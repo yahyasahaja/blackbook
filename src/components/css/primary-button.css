@@ -1,0 +1,29 @@
+.container {
+  padding: 10px 20px;
+  font-size: 11pt;
+  background: #e74c3c;
+  cursor: pointer;
+  transition: .3s;
+  filter: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin: 0 3px;
+  border-radius: 5px; }
+  @media only screen and (max-width: 400px) {
+    .container {
+      padding: 10px 13px; } }
+  @media only screen and (max-width: 380px) {
+    .container {
+      width: 100%;
+      flex: 1; } }
+  .container .icon {
+    font-size: 12pt;
+    display: block;
+    margin-right: 5px; }
+  .container:active {
+    opacity: .3;
+    filter: brightness(100%);
+    transition: 0s; }

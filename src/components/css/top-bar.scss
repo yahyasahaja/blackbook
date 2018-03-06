@@ -1,0 +1,53 @@
+@import '../../assets/css/config.scss';
+
+.container {
+  display: block;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+  min-height: 100vh;
+
+  .fly {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #f8f8f8;
+    border-bottom: 1px solid #e1e1e1;
+    max-width: $max-width;
+    margin: auto;
+  }
+
+  .content {
+    width: 100%;
+    background: white;
+    margin-bottom: 55px;
+    min-height: calc(100vh - 55px);
+
+    .relative {
+      display: block;
+      position: relative;
+      top: 0;
+      width: 100%;
+      background: #f8f8f8;
+      border-bottom: 1px solid #e1e1e1;
+    }
+
+    .wrapper {
+      flex: 1;
+      padding: 10px;
+    }
+  }
+}
+
+.appear {
+  opacity: 1 !important;
+  top: 0 !important;
+  transition: .5s;
+}
+
+.hide {
+  opacity: 0 !important;
+  top: -55px !important;
+  transition: .5s;
+}

@@ -1,0 +1,22 @@
+.container {
+  position: relative;
+  padding: 8px 0;
+  color: #e74c3c; }
+  .container .title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 20pt;
+    width: 100%; }
+  .container .icon, .container .icon:visited {
+    position: absolute;
+    width: 60px;
+    font-size: 20pt;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e74c3c; }
+    .container .icon:active, .container .icon:visited:active {
+      opacity: .3; }

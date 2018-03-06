@@ -1,0 +1,20 @@
+.button {
+    background: #4caf50 !important;
+    color: white !important;
+    margin: auto;
+    display: block;
+    font-size: 18pt !important;
+    font-weight: bold;
+    transition: .2s;
+}
+
+.button:hover {
+    background: #8bc34a !important;
+    transition: .2s;
+}
+
+.button:active {
+    background: #306f33 !important;
+    box-shadow: rgba(0, 0, 0, .45) 1px 1px 8px 0px;
+    transition: .1s;
+}

@@ -1,0 +1,30 @@
+.container {
+  padding: 10px;
+  font-size: 11pt;
+  background: none;
+  cursor: pointer;
+  transition: .3s;
+  filter: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #7b7b7b;
+  margin: 0 3px; }
+  .container .icon {
+    font-size: 12pt;
+    display: block;
+    margin-right: 5px; }
+  @media only screen and (max-width: 445px) {
+    .container {
+      padding: 10px 4px;
+      font-size: 10pt;
+      margin: 0; } }
+  .container:active {
+    opacity: .3;
+    filter: brightness(100%);
+    transition: 0s; }
+
+.active {
+  color: #ea0f00 !important;
+  font-weight: bold; }

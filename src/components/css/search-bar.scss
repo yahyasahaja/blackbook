@@ -1,0 +1,52 @@
+@import '../../assets/css/config.scss';
+
+.container {
+  position: relative;
+  padding: 8px 5px;
+  color: $secondary-color;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .search {
+    text-align: center;
+    font-weight: 700;
+    font-size: 20pt;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: #ebe9ea;
+    border-radius: 12px;
+    font-size: 11pt;
+    font-weight: 500;
+    padding: 1px;
+    padding-left: 10px;
+    color: #9c9c9c;
+    margin: 0 10px;
+    cursor: text;
+
+    .icon {
+      font-size: 18pt;
+      width: 15px;
+      color: #9c9c9c;
+      margin-right: 10px;
+    }
+  }
+
+  .icon, .icon:visited {
+    position: relative;
+    width: 60px;
+    font-size: 20pt;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $secondary-color;
+
+    &:active {
+      opacity: .3;
+    }
+  }
+}

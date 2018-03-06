@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  font-weight: bold;
+
+  .line1, .line2 {
+    height: 1px;
+    background: rgb(190, 190, 190);
+  }
+
+  .line1 {
+    width: 25px;
+  }
+
+  .line2 {
+    flex: 1;
+  }
+
+  span {
+    text-align: center;
+    margin: 0 13px;
+  }
+}

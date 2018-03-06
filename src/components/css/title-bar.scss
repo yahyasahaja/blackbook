@@ -1,0 +1,31 @@
+@import '../../assets/css/config.scss';
+
+.container {
+  position: relative;
+  padding: 8px 0;
+  color: $secondary-color;
+
+  .title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 20pt;
+    width: 100%;
+  }
+
+  .icon, .icon:visited {
+    position: absolute;
+    width: 60px;
+    font-size: 20pt;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $secondary-color;
+
+    &:active {
+      opacity: .3;
+    }
+  }
+}

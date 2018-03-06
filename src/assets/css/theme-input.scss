@@ -1,0 +1,9 @@
+.inputElement:focus:not([disabled]):not([readonly]) {
+    ~ .counter, ~ .icon, ~ .label, ~ .hint, ~ .bar {
+        color: #00bcd4 !important;
+    }
+
+    ~ .bar::before, ~ .bar::after {
+        background-color: #00bcd4 !important;
+    }
+}

@@ -1,0 +1,20 @@
+@import '../../assets/css/config.scss';
+
+.container {
+  width: 100%;
+  padding: 10px;
+  font-size: 12pt; 
+  color: $secondary-color;
+  background: none;
+  border: solid $secondary-color 1px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .3s;
+  filter: none;
+
+  &:active {
+    opacity: .3;
+    filter: brightness(100%);
+    transition: 0s;
+  }
+}

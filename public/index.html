@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Blanja</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Blanja">
+  <meta name="keywords" content="Some, Keywords, To, Share">
+  <meta name="authors" content="Yahya Sahaja">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <style>
+    .loader,
+    .loader2,
+    .loader3 {
+      border: 3px solid rgba(255, 255, 255, 0);
+      border-radius: 50%;
+      border-top-color: #3498db;
+      width: 120px;
+      height: 120px;
+
+      -webkit-animation: spin 2s linear infinite;
+      animation: spin .7s linear infinite;
+      position: absolute;
+    }
+
+    .loader2 {
+      width: 100px;
+      height: 100px;
+      transform: rotate(30deg);
+      animation: spin .5s linear infinite;
+      border-top-color: #e67e22;
+    }
+
+    .loader3 {
+      width: 80px;
+      height: 80px;
+      transform: rotate(100deg);
+      animation: spin .9s linear infinite;
+      border-top-color: #2ecc71;
+    }
+
+    #loading-container {
+      display: flex;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+    }
+
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
+  <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/2.1.19/css/materialdesignicons.min.css">
+
+  <link rel="shortcut icon" href="favicon.ico?<% Math.random() %>">
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/static/icon/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/icon/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/icon/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/static/icon/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/static/icon/apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/static/icon/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/static/icon/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/static/icon/apple-touch-icon-152x152.png" />
+  <meta name="application-name" content="&nbsp;" />
+  <meta name="msapplication-TileColor" content="#e74c3c" />
+  <meta name="msapplication-TileImage" content="/static/icon/mstile-144x144.png" />
+  <meta name="msapplication-square150x150logo" content="/static/icon/mstile-150x150.png" />
+
+  <!-- Add manifest -->
+  <link rel="manifest" href="/manifest.json">
+  <!-- Tell the browser it's a PWA -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <!-- Tell iOS it's a PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- Make sure theme-color is defined -->
+  <meta name="theme-color" content="#e74c3c">
+
+  <!-- jQuery library -->
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+
+  <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+  <% for (var chunk of webpack.chunks) { %>
+    <% for (var file of chunk.files) { %>
+      <% if (file.match(/\.(js|css)$/)) { %>
+        <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>">
+        <% } %>
+          <% } %>
+            <% } %>
+</head>
+
+<body>
+  <div id="app">
+    <div id="loading-container">
+      <div class="loader"></div>
+      <div class="loader2"></div>
+      <div class="loader3"></div>
+    </div>
+  </div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').then(function (registration) {
+          // Registration was successful
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+
+          if ('Notification' in window) {
+            if (Notification.permission !== 'granted')
+              Notification.requestPermission().then(function (permission) {
+                console.log('User ', permission, ' Notification')
+              })
+            else console.log('User granted notification')
+          } else console.log('Browser does not support Notification')
+
+          return registration.pushManager.getSubscription().then(function (subscription) {
+            console.log(subscription)
+            if (subscription) return subscription;
+            console.log('aaa')
+            return registration.pushManager.subscribe({ userVisibleOnly: true });
+          });
+        }, function (err) {
+          // registration failed :(
+          console.log('ServiceWorker registration failed: ', err);
+        }).catch(function (err) {
+          console.log(err);
+        });
+      });
+    } else {
+      console.log('service worker is not supported');
+    }
+
+    // var target = window; // this can be any scrollable element
+    // var last_y = 0;
+    // target.addEventListener('touchmove', function (e) {
+    //   var scrolly = target.pageYOffset || target.scrollTop || 0;
+    //   var direction = e.changedTouches[0].pageY > last_y ? 1 : -1;
+    //   if (direction > 0 && scrolly === 0) {
+    //     e.preventDefault();
+    //   }
+    //   last_y = e.changedTouches[0].pageY;
+    // });
+  </script>
+</body>
+
+</html>

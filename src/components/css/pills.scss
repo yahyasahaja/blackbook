@@ -1,0 +1,19 @@
+@import '../../assets/css/config.scss';
+
+.container {
+  display: inline-block;
+  background: #e74c3c;
+  padding: 8px 15px;
+  border-radius: 100px;
+  border: none;
+  margin: 5px;
+  font-size: 10pt;
+  color: white;
+  cursor: pointer;
+
+  &:active {
+    opacity: .3;
+    filter: brightness(100%);
+    transition: 0s;
+  }
+}

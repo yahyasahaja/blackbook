@@ -1,0 +1,42 @@
+@import '../../../assets/css/config.scss';
+
+.container {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  background: none;
+  
+  span {
+    color: #9c9c9c;
+    font-weight: 600;
+
+    &.active {
+      font-weight: bold;
+      color: $primary-color;
+    }
+  }
+
+  .icon {
+    font-weight: normal;
+    font-size: 20pt;
+    line-height: 1;
+
+    &.active {
+      font-weight: normal;
+    }
+  }
+
+  .label {
+    font-size: 7pt;
+  }
+
+  &:active {
+    span {
+      color: $primary-color;
+      transition: .01s;
+    }
+  }
+}

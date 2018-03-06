@@ -1,0 +1,74 @@
+
+@import '../../assets/css/config.scss';
+
+.container {
+  display: block;
+  width: 95%;
+  margin: auto;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 15px 3px #d8d8d8;
+  margin-bottom: 15px;
+  
+  .picture {
+    width: 100%;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      object-fit: contain;
+      height: 170px;
+    }
+  }
+
+  .wrapper {
+    padding: 10px;
+    padding-bottom: 0;
+
+    .content {
+      display: block;
+      margin: 10px 0;
+
+      .name {
+        display: block;
+        font-weight: bold;
+        font-size: 12pt;
+      }
+      
+      .price {
+        display: block;
+        font-size: 11pt;
+        color: red;
+        font-weight: 100;
+      }
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 10px;
+      padding-top: 5px;
+      flex-wrap: wrap;
+
+      .left {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      @media only screen and(max-width: 350px) {
+        .right {
+          width: 100%;
+          margin-bottom: 10px;
+        }
+
+        .left {
+          width: 100%;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
