@@ -60,7 +60,7 @@
     "dev-server": "NODE_ENV=development nodemon server/index.js --exec babel-node --watch server",
     "build-server": "babel server -d build-server",
     "test": "node scripts/test.js --env=jsdom",
-    "postinstall": "npm run build"
+    "postinstall": "yarn build && yarn run build-server"
   },
   "jest": {
     "collectCoverageFrom": [
