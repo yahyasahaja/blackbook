@@ -12,7 +12,7 @@ class Snackbar {
   }
 
   @action
-  show(label, action, type) {
+  show = (label, action, type) => {
     let state = this.data
 
     this.data = observable({
@@ -24,7 +24,7 @@ class Snackbar {
   }
 
   @action
-  hide() {
+  hide = () => {
     let state = this.data
 
     this.data = observable({
