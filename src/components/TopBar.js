@@ -199,7 +199,7 @@ export class TopBar extends Component {
         <div className={styles.content} style={{ ...style, ...this.props.style }} >
           {this.renderRelativeTopBar()}
 
-          <div className={styles.wrapper}>
+          <div className={styles.wrapper} style={this.props.wrapperStyle}>
             {this.props.children}
           </div>
         </div>

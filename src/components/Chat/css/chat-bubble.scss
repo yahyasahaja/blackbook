@@ -1,0 +1,49 @@
+@import '../../../assets/css/config.scss';
+$size: 40px;
+
+.avatar {
+  height: $size !important;
+  width: $size !important;
+}
+
+.letter {
+  height: $size;
+  width: $size;
+  line-height: $size !important;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 8px;
+  align-items: flex-start;
+}
+
+.bubble {
+  background-color: #ddd;
+  margin-left: 5px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: 'center';
+  margin-right: 60px;
+  
+  span {
+    font-size: 14px;
+  }
+}
+
+.bubble_alt {
+  background-color: $primary_color;
+  margin-right: 5px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: 'center';
+  margin-left: 60px;
+  
+  span {
+    color: white;
+    font-size: 14px;
+  }
+}
