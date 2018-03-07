@@ -28,8 +28,6 @@
 }
 
 .loading {
-  position: fixed;
-  top: -10px;
-  width: 100%;
-  left: 0;
+  display: block;
+  margin: auto;
 }

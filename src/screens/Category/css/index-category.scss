@@ -151,11 +151,8 @@
 }
 
 .loading {
-  position: fixed;
-  top: -10px;
-  width: 100%;
-  left: 0;
-  z-index: 10;
+  display: block;
+  margin: auto;
 }
 
 .content {

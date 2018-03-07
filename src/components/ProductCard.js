@@ -42,6 +42,11 @@ class ProductCard extends Component {
       break
     }
 
+    if (!price) price = {
+      value: 0,
+      currency: 0,
+    }
+
     return (
       <div className={styles.container} >
         <div className={styles.picture} >

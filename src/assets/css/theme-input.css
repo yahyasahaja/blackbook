@@ -1,5 +1,0 @@
-.inputElement:focus:not([disabled]):not([readonly]) ~ .counter, .inputElement:focus:not([disabled]):not([readonly]) ~ .icon, .inputElement:focus:not([disabled]):not([readonly]) ~ .label, .inputElement:focus:not([disabled]):not([readonly]) ~ .hint, .inputElement:focus:not([disabled]):not([readonly]) ~ .bar {
-  color: #00bcd4 !important; }
-
-.inputElement:focus:not([disabled]):not([readonly]) ~ .bar::before, .inputElement:focus:not([disabled]):not([readonly]) ~ .bar::after {
-  background-color: #00bcd4 !important; }

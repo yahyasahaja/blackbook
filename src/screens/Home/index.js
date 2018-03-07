@@ -34,7 +34,7 @@ class Home extends Component {
     let isSelectedCurrent = nextProps.isSelected
     let isSelectedBefore = this.props.isSelected
 
-    if (isSelectedCurrent != isSelectedBefore) 
+    if (isSelectedCurrent != isSelectedBefore)
       this.addScrollListener(isSelectedCurrent)
   }
 
@@ -49,7 +49,7 @@ class Home extends Component {
   checkAllProductsChanges(nextProps) {
     let { allProductsQuery: { loading: newLoading, error: newError } } = nextProps
     let { allProductsQuery: { loading: curLoading } } = this.props
-    
+
     if (curLoading !== newLoading && !newLoading && !newError) {
       let allProducts = nextProps.allProductsQuery.allProducts
       let { offset } = this.state
@@ -58,7 +58,7 @@ class Home extends Component {
         if (data.images.length > 0)
           return { ...data, image: data.images[0].url }
       })
-      
+
       this.setState({
         products: [...this.state.products, ...products],
         offset: offset + MAX_FETCH_LENGTH,
@@ -92,7 +92,7 @@ class Home extends Component {
     let { offset } = this.state
 
     if (loading) return
-    if (scrollPosition < pageHeight - screenHeight - 100) return
+    if (scrollPosition < pageHeight - screenHeight - screenHeight * .1) return
     if (this.state.isFetchDisabled) return
     if (popup.isPopupActive) return
     refetch({ limit: MAX_FETCH_LENGTH, offset })
@@ -142,9 +142,15 @@ class Home extends Component {
 
         <Separator>All Products</Separator>
         {this.renderCards()}
-        {loading ? <div className={styles.loading} >
-          <ProgressBar mode='indeterminate' />
-        </div> : ''}
+        {
+          loading
+            ? <ProgressBar
+              className={styles.loading} 
+              type='circular' 
+              mode='indeterminate' multicolor
+            />
+            : ''
+        }
       </TopBar>
     )
   }
@@ -189,7 +195,7 @@ export default compose(
     name: 'allProductsQuery',
     options: () => {
       return {
-        variables: { limit: MAX_FETCH_LENGTH, offset: 0}
+        variables: { limit: MAX_FETCH_LENGTH, offset: 0 }
       }
     }
   }),

@@ -2,19 +2,33 @@
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+import { setContext } from 'apollo-link-context'
 
 //CONFIG
 import {
   PRODUCTS_ENDPOINT_URL,
-  AUTHORIZATION_TOKEN
 } from '../../config'
 
-export default new ApolloClient({
-  link: new HttpLink({ 
-    uri: PRODUCTS_ENDPOINT_URL,
+//STORE
+import { tokens } from '../stores'
+
+let httpLink = new HttpLink({ 
+  uri: PRODUCTS_ENDPOINT_URL
+})
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = tokens.token
+  // return the headers to the context so httpLink can read them
+  return {
     headers: {
-      'Authorization': AUTHORIZATION_TOKEN
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : '',
     }
-  }),
+  }
+})
+
+export default new ApolloClient({
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 })

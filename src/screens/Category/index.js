@@ -117,7 +117,7 @@ class Category extends Component {
 
     //CHECKING FOR FETCHING ACCEPTANCE
     if (loading) return
-    if (scrollPosition < pageHeight - screenHeight - 100) return
+    if (scrollPosition < pageHeight - screenHeight - screenHeight * .1) return
     if (this.state.isFetchDisabled) return
 
     //BE ABLE TO FETCH
@@ -176,7 +176,7 @@ class Category extends Component {
           name="filters" className={styles.filters}
           id="filters"
           value={filter}
-          autoCapitalize onChange={this.handleChange.bind(this, 'filter')}
+          autoCapitalize="true" onChange={this.handleChange.bind(this, 'filter')}
         >
           {filters.map((data, i) => {
             return <option key={i} value={data.value}>{data.label}</option>
@@ -190,7 +190,7 @@ class Category extends Component {
           name="categories" className={styles.categories}
           id="categories"
           value={category}
-          autoCapitalize onChange={this.handleChange.bind(this, 'category')}
+          autoCapitalize="true" onChange={this.handleChange.bind(this, 'category')}
         >
           {categories.map((data, i) => {
             return <option key={i} value={data.value}>{data.label}</option>
@@ -219,11 +219,19 @@ class Category extends Component {
       {this.renderBar()}
       <div className={styles.wrapper} >
         {this.renderCards()}
-        {loading ? <div className={styles.loading} >
-          <ProgressBar mode='indeterminate' />
-        </div> : products.length === 0 ? <div className={styles['not-found']}>
-          <span>Tidak ada produk yang ditemukan</span>
-        </div> : ''}
+        {
+          loading
+            ? <ProgressBar
+              className={styles.loading}
+              type='circular'
+              mode='indeterminate' multicolor
+            />
+            : products.length === 0
+              ? <div className={styles['not-found']}>
+                <span>Tidak ada produk yang ditemukan</span>
+              </div> 
+              : ''
+        }
       </div>
     </div>
   }

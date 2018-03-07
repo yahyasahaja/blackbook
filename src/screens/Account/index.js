@@ -1,5 +1,10 @@
 //MODULES
-import React, { Component }  from 'react'
+import React, { Component } from 'react'
+// import ProgressBar from 'react-toolbox/lib/progress_bar'
+// import _ from 'lodash'
+// import { graphql, compose } from 'react-apollo'
+// import gql from 'graphql-tag'
+// import { observer } from 'mobx-react'
 
 //STYLES
 // import styles from './css/index.scss'
@@ -8,17 +13,25 @@ import React, { Component }  from 'react'
 import TopBar, { ABSOLUTE } from '../../components/TopBar'
 
 //COMPONENT
-export default class Account extends Component {
+class Account extends Component {
+  componentDidMount() {
+
+  }
+
   render() {
     return (
       <TopBar
         fly={{
-          title: {cart: true},
+          title: { cart: true },
           mode: ABSOLUTE
         }}
       >
-        <h1>Account Example</h1>
+
       </TopBar>
     )
   }
 }
+
+
+
+export default Account
