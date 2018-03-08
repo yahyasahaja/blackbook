@@ -1,0 +1,90 @@
+@import '../../../assets/css/config.scss';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  background: #f8f8f8;
+  padding: 80px 15px;
+
+  .top {
+    display: block;
+
+    .title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 30pt;
+      width: 100%;
+      cursor: default;
+      color: $secondary-color;
+      text-align: center;
+    }
+
+    .desc {
+      font-size: 12pt;
+    }
+  }
+
+  .form {
+    width: 100%;
+    margin-top: 50px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 2px 3px 35px #dedede;
+
+    .handphone {
+      display: flex;
+
+      .telp {
+        width: 100%;
+        margin: 0 10px; 
+      }
+    }
+
+    button {
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    .gender {
+      font-weight: 500;
+      margin-bottom: 15px;
+      display: block;
+      font-size: 12pt;
+      color: #c8c9d1;
+      margin-top: 10px;
+    }
+
+    .ref {
+      text-align: center;
+      width: 100%;
+      display: block;
+
+      a, a:visited {
+        color: $secondary-color;
+        font-weight: bold;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  height: 500px;
+  width: 100%;
+  align-items: center;
+
+  div {
+    display: block;
+    width: 50px;
+    height: 50px;
+  }
+}

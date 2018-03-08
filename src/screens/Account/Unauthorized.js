@@ -20,8 +20,8 @@ class Account extends Component {
         </div>
 
         <div className={styles.button} >
-          <PrimaryButton>DAFTAR</PrimaryButton>
-          <SecondaryButton>LOGIN</SecondaryButton>
+          <PrimaryButton to="/auth/register" >DAFTAR</PrimaryButton>
+          <SecondaryButton to="/auth/login" >LOGIN</SecondaryButton>
         </div>
       </div>
     )

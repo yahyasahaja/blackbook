@@ -21,5 +21,5 @@ export default class Home extends Component {
         {cart && <Link to="/cart" className={styles.icon}><Badge badge={badges.CART} icon="cart" /></Link> }
       </div>
     )
-  } 
+  }
 } 

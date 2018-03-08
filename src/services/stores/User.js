@@ -57,7 +57,7 @@ class User {
   fetchData = token => {
     let authToken = token || localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)
     
-    if (authToken) return new Promise((resolve) => resolve(false))
+    if (!authToken) return new Promise((resolve) => resolve(false))
     this.isLoading = true
     return axios.get(getIAMEndpoint('/user'))
       .then(({data: { is_ok, data: user } }) => {

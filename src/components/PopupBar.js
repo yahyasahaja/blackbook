@@ -1,6 +1,7 @@
 //MODULES
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { observer } from 'mobx-react'
 
 //STYLES
 import styles from './css/popup-bar.scss'
@@ -10,7 +11,7 @@ export const ANIMATE_HORIZONTAL = 'animateHorizontal'
 export const ANIMATE_VERTICAL = 'animateVertical'
 
 //COMPONENT
-export default class Popup extends Component {
+@observer class Popup extends Component {
   componentDidMount() {
     window.addEventListener('scroll', this.checkScroll)
     window.addEventListener('gesturechange', this.checkScroll)
@@ -32,6 +33,9 @@ export default class Popup extends Component {
 
   onBack = () => {
     let { length, goBack, push } = this.props.history
+    let { backLink } = this.props
+
+    if (backLink) return
 
     if (length == 1) {
       push('/home')
@@ -75,23 +79,23 @@ export default class Popup extends Component {
     } = this.props
 
     if (component) return component
-    return [
-      <div key="title" className={styles.title}><span>{this.props.title}</span></div>,
-      (() => {
+    return <React.Fragment>
+      <div className={styles.title}><span>{this.props.title}</span></div>
+      {(() => {
         if (rightComponent) return <rightComponent />
         if (cart || icons) return <div className={styles.right} >
           {(() => {
             if (cart) return <Link to="/cart" className={`mdi mdi-cart ${styles.cart}`} />
-            if (icons) return icons.map(data => {
+            if (icons) return icons.map((data, i) => {
               <Link
                 to={data.to} className={`mdi mdi-${data.icon} ${styles.cart}`}
-                onClick={data.onClick}
+                onClick={data.onClick} key={i}
               />
             })
           })()}
         </div>
-      })()
-    ]
+      })()}
+    </React.Fragment>
   }
 
   render() {
@@ -140,3 +144,5 @@ export default class Popup extends Component {
     )
   }
 } 
+
+export default Popup

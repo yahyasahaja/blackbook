@@ -15,6 +15,7 @@ const Account = asyncComponent(() => import('./screens/Account'))
 // const PageNotFound = asyncComponent(() => import('./screens/PageNotFound'))
 const Search = asyncComponent(() => import('./screens/Search'))
 const Category = asyncComponent(() => import('./screens/Category'))
+const Auth = asyncComponent(() => import('./screens/Auth'))
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -91,6 +92,7 @@ let BOTTOM_TAB_BAR_DATA = [
           </Switch>
           <Switch>
             <Route path="/search" component={Search} />
+            <Route path="/auth" component={Auth} />
             <Route path="/category/:category_name" component={Category} />
             <Route path="/chat/:id" component={Conversation} />
           </Switch>

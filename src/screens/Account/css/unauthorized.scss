@@ -20,7 +20,7 @@
 
     .icon {
       font-size: 100pt;
-      color: $primary-color;
+      color: $secondary-color;
     }
 
     .title {
@@ -34,10 +34,11 @@
     justify-content: center;
     width: 85%;
 
-    button {
+    button, a {
       width: 100%;
       flex: 1;
       margin: 5px;
+      font-weight: 500;
     }
   }
 }
