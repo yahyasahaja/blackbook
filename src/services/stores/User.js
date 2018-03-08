@@ -1,5 +1,5 @@
 //MODULES
-import { observable, action } from 'mobx'
+import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 
 //CONFIG
@@ -19,6 +19,7 @@ class User {
   }
 
   @observable data = null
+  @observable isLoading
 
   @action
   setData = data => {
@@ -26,17 +27,23 @@ class User {
   }
 
   @action
-  login = async (msisdn, password) => {
-    let { is_ok, data: token } = await axios.post(getIAMEndpoint('/login'), {
+  login = (msisdn, password) => {
+    this.isLoading = true
+    
+    axios.post(getIAMEndpoint('/login'), {
       msisdn,
       password
+    }).then(({ is_ok, data: token }) => {
+      
+      this.isLoading = false
+  
+      if (is_ok) {
+        this.fetchData(token)
+        return tokens.authToken = token
+      }
+
+      return false
     })
-    
-    if (is_ok) {
-      this.fetchData(token)
-      return tokens.authToken = token
-    }
-    return false
   }
 
   @action
@@ -47,20 +54,31 @@ class User {
   }
 
   @action
-  fetchData = async token => {
+  fetchData = token => {
     let authToken = token || localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)
     
-    if (authToken) return
+    if (authToken) return new Promise((resolve) => resolve(false))
+    this.isLoading = true
+    return axios.get(getIAMEndpoint('/user'))
+      .then(({data: { is_ok, data: user } }) => {
+        console.log(is_ok, user)
+        this.isLoading = false
+        if (is_ok) {
+          tokens.authToken = authToken
+          return this.setData(user)
+        }
 
-    let {data: { is_ok, data: user } } = await axios.get(getIAMEndpoint('/user'))
+        localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
+        return false
+      }).catch(res => {
+        console.log('FETCH USER ERROR', res)
+        return false
+      })
+  }
 
-    if (is_ok) {
-      tokens.authToken = authToken
-      return this.setData(user)
-    }
-
-    localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
-    return false
+  @computed
+  get isLoggedIn() {
+    return !!this.data
   }
 }
  

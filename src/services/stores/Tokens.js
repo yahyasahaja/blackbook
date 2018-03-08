@@ -31,6 +31,12 @@ class Tokens {
   //USE THIS FOR AUTHORIZATION
   @computed
   get token() {
+    let raw = this.rawToken
+    return raw ? `Bearer ${raw}` : null
+  }
+
+  @computed
+  get rawToken() {
     return this.authToken || this.apiToken
   }
 }

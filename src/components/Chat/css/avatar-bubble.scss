@@ -1,0 +1,14 @@
+$size: 37px;
+
+.avatar {
+  height: $size !important;
+  width: $size !important;
+  min-width: $size !important;
+}
+
+.letter {
+  height: $size;
+  width: $size;
+  line-height: $size !important;
+}
+

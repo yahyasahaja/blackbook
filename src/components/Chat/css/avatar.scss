@@ -1,0 +1,12 @@
+$size: 50px;
+
+.avatar {
+  height: $size !important;
+  width: $size !important;
+}
+
+.letter {
+  height: $size;
+  width: $size;
+  line-height: $size !important;
+}

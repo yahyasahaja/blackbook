@@ -1,0 +1,43 @@
+@import '../../../assets/css/config.scss';
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  height: calc(100vh - 120px);
+  align-items: center;
+  flex-direction: column;
+  background: #f8f8f8;
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 45px;
+    text-align: center;
+    margin-top: -40px;
+
+    .icon {
+      font-size: 100pt;
+      color: $primary-color;
+    }
+
+    .title {
+      font-weight: bold;
+      font-size: 20pt;
+    }
+  }
+
+  .button {
+    display: flex;
+    justify-content: center;
+    width: 85%;
+
+    button {
+      width: 100%;
+      flex: 1;
+      margin: 5px;
+    }
+  }
+}

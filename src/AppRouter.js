@@ -10,6 +10,7 @@ const Home = asyncComponent(() => import('./screens/Home'))
 const Favorite = asyncComponent(() => import('./screens/Favorite'))
 const Promo = asyncComponent(() => import('./screens/Promo'))
 const Chat = asyncComponent(() => import('./screens/Chat'))
+const Conversation = asyncComponent(() => import('./screens/Chat/Conversation'))
 const Account = asyncComponent(() => import('./screens/Account'))
 // const PageNotFound = asyncComponent(() => import('./screens/PageNotFound'))
 const Search = asyncComponent(() => import('./screens/Search'))
@@ -91,6 +92,7 @@ let BOTTOM_TAB_BAR_DATA = [
           <Switch>
             <Route path="/search" component={Search} />
             <Route path="/category/:category_name" component={Category} />
+            <Route path="/chat/:id" component={Conversation} />
           </Switch>
 
           <section>

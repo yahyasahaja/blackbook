@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  background: #f8f8f8;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  height: 500px;
+  width: 100%;
+  align-items: center;
+
+  div {
+    display: block;
+    width: 50px;
+    height: 50px;
+  }
+}

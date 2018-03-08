@@ -6,14 +6,14 @@ import { setContext } from 'apollo-link-context'
 
 //CONFIG
 import {
-  PRODUCTS_ENDPOINT_URL,
+  USER_ENDPOINT_URL,
 } from '../../config'
 
 //STORE
 import { tokens } from '../stores'
 
 let httpLink = new HttpLink({ 
-  uri: PRODUCTS_ENDPOINT_URL
+  uri: USER_ENDPOINT_URL
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -23,7 +23,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      Authorization: token ? `Bearer ${token}` : '',
+      Authorization: token
     }
   }
 })

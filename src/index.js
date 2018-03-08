@@ -7,6 +7,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { observer } from 'mobx-react'
 // import * as OfflinePluginRuntime from 'offline-plugin/runtime'
 // OfflinePluginRuntime.install()
+import axios from 'axios'
 
 //CSS
 import theme from './assets/css/theme.scss'
@@ -15,12 +16,15 @@ import theme from './assets/css/theme.scss'
 import AppRouter from './AppRouter'
 
 //SERVICES
-import client from './services/graphql/client'
+import client from './services/graphql/productClient'
 import { onlineStatus, snackbar, tokens } from './services/stores'
 
 const contextTheme = {
   RTInput: theme
 }
+
+axios.defaults.headers['Content-Type'] = 'application/json'
+axios.defaults.headers['Authorization'] = tokens.token
 
 @observer
 class App extends Component {

@@ -6,6 +6,7 @@ import selected from './Selected'
 import snackbar from './Snackbar'
 import badges from './Badges'
 import tokens from './Tokens'
+import user from './User'
 
 export { 
   categories,
@@ -15,7 +16,8 @@ export {
   selected,
   snackbar,
   badges,
-  tokens
+  tokens,
+  user
 }
 
 export default { 
@@ -26,5 +28,6 @@ export default {
   selected,
   snackbar,
   badges,
-  tokens
+  tokens,
+  user
 }
