@@ -44,10 +44,21 @@
   
       .title {
         color: #5a5a5a;
-        flex: 1;
-        font-size: 17pt;
+        font-size: 4vw;
         font-weight: 500;
         margin-left: 10px;
+        min-width: 0;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        
+        span {
+          flex: 1;
+          display: inline-block;
+          width: 50px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
       }
   
       .right {

@@ -11,12 +11,11 @@ import styles from './css/index.scss'
 @observer
 class Threads extends Component {
   render() {
-    const { data } = this.props
-    const { loading } = data
+    console.log(this.props)
 
     return (
       <div>
-        {!loading &&
+        {!this.props.data.loading &&
           this.props.data.threads.data.map(thread => {
             const sender = thread.participants[0].isMe
               ? thread.participants[1]
@@ -31,7 +30,7 @@ class Threads extends Component {
               />
             )
           })}
-        {loading ? (
+        {this.props.data.loading ? (
           <div className={styles.loading}>
             <ProgressBar mode="indeterminate" />
           </div>

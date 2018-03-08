@@ -76,7 +76,7 @@ export default class Popup extends Component {
 
     if (component) return component
     return [
-      <div className={styles.title}><span>{this.props.title}</span></div>,
+      <div key="title" className={styles.title}><span>{this.props.title}</span></div>,
       (() => {
         if (rightComponent) return <rightComponent />
         if (cart || icons) return <div className={styles.right} >
