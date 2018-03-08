@@ -26,7 +26,7 @@ class Account extends Component {
           mode: ABSOLUTE
         }}
       >
-
+        
       </TopBar>
     )
   }

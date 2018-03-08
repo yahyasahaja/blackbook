@@ -40,16 +40,23 @@ class User {
   }
 
   @action
+  logout = () => {
+    this.data = null
+    tokens.authToken = null
+    localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
+  }
+
+  @action
   fetchData = async token => {
     let authToken = token || localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)
     
     if (authToken) return
 
-    let {data: { is_ok, data } } = await axios.get(getIAMEndpoint('/user'))
+    let {data: { is_ok, data: user } } = await axios.get(getIAMEndpoint('/user'))
 
     if (is_ok) {
       tokens.authToken = authToken
-      return this.setData(data)
+      return this.setData(user)
     }
 
     localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
