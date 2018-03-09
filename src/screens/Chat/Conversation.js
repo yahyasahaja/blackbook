@@ -88,6 +88,10 @@ class Conversation extends Component {
     const { message, title } = this.state
     return (
       <PopupBar
+        onBack={(e) => {
+          e.preventDefault()
+          this.props.history.goBack()
+        }}
         title={`Hubungi ${title}`} {...this.props}
         anim={ANIMATE_HORIZONTAL}
         style={{
