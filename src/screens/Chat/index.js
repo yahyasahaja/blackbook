@@ -18,6 +18,7 @@ export default class Chat extends Component {
           title: { cart: true },
           mode: HIDE,
         }}
+        
         isSelected={this.props.isSelected}
         style={{ background: 'rgb(239, 239, 239)' }}
         wrapperStyle={{ padding: 0 }}

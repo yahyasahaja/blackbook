@@ -44,13 +44,17 @@
   
       .title {
         color: #5a5a5a;
-        font-size: 4vw;
+        font-size: 17pt;
         font-weight: 500;
         margin-left: 10px;
         min-width: 0;
         flex: 1;
         overflow: hidden;
         text-overflow: ellipsis;
+
+        @media screen and (max-width: 400px) {
+          font-size: 12pt;
+        }
         
         span {
           flex: 1;

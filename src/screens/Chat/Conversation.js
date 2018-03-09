@@ -10,6 +10,8 @@ import client from '../../services/graphql/chatClient'
 
 import styles from './css/conversation.scss'
 
+import { popup } from '../../services/stores'
+
 @observer
 class Conversation extends Component {
   state = {
@@ -19,11 +21,15 @@ class Conversation extends Component {
     message: '',
   }
 
-  componentDidUpdate() {
-    this.scrollToBottom()
+  componentDidMount() {
+    popup.push()
   }
 
-  componentDidMount() {
+  componentWillUnmount() {
+    popup.pop()
+  }
+
+  componentDidUpdate() {
     this.scrollToBottom()
   }
 
@@ -82,9 +88,7 @@ class Conversation extends Component {
     const { message, title } = this.state
     return (
       <PopupBar
-        history={this.props.history}
-        backLink="/chat"
-        title={`Hubungi ${title}`}
+        title={`Hubungi ${title}`} {...this.props}
         anim={ANIMATE_HORIZONTAL}
         style={{
           background: 'rgb(239, 239, 239)',

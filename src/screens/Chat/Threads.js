@@ -11,8 +11,6 @@ import styles from './css/index.scss'
 @observer
 class Threads extends Component {
   render() {
-    console.log(this.props)
-
     return (
       <div>
         {!this.props.data.loading &&
