@@ -3,6 +3,7 @@ import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
+import moment from 'moment'
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import ChatBubble from '../../components/Chat/ChatBubble'
 import client from '../../services/graphql/chatClient'
@@ -49,8 +50,35 @@ class Conversation extends Component {
     return `${currency} ${res}`
   }
 
+  renderMessages(messages) {
+    return messages.reverse().map((message, index) => {
+      let isOtherDay = false
+      
+      if (index === 0) {
+        isOtherDay = true
+      } else {
+        const messageDate = moment(message.createdAt)
+        const prevMessageDate = moment(messages[index - 1].createdAt)
+        if (prevMessageDate.isBefore(messageDate, 'day')) {
+          isOtherDay = true
+        }
+      }
+      
+      return (
+        <ChatBubble
+          isOtherDay={isOtherDay}
+          key={message.id}
+          avatarImage={message.createdBy.profilePicture}
+          avatarTitle={message.createdBy.displayName[0]}
+          message={message.text}
+          time={message.createdAt}
+          isMe={message.createdBy.isMe}
+        />
+      )
+    })
+  }
+
   render() {
-    console.log(this.props)
     const { message, title } = this.state
     return (
       <PopupBar
@@ -68,23 +96,14 @@ class Conversation extends Component {
         <div className={styles.productBar}>
           <img src="https://marketplacefile.blob.core.windows.net/profiles-testing/b8c240e7-6afe-4274-93ec-7d833657fe5b/1518597609.jpg" />
           <div className={styles.content}>
-            <p>Nama Produk Test</p>
+            <p>{this.props.data.loading ? 'Memuat produk...' : this.props.data.thread.productName}</p>
             <span>{this.convertToMoneyFormat(12000, 'NTD')}</span>
           </div>
           <span className={`mdi mdi-chevron-right ${styles.chevronRight}`} />
         </div>
         <div className={styles.messages}>
           {!this.props.data.loading &&
-            this.props.data.thread.messages.data.slice().reverse().map(message => (
-              <ChatBubble
-                key={message.id}
-                avatarImage={message.createdBy.profilePicture}
-                avatarTitle={message.createdBy.displayName[0]}
-                message={message.text}
-                time={message.createdAt}
-                isMe={message.createdBy.isMe}
-              />
-            ))}
+            this.renderMessages(this.props.data.thread.messages.data.slice())}
           <div
             style={{ float: 'left', clear: 'both' }}
             ref={el => {
@@ -123,6 +142,8 @@ class Conversation extends Component {
 const getMessagesQuery = gql`
   query MessageQuery($id: Int!) {
     thread(threadId: $id, perspective: BUYER) {
+      productName
+      productId
       messages {
         data {
           id
