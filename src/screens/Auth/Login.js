@@ -59,7 +59,9 @@ class Account extends Component {
       <div className={styles.container} >
         <div className={styles.top} >
           <div className={styles.title} ><span>Blanja</span></div>
-          <div className={styles.desc} ><span>Masukkan nomor telepon anda untuk masuk ke blanja.tw</span></div>
+          <div className={styles.desc} >
+            <span>Masukkan nomor telepon anda untuk masuk ke blanja.tw</span>
+          </div>
         </div>
 
         <form className={styles.form} onSubmit={this.onSubmit} >

@@ -1,6 +1,7 @@
 //MODULES
 import React, { Component } from 'react'
 import { List, ListItem, ListSubHeader } from 'react-toolbox/lib/list'
+import { observer } from 'mobx-react'
 
 //STYLES
 import styles from './css/authorized.scss'
@@ -9,17 +10,16 @@ import styles from './css/authorized.scss'
 import { user } from '../../services/stores'
 
 //COMPONENT
+@observer
 class Account extends Component {
   componentDidMount() {
-    user.getProfilePictureURL().then(profilePictureURL => {
-      if (profilePictureURL) this.setState({profilePictureURL})
-    })
+    user.getProfilePictureURL()
   }
 
   renderProfilePicture() {
     let { name } = user.data
-    let { profilePictureURL } = this.state
-
+    let { profilePictureURL } = user
+    
     if (profilePictureURL) return (
       <div className={styles.pic} >
         <img src={profilePictureURL} alt="Profile Picture"/>
@@ -54,10 +54,15 @@ class Account extends Component {
         <div className={styles.card} >
           <List selectable ripple> 
             <ListSubHeader caption='Account' />
-            <ListItem caption='Profile Saya' leftIcon='account_circle' />
+            <ListItem 
+              caption='Profile Saya' leftIcon='account_circle' 
+              onClick={() => {
+                this.props.history.push('/account/profile')
+              }}
+            />
             <ListItem caption='Daftar Transaksi' leftIcon='playlist_add_check' />
-            <ListItem caption='Ubah Katasandi' leftIcon='delete' />
-            <ListItem caption='Berjualan di Blanja' leftIcon='lock' />
+            <ListItem caption='Ubah Katasandi' leftIcon='lock' />
+            <ListItem caption='Berjualan di Blanja' leftIcon='business_center' />
             <ListItem caption='Log Out' leftIcon='input' onClick={() => user.logout()} />
           </List>
         </div>

@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
+import { Switch, Route } from 'react-router-dom'
 
 //STYLES
 import styles from './css/index-account.scss'
@@ -11,6 +12,10 @@ import styles from './css/index-account.scss'
 import TopBar, { ABSOLUTE } from '../../components/TopBar'
 import Authorized from './Authorized'
 import Unauthorized from './Unauthorized'
+import asyncComponent from '../../components/AsyncComponent'
+
+//ASYNC_SCREEN
+const Profile = asyncComponent(() => import('./Profile.js'))
 
 //STORE
 import { user } from '../../services/stores'
@@ -18,6 +23,11 @@ import { user } from '../../services/stores'
 //COMPONENT
 @observer
 class Account extends Component {
+  renderAccount() {
+    if (user.isLoggedIn) return <Authorized {...this.props} />
+    return <Unauthorized />
+  }
+
   renderContent() {
     if (user.isLoading) return <div className={styles.loading} >
       <div>
@@ -29,8 +39,15 @@ class Account extends Component {
       </div>
     </div>
 
-    if (user.isLoggedIn) return <Authorized />
-    return <Unauthorized />
+    return (
+      <React.Fragment>
+        {this.renderAccount()}
+
+        <Switch>
+          <Route path="/account/profile" component={Profile} />
+        </Switch>
+      </React.Fragment>
+    )
   }
 
   render() {

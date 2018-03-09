@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 5px;
+  align-items: center;
+  font-size: 11pt;
+  border-bottom: 1px solid #d0d0d0;
+
+  .input {
+    display: block;
+    border: none;
+    padding: 5px;
+    text-align: right;
+    font-size: 11pt;
+
+    &:disabled {
+      background: none;
+      color: #adadad;
+    }
+  }
+
+  input::placeholder {
+    opacity: .3;
+  }
+}
+
+.disabled {
+  color: #adadad;
+}

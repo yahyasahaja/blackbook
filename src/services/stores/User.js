@@ -33,6 +33,7 @@ class User {
       return axios.get(getIAMEndpoint('/profpic'))
         .then(({data: { is_ok, uri }}) => {
           if (is_ok) {
+            this.profilePictureURL = observable(uri)
             return uri
           }
 
@@ -51,8 +52,6 @@ class User {
     this.isLoading = true
     password = btoa(password)
 
-    console.log(msisdn, password)
-    
     return axios.post(getIAMEndpoint('/login'), {
       msisdn,
       password
@@ -81,8 +80,6 @@ class User {
   register = (name, msisdn, password, address, country) => {
     this.isLoading = true
     password = btoa(password)
-
-    console.log(name, msisdn, password, address, country)
     
     return axios.post(getIAMEndpoint('/login'), {
       msisdn,
@@ -119,7 +116,6 @@ class User {
       }
     })
       .then(({data: { is_ok, data: user } }) => {
-        console.log(is_ok, user)
         this.isLoading = false
         if (is_ok) {
           tokens.setAuthToken(raw)
