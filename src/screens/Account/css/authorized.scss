@@ -10,6 +10,10 @@
     font-size: 12pt;
 
     .picture-default {
+      border: 3px solid #595959;
+    }
+
+    .pic, .picture-default {
       display: flex;
       width: 100px;
       height: 100px;
@@ -20,7 +24,16 @@
       font-size: 40pt;
       justify-content: center;
       align-items: center;
-      border: 3px solid #595959;
+      overflow: hidden;
+    }
+
+    .pic {
+      box-shadow: 2px 2px 15px #d5d5d5;
+
+      img {
+        height: 100%;
+        width: 100%;
+      }
     }
 
     .name {

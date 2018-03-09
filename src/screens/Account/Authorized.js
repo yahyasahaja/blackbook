@@ -10,8 +10,21 @@ import { user } from '../../services/stores'
 
 //COMPONENT
 class Account extends Component {
+  componentDidMount() {
+    user.getProfilePictureURL().then(profilePictureURL => {
+      if (profilePictureURL) this.setState({profilePictureURL})
+    })
+  }
+
   renderProfilePicture() {
     let { name } = user.data
+    let { profilePictureURL } = this.state
+
+    if (profilePictureURL) return (
+      <div className={styles.pic} >
+        <img src={profilePictureURL} alt="Profile Picture"/>
+      </div>
+    )
 
     return (
       <div className={styles['picture-default']} >
@@ -20,10 +33,14 @@ class Account extends Component {
     )
   }
 
+  state = {
+    profilePictureURL: null
+  }
+
   render() {
     let {
       name,
-      msisdn
+      msisdn,
     } = user.data
 
     return (
@@ -41,7 +58,7 @@ class Account extends Component {
             <ListItem caption='Daftar Transaksi' leftIcon='playlist_add_check' />
             <ListItem caption='Ubah Katasandi' leftIcon='delete' />
             <ListItem caption='Berjualan di Blanja' leftIcon='lock' />
-            <ListItem caption='Log Out' leftIcon='input' />
+            <ListItem caption='Log Out' leftIcon='input' onClick={() => user.logout()} />
           </List>
         </div>
       </div>

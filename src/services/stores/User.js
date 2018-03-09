@@ -19,11 +19,31 @@ class User {
   }
 
   @observable data = null
+  @observable profilePictureURL
   @observable isLoading
 
   @action
   setData = data => {
     return this.data = observable(data)
+  }
+
+  @action
+  getProfilePictureURL() {
+    if (this.isLoggedIn && tokens.authToken) 
+      return axios.get(getIAMEndpoint('/profpic'))
+        .then(({data: { is_ok, uri }}) => {
+          if (is_ok) {
+            return uri
+          }
+
+          return false
+        })
+        .catch(err => {
+          console.log('ERROR ON FETCH PROFILE PICTURE', err)
+          return false
+        })
+
+    return new Promise(resolve => resolve(false))
   }
 
   @action

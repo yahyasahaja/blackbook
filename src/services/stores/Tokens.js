@@ -12,7 +12,7 @@ import {
 class Tokens {
   constructor() {
     //INIT_TOKENS
-    let apiToken
+    let apiToken, authToken
 
     if ((apiToken = localStorage.getItem(API_TOKEN_STORAGE_URI)))
       this.apiToken = observable(apiToken)
@@ -24,6 +24,9 @@ class Tokens {
           this.apiToken = observable(token)
         }
       })
+
+    if ((authToken = localStorage.get(AUTHORIZATION_TOKEN_STORAGE_URI))) 
+      this.authToken = observable(authToken)
   }
 
   //THIS MUST BE RAW TOKEN, NO BEARER!
