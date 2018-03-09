@@ -29,17 +29,21 @@ class User {
   @action
   login = (msisdn, password) => {
     this.isLoading = true
+    password = btoa(password)
+
+    console.log(msisdn, password)
     
-    axios.post(getIAMEndpoint('/login'), {
+    return axios.post(getIAMEndpoint('/login'), {
       msisdn,
       password
-    }).then(({ is_ok, data: token }) => {
+    }).then(({data: { is_ok, data: token }}) => {
       
       this.isLoading = false
   
       if (is_ok) {
+        tokens.setAuthToken(token)
         this.fetchData(token)
-        return tokens.authToken = token
+        return token
       }
 
       return false
@@ -54,17 +58,51 @@ class User {
   }
 
   @action
-  fetchData = token => {
-    let authToken = token || localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)
-    
-    if (!authToken) return new Promise((resolve) => resolve(false))
+  register = (name, msisdn, password, address, country) => {
     this.isLoading = true
-    return axios.get(getIAMEndpoint('/user'))
+    password = btoa(password)
+
+    console.log(name, msisdn, password, address, country)
+    
+    return axios.post(getIAMEndpoint('/login'), {
+      msisdn,
+      password,
+      name,
+      address,
+      country,
+    }).then(({data: { is_ok, data: token }}) => {
+      
+      this.isLoading = false
+  
+      if (is_ok) {
+        tokens.setAuthToken(token)
+        this.fetchData(token)
+        return token
+      }
+
+      return false
+    })
+  }
+
+  @action
+  fetchData = token => {
+    let raw = token || localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)
+    
+    if (!raw) return new Promise((resolve) => resolve(false))
+
+    let authToken = `Bearer ${raw}`
+
+    this.isLoading = true
+    return axios.get(getIAMEndpoint('/user'), {
+      headers: {
+        Authorization: authToken
+      }
+    })
       .then(({data: { is_ok, data: user } }) => {
         console.log(is_ok, user)
         this.isLoading = false
         if (is_ok) {
-          tokens.authToken = authToken
+          tokens.setAuthToken(raw)
           return this.setData(user)
         }
 
@@ -83,4 +121,4 @@ class User {
 }
  
 // autorun(() => console.log('DARI AUTORUN', window.badges.data))
-export default new User()
+export default window.user = new User()

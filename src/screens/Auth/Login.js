@@ -15,9 +15,12 @@ import PrimaryButton from '../../components/PrimaryButton'
 
 //INNER_CONFIG
 let countryCodes = [
-  { value: 'twn', label: '+886' },
-  { value: 'idn', label: '+62' },
+  { value: '886', label: '+886' },
+  { value: '62', label: '+62' },
 ]
+
+//STORE
+import { user } from '../../services/stores'
 
 //COMPONENT
 class Account extends Component {
@@ -25,13 +28,29 @@ class Account extends Component {
     this.props.setTitle('Login')
   }
 
+  onSubmit = e => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    let { password, countryCode, telp } = this.state
+
+    if (countryCode === null) return
+    user.login(`${countryCode}${telp}`, password).then(token => {
+      console.log('FROM LOGIN', token)
+    })
+  }
+
   state = {
-    countryCode: null,
+    countryCode: '886',
     telp: '',
     password: '',
   }
 
   handleChange(name, value) {
+    if (name === 'telp')
+      if (value[0] === '0') 
+        value = value.split('').slice(1).join('')
+
     this.setState({ [name]: value })
   }
 
@@ -43,10 +62,9 @@ class Account extends Component {
           <div className={styles.desc} ><span>Masukkan nomor telepon anda untuk masuk ke blanja.tw</span></div>
         </div>
 
-        <form className={styles.form} >
+        <form className={styles.form} onSubmit={this.onSubmit} >
           <div className={styles.handphone} >
             <Dropdown
-              auto
               onChange={this.handleChange.bind(this, 'countryCode')}
               source={countryCodes}
               value={this.state.countryCode}
@@ -55,6 +73,7 @@ class Account extends Component {
 
             <div className={styles.telp} >
               <Input
+                type="number"
                 label="Nomor Telepon"
                 onChange={this.handleChange.bind(this, 'telp')}
                 value={this.state.telp}

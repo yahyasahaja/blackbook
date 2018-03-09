@@ -1,10 +1,11 @@
 //MODULES
-import { observable, computed } from 'mobx'
+import { observable, computed, action } from 'mobx'
 import axios from 'axios'
 
 import {
   getIAMEndpoint,
   API_TOKEN_STORAGE_URI,
+  AUTHORIZATION_TOKEN_STORAGE_URI,
 } from '../../config'
 
 //STORE
@@ -25,6 +26,7 @@ class Tokens {
       })
   }
 
+  //THIS MUST BE RAW TOKEN, NO BEARER!
   @observable apiToken = null
   @observable authToken = null
 
@@ -39,7 +41,15 @@ class Tokens {
   get rawToken() {
     return this.authToken || this.apiToken
   }
+
+  @action
+  setAuthToken(token) {
+    this.authToken = token
+    axios.defaults.headers['Authorization'] = `Bearer ${token}`
+    localStorage.setItem(AUTHORIZATION_TOKEN_STORAGE_URI, token)
+    return token
+  }
 }
  
 // autorun(() => console.log('DARI AUTORUN', window.badges.data))
-export default new Tokens()
+export default window.tokens = new Tokens()

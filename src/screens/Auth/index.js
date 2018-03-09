@@ -9,7 +9,7 @@ import { observer } from 'mobx-react'
 import styles from './css/index-auth.scss'
 
 //COMPONENTS
-import PopupBar from '../../components/PopupBar'
+import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import Login from './Login'
 import Register from './Register'
 
@@ -63,6 +63,7 @@ class Auth extends Component {
         title={this.state.title} {...this.props}
         renderContent={this.renderContent}
         backLink="/account"
+        anim={ANIMATE_HORIZONTAL}
       />
     )
   }

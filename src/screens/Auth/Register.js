@@ -16,9 +16,12 @@ import PrimaryButton from '../../components/PrimaryButton'
 
 //INNER_CONFIG
 let countryCodes = [
-  { value: 'twn', label: '+886' },
-  { value: 'idn', label: '+62' },
+  { value: '886', label: '+886' },
+  { value: '62', label: '+62' },
 ]
+
+//STORE
+import { user } from '../../services/stores'
 
 //COMPONENT
 class Register extends Component {
@@ -27,7 +30,7 @@ class Register extends Component {
   }
 
   state = {
-    countryCode: null,
+    countryCode: '886',
     telp: '',
     password: '',
     address: '',
@@ -36,7 +39,25 @@ class Register extends Component {
   }
 
   handleChange(name, value) {
+    if (name === 'telp')
+      if (value[0] === '0') 
+        value = value.split('').slice(1).join('')
+
     this.setState({ [name]: value })
+  }
+
+  onSubmit = e => {
+    e.preventDefault()
+    e.stopPropagation()
+    let {
+      countryCode,
+      telp,
+      password,
+      address,
+      name,
+    } = this.state
+
+    user.register(name, `${countryCode}${telp}`, password, address)
   }
 
   render() {
@@ -49,7 +70,7 @@ class Register extends Component {
           </span></div>
         </div>
 
-        <form className={styles.form} >
+        <form className={styles.form} onSubmit={this.onSubmit} >
           <Input
             type="text"
             label="Nama"
@@ -104,10 +125,10 @@ class Register extends Component {
             rows={2}
           />
 
-          <PrimaryButton type="submit" >Login</PrimaryButton>
+          <PrimaryButton type="submit" >Register</PrimaryButton>
 
           <span className={styles.ref} >
-            Belum punya akun? <Link to="/auth/register" >Daftar disini</Link>
+            Sudah memiliki akun? <Link to="/auth/login" >Login disini</Link>
           </span>
         </form>
       </div>

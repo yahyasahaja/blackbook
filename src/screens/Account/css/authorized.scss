@@ -1,0 +1,45 @@
+.container {
+  display: block;
+  width: 100%;
+  padding: 15px;
+
+  .profile {
+    display: block;
+    margin: auto;
+    text-align: center;
+    font-size: 12pt;
+
+    .picture-default {
+      display: flex;
+      width: 100px;
+      height: 100px;
+      margin: auto;
+      border-radius: 100px;
+      background: white;
+      margin-bottom: 10px;
+      font-size: 40pt;
+      justify-content: center;
+      align-items: center;
+      border: 3px solid #595959;
+    }
+
+    .name {
+      display: block;
+      font-weight: bold;
+    }
+
+    .msisdn {
+      display: block;
+      color: rgb(148, 148, 148);
+    }
+  }
+
+  .card {
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 1px 2px 5px #dedede;
+  }
+}
