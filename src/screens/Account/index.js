@@ -16,6 +16,7 @@ import asyncComponent from '../../components/AsyncComponent'
 
 //ASYNC_SCREEN
 const Profile = asyncComponent(() => import('./Profile.js'))
+const Password = asyncComponent(() => import ('./Password.js'))
 
 //STORE
 import { user } from '../../services/stores'
@@ -45,6 +46,7 @@ class Account extends Component {
 
         <Switch>
           <Route path="/account/profile" component={Profile} />
+          <Route path="/account/password" component={Password} />
         </Switch>
       </React.Fragment>
     )

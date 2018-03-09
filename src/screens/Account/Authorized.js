@@ -61,7 +61,12 @@ class Account extends Component {
               }}
             />
             <ListItem caption='Daftar Transaksi' leftIcon='playlist_add_check' />
-            <ListItem caption='Ubah Katasandi' leftIcon='lock' />
+            <ListItem 
+              caption='Ubah Katasandi' leftIcon='lock' 
+              onClick={() => {
+                this.props.history.push('/account/password')
+              }}
+            />
             <ListItem caption='Berjualan di Blanja' leftIcon='business_center' />
             <ListItem caption='Log Out' leftIcon='input' onClick={() => user.logout()} />
           </List>
