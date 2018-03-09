@@ -5,16 +5,29 @@ import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import ThreadItem from '../../components/Chat/ThreadItem'
 import client from '../../services/graphql/chatClient'
+import { user } from '../../services/stores'
 
 import styles from './css/index.scss'
 
-@observer
+@observer 
 class Threads extends Component {
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.isSelected && !user.isLoggedIn) {
+      return this.props.history.replace('/account')
+    }
+  }
+
   render() {
+    const { data } = this.props
+    const { loading, threads, error } = data
+    if(!user.isLoggedIn || error) {
+      return null
+    } 
+
     return (
       <div>
-        {!this.props.data.loading &&
-          this.props.data.threads.data.map(thread => {
+        {!loading &&
+          threads.data.map(thread => {
             const sender = thread.participants[0].isMe
               ? thread.participants[1]
               : thread.participants[0]

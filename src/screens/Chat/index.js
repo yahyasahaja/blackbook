@@ -23,7 +23,7 @@ export default class Chat extends Component {
         style={{ background: 'rgb(239, 239, 239)' }}
         wrapperStyle={{ padding: 0 }}
       >
-        <Threads />
+        <Threads {...this.props} isSelected={this.props.isSelected} />
       </TopBar>
     )
   }

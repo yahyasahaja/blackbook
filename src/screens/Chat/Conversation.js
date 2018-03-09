@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
@@ -59,7 +59,7 @@ class Conversation extends Component {
   renderMessages(messages) {
     return messages.reverse().map((message, index) => {
       let isOtherDay = false
-      
+
       if (index === 0) {
         isOtherDay = true
       } else {
@@ -69,7 +69,7 @@ class Conversation extends Component {
           isOtherDay = true
         }
       }
-      
+
       return (
         <ChatBubble
           isOtherDay={isOtherDay}
@@ -85,14 +85,17 @@ class Conversation extends Component {
   }
 
   render() {
+    console.log(this.props)
     const { message, title } = this.state
+    const { data, product } = this.props
     return (
       <PopupBar
-        onBack={(e) => {
+        onBack={e => {
           e.preventDefault()
           this.props.history.goBack()
         }}
-        title={`Hubungi ${title}`} {...this.props}
+        title={`Hubungi ${title}`}
+        {...this.props}
         anim={ANIMATE_HORIZONTAL}
         style={{
           background: 'rgb(239, 239, 239)',
@@ -102,10 +105,25 @@ class Conversation extends Component {
         }}
       >
         <div className={styles.productBar}>
-          <img src="https://marketplacefile.blob.core.windows.net/profiles-testing/b8c240e7-6afe-4274-93ec-7d833657fe5b/1518597609.jpg" />
+          <div className={styles.imagePlaceholder}>
+            {!data.loading &&
+              (!product.loading && <img src={product.product.images[0].url} />)}
+          </div>
           <div className={styles.content}>
-            <p>{this.props.data.loading ? 'Memuat produk...' : this.props.data.thread.productName}</p>
-            <span>{this.convertToMoneyFormat(12000, 'NTD')}</span>
+            <p>
+              {this.props.data.loading
+                ? 'Memuat produk...'
+                : this.props.data.thread.productName}
+            </p>
+            {!data.loading ? (
+              product.loading ? (
+                <span>memuat...</span>
+              ) : (
+                <span>{this.convertToMoneyFormat(12000, 'NTD')}</span>
+              )
+            ) : (
+              <span>memuat...</span>
+            )}
           </div>
           <span className={`mdi mdi-chevron-right ${styles.chevronRight}`} />
         </div>
@@ -147,6 +165,10 @@ class Conversation extends Component {
   }
 }
 
+Conversation.defaultProps = {
+  data: {},
+}
+
 const getMessagesQuery = gql`
   query MessageQuery($id: Int!) {
     thread(threadId: $id, perspective: BUYER) {
@@ -169,11 +191,37 @@ const getMessagesQuery = gql`
   }
 `
 
-export default graphql(getMessagesQuery, {
-  options: props => ({
-    client,
-    variables: {
-      id: props.match.params.id,
-    },
+const getProductQuery = gql`
+  query Product($id: ID!) {
+    product(productId: $id) {
+      name
+      price {
+        currency
+        value
+      }
+      images {
+        url
+      }
+    }
+  }
+`
+
+export default compose(
+  graphql(getMessagesQuery, {
+    options: props => ({
+      client,
+      variables: {
+        id: props.match.params.id,
+      },
+    }),
   }),
-})(Conversation)
+  graphql(getProductQuery, {
+    name: 'product',
+    skip: props => !props.data.thread,
+    options: props => ({
+      variables: {
+        id: props.data.thread.productId,
+      },
+    }),
+  }),
+)(Conversation)

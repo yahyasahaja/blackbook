@@ -25,7 +25,7 @@ class Tokens {
         }
       })
 
-    if ((authToken = localStorage.get(AUTHORIZATION_TOKEN_STORAGE_URI))) 
+    if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI))) 
       this.authToken = observable(authToken)
   }
 
