@@ -57,7 +57,13 @@ class Register extends Component {
       name,
     } = this.state
 
-    user.register(name, `${countryCode}${telp}`, password, address)
+    user.register({
+      name, 
+      msisdn: `${countryCode}${telp}`, 
+      password, 
+      address, 
+      country: countryCode === '886' ? 'TWN' : 'IDN'
+    })
   }
 
   render() {

@@ -1,7 +1,9 @@
 //MODULES
 import React, { Component } from 'react'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
+import Dialog from 'react-toolbox/lib/dialog'
 
 //STYLES
 import styles from './css/profile.scss'
@@ -12,79 +14,123 @@ import EditableList from '../../components/EditableList'
 import PrimaryButton from '../../components/PrimaryButton'
 
 //STORE
-import { user } from '../../services/stores'
+import { user, snackbar } from '../../services/stores'
 
 //COMPONENT
 @observer
 class Auth extends Component {
   componentDidMount() {
-    this.setState({...user.data})
+    user.getProfilePictureURL()
+    this.setState({ ...user.data })
   }
 
   state = {
-    profilePictureURL: null,
-    currentPassword: '',
+    oldPassword: '',
     newPassword: '',
     retypePassword: '',
+    active: false
   }
 
   handleChange(name, value) {
-    this.setState({[name]: value})
+    this.setState({ [name]: value })
   }
 
-  onSubmit = e => {
-    e.preventDefault()
-    e.stopPropagation()
-    
-    console.log('WILL BE UPDATED', this.state)
+  updatePassword = () => {
+    if (user.isLoadingUpdateProfile) return
+    if (this.state.newPassword !== this.state.retypePassword) 
+      return snackbar.show('Password does not match!')
+
+    this.setState({ active: false }, () => {
+      user.updateProfile({
+        ...this.state
+      }).then(token => {
+        if (token) snackbar.show('Password have been updated')
+        this.props.history.push('/account')
+      })
+    })
   }
+
+  handleToggle = () => {
+    this.setState({ active: !this.state.active })
+  }
+
+  actions = [
+    { label: 'Cancel', onClick: this.handleToggle },
+    { label: 'Ok', onClick: this.updatePassword }
+  ]
 
   renderContent = () => {
     let {
-      currentPassword,
+      oldPassword,
       newPassword,
       retypePassword,
     } = this.state
 
     return (
       <div className={styles.container} >
-        <form onSubmit={this.onSubmit} className={styles.card} >
-          <EditableList 
+        <div className={styles.card} >
+          <EditableList
             label="Current Password" placeholder="Your current password"
-            value={currentPassword}
-            onChange={this.handleChange.bind(this, 'currentPassword')}
+            value={oldPassword} type="password"
+            onChange={this.handleChange.bind(this, 'oldPassword')}
             border
           />
 
-          <EditableList 
+          <EditableList
             label="New Password" placeholder="Your new password"
-            value={newPassword}
+            value={newPassword} type="password"
             onChange={this.handleChange.bind(this, 'newPassword')}
             border
           />
 
-          <EditableList 
+          <EditableList
             label="Retype Password" placeholder="Retype your new password"
-            value={retypePassword}
+            value={retypePassword} type="password"
             onChange={this.handleChange.bind(this, 'retypePassword')}
             border
           />
 
-          <PrimaryButton 
-            className={styles.button} 
-            type="submit"
+          {this.renderButton()}
+          <Dialog
+            actions={this.actions}
+            active={this.state.active}
+            onEscKeyDown={this.handleToggle}
+            onOverlayClick={this.handleToggle}
+            title='Update Password'
           >
-            Ganti Password
-          </PrimaryButton>
-        </form>
+            <p>Anda akan memperbarui kata sandi. Lanjutkan?</p>
+          </Dialog>
+        </div>
       </div>
+    )
+  }
+
+  renderButton() {
+    if (user.isLoadingUpdateProfile) return (
+      <div className={styles['loading-wrapper']} >
+        <ProgressBar
+          className={styles.loading}
+          type='circular'
+          mode='indeterminate' multicolor
+        />
+      </div>
+    )
+
+    return (
+      <PrimaryButton
+        className={styles.button}
+        type="submit"
+        onClick={() => this.setState({ active: true })}
+      >
+        Update Password
+      </PrimaryButton>
     )
   }
 
   render() {
     return (
       <PopupBar
-        title="Profile" {...this.props}
+        title="Password" {...this.props}
         renderContent={this.renderContent}
         backLink="/account"
         anim={ANIMATE_HORIZONTAL}

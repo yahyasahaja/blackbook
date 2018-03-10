@@ -20,7 +20,7 @@ class Account extends Component {
     let { name } = user.data
     let { profilePictureURL } = user
     
-    if (profilePictureURL) return (
+    if (profilePictureURL) if (profilePictureURL.length > 0) return (
       <div className={styles.pic} >
         <img src={profilePictureURL} alt="Profile Picture"/>
       </div>

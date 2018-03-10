@@ -11,6 +11,11 @@ import {
 //TOKENS
 import tokens from './Tokens'
 
+//UTILS
+import {
+  getSubscription,
+} from '../../utils'
+
 //STORE
 class User {
   constructor() {
@@ -21,6 +26,8 @@ class User {
   @observable data = null
   @observable profilePictureURL
   @observable isLoading
+  @observable isLoadingUpdateProfile
+  @observable isLoadingUpdatePassword
 
   @action
   setData = data => {
@@ -29,9 +36,9 @@ class User {
 
   @action
   getProfilePictureURL() {
-    if (this.isLoggedIn && tokens.authToken) 
+    if (this.isLoggedIn && tokens.authToken)
       return axios.get(getIAMEndpoint('/profpic'))
-        .then(({data: { is_ok, uri }}) => {
+        .then(({ data: { is_ok, uri } }) => {
           if (is_ok) {
             this.profilePictureURL = observable(uri)
             return uri
@@ -55,10 +62,10 @@ class User {
     return axios.post(getIAMEndpoint('/login'), {
       msisdn,
       password
-    }).then(({data: { is_ok, data: token }}) => {
-      
+    }).then(({ data: { is_ok, data: token } }) => {
+
       this.isLoading = false
-  
+
       if (is_ok) {
         tokens.setAuthToken(token)
         this.fetchData(token)
@@ -77,34 +84,78 @@ class User {
   }
 
   @action
-  register = (name, msisdn, password, address, country) => {
-    this.isLoading = true
-    password = btoa(password)
-    
-    return axios.post(getIAMEndpoint('/login'), {
-      msisdn,
-      password,
-      name,
-      address,
-      country,
-    }).then(({data: { is_ok, data: token }}) => {
-      
-      this.isLoading = false
-  
-      if (is_ok) {
-        tokens.setAuthToken(token)
-        this.fetchData(token)
-        return token
-      }
+  updatePassword = ({oldPassword, newPassword}) => {
+    this.isLoadingUpdatePassword = true
 
-      return false
+    return axios.post(getIAMEndpoint('/user/pwd', {
+      oldPassword,
+      newPassword
+    })).then(({data: { is_ok }}) => {
+      this.isLoadingUpdatePassword = false
+      return is_ok
+    })
+  }
+
+  @action
+  updateProfile = ({ 
+    name, 
+    msisdn, 
+    password, 
+    address, 
+    country, 
+    zip_code, 
+    subscription,
+    city
+  }) => {
+    let data = {}
+    this.isLoadingUpdateProfile = true
+
+    if (name) data.name = name
+    if (msisdn) data.msisdn = msisdn
+    if (password) data.password = password
+    if (address) data.password = address
+    if (country) data.country = country
+    if (zip_code) data.zip_code = zip_code
+    if (subscription) data.push_id = JSON.stringify(subscription)
+    if (city) data.city = city
+
+    return axios.post(getIAMEndpoint('/register'), data)
+      .then(({ data: { is_ok, data: token } }) => {
+        this.isLoadingUpdateProfile = false
+
+        if (is_ok) {
+          return token
+        }
+
+        return false
+      })
+  }
+
+  @action
+  register = ({ name, msisdn, password, address, country, zip_code, city }) => {
+    password = btoa(password)
+
+    return getSubscription().then(subscription => {
+      return this.updateProfile({
+        name, 
+        msisdn, 
+        password, 
+        address, 
+        country, 
+        zip_code, 
+        subscription,
+        city
+      }).then(token => {
+        tokens.setAuthToken(token)
+        return this.fetchData(token)
+      })
     })
   }
 
   @action
   fetchData = token => {
     let raw = token || localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)
-    
+
     if (!raw) return new Promise((resolve) => resolve(false))
 
     let authToken = `Bearer ${raw}`
@@ -115,7 +166,7 @@ class User {
         Authorization: authToken
       }
     })
-      .then(({data: { is_ok, data: user } }) => {
+      .then(({ data: { is_ok, data: user } }) => {
         this.isLoading = false
         if (is_ok) {
           tokens.setAuthToken(raw)
@@ -135,6 +186,6 @@ class User {
     return !!this.data
   }
 }
- 
+
 // autorun(() => console.log('DARI AUTORUN', window.badges.data))
 export default window.user = new User()
