@@ -10,10 +10,15 @@ import client from '../../services/graphql/chatClient'
 
 import styles from './css/conversation.scss'
 
-import { popup } from '../../services/stores'
+import { appStack } from '../../services/stores'
 
 @observer
 class Conversation extends Component {
+  constructor(props) {
+    super(props)
+    this.id = appStack.push()
+  }
+
   state = {
     title: this.props.location.state
       ? this.props.location.state.sender
@@ -21,12 +26,8 @@ class Conversation extends Component {
     message: '',
   }
 
-  componentDidMount() {
-    popup.push()
-  }
-
   componentWillUnmount() {
-    popup.pop()
+    appStack.pop()
   }
 
   componentDidUpdate() {

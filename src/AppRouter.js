@@ -16,6 +16,8 @@ const Account = asyncComponent(() => import('./screens/Account'))
 const Search = asyncComponent(() => import('./screens/Search'))
 const Category = asyncComponent(() => import('./screens/Category'))
 const Auth = asyncComponent(() => import('./screens/Auth'))
+const Password = asyncComponent(() => import('./screens/Account/Password'))
+const Profile = asyncComponent(() => import('./screens/Account/Profile'))
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -24,7 +26,7 @@ import styles from './assets/css/app-router.scss'
 import BottomTabBar from './components/BottomTabBar'
 
 //STORE
-import { popup, badges } from './services/stores'
+import { appStack, badges } from './services/stores'
 
 //INNER_CONFIG
 let BOTTOM_TAB_BAR_DATA = [
@@ -39,15 +41,13 @@ let BOTTOM_TAB_BAR_DATA = [
 
 //COMPONENT
 @observer class AppRouter extends Component {
-  componentWillMount() {
-    // axios.defaults.headers.post['Content-Type'] = 'application/json'
-    // axios.defaults.headers.common['Authorization']
-    // axios.defaults.baseURL = PRODUCTS_ENDPOINT_URL
-  }
 
   componentDidMount() {
     let { onlineStatus: { goOffline, goOnline }, snackbar: { show } } = this.props
-    window.ononline = () => goOnline()
+    window.ononline = () => {
+      goOnline()
+      window.location.reload()
+    }
     window.onoffline = () => {
       goOffline()
       show('You\'re offline!')
@@ -87,7 +87,7 @@ let BOTTOM_TAB_BAR_DATA = [
           <Switch>
             <Redirect from="/" exact to="/home" />
             <Route path="*" render={props =>
-              <BottomTabBar {...props} data={BOTTOM_TAB_BAR_DATA} popup={popup} />}
+              <BottomTabBar {...props} data={BOTTOM_TAB_BAR_DATA} appStack={appStack} />}
             />
           </Switch>
           <Switch>
@@ -95,6 +95,8 @@ let BOTTOM_TAB_BAR_DATA = [
             <Route path="/auth" component={Auth} />
             <Route path="/category/:category_name" component={Category} />
             <Route path="/chat/:id" component={Conversation} />
+            <Route path="/account/profile" component={Profile} />
+            <Route path="/acocunt/password" component={Password} />
           </Switch>
 
           <section>

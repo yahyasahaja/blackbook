@@ -14,11 +14,21 @@ import EditableList from '../../components/EditableList'
 import PrimaryButton from '../../components/PrimaryButton'
 
 //STORE
-import { user, snackbar } from '../../services/stores'
+import { user, snackbar, appStack } from '../../services/stores'
 
 //COMPONENT
 @observer
 class Auth extends Component {
+  constructor(props) {
+    super(props)
+    this.id = appStack.push()
+    console.log('dari profile', this.id)
+  }
+
+  componentWillUnmount() {
+    appStack.pop()
+  }
+
   componentDidMount() {
     user.getProfilePictureURL()
     this.setState({ ...user.data })

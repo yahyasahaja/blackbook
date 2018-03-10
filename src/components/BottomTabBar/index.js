@@ -68,7 +68,7 @@ class BottomTabBar extends Component {
   }
 
   render() {
-    let { data, popup: { isPopupActive } } = this.props
+    let { data, appStack: { isPopupActive } } = this.props
     return (
       <div className={styles.container} 
         style={{

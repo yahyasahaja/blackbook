@@ -16,7 +16,7 @@ import Pills from '../../components/Pills'
 import Separator from '../../components/Separator'
 
 //STORE
-import { categories as categoriesStore, popup, favorites } from '../../services/stores'
+import { categories as categoriesStore, appStack, favorites } from '../../services/stores'
 
 //INNER_CONFIG
 const MAX_FETCH_LENGTH = 5
@@ -94,7 +94,7 @@ class Home extends Component {
     if (loading) return
     if (scrollPosition < pageHeight - screenHeight - screenHeight * .1) return
     if (this.state.isFetchDisabled) return
-    if (popup.isPopupActive) return
+    if (appStack.isPopupActive) return
     refetch({ limit: MAX_FETCH_LENGTH, offset })
   }
 

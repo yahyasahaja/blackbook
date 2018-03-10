@@ -1,5 +1,5 @@
 import categories from './Categories'
-import popup from './Popup'
+import appStack from './AppStack'
 import favorites from './Favorites'
 import onlineStatus from './OnlineStatus'
 import selected from './Selected'
@@ -10,7 +10,7 @@ import user from './User'
 
 export { 
   categories,
-  popup,
+  appStack,
   favorites,
   onlineStatus,
   selected,
@@ -22,7 +22,7 @@ export {
 
 export default { 
   categories,
-  popup,
+  appStack,
   favorites,
   onlineStatus,
   selected,

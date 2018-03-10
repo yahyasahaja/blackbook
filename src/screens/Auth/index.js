@@ -14,11 +14,20 @@ import Login from './Login'
 import Register from './Register'
 
 //STORE
-import { user } from '../../services/stores'
+import { user, appStack } from '../../services/stores'
 
 //COMPONENT
 @observer
 class Auth extends Component {
+  constructor(props) {
+    super(props)
+    this.id = appStack.push()
+  }
+
+  componentWillUnmount() {
+    appStack.pop()
+  }
+
   renderLogin() {
     return <div />
   }

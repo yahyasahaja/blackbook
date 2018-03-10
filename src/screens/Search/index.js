@@ -14,7 +14,7 @@ import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import Card from '../../components/ProductCard'
 
 //STORE
-import { categories as categoriesStore, popup, favorites } from '../../services/stores'
+import { categories as categoriesStore, appStack, favorites } from '../../services/stores'
 
 //INNER_CONFIG
 const MAX_FETCH_LENGTH = 5
@@ -29,6 +29,16 @@ const filters = [
 //COMPONENT
 @observer
 class Search extends Component {
+  constructor(props) {
+    super(props)
+    this.id = appStack.push()
+  }
+
+  componentWillUnmount() {
+    appStack.pop()
+    this.removeScrollListener()
+  }
+
   componentWillReceiveProps(nextProps) {
     this.checkSelectedChanges(nextProps)
     this.checkAllCategoriesChanges(nextProps)
@@ -79,7 +89,6 @@ class Search extends Component {
   category_name = ''
 
   componentDidMount() {
-    popup.push()
     if (!categoriesStore.data) this.fetchCategories()
     this.category_name = this.props.match.params.category_name
 
@@ -88,11 +97,6 @@ class Search extends Component {
     }
 
     this.addScrollListener()
-  }
-
-  componentWillUnmount() {
-    popup.pop()
-    this.removeScrollListener()
   }
 
   addScrollListener() {

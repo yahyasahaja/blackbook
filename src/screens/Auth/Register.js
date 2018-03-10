@@ -23,13 +23,18 @@ let countryCodes = [
 ]
 
 //STORE
-import { user } from '../../services/stores'
+import { user, popup, snackbar } from '../../services/stores'
 
 //COMPONENT
 @observer
 class Register extends Component {
+  componentWillUnmount() {
+    popup.pop()
+  }
+
   componentDidMount() {
     this.props.setTitle('Register')
+    popup.push()
   }
 
   state = {
