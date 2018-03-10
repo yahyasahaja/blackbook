@@ -16,7 +16,7 @@ class Tokens {
 
     if ((apiToken = localStorage.getItem(API_TOKEN_STORAGE_URI)))
       this.apiToken = observable(apiToken)
-    else 
+    else
       axios.get(getIAMEndpoint('/token')).then(res => {
         if (res.data) {
           let token = res.data.toString()
@@ -25,7 +25,7 @@ class Tokens {
         }
       })
 
-    if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI))) 
+    if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)))
       this.authToken = observable(authToken)
   }
 
@@ -52,7 +52,16 @@ class Tokens {
     localStorage.setItem(AUTHORIZATION_TOKEN_STORAGE_URI, token)
     return token
   }
+
+  @action
+  removeAuthToken() {
+    this.authToken = null
+    if (this.token) axios.defaults.headers['Authorization'] = this.token
+    else delete axios.defaults.headers['Authorization']
+    
+    localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
+  }
 }
- 
+
 // autorun(() => console.log('DARI AUTORUN', window.badges.data))
 export default window.tokens = new Tokens()

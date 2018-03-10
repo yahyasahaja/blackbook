@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import Input from 'react-toolbox/lib/input'
 import Dropdown from 'react-toolbox/lib/dropdown'
 import { Link } from 'react-router-dom'
+import { observer } from 'mobx-react'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 //STYLES 
 import styles from './css/login.scss'
@@ -20,10 +22,11 @@ let countryCodes = [
 ]
 
 //STORE
-import { user } from '../../services/stores'
+import { user, snackbar } from '../../services/stores'
 
 //COMPONENT
-class Account extends Component {
+@observer
+class Login extends Component {
   componentDidMount() {
     this.props.setTitle('Login')
   }
@@ -36,7 +39,7 @@ class Account extends Component {
 
     if (countryCode === null) return
     user.login(`${countryCode}${telp}`, password).then(token => {
-      console.log('FROM LOGIN', token)
+      if (!token) snackbar.show('Login failed')
     })
   }
 
@@ -52,6 +55,20 @@ class Account extends Component {
         value = value.split('').slice(1).join('')
 
     this.setState({ [name]: value })
+  }
+
+  renderButton() {
+    if (user.isLoadingLogin) return (
+      <div className={styles['loading-wrapper']} >
+        <ProgressBar
+          className={styles.loading}
+          type='circular'
+          mode='indeterminate' multicolor
+        />
+      </div>
+    )
+
+    return <PrimaryButton type="submit" >Login</PrimaryButton>
   }
 
   render() {
@@ -71,6 +88,7 @@ class Account extends Component {
               source={countryCodes}
               value={this.state.countryCode}
               label="Kode Negara"
+              required
             />
 
             <div className={styles.telp} >
@@ -80,6 +98,7 @@ class Account extends Component {
                 onChange={this.handleChange.bind(this, 'telp')}
                 value={this.state.telp}
                 theme={theme}
+                required
               />
             </div>
           </div>
@@ -90,9 +109,10 @@ class Account extends Component {
             onChange={this.handleChange.bind(this, 'password')}
             value={this.state.password}
             theme={theme}
+            required
           />
 
-          <PrimaryButton type="submit" >Login</PrimaryButton>
+          {this.renderButton()}
 
           <span className={styles.ref} >
             Belum punya akun? <Link to="/auth/register" >Daftar disini</Link>
@@ -103,4 +123,4 @@ class Account extends Component {
   }
 }
 
-export default Account
+export default Login

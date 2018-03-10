@@ -28,6 +28,7 @@ class User {
   @observable isLoading
   @observable isLoadingUpdateProfile
   @observable isLoadingUpdatePassword
+  @observable isLoadingLogin
 
   @action
   setData = data => {
@@ -56,7 +57,7 @@ class User {
 
   @action
   login = (msisdn, password) => {
-    this.isLoading = true
+    this.isLoadingLogin = true
     password = btoa(password)
 
     return axios.post(getIAMEndpoint('/login'), {
@@ -64,8 +65,7 @@ class User {
       password
     }).then(({ data: { is_ok, data: token } }) => {
 
-      this.isLoading = false
-
+      this.isLoadingLogin = false
       if (is_ok) {
         tokens.setAuthToken(token)
         this.fetchData(token)
@@ -79,8 +79,7 @@ class User {
   @action
   logout = () => {
     this.data = null
-    tokens.authToken = null
-    localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
+    tokens.removeAuthToken()
   }
 
   @action

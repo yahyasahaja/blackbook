@@ -4,6 +4,8 @@ import Input from 'react-toolbox/lib/input'
 import Dropdown from 'react-toolbox/lib/dropdown'
 import { Link } from 'react-router-dom'
 import { RadioGroup, RadioButton } from 'react-toolbox/lib/radio'
+import { observer } from 'mobx-react'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 //STYLES 
 import styles from './css/register.scss'
@@ -24,6 +26,7 @@ let countryCodes = [
 import { user } from '../../services/stores'
 
 //COMPONENT
+@observer
 class Register extends Component {
   componentDidMount() {
     this.props.setTitle('Register')
@@ -63,7 +66,23 @@ class Register extends Component {
       password, 
       address, 
       country: countryCode === '886' ? 'TWN' : 'IDN'
+    }).then(token => {
+      if (!token) snackbar.show('Registration failed')
     })
+  }
+
+  renderButton() {
+    if (user.isLoadingUpdateProfile) return (
+      <div className={styles['loading-wrapper']} >
+        <ProgressBar
+          className={styles.loading}
+          type='circular'
+          mode='indeterminate' multicolor
+        />
+      </div>
+    )
+
+    return <PrimaryButton type="submit" >Register</PrimaryButton>
   }
 
   render() {
@@ -83,6 +102,7 @@ class Register extends Component {
             onChange={this.handleChange.bind(this, 'name')}
             value={this.state.name}
             theme={theme}
+            required
           />
 
           <div className={styles.handphone} >
@@ -92,6 +112,7 @@ class Register extends Component {
               source={countryCodes}
               value={this.state.countryCode}
               label="Kode Negara"
+              required
             />
 
             <div className={styles.telp} >
@@ -100,6 +121,7 @@ class Register extends Component {
                 onChange={this.handleChange.bind(this, 'telp')}
                 value={this.state.telp}
                 theme={theme}
+                required
               />
             </div>
           </div>
@@ -110,6 +132,7 @@ class Register extends Component {
             onChange={this.handleChange.bind(this, 'password')}
             value={this.state.password}
             theme={theme}
+            required
           />
 
           <span className={styles.gender}>Jenis Kelamin</span>
@@ -131,7 +154,7 @@ class Register extends Component {
             rows={2}
           />
 
-          <PrimaryButton type="submit" >Register</PrimaryButton>
+          {this.renderButton()}
 
           <span className={styles.ref} >
             Sudah memiliki akun? <Link to="/auth/login" >Login disini</Link>
