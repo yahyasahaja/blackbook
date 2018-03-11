@@ -101,7 +101,6 @@ class Auth extends Component {
         </div>
 
         <div className={styles.card} >
-        TEST TEST
           <EditableList
             label="Nama" placeholder="Your Name"
             value={name}
