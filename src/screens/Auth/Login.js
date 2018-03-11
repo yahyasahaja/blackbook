@@ -22,18 +22,22 @@ let countryCodes = [
 ]
 
 //STORE
-import { user, snackbar, popup } from '../../services/stores'
+import { user, snackbar, appStack } from '../../services/stores'
 
 //COMPONENT
 @observer
 class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.id = appStack.push()
+  }
+
   componentWillUnmount() {
-    popup.pop()
+    appStack.pop()
   }
 
   componentDidMount() {
     this.props.setTitle('Login')
-    popup.push()
   }
 
   onSubmit = e => {
