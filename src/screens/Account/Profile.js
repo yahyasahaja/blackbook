@@ -22,7 +22,6 @@ class Auth extends Component {
   constructor(props) {
     super(props)
     this.id = appStack.push()
-    console.log('dari profile', this.id)
   }
 
   componentWillUnmount() {
@@ -102,6 +101,7 @@ class Auth extends Component {
         </div>
 
         <div className={styles.card} >
+        TEST TEST
           <EditableList
             label="Nama" placeholder="Your Name"
             value={name}
