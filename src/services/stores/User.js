@@ -41,7 +41,7 @@ class User {
       return axios.get(getIAMEndpoint('/profpic'))
         .then(({ data: { is_ok, uri } }) => {
           if (is_ok) {
-            this.profilePictureURL = observable(uri)
+            this.profilePictureURL = uri
             return uri
           }
 
@@ -85,10 +85,11 @@ class User {
   @action
   updatePassword = ({oldPassword, newPassword}) => {
     this.isLoadingUpdatePassword = true
+    
 
     return axios.post(getIAMEndpoint('/user/pwd', {
-      oldPassword,
-      newPassword
+      oldPassword: btoa(oldPassword),
+      newPassword: btoa(newPassword)
     })).then(({data: { is_ok }}) => {
       this.isLoadingUpdatePassword = false
       return is_ok
@@ -123,7 +124,8 @@ class User {
         this.isLoadingUpdateProfile = false
 
         if (is_ok) {
-          return token
+          tokens.setAuthToken(token)
+          return this.fetchData(token)
         }
 
         return false
@@ -144,9 +146,6 @@ class User {
         zip_code, 
         subscription,
         city
-      }).then(token => {
-        tokens.setAuthToken(token)
-        return this.fetchData(token)
       })
     })
   }

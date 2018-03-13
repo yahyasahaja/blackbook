@@ -31,6 +31,6 @@ class Badges {
     else this.data = observable({...this.data, [key]: 1})
   }
 }
- 
+
 // autorun(() => console.log('DARI AUTORUN', window.badges.data))
 export default window.badges = new Badges()

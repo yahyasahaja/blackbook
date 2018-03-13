@@ -33,7 +33,13 @@ class Auth extends Component {
     this.setState({ ...user.data })
   }
 
+  componentWillReact() {
+    this.setState({...user.data})
+  }
+
   renderProfilePicture() {
+    if (!user.data) return
+
     let { name } = user.data
     let { profilePictureURL } = user
 
@@ -173,6 +179,7 @@ class Auth extends Component {
   }
 
   render() {
+    user.data
     return (
       <PopupBar
         title="Profile" {...this.props}

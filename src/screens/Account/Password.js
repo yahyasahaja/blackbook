@@ -31,6 +31,7 @@ class Auth extends Component {
   componentDidMount() {
     user.getProfilePictureURL()
     this.setState({ ...user.data })
+    console.log('here i\'m')
   }
 
   state = {

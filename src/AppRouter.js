@@ -41,7 +41,6 @@ let BOTTOM_TAB_BAR_DATA = [
 
 //COMPONENT
 @observer class AppRouter extends Component {
-
   componentDidMount() {
     let { onlineStatus: { goOffline, goOnline }, snackbar: { show } } = this.props
     window.ononline = () => {
@@ -96,7 +95,7 @@ let BOTTOM_TAB_BAR_DATA = [
             <Route path="/category/:category_name" component={Category} />
             <Route path="/chat/:id" component={Conversation} />
             <Route path="/account/profile" component={Profile} />
-            <Route path="/acocunt/password" component={Password} />
+            <Route path="/account/password" component={Password} />
           </Switch>
 
           <section>
