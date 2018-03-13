@@ -102,7 +102,7 @@ class Login extends Component {
 
             <div className={styles.telp} >
               <Input
-                type="number"
+                type="tel"
                 label="Nomor Telepon"
                 onChange={this.handleChange.bind(this, 'telp')}
                 value={this.state.telp}

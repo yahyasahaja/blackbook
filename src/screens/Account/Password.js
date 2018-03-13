@@ -31,7 +31,6 @@ class Auth extends Component {
   componentDidMount() {
     user.getProfilePictureURL()
     this.setState({ ...user.data })
-    console.log('here i\'m')
   }
 
   state = {
@@ -80,21 +79,21 @@ class Auth extends Component {
       <div className={styles.container} >
         <div className={styles.card} >
           <EditableList
-            label="Current Password" placeholder="Your current password"
+            label="Kata Sandi Lama" placeholder="Sandi lama"
             value={oldPassword} type="password"
             onChange={this.handleChange.bind(this, 'oldPassword')}
             border
           />
 
           <EditableList
-            label="New Password" placeholder="Your new password"
+            label="Kata Sandi Baru" placeholder="Sandi baru"
             value={newPassword} type="password"
             onChange={this.handleChange.bind(this, 'newPassword')}
             border
           />
 
           <EditableList
-            label="Retype Password" placeholder="Retype your new password"
+            label="Konfirmasi Sandi" placeholder="Sandi baru"
             value={retypePassword} type="password"
             onChange={this.handleChange.bind(this, 'retypePassword')}
             border
@@ -106,7 +105,7 @@ class Auth extends Component {
             active={this.state.active}
             onEscKeyDown={this.handleToggle}
             onOverlayClick={this.handleToggle}
-            title='Update Password'
+            title='Perbarui Kata Sandi'
           >
             <p>Anda akan memperbarui kata sandi. Lanjutkan?</p>
           </Dialog>
@@ -132,7 +131,7 @@ class Auth extends Component {
         type="submit"
         onClick={() => this.setState({ active: true })}
       >
-        Update Password
+        Ubah Kata Sandi
       </PrimaryButton>
     )
   }
@@ -140,7 +139,7 @@ class Auth extends Component {
   render() {
     return (
       <PopupBar
-        title="Password" {...this.props}
+        title="Ubah Kata Sandi" {...this.props}
         renderContent={this.renderContent}
         backLink="/account"
         anim={ANIMATE_HORIZONTAL}

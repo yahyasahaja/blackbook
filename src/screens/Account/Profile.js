@@ -182,7 +182,7 @@ class Auth extends Component {
     user.data
     return (
       <PopupBar
-        title="Profile" {...this.props}
+        title="Profil" {...this.props}
         renderContent={this.renderContent}
         backLink="/account"
         anim={ANIMATE_HORIZONTAL}

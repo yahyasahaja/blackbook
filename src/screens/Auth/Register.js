@@ -38,7 +38,7 @@ class Register extends Component {
   }
 
   componentDidMount() {
-    this.props.setTitle('Register')
+    this.props.setTitle('Daftar')
   }
 
   state = {
@@ -91,7 +91,7 @@ class Register extends Component {
       </div>
     )
 
-    return <PrimaryButton type="submit" >Register</PrimaryButton>
+    return <PrimaryButton type="submit" >Daftar</PrimaryButton>
   }
 
   render() {
@@ -126,6 +126,7 @@ class Register extends Component {
 
             <div className={styles.telp} >
               <Input
+                type="tel"
                 label="Nomor Telepon"
                 onChange={this.handleChange.bind(this, 'telp')}
                 value={this.state.telp}

@@ -53,7 +53,7 @@ class Account extends Component {
 
         <div className={styles.card} >
           <List selectable ripple> 
-            <ListSubHeader caption='Account' />
+            <ListSubHeader caption='Akun' />
             <ListItem 
               caption='Profile Saya' leftIcon='account_circle' 
               onClick={() => {
@@ -68,7 +68,7 @@ class Account extends Component {
               }}
             />
             <ListItem caption='Berjualan di Blanja' leftIcon='business_center' />
-            <ListItem caption='Log Out' leftIcon='input' onClick={() => user.logout()} />
+            <ListItem caption='Keluar' leftIcon='input' onClick={() => user.logout()} />
           </List>
         </div>
       </div>
