@@ -15,6 +15,8 @@ class Threads extends Component {
     if(nextProps.isSelected && !user.isLoggedIn) {
       return this.props.history.replace('/account')
     }
+
+    this.props.data.refetch()
   }
 
   render() {
@@ -26,7 +28,13 @@ class Threads extends Component {
 
     return (
       <div>
-        {!loading &&
+        {!loading && threads.data.length === 0 && (
+          <div className={styles.empty}>
+            <p>Chat mu masih kosong</p>
+            <span className="mdi mdi-message-processing" />
+          </div>
+        )}
+        {threads &&
           threads.data.map(thread => {
             const sender = thread.participants[0].isMe
               ? thread.participants[1]

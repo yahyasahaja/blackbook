@@ -9,6 +9,7 @@ import ChatBubble from '../../components/Chat/ChatBubble'
 import client from '../../services/graphql/chatClient'
 
 import styles from './css/conversation.scss'
+import loadingSubmitTheme from './css/loading-submit.scss'
 
 import { appStack } from '../../services/stores'
 
@@ -24,6 +25,21 @@ class Conversation extends Component {
       ? this.props.location.state.sender
       : 'Penjual',
     message: '',
+    loading: false,
+    showed: false,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.data.loading) {
+      this.setState({showed : true})
+    }
+
+    if (!this.props.data.loading) {
+      if(!this.state.showed) {
+        this.props.data.refetch()
+        console.log('refetch')
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -57,6 +73,25 @@ class Conversation extends Component {
     return `${currency} ${res}`
   }
 
+  async sendMessage() {
+    const { message, loading } = this.state
+    if (message.length === 0 || loading) return
+
+    this.setState({ loading: true })
+
+    const { submit, data } = this.props
+    const { data: res } = await submit(message)
+
+    if (!res.error) {
+      // clear input
+      this.setState({ message: '', loading: false })
+      // reset height
+      this.messageInput.style.height = ''
+      // refetch the message
+      data.refetch()
+    }
+  }
+
   renderMessages(messages) {
     return messages.reverse().map((message, index) => {
       let isOtherDay = false
@@ -87,7 +122,7 @@ class Conversation extends Component {
 
   render() {
     console.log(this.props)
-    const { message, title } = this.state
+    const { message, title, loading } = this.state
     const { data, product } = this.props
     return (
       <PopupBar
@@ -107,20 +142,25 @@ class Conversation extends Component {
       >
         <div className={styles.productBar}>
           <div className={styles.imagePlaceholder}>
-            {!data.loading &&
+            {data.thread &&
               (!product.loading && <img src={product.product.images[0].url} />)}
           </div>
           <div className={styles.content}>
             <p>
-              {this.props.data.loading
-                ? 'Memuat produk...'
-                : this.props.data.thread.productName}
+              {data.thread && !product.loading
+                ? product.product.name
+                : 'Memuat produk...'}
             </p>
-            {!data.loading ? (
+            {data.thread ? (
               product.loading ? (
                 <span>memuat...</span>
               ) : (
-                <span>{this.convertToMoneyFormat(12000, 'NTD')}</span>
+                <span>
+                  {this.convertToMoneyFormat(
+                    product.product.price.value,
+                    product.product.price.currency,
+                  )}
+                </span>
               )
             ) : (
               <span>memuat...</span>
@@ -129,7 +169,7 @@ class Conversation extends Component {
           <span className={`mdi mdi-chevron-right ${styles.chevronRight}`} />
         </div>
         <div className={styles.messages}>
-          {!this.props.data.loading &&
+          {this.props.data.thread &&
             this.renderMessages(this.props.data.thread.messages.data.slice())}
           <div
             style={{ float: 'left', clear: 'both' }}
@@ -146,11 +186,22 @@ class Conversation extends Component {
             onChange={this.handleInput.bind(this)}
             placeholder="Ketik pesanmu disini..."
           />
-          <button className={styles.sendButton}>
-            <span
-              className={`mdi mdi-send ${styles.sendIcon} ${message.length >
-                0 && styles.active}`}
-            />
+          <button
+            className={styles.sendButton}
+            onClick={() => this.sendMessage()}
+          >
+            {loading ? (
+              <ProgressBar
+                type="circular"
+                mode="indeterminate"
+                theme={loadingSubmitTheme}
+              />
+            ) : (
+              <span
+                className={`mdi mdi-send ${styles.sendIcon} ${message.length >
+                  0 && styles.active}`}
+              />
+            )}
           </button>
         </div>
 
@@ -207,13 +258,36 @@ const getProductQuery = gql`
   }
 `
 
+const sendMessageMutation = gql`
+  mutation SendMessage($id: Int!, $message: String!) {
+    pushMessage(text: $message, threadId: $id) {
+      status
+    }
+  }
+`
+
 export default compose(
+  graphql(sendMessageMutation, {
+    props: ({ mutate, ownProps }) => ({
+      submit: message =>
+        mutate({
+          variables: {
+            id: ownProps.match.params.id,
+            message,
+          },
+        }),
+    }),
+    options: {
+      client,
+    },
+  }),
   graphql(getMessagesQuery, {
     options: props => ({
       client,
       variables: {
         id: props.match.params.id,
       },
+      fetchPolicy: 'cache-and-network',
     }),
   }),
   graphql(getProductQuery, {
