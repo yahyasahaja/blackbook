@@ -77,7 +77,7 @@ class Auth extends Component {
       user.updateProfile({
         ...this.state
       }).then(token => {
-        if (token) snackbar.show('Profile have been updated')
+        if (token) snackbar.show('Profile has been updated')
       })
     })
   }
