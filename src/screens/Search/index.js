@@ -294,6 +294,9 @@ query allProducts(
     products {
       id,
       name,
+      variants {
+        name
+      }
       price {
         value,
         currency
