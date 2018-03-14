@@ -44,9 +44,17 @@ class Auth extends Component {
     let { profilePictureURL } = user
 
     if (profilePictureURL) if (profilePictureURL.length > 0) return (
-      <div className={styles.pic} >
+      <label htmlFor="pic" className={styles.pic} >
         <img src={profilePictureURL} alt="Profile Picture" />
-      </div>
+        <span className={`mdi mdi-pencil ${styles.edit}`} />
+        <input 
+          id="pic" name="pic" type="file" style={{display: 'none'}} 
+          onChange={e => {
+            user.uploadProfilePicture(e.target.files[0])
+          }}
+          accept=".jpg, .jpeg, .png"
+        />
+      </label>
     )
 
     return (
@@ -63,6 +71,8 @@ class Auth extends Component {
     address: '',
     city: '',
     zip_code: '',
+    country: '',
+    profilePhotoInput: '',
     active: false
   }
 
@@ -98,7 +108,14 @@ class Auth extends Component {
       address,
       city,
       zip_code,
+      country,
     } = this.state
+
+    if (country) {
+      if (country === 'TWN') country = 'Taiwan'
+      if (country === 'IDN') country = 'Indonesia'
+      if (country === 'HKG') country = 'Hongkong'
+    }
 
     return (
       <div className={styles.container} >
@@ -139,6 +156,13 @@ class Auth extends Component {
             label="Kode Pos" placeholder="Your Zip Code"
             value={zip_code}
             onChange={this.handleChange.bind(this, 'zip_code')}
+            border
+          />
+
+          <EditableList
+            label="Negara" placeholder="Negara"
+            value={country} disabled
+            onChange={this.handleChange.bind(this, 'country')}
           />
 
           {this.renderButton()}
@@ -180,6 +204,7 @@ class Auth extends Component {
 
   render() {
     user.data
+    user.profilePictureURL
     return (
       <PopupBar
         title="Profil" {...this.props}

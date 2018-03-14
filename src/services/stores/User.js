@@ -36,6 +36,27 @@ class User {
   }
 
   @action
+  async uploadProfilePicture(file) {
+    let fileType
+
+    if (file.type.indexOf('jpg') !== -1) fileType = 'jpg'
+    else if (file.type.indexOf('jpeg') !== -1) fileType = 'jpeg'
+    else if (file.type.indexOf('png') !== -1) fileType = 'png'
+
+    if (!fileType) return false
+
+    let formData = new FormData()
+    formData.append('file', file)
+
+    let { is_ok, uri } = await axios.post(getIAMEndpoint(`/iam/profpic/${fileType}`), formData)
+
+    if (!is_ok) return false
+
+    this.profilePictureURL = uri
+    return uri
+  }
+
+  @action
   getProfilePictureURL() {
     if (this.isLoggedIn && tokens.authToken)
       return axios.get(getIAMEndpoint('/profpic'))
@@ -48,7 +69,7 @@ class User {
           return false
         })
         .catch(err => {
-          console.log('ERROR ON FETCH PROFILE PICTURE', err)
+          console.log('ERROR ON FETCHING PROFILE PICTURE', err)
           return false
         })
 
@@ -56,24 +77,29 @@ class User {
   }
 
   @action
-  login = (msisdn, password) => {
+  login = async (msisdn, password) => {
     this.isLoadingLogin = true
     password = btoa(password)
 
-    return axios.post(getIAMEndpoint('/login'), {
-      msisdn,
-      password
-    }).then(({ data: { is_ok, data: token } }) => {
+    try {
+      let { data: { is_ok, data: token } } = await axios.post(getIAMEndpoint('/login'), {
+        msisdn,
+        password
+      })
 
       this.isLoadingLogin = false
       if (is_ok) {
         tokens.setAuthToken(token)
-        this.fetchData(token)
+        await this.fetchData(token)
+        await this.registerPushSubscription()
         return token
       }
 
       return false
-    })
+    } catch (err) {
+      console.log('ERROR ON LOGGING IN', err)
+      return false
+    }
   }
 
   @action
@@ -83,27 +109,27 @@ class User {
   }
 
   @action
-  updatePassword = ({oldPassword, newPassword}) => {
+  updatePassword = ({ oldPassword, newPassword }) => {
     this.isLoadingUpdatePassword = true
-    
+
 
     return axios.post(getIAMEndpoint('/user/pwd', {
       oldPassword: btoa(oldPassword),
       newPassword: btoa(newPassword)
-    })).then(({data: { is_ok }}) => {
+    })).then(({ data: { is_ok } }) => {
       this.isLoadingUpdatePassword = false
       return is_ok
     })
   }
 
   @action
-  updateProfile = ({ 
-    name, 
-    msisdn, 
-    password, 
-    address, 
-    country, 
-    zip_code, 
+  updateProfile = ({
+    name,
+    msisdn,
+    password,
+    address,
+    country,
+    zip_code,
     subscription,
     city
   }) => {
@@ -138,16 +164,43 @@ class User {
 
     return getSubscription().then(subscription => {
       return this.updateProfile({
-        name, 
-        msisdn, 
-        password, 
-        address, 
-        country, 
-        zip_code, 
+        name,
+        msisdn,
+        password,
+        address,
+        country,
+        zip_code,
         subscription,
         city
       })
     })
+  }
+
+  @action
+  registerPushSubscription = async pushSubscription => {
+    try {
+      if (!pushSubscription)
+        pushSubscription = await getSubscription()
+        
+      if (!pushSubscription || !this.isLoggedIn) return false
+
+      let authToken = tokens.token
+
+      let { data: { is_ok } } = await axios.post(getIAMEndpoint('/renewpush'),
+        pushSubscription,
+        {
+          headers: {
+            Authorization: authToken
+          }
+        }
+      )
+
+      if (is_ok) console.log('PUSH SUBSCRIPTION WAS REGISTERED')
+      return is_ok
+    } catch (err) {
+      console.log('ERROR ON REGISTERING PUSH SUBSCRIPTION', err)
+      return false
+    }
   }
 
   @action
@@ -174,7 +227,7 @@ class User {
         localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
         return false
       }).catch(res => {
-        console.log('FETCH USER ERROR', res)
+        console.log('ERROR ON FETCHING USER DATA', res)
         return false
       })
   }

@@ -117,49 +117,9 @@
       <div class="loader3"></div>
     </div>
   </div>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js').then(function (registration) {
-          // Registration was successful
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-
-          if ('Notification' in window) {
-            if (Notification.permission !== 'granted')
-              Notification.requestPermission().then(function (permission) {
-                console.log('User ', permission, ' Notification')
-              })
-            else console.log('User granted notification')
-          } else console.log('Browser does not support Notification')
-
-          return registration.pushManager.getSubscription().then(function (subscription) {
-            console.log(subscription)
-            if (subscription) return subscription;
-            console.log('aaa')
-            return registration.pushManager.subscribe({ userVisibleOnly: true });
-          });
-        }, function (err) {
-          // registration failed :(
-          console.log('ServiceWorker registration failed: ', err);
-        }).catch(function (err) {
-          console.log(err);
-        });
-      });
-    } else {
-      console.log('service worker is not supported');
-    }
-
-    // var target = window; // this can be any scrollable element
-    // var last_y = 0;
-    // target.addEventListener('touchmove', function (e) {
-    //   var scrolly = target.pageYOffset || target.scrollTop || 0;
-    //   var direction = e.changedTouches[0].pageY > last_y ? 1 : -1;
-    //   if (direction > 0 && scrolly === 0) {
-    //     e.preventDefault();
-    //   }
-    //   last_y = e.changedTouches[0].pageY;
-    // });
-  </script>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
 </body>
 
 </html>

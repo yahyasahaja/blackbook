@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import Input from 'react-toolbox/lib/input'
 import Dropdown from 'react-toolbox/lib/dropdown'
 import { Link } from 'react-router-dom'
-import { RadioGroup, RadioButton } from 'react-toolbox/lib/radio'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
@@ -144,15 +143,6 @@ class Register extends Component {
             theme={theme}
             required
           />
-
-          <span className={styles.gender}>Jenis Kelamin</span>
-          <RadioGroup 
-            label="Jenis Kelamin" value={this.state.gender} 
-            onChange={this.handleChange.bind(this, 'gender')}
-          >
-            <RadioButton label='Laki Laki' value='lakilaki' />
-            <RadioButton label='Perempuan' value='perempuan' />
-          </RadioGroup>
 
           <Input
             type="text"

@@ -55,20 +55,24 @@ class Account extends Component {
           <List selectable ripple> 
             <ListSubHeader caption='Akun' />
             <ListItem 
-              caption='Profile Saya' leftIcon='account_circle' 
+              caption='Profil Saya' leftIcon='account_circle' 
               onClick={() => {
                 this.props.history.push('/account/profile')
               }}
             />
             <ListItem caption='Daftar Transaksi' leftIcon='playlist_add_check' />
             <ListItem 
-              caption='Ubah Katasandi' leftIcon='lock' 
+              caption='Ubah Kata Sandi' leftIcon='lock' 
               onClick={() => {
                 this.props.history.push('/account/password')
               }}
             />
             <ListItem caption='Berjualan di Blanja' leftIcon='business_center' />
-            <ListItem caption='Keluar' leftIcon='input' onClick={() => user.logout()} />
+            <ListItem 
+              caption='Keluar' 
+              leftIcon={<span className="mdi mdi-logout-variant" />} 
+              onClick={() => user.logout()} 
+            />
           </List>
         </div>
       </div>

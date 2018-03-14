@@ -19,6 +19,9 @@ import AppRouter from './AppRouter'
 import client from './services/graphql/productClient'
 import { onlineStatus, snackbar, tokens } from './services/stores'
 
+//SERVICE_WORKER
+import registerServiceWorker from './registerServiceWorker'
+
 const contextTheme = {
   RTInput: theme
 }
@@ -33,13 +36,22 @@ class App extends Component {
   }
 
   render() {
-    if (!tokens.token) return <div
-      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh' }}
-    >
-      <ProgressBar
-        type='circular'
-        mode='indeterminate' multicolor
-      /></div>
+    if (!tokens.token) return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '100vh'
+        }}
+      >
+        <ProgressBar
+          type='circular'
+          mode='indeterminate' multicolor
+        />
+      </div>
+    )
 
     return (
       <ApolloProvider client={client} >
@@ -55,3 +67,5 @@ ReactDOM.render(
   <App />,
   document.getElementById('app')
 )
+
+registerServiceWorker()

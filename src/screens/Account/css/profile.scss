@@ -16,6 +16,9 @@
 
     .picture-default {
       border: 3px solid #595959;
+      background: white;
+      overflow: hidden;
+      border-radius: 100px;
     }
 
     .pic, .picture-default {
@@ -23,21 +26,38 @@
       width: 150px;
       height: 150px;
       margin: auto;
-      border-radius: 100px;
-      background: white;
       margin-bottom: 10px;
       font-size: 40pt;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
     }
 
     .pic {
-      box-shadow: 2px 2px 15px #d5d5d5;
+      position: relative;
 
       img {
         height: 100%;
         width: 100%;
+        border-radius: 100px;
+        display: block;
+        box-shadow: 2px 2px 15px #d5d5d5;
+        background: white;
+      }
+
+      .edit {
+        background: #2ecc71;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 35px;
+        height: 35px;
+        color: white;
+        font-size: 15pt;
+        border-radius: 100px;
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+        box-shadow: 2px 2px 15px #d5d5d5;
       }
     }
   }
