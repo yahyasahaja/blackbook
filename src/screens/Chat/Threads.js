@@ -8,7 +8,7 @@ import client from '../../services/graphql/chatClient'
 import { user } from '../../services/stores'
 
 import styles from './css/index.scss'
-import loadingTheme from './css/loading.scss'
+import loadingTheme from './css/loading-submit.scss'
 
 @observer 
 class Threads extends Component {

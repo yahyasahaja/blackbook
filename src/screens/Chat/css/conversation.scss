@@ -1,7 +1,12 @@
 @import '../../../assets/css/config.scss';
 
 .loading {
-  align-self: center;
+  position: fixed;
+  top: 126px;
+  width: 100%;
+  max-width: 480px;
+  font-size: 4px;
+  z-index: 2;
 }
 
 .messages {

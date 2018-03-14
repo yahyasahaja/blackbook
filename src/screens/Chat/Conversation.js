@@ -208,18 +208,14 @@ class Conversation extends Component {
           </div>
           <span className={`mdi mdi-chevron-right ${styles.chevronRight}`} />
         </div>
+        {this.props.data.loading && !this.state.refetchSending ? (
+          <div className={styles.loading}>
+            <ProgressBar theme={loadingTheme} mode="indeterminate" />
+          </div>
+        ) : (
+          ''
+        )}
         <div className={styles.messages}>
-          {this.props.data.loading && !this.state.refetchSending ? (
-            <div className={styles.loading}>
-              <ProgressBar
-                theme={loadingTheme}
-                type="circular"
-                mode="indeterminate"
-              />
-            </div>
-          ) : (
-            ''
-          )}
           {this.props.data.thread &&
             this.renderMessages(this.props.data.thread.messages.data.slice())}
           <div
