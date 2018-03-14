@@ -177,6 +177,9 @@ query allProducts($limit: Int, $offset: Int) {
         value,
         currency
       },
+      variants {
+        name
+      }
       images {
         url
       }
