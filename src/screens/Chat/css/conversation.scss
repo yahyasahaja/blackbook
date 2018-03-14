@@ -1,11 +1,7 @@
 @import '../../../assets/css/config.scss';
 
 .loading {
-  position: fixed;
-  top: -10px;
-  width: 100%;
-  left: 0;
-  z-index: 99;
+  align-self: center;
 }
 
 .messages {
@@ -13,6 +9,11 @@
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 45px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bubble {
   display: flex;
   flex-direction: column;
 }

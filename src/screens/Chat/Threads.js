@@ -8,6 +8,7 @@ import client from '../../services/graphql/chatClient'
 import { user } from '../../services/stores'
 
 import styles from './css/index.scss'
+import loadingTheme from './css/loading.scss'
 
 @observer 
 class Threads extends Component {
@@ -51,7 +52,7 @@ class Threads extends Component {
           })}
         {this.props.data.loading ? (
           <div className={styles.loading}>
-            <ProgressBar mode="indeterminate" />
+            <ProgressBar theme={loadingTheme} type="circular" mode="indeterminate" />
           </div>
         ) : (
           ''

@@ -9,6 +9,7 @@ import ChatBubble from '../../components/Chat/ChatBubble'
 import client from '../../services/graphql/chatClient'
 
 import styles from './css/conversation.scss'
+import loadingTheme from './css/loading.scss'
 import loadingSubmitTheme from './css/loading-submit.scss'
 
 import { appStack } from '../../services/stores'
@@ -18,6 +19,7 @@ class Conversation extends Component {
   constructor(props) {
     super(props)
     this.id = appStack.push()
+    this.messagesRef = []
   }
 
   state = {
@@ -27,31 +29,62 @@ class Conversation extends Component {
     message: '',
     loading: false,
     showed: false,
+    scrolledToBottom: false,
+    refetchSending: false,
   }
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.data.loading) {
-      this.setState({showed : true})
+      this.setState({ showed: true })
     }
 
     if (!this.props.data.loading) {
-      if(!this.state.showed) {
+      if (!this.state.showed) {
         this.props.data.refetch()
-        console.log('refetch')
+        this.scrollToBottom()
       }
     }
   }
 
+  componentDidMount() {
+    window.addEventListener('scroll', this.checkScroll)
+    window.addEventListener('gesturechange', this.checkScroll)
+  }
+
   componentWillUnmount() {
     appStack.pop()
+    window.removeEventListener('scroll', this.checkScroll)
+    window.removeEventListener('gesturechange', this.checkScroll)
   }
 
   componentDidUpdate() {
-    this.scrollToBottom()
+    if (!this.state.scrolledToBottom && !this.props.data.loading) {
+      this.scrollToBottom()
+    }
+  }
+
+  checkScroll = async () => {
+    let scrollPosition = Math.max(
+      document.documentElement.scrollTop,
+      document.body.scrollTop,
+    )
+    let screenHeight = document.body.offsetHeight
+
+    if (
+      scrollPosition < 10 &&
+      !this.props.data.loading &&
+      (this.props.data.thread && this.props.data.thread.messages.total !== 0)
+    ) {
+      const currentTopMessage = this.messagesRef[0]
+      await this.props.data.fetchMore()
+      currentTopMessage.scrollIntoView()
+      window.scrollBy(0, -180)
+    }
   }
 
   scrollToBottom() {
     this.messagesEnd.scrollIntoView({ behavior: 'auto' })
+    this.setState({ scrolledToBottom: true })
   }
 
   handleInput(event) {
@@ -77,7 +110,7 @@ class Conversation extends Component {
     const { message, loading } = this.state
     if (message.length === 0 || loading) return
 
-    this.setState({ loading: true })
+    this.setState({ loading: true, refetchSending: true })
 
     const { submit, data } = this.props
     const { data: res } = await submit(message)
@@ -88,7 +121,8 @@ class Conversation extends Component {
       // reset height
       this.messageInput.style.height = ''
       // refetch the message
-      data.refetch()
+      await data.refetch()
+      this.setState({ refetchSending: false })
     }
   }
 
@@ -107,21 +141,27 @@ class Conversation extends Component {
       }
 
       return (
-        <ChatBubble
-          isOtherDay={isOtherDay}
+        <div
+          className={styles.bubble}
+          ref={el => {
+            this.messagesRef[index] = el
+          }}
           key={message.id}
-          avatarImage={message.createdBy.profilePicture}
-          avatarTitle={message.createdBy.displayName[0]}
-          message={message.text}
-          time={message.createdAt}
-          isMe={message.createdBy.isMe}
-        />
+        >
+          <ChatBubble
+            isOtherDay={isOtherDay}
+            avatarImage={message.createdBy.profilePicture}
+            avatarTitle={message.createdBy.displayName[0]}
+            message={message.text}
+            time={message.createdAt}
+            isMe={message.createdBy.isMe}
+          />
+        </div>
       )
     })
   }
 
   render() {
-    console.log(this.props)
     const { message, title, loading } = this.state
     const { data, product } = this.props
     return (
@@ -169,6 +209,17 @@ class Conversation extends Component {
           <span className={`mdi mdi-chevron-right ${styles.chevronRight}`} />
         </div>
         <div className={styles.messages}>
+          {this.props.data.loading && !this.state.refetchSending ? (
+            <div className={styles.loading}>
+              <ProgressBar
+                theme={loadingTheme}
+                type="circular"
+                mode="indeterminate"
+              />
+            </div>
+          ) : (
+            ''
+          )}
           {this.props.data.thread &&
             this.renderMessages(this.props.data.thread.messages.data.slice())}
           <div
@@ -204,14 +255,6 @@ class Conversation extends Component {
             )}
           </button>
         </div>
-
-        {this.props.data.loading ? (
-          <div className={styles.loading}>
-            <ProgressBar mode="indeterminate" />
-          </div>
-        ) : (
-          ''
-        )}
       </PopupBar>
     )
   }
@@ -222,11 +265,11 @@ Conversation.defaultProps = {
 }
 
 const getMessagesQuery = gql`
-  query MessageQuery($id: Int!) {
+  query MessageQuery($id: Int!, $before: Int) {
     thread(threadId: $id, perspective: BUYER) {
-      productName
       productId
-      messages {
+      messages(before: $before) {
+        total
         data {
           id
           text
@@ -289,6 +332,42 @@ export default compose(
       },
       fetchPolicy: 'cache-and-network',
     }),
+    props: ({ data: { loading, thread, fetchMore, refetch } }) => {
+      const loadMoreMessages = () => {
+        if (thread.messages.total > 0) {
+          return fetchMore({
+            variables: {
+              before: thread.messages.data[thread.messages.data.length - 1].id,
+            },
+            updateQuery: (previousResult, { fetchMoreResult }) => {
+              const previousMessages = previousResult.thread.messages.data
+              const currentMessages = fetchMoreResult.thread.messages.data
+
+              return {
+                thread: {
+                  __typename: fetchMoreResult.thread.__typename,
+                  productId: fetchMoreResult.thread.productId,
+                  messages: {
+                    total: fetchMoreResult.thread.messages.total,
+                    __typename: fetchMoreResult.thread.messages.__typename,
+                    data: [...previousMessages, ...currentMessages],
+                  },
+                },
+              }
+            },
+          })
+        }
+      }
+
+      return {
+        data: {
+          loading,
+          thread,
+          refetch,
+          fetchMore: loadMoreMessages,
+        },
+      }
+    },
   }),
   graphql(getProductQuery, {
     name: 'product',
