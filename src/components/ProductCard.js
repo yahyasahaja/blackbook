@@ -1,7 +1,7 @@
 //MODULES
 import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 //STYLES
 import styles from './css/product-card.scss'
@@ -12,7 +12,7 @@ import PrimaryButton from './PrimaryButton'
 import ImageLoader from './ImageLoader'
 
 //STORE
-import { favorites, cart } from '../services/stores'
+import { favorites, cart, snackbar } from '../services/stores'
 
 //INNER_CONFIG
 const convertToMoneyFormat = (num, currency) => {
@@ -60,6 +60,8 @@ class ProductCard extends Component {
       variant,
       amount,
     })
+
+    snackbar.show('Barang ditambahkan ke keranjang')
   }
 
   renderAmountOption() {
@@ -147,7 +149,9 @@ class ProductCard extends Component {
                   >
                     Suka
                   </FlatButton>
-                  <FlatButton icon="forum">Chat</FlatButton>
+                  <Link to={{pathname: '/chat/new', state: { productId: id }}}>
+                    <FlatButton icon="forum">Chat</FlatButton>
+                  </Link>
                   <FlatButton icon="share">Bagikan</FlatButton>
                 </div>
 

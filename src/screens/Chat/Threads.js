@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import ThreadItem from '../../components/Chat/ThreadItem'
 import client from '../../services/graphql/chatClient'
-import { user } from '../../services/stores'
+import { user, onlineStatus } from '../../services/stores'
 
 import styles from './css/index.scss'
 import loadingTheme from './css/loading-submit.scss'
@@ -17,19 +17,19 @@ class Threads extends Component {
       return this.props.history.replace('/account')
     }
 
-    this.props.data.refetch()
+    if(onlineStatus.isOnline) this.props.data.refetch()
   }
 
   render() {
     const { data } = this.props
-    const { loading, threads, error } = data
+    const { threads, error } = data
     if(!user.isLoggedIn || error) {
       return null
     } 
 
     return (
       <div>
-        {!loading && threads.data.length === 0 && (
+        {threads && threads.data.length === 0 && (
           <div className={styles.empty}>
             <p>Chat mu masih kosong</p>
             <span className="mdi mdi-message-processing" />
@@ -44,7 +44,8 @@ class Threads extends Component {
               <ThreadItem
                 id={thread.id}
                 key={thread.id}
-                sender={sender.displayName}
+                sender={sender}
+                productName={thread.productName}
                 message={thread.messages.data[0].text}
                 time={thread.messages.data[0].createdAt}
               />
@@ -67,6 +68,7 @@ const getThreadsQuery = gql`
     threads(perspective: BUYER) {
       data {
         id
+        productOwner
         productName
         participants {
           id

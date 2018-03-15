@@ -13,7 +13,7 @@ import loadingTheme from './css/loading.scss'
 import loadingSubmitTheme from './css/loading-submit.scss'
 import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
-import { appStack } from '../../services/stores'
+import { appStack, onlineStatus } from '../../services/stores'
 
 @observer
 class Conversation extends Component {
@@ -24,26 +24,36 @@ class Conversation extends Component {
   }
 
   state = {
-    title: this.props.location.state
-      ? this.props.location.state.sender
-      : 'Penjual',
+    title:
+      this.props.location.state && this.props.location.state.sender
+        ? this.props.location.state.sender
+        : 'Penjual',
     message: '',
     loading: false,
     showed: false,
     scrolledToBottom: false,
     refetchSending: false,
+    gettingOlderMessage: false,
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.data.loading) {
+    if (nextProps.data && !nextProps.data.loading) {
       this.setState({ showed: true })
     }
 
-    if (!this.props.data.loading) {
-      if (!this.state.showed) {
+    if (
+      this.props.data &&
+      !this.props.data.loading &&
+      this.props.match.params.id !== 'new'
+    ) {
+      if (!this.state.showed && onlineStatus.isOnline) {
         this.props.data.refetch()
         this.scrollToBottom()
       }
+    }
+
+    if (nextProps.product && nextProps.product.product) {
+      this.setState({ title: nextProps.product.product.seller.name })
     }
   }
 
@@ -59,7 +69,11 @@ class Conversation extends Component {
   }
 
   componentDidUpdate() {
-    if (!this.state.scrolledToBottom && !this.props.data.loading) {
+    if (
+      !this.state.scrolledToBottom &&
+      this.props.data &&
+      !this.props.data.loading
+    ) {
       this.scrollToBottom()
     }
   }
@@ -69,17 +83,22 @@ class Conversation extends Component {
       document.documentElement.scrollTop,
       document.body.scrollTop,
     )
-    let screenHeight = document.body.offsetHeight
 
     if (
       scrollPosition < 10 &&
+      this.props.data &&
       !this.props.data.loading &&
-      (this.props.data.thread && this.props.data.thread.messages.total !== 0)
+      (this.props.data.thread && this.props.data.thread.messages.total !== 0) &&
+      !this.state.gettingOlderMessage
     ) {
+      this.setState({ gettingOlderMessage: true })
+
       const currentTopMessage = this.messagesRef[0]
       await this.props.data.fetchMore()
       currentTopMessage.scrollIntoView()
       window.scrollBy(0, -180)
+
+      this.setState({ gettingOlderMessage: false })
     }
   }
 
@@ -122,8 +141,17 @@ class Conversation extends Component {
       // reset height
       this.messageInput.style.height = ''
       // refetch the message
-      await data.refetch()
-      this.setState({ refetchSending: false })
+
+      // check if new message
+      if (this.props.match.params.id === 'new') {
+        // if new message change history to id
+        this.setState({ scrolledToBottom: false })
+        this.props.history.replace(`/chat/${res.pushMessage.threadId}`)
+      } else {
+        // if not new message, refetch
+        await data.refetch()
+        this.setState({ refetchSending: false })
+      }
     }
   }
 
@@ -164,7 +192,7 @@ class Conversation extends Component {
 
   render() {
     const { message, title, loading } = this.state
-    const { data, product } = this.props
+    const { product } = this.props
     return (
       <PopupBar
         onBack={e => {
@@ -183,16 +211,16 @@ class Conversation extends Component {
       >
         <div className={styles.productBar}>
           <div className={styles.imagePlaceholder}>
-            {data.thread &&
+            {product &&
               (!product.loading && <img src={product.product.images[0].url} />)}
           </div>
           <div className={styles.content}>
             <p>
-              {data.thread && !product.loading
+              {product && !product.loading
                 ? product.product.name
                 : 'Memuat produk...'}
             </p>
-            {data.thread ? (
+            {product ? (
               product.loading ? (
                 <span>memuat...</span>
               ) : (
@@ -209,15 +237,19 @@ class Conversation extends Component {
           </div>
           <span className={`mdi mdi-chevron-right ${styles.chevronRight}`} />
         </div>
-        {this.props.data.loading && !this.state.refetchSending ? (
-          <div className={styles.loading}>
-            <ProgressBar theme={loadingTheme} mode="indeterminate" />
-          </div>
-        ) : (
-          ''
-        )}
+        {(this.props.data &&
+          this.props.data.loading &&
+          !this.state.refetchSending) ||
+        this.state.gettingOlderMessage ? (
+            <div className={styles.loading}>
+              <ProgressBar theme={loadingTheme} mode="indeterminate" />
+            </div>
+          ) : (
+            ''
+          )}
         <div className={styles.messages}>
-          {this.props.data.thread &&
+          {this.props.data &&
+            this.props.data.thread &&
             this.renderMessages(this.props.data.thread.messages.data.slice())}
           <div
             style={{ float: 'left', clear: 'both' }}
@@ -257,9 +289,9 @@ class Conversation extends Component {
   }
 }
 
-Conversation.defaultProps = {
-  data: {},
-}
+// Conversation.defaultProps = {
+//   data: {},
+// }
 
 const getMessagesQuery = gql`
   query MessageQuery($id: Int!, $before: Int) {
@@ -294,14 +326,18 @@ const getProductQuery = gql`
       images {
         url
       }
+      seller {
+        name
+      }
     }
   }
 `
 
 const sendMessageMutation = gql`
-  mutation SendMessage($id: Int!, $message: String!) {
-    pushMessage(text: $message, threadId: $id) {
+  mutation SendMessage($id: Int!, $message: String!, $productId: String) {
+    pushMessage(text: $message, threadId: $id, productId: $productId) {
       status
+      threadId
     }
   }
 `
@@ -312,8 +348,12 @@ export default compose(
       submit: message =>
         mutate({
           variables: {
-            id: ownProps.match.params.id,
+            id:
+              ownProps.match.params.id === 'new'
+                ? -1
+                : ownProps.match.params.id,
             message,
+            productId: ownProps.location.state.productId,
           },
         }),
     }),
@@ -322,12 +362,13 @@ export default compose(
     },
   }),
   graphql(getMessagesQuery, {
+    skip: props => props.match.params.id === 'new',
     options: props => ({
       client,
       variables: {
         id: props.match.params.id,
       },
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'cache-and-network'
     }),
     props: ({ data: { loading, thread, fetchMore, refetch } }) => {
       const loadMoreMessages = () => {
@@ -368,11 +409,25 @@ export default compose(
   }),
   graphql(getProductQuery, {
     name: 'product',
-    skip: props => !props.data.thread,
-    options: props => ({
-      variables: {
-        id: props.data.thread.productId,
-      },
-    }),
+    skip: props => {
+      if (props.match.params.id === 'new') {
+        return false
+      } else if (props.data.thread) {
+        return false
+      }
+
+      return true
+    },
+    options: props => {
+      const id =
+        props.match.params.id === 'new'
+          ? props.location.state.productId
+          : props.data.thread.productId
+      return {
+        variables: {
+          id,
+        },
+      }
+    },
   }),
 )(Conversation)

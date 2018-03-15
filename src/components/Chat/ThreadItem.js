@@ -6,15 +6,15 @@ import moment from 'moment'
 import styles from './css/thread-item.scss'
 import avatarTheme from './css/avatar.scss'
 
-const ThreadItem = ({ id, sender, message, avatar, time }) => (
-  <Link to={{pathname: `/chat/${id}`, state: {sender}}} className={styles.container}>
+const ThreadItem = ({ id, sender, productName, message, time }) => (
+  <Link to={{pathname: `/chat/${id}`, state: {sender: sender.displayName}}} className={styles.container}>
     <Avatar
-      title={sender[0].toUpperCase()}
-      image={avatar}
+      title={sender.displayName.toUpperCase()}
+      image={sender.profilePicture}
       theme={avatarTheme}
     />
     <div className={styles.text}>
-      <p className={styles.name}>{sender}</p>
+      <p className={styles.name}>{`${productName} (${sender.displayName})`}</p>
       <p className={styles.message}>{message}</p>
     </div>
     <span className={styles.time}>
