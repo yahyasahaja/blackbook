@@ -11,7 +11,7 @@ import FlatButton from './FlatButton'
 import PrimaryButton from './PrimaryButton'
 
 //STORE
-import { favorites } from '../services/stores'
+import { favorites, cart } from '../services/stores'
 
 //INNER_CONFIG
 const convertToMoneyFormat = (num, currency) => {
@@ -49,6 +49,16 @@ class ProductCard extends Component {
 
   closeVariant() {
     this.setState({ isVariantOpen: false })
+  }
+
+  addToCart() {
+    const { data } = this.props
+    const { variant, amount } = this.state
+    cart.add({
+      product: data,
+      variant,
+      amount,
+    })
   }
 
   renderAmountOption() {
@@ -122,7 +132,7 @@ class ProductCard extends Component {
                     </div>
                   </div>
                 </div>
-                <PrimaryButton icon="cart" className={styles.buy}>
+                <PrimaryButton onClick={() => this.addToCart()} icon="cart" className={styles.buy}>
                   BELI
                 </PrimaryButton>
               </div>

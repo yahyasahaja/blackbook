@@ -7,6 +7,7 @@ import snackbar from './Snackbar'
 import badges from './Badges'
 import tokens from './Tokens'
 import user from './User'
+import cart from './Cart'
 
 export { 
   categories,
@@ -17,7 +18,8 @@ export {
   snackbar,
   badges,
   tokens,
-  user
+  user,
+  cart
 }
 
 export default { 
@@ -29,5 +31,6 @@ export default {
   snackbar,
   badges,
   tokens,
-  user
+  user,
+  cart
 }
