@@ -18,6 +18,7 @@ const Category = asyncComponent(() => import('./screens/Category'))
 const Auth = asyncComponent(() => import('./screens/Auth'))
 const Password = asyncComponent(() => import('./screens/Account/Password'))
 const Profile = asyncComponent(() => import('./screens/Account/Profile'))
+const Cart = asyncComponent(() => import('./screens/Cart'))
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -94,6 +95,7 @@ let BOTTOM_TAB_BAR_DATA = [
             <Route path="/auth" component={Auth} />
             <Route path="/category/:category_name" component={Category} />
             <Route path="/chat/:id" component={Conversation} />
+            <Route path="/cart" component={Cart} />
             <Route path="/account/profile" component={Profile} />
             <Route path="/account/password" component={Password} />
           </Switch>

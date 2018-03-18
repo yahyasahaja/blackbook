@@ -1,0 +1,60 @@
+@import '../../../assets/css/config.scss';
+
+.products {
+  margin-top: 10px;
+  padding-bottom: 165px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail {
+  position: fixed;
+  bottom: 0px;
+  left: 50%;
+  margin-left: -240px;
+  width: 100%;
+  max-width: $max_width;
+  border-top: 1px solid #e1e1e1;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+
+  @media screen and (max-width: 480px) {
+    margin-left: -50%;
+  }
+
+  div {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+
+    .info {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .amount {
+      font-weight: bold;
+      font-size: 14px;
+      color: $primary_color;
+    }
+  }
+
+  .buyButton {
+    margin: 15px 10px 10px 10px;
+    width: auto;
+  }
+}
+
+.empty {
+  text-align: center;
+  font-size: 16px;
+
+  span {
+    font-size: 80px;
+    color: #ccc;
+    display: block;
+  }
+}

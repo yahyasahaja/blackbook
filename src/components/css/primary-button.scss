@@ -34,4 +34,8 @@
     filter: brightness(100%);
     transition: 0s;
   }
+
+  &.disabled {
+    filter: grayscale(100%);
+  }
 }
