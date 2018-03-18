@@ -1,7 +1,7 @@
 //MODULES
 import React, { Component } from 'react'
 import Input from 'react-toolbox/lib/input/Input'
-import Dropdown from 'react-toolbox/lib/dropdown/Dropdown'
+import Dropdown from 'react-toolbox/lib/dropdown'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'

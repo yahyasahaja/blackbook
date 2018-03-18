@@ -98,39 +98,57 @@ self.addEventListener('fetch', function (event) {
 //   )
 // })
 
-self.addEventListener('push', function (e) {
-  var options = {
-    body: 'This notification was generated from a push!',
-    icon: 'images/example.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: '2'
-    },
-    actions: [
-      {
-        action: 'explore', title: 'Explore this new world',
-        icon: 'images/checkmark.png'
-      },
-      {
-        action: 'close', title: 'Close',
-        icon: 'images/xmark.png'
-      },
-    ]
+self.addEventListener('push', function (event) {
+  // var options = {
+  //   body: 'This notification was generated from a push!',
+  //   icon: 'images/example.png',
+  //   vibrate: [100, 50, 100],
+  //   data: {
+  //     dateOfArrival: Date.now(),
+  //     primaryKey: '2'
+  //   },
+  //   actions: [
+  //     {
+  //       action: 'explore', title: 'Explore this new world',
+  //       icon: 'images/checkmark.png'
+  //     },
+  //     {
+  //       action: 'close', title: 'Close',
+  //       icon: 'images/xmark.png'
+  //     },
+  //   ]
+  // }
+  
+  //console.log(event)
+  let context = {}
+  
+  if (event.data) {
+    try {
+      context = JSON.parse(event.data.text())
+    } catch (e) {
+      context = { body: event.data.text() }
+    }
   }
-  e.waitUntil(
-    self.registration.showNotification('Hello world!', options)
-  )
 
-  // e.postMessage(e.data)
-  // self.postMessage()
-  console.log(self.clients)
-  self.clients.matchAll().then(all => all.forEach(client => {
-    client.postMessage('yoe')
-  }))
-})
+  ///// broadcast to Window
+  if (context.body.includes('pesan') || context.threadId) {
+    ///
+    this.clients.matchAll({ includeUncontrolled: true }).then(function (allClients) {
+      allClients.forEach(function (client) {
+        client.postMessage({
+          threadId: context.threadId,
+          body: context.body
+        })
+      })
+    })
+  }
+  ///
+  const title = context.title || 'Blanja-Commerce'
+  const options = {
+    body: context.body || 'Pesan baru dari Blanja',
+    icon: '/static/img/icons/android-chrome-192x192.png',
+    vibrate: [100, 50, 100]
+  }
 
-self.addEventListener('message', function (e) {
-  console.log('SERVICE WORKER MESSAGE TRIGGERED')
-  e.source.postMessage(e.data)
+  event.waitUntil(self.registration.showNotification(title, options))
 })

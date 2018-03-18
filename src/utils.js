@@ -7,7 +7,7 @@ export const matchProps = (next, current, context) => {
 }
 
 export const getSubscription = () => {
-  return navigator.serviceWorker.getRegistration('/service-worker.js')
+  return navigator.serviceWorker.getRegistration('/sw.js')
     .then(reg => reg.pushManager.getSubscription())
 }
 
@@ -15,9 +15,3 @@ export default {
   matchLoading,
   matchProps, 
 }
-
-navigator.serviceWorker.getRegistration('/service-worker.js')
-  .then(reg => {
-    reg.pushManager.getSubscription()
-    reg.getNotifications()
-  })

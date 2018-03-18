@@ -9,6 +9,7 @@ import styles from './css/product-card.scss'
 //COMPONENTS
 import FlatButton from './FlatButton'
 import PrimaryButton from './PrimaryButton'
+import ImageLoader from './ImageLoader'
 
 //STORE
 import { favorites, cart } from '../services/stores'
@@ -89,7 +90,7 @@ class ProductCard extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.picture}>
-          <img src={image} alt="Product Image" />
+          <ImageLoader src={image} alt="Product Image" />
         </div>
 
         <div className={styles.wrapper}>
