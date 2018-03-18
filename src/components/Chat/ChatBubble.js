@@ -1,10 +1,5 @@
-<<<<<<< 40987b9de52ee97de4e657c0d325fa70c0a52f65
 import React, { Component, Fragment } from 'react'
 import Avatar from 'react-toolbox/lib/avatar'
-=======
-import React, { Fragment } from 'react'
-import Avatar from 'react-toolbox/lib/avatar/Avatar'
->>>>>>> update theming
 import moment from 'moment'
 
 import styles from './css/chat-bubble.scss'

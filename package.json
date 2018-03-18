@@ -11,7 +11,8 @@
       "color-primary-contrast": "var(--color-dark-contrast)",
       "color-accent-contrast": "var(--color-dark-contrast)",
       "input-text-highlight-color": "#ea0f00",
-      "progress-main-color": "$ea0f00"
+      "progress-main-color": "$ea0f00",
+      "color-primary": "$e74c3c"
       
     },
     "javascript": "src/assets/theme",
