@@ -54,5 +54,12 @@
     background: white;
     border-radius: 5px;
     box-shadow: 1px 2px 5px #dedede;
+
+    .logout, .list {
+
+      span {
+        color: #e74c3c !important;
+      }
+    }
   }
 }

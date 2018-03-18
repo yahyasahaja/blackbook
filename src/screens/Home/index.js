@@ -8,6 +8,7 @@ import { observer } from 'mobx-react'
 
 //STYLES
 import styles from './css/index.scss'
+import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import TopBar, { APPEAR } from '../../components/TopBar'
@@ -146,8 +147,8 @@ class Home extends Component {
           loading
             ? <ProgressBar
               className={styles.loading} 
-              type='circular' 
-              mode='indeterminate' multicolor
+              type='circular' theme={ProgressBarTheme}
+              mode='indeterminate'
             />
             : ''
         }

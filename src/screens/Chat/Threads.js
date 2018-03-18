@@ -52,7 +52,7 @@ class Threads extends Component {
           })}
         {this.props.data.loading ? (
           <div className={styles.loading}>
-            <ProgressBar theme={loadingTheme} type="circular" mode="indeterminate" />
+            <ProgressBar theme={loadingTheme} type="circular" mode="indeterminate" theme={Progr} />
           </div>
         ) : (
           ''

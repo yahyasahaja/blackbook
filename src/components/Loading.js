@@ -1,6 +1,6 @@
 //COMPONENT
 import React from 'react'
-import ProgressBar from 'react-toolbox/lib/progress_bar'
+import ProgressBar from 'react-toolbox/lib/progress_bar/ProgressBar'
 
 //stylesS
 import styles from 'css/loading.scss'

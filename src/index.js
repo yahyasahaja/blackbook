@@ -3,14 +3,14 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { ThemeProvider } from 'react-css-themr'
 import { ApolloProvider } from 'react-apollo'
-import ProgressBar from 'react-toolbox/lib/progress_bar'
+import ProgressBar from 'react-toolbox/lib/progress_bar/ProgressBar'
 import { observer } from 'mobx-react'
 // import * as OfflinePluginRuntime from 'offline-plugin/runtime'
 // OfflinePluginRuntime.install()
 import axios from 'axios'
 
 //CSS
-import theme from './assets/css/theme.scss'
+import theme from './assets/theme/theme.js'
 
 //ROUTER
 import AppRouter from './AppRouter'
@@ -22,9 +22,7 @@ import { onlineStatus, snackbar, tokens } from './services/stores'
 //SERVICE_WORKER
 import registerServiceWorker from './registerServiceWorker'
 
-const contextTheme = {
-  RTInput: theme
-}
+const contextTheme = theme
 
 axios.defaults.headers['Content-Type'] = 'application/json'
 axios.defaults.headers['Authorization'] = tokens.token

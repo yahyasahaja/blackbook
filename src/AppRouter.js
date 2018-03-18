@@ -1,7 +1,7 @@
 //MODULES
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-import Snackbar from 'react-toolbox/lib/snackbar'
+import Snackbar from 'react-toolbox/lib/snackbar/Snackbar'
 import { observer } from 'mobx-react'
 
 //SCREENS

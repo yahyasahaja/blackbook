@@ -121,4 +121,16 @@ self.addEventListener('push', function (e) {
   e.waitUntil(
     self.registration.showNotification('Hello world!', options)
   )
+
+  // e.postMessage(e.data)
+  // self.postMessage()
+  console.log(self.clients)
+  self.clients.matchAll().then(all => all.forEach(client => {
+    client.postMessage('yoe')
+  }))
+})
+
+self.addEventListener('message', function (e) {
+  console.log('SERVICE WORKER MESSAGE TRIGGERED')
+  e.source.postMessage(e.data)
 })

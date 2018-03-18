@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Avatar from 'react-toolbox/lib/avatar'
+import Avatar from 'react-toolbox/lib/avatar/Avatar'
 import moment from 'moment'
 
 import styles from './css/thread-item.scss'

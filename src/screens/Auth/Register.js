@@ -1,13 +1,14 @@
 //MODULES
 import React, { Component } from 'react'
-import Input from 'react-toolbox/lib/input'
-import Dropdown from 'react-toolbox/lib/dropdown'
+import Input from 'react-toolbox/lib/input/Input'
+import Dropdown from 'react-toolbox/lib/dropdown/Dropdown'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 //STYLES 
 import styles from './css/register.scss'
+import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //THEME
 import theme from '../../assets/css/theme.scss'
@@ -85,7 +86,7 @@ class Register extends Component {
         <ProgressBar
           className={styles.loading}
           type='circular'
-          mode='indeterminate' multicolor
+          mode='indeterminate' theme={ProgressBarTheme}
         />
       </div>
     )

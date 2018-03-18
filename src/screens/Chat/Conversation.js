@@ -11,6 +11,7 @@ import client from '../../services/graphql/chatClient'
 import styles from './css/conversation.scss'
 import loadingTheme from './css/loading.scss'
 import loadingSubmitTheme from './css/loading-submit.scss'
+import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 import { appStack } from '../../services/stores'
 

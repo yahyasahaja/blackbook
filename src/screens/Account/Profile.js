@@ -7,6 +7,7 @@ import Dialog from 'react-toolbox/lib/dialog'
 
 //STYLES
 import styles from './css/profile.scss'
+import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
@@ -186,7 +187,7 @@ class Auth extends Component {
         <ProgressBar
           className={styles.loading}
           type='circular'
-          mode='indeterminate' multicolor
+          mode='indeterminate' theme={ProgressBarTheme}
         />
       </div>
     )

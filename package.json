@@ -1,4 +1,22 @@
 {
+  "reactToolbox": {
+    "include": [
+      "BUTTON",
+      "DATE_PICKER"
+    ],
+    "customProperties": {
+      "animation-duration": "0.3s",
+      "color-accent": "#ea0f00",
+      "color-accent-dark": "#e74c3c",
+      "color-primary-contrast": "var(--color-dark-contrast)",
+      "color-accent-contrast": "var(--color-dark-contrast)",
+      "input-text-highlight-color": "#ea0f00",
+      "progress-main-color": "$ea0f00"
+      
+    },
+    "javascript": "src/assets/theme",
+    "styles": "public/static/css"
+  },
   "name": "buyer-pwa",
   "version": "0.1.0",
   "private": true,
@@ -49,7 +67,8 @@
     "react-dev-utils": "^5.0.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
-    "react-toolbox": "^2.0.0-beta.12",
+    "react-style-proptype": "^3.2.1",
+    "react-toolbox": "2.0.0-beta.12",
     "regenerator": "^0.12.3",
     "style-loader": "0.19.0",
     "sw-precache-webpack-plugin": "0.11.4",
@@ -66,7 +85,8 @@
     "dev-server": "NODE_ENV=development nodemon server/index.js --exec babel-node --watch server",
     "build-server": "babel server -d build-server",
     "test": "node scripts/test.js --env=jsdom",
-    "postinstall": "yarn build && yarn run build-server"
+    "postinstall": "yarn build && yarn run build-server",
+    "toolbox": "react-toolbox-themr"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -123,6 +143,7 @@
     "postcss-cssnext": "^3.0.2",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
+    "react-toolbox-themr": "^1.0.2",
     "sass-loader": "^6.0.6"
   }
 }

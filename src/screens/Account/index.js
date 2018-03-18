@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 
 //STYLES
 import styles from './css/index-account.scss'
+import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import TopBar, { ABSOLUTE } from '../../components/TopBar'
@@ -29,7 +30,7 @@ class Account extends Component {
         <ProgressBar
           className={styles.loading}
           type='circular'
-          mode='indeterminate' multicolor
+          mode='indeterminate' theme={ProgressBarTheme}
         />
       </div>
     </div>

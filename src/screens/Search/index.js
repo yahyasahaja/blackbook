@@ -8,6 +8,7 @@ import _ from 'lodash'
 
 //STYLES
 import styles from './css/index-search.scss'
+import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
@@ -248,9 +249,9 @@ class Search extends Component {
         {
           loading
             ? <ProgressBar
-              className={styles.loading}
-              type='circular'
-              mode='indeterminate' multicolor
+              className={styles.loading} theme={ProgressBarTheme}
+              type='circular' 
+              mode='indeterminate' 
             />
             : products.length === 0
               ? <div className={styles['not-found']}>

@@ -13,5 +13,11 @@ export const getSubscription = () => {
 
 export default {
   matchLoading,
-  matchProps,
+  matchProps, 
 }
+
+navigator.serviceWorker.getRegistration('/service-worker.js')
+  .then(reg => {
+    reg.pushManager.getSubscription()
+    reg.getNotifications()
+  })

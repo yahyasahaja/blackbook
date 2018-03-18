@@ -1,6 +1,6 @@
 //MODULES
 import React, { Component } from 'react'
-import Input from 'react-toolbox/lib/input'
+import Input from 'react-toolbox/lib/input/Input'
 import Dropdown from 'react-toolbox/lib/dropdown'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
@@ -11,6 +11,7 @@ import styles from './css/login.scss'
 
 //THEME
 import theme from '../../assets/css/theme.scss'
+import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import PrimaryButton from '../../components/PrimaryButton'
@@ -72,7 +73,7 @@ class Login extends Component {
         <ProgressBar
           className={styles.loading}
           type='circular'
-          mode='indeterminate' multicolor
+          mode='indeterminate' theme={ProgressBarTheme}
         />
       </div>
     )

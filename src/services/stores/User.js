@@ -195,7 +195,7 @@ class User {
         }
       )
 
-      if (is_ok) console.log('PUSH SUBSCRIPTION WAS REGISTERED')
+      if (is_ok) console.log('PUSH SUBSCRIPTION HAS BEEN REGISTERED')
       return is_ok
     } catch (err) {
       console.log('ERROR ON REGISTERING PUSH SUBSCRIPTION', err)

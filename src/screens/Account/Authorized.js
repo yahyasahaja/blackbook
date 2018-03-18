@@ -70,6 +70,7 @@ class Account extends Component {
             <ListItem caption='Berjualan di Blanja' leftIcon='business_center' />
             <ListItem 
               caption='Keluar' 
+              className={styles.logout}
               leftIcon={<span className="mdi mdi-logout-variant" />} 
               onClick={() => user.logout()} 
             />
