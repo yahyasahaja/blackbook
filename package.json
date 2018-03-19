@@ -13,7 +13,6 @@
       "input-text-highlight-color": "#ea0f00",
       "progress-main-color": "#ea0f00",
       "color-primary": "#e74c3c"
-      
     },
     "javascript": "src/assets/theme",
     "styles": "public/static/css"
@@ -67,6 +66,7 @@
     "react-css-themr": "^2.1.2",
     "react-dev-utils": "^5.0.0",
     "react-dom": "^16.2.0",
+    "react-lazyload": "^2.3.0",
     "react-router-dom": "^4.2.2",
     "react-style-proptype": "^3.2.1",
     "react-toolbox": "2.0.0-beta.12",

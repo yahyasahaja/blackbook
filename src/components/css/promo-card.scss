@@ -1,0 +1,56 @@
+@import '../../assets/css/config.scss';
+
+.container, .container:visited {
+  display: block;
+  width: 95%;
+  margin: auto;
+  background: white;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  border: 1px solid #d8d8d8;
+  color: inherit;
+
+  .picture {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    max-height: 300px;
+
+    img {
+      width: 100%;
+      object-fit: contain;
+      object-position: center;
+      height: 100%;
+    }
+  }
+
+  .wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    padding-top: 20px;
+
+    .left {
+      display: block;
+
+      .title {
+        display: block;
+        font-weight: 600;
+        font-size: 12pt;
+      }
+
+      .time {
+        display: block;
+        font-size: 11pt;
+        font-weight: 400;
+      }
+    }
+
+    .icon {
+      font-size: 20pt;
+      color: rgb(202, 202, 202);
+    }
+  }
+}

@@ -17,13 +17,7 @@ class Tokens {
     if ((apiToken = localStorage.getItem(API_TOKEN_STORAGE_URI)))
       this.apiToken = observable(apiToken)
     else
-      axios.get(getIAMEndpoint('/token')).then(res => {
-        if (res.data) {
-          let token = res.data.toString()
-          localStorage.setItem(API_TOKEN_STORAGE_URI, token)
-          this.apiToken = observable(token)
-        }
-      })
+      this.refetchAPIToken()
 
     if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)))
       this.authToken = observable(authToken)
@@ -43,6 +37,20 @@ class Tokens {
   @computed
   get rawToken() {
     return this.authToken || this.apiToken
+  }
+
+  @action
+  async refetchAPIToken() {
+    let { data } = await axios.get(getIAMEndpoint('/token'))
+
+    if (data) {
+      let token = data.toString()
+      localStorage.setItem(API_TOKEN_STORAGE_URI, token)
+      this.apiToken = observable(token)
+      return data
+    }
+
+    return this.refetchAPIToken()
   }
 
   @action

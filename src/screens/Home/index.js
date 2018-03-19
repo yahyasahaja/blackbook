@@ -17,7 +17,7 @@ import Pills from '../../components/Pills'
 import Separator from '../../components/Separator'
 
 //STORE
-import { categories as categoriesStore, appStack, favorites } from '../../services/stores'
+import { categories as categoriesStore, appStack, favorites, tokens } from '../../services/stores'
 
 //INNER_CONFIG
 const MAX_FETCH_LENGTH = 5
@@ -48,23 +48,25 @@ class Home extends Component {
   }
 
   checkAllProductsChanges(nextProps) {
-    let { allProductsQuery: { loading: newLoading, error: newError } } = nextProps
-    let { allProductsQuery: { loading: curLoading } } = this.props
-
+    let { allPromotedsQuery: { loading: newLoading, error: newError } } = nextProps
+    let { allPromotedsQuery: { loading: curLoading } } = this.props
+    
     if (curLoading !== newLoading && !newLoading && !newError) {
-      let allProducts = nextProps.allProductsQuery.allProducts
+      let allPromoteds = nextProps.allPromotedsQuery.allPromoteds
       let { offset } = this.state
 
-      let products = allProducts.products.map(data => {
-        if (data.images.length > 0)
-          return { ...data, image: data.images[0].url }
+      let products = allPromoteds.promoteds.map(({product}) => {
+        if (product.images.length > 0)
+          return { ...product, image: product.images[0].url }
       })
 
       this.setState({
         products: [...this.state.products, ...products],
         offset: offset + MAX_FETCH_LENGTH,
-        isFetchDisabled: this.state.products.length === allProducts.totalCount
+        isFetchDisabled: this.state.products.length === allPromoteds.totalCount
       })
+    } else if (newError) {
+      tokens.refetchAPIToken().then(() => window.location.reload())
     }
   }
 
@@ -89,7 +91,7 @@ class Home extends Component {
     let scrollPosition = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
     let pageHeight = document.body.scrollHeight
     let screenHeight = document.body.offsetHeight
-    let { allProductsQuery: { loading, refetch } } = this.props
+    let { allPromotedsQuery: { loading, refetch } } = this.props
     let { offset } = this.state
 
     if (loading) return
@@ -119,7 +121,7 @@ class Home extends Component {
   }
 
   render() {
-    let { allProductsQuery: { loading } } = this.props
+    let { allPromotedsQuery: { loading } } = this.props
 
     return (
       <TopBar
@@ -168,21 +170,23 @@ query {
 }
 `
 
-const allProductsQuery = gql`
-query allProducts($limit: Int, $offset: Int) {
-  allProducts(limit: $limit, offset: $offset) {
-    products {
-      id,
-      name,
-      price {
-        value,
-        currency
-      },
-      variants {
-        name
-      }
-      images {
-        url
+const allPromotedsQuery = gql`
+query allPromoteds($limit: Int, $offset: Int) {
+  allPromoteds(limit: $limit, offset: $offset) {
+    promoteds {
+      product {
+        id,
+        name,
+        price {
+          value,
+          currency
+        },
+        variants {
+          name
+        }
+        images {
+          url
+        }
       }
     }
     totalCount
@@ -195,8 +199,8 @@ export default compose(
     name: 'allCategoriesQuery',
     skip: () => categoriesStore.data === null
   }),
-  graphql(allProductsQuery, {
-    name: 'allProductsQuery',
+  graphql(allPromotedsQuery, {
+    name: 'allPromotedsQuery',
     options: () => {
       return {
         variables: { limit: MAX_FETCH_LENGTH, offset: 0 }

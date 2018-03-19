@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { ThemeProvider } from 'react-css-themr'
 import { ApolloProvider } from 'react-apollo'
-import ProgressBar from 'react-toolbox/lib/progress_bar/ProgressBar'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { observer } from 'mobx-react'
 // import * as OfflinePluginRuntime from 'offline-plugin/runtime'
 // OfflinePluginRuntime.install()
