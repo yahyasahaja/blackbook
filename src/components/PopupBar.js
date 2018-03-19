@@ -32,14 +32,12 @@ export const ANIMATE_VERTICAL = 'animateVertical'
   }
 
   onBack = () => {
-    let { length, goBack, push } = this.props.history
+    let { goBack } = this.props.history
     let { backLink } = this.props
 
     if (backLink) return
 
-    if (length == 1) {
-      push('/home')
-    } else goBack()
+    goBack()
   }
 
   checkScroll = () => {
