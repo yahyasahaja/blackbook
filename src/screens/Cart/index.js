@@ -131,7 +131,7 @@ export default class Cart extends Component {
 }
 
 const calculateShippingCostTaiwan = gql`
-  mutation calcShippingCostTwn($input: CalcShippingCostTwnInput!) {
-    calcShippingCostTwn(input: $input)
+  mutation CalcShippingCost($input: CalcShippingCostInput!) {
+    CalcShippingCost(input: $input)
   }
 `
