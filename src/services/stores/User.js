@@ -181,10 +181,19 @@ class User {
     try {
       if (!pushSubscription)
         pushSubscription = await getSubscription()
-        
+      
       if (!pushSubscription || !this.isLoggedIn) return false
 
       let authToken = tokens.token
+
+      pushSubscription = pushSubscription.toJSON()
+      pushSubscription = {
+        endpoint: pushSubscription.endpoint,
+        keys: {
+          auth: pushSubscription.kays.auth,
+          p256dh: pushSubscription.keys.p256dh
+        }
+      }
 
       let { data: { is_ok } } = await axios.post(getIAMEndpoint('/renewpush'),
         pushSubscription,

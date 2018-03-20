@@ -142,8 +142,7 @@ class Home extends Component {
         <div className={styles.categories} >
           {this.renderCategories()}
         </div>
-
-        <Separator>All Products</Separator>
+        
         {this.renderCards()}
         {
           loading
