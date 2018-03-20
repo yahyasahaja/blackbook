@@ -5,6 +5,9 @@ import LazyLoad from 'react-lazyload'
 //IMAGE_PLACEHOLDER
 import ImagePlaceholder from '../assets/img/image-placeholder.jpeg'
 
+//STYLE
+import styles from './css/image-loader.scss'
+
 //COMPONENT
 export default class ImageLoader extends Component {
   state = {
@@ -14,29 +17,20 @@ export default class ImageLoader extends Component {
 
   render() {
     let { isLoaded } = this.state
-    let imageStyle = {}
-    let imagePlaceholderStyle = {}
-
-    if (!isLoaded) imageStyle.display = 'none'
-    else imagePlaceholderStyle.display = 'none'
 
     return (
-      <React.Fragment>
-        <img
-          {...this.props}
-          style={imagePlaceholderStyle}
-          src={ImagePlaceholder}
-        />
-
-        <LazyLoad height={200} >
+      <LazyLoad
+        height={200}
+        placeholder={
           <img
             {...this.props}
-            onLoad={() => this.setState({ isLoaded: true })}
-            style={imageStyle}
-            onError={() => this.setState({ isError: true })}
+            className={isLoaded ? styles.none : ''}
+            src={ImagePlaceholder}
           />
-        </LazyLoad>
-      </React.Fragment>
+        }
+      >
+        <img {...this.props} />
+      </LazyLoad>
     )
   }
 }

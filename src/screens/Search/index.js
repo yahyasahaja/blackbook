@@ -220,6 +220,7 @@ class Search extends Component {
         title="Search" {...this.props}
         anim={ANIMATE_HORIZONTAL}
         style={{ background: 'rgb(239, 239, 239)' }}
+        backLink="/home"
         component={(
           <div className={styles.search} >
             <div className={styles.input}>

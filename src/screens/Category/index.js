@@ -252,6 +252,7 @@ class Category extends Component {
       <PopupBar
         title="Search" {...this.props}
         anim={ANIMATE_HORIZONTAL}
+        backLink="/home"
         component={(
           <div className={styles.search} >
             <div className={styles.input}>

@@ -36,7 +36,6 @@ export const ANIMATE_VERTICAL = 'animateVertical'
     let { backLink } = this.props
 
     if (backLink) return
-
     goBack()
   }
 
