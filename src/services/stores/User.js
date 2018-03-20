@@ -182,7 +182,10 @@ class User {
       if (!pushSubscription)
         pushSubscription = await getSubscription()
       
+      console.log('PUSH SUBSCRIPTION:', pushSubscription)
       if (!pushSubscription || !this.isLoggedIn) return false
+
+      console.log('processing registration..')
 
       let authToken = tokens.token
 
@@ -195,6 +198,7 @@ class User {
         }
       }
 
+      console.log('RESULT', pushSubscription)
       let { data: { is_ok } } = await axios.post(getIAMEndpoint('/renewpush'),
         pushSubscription,
         {
