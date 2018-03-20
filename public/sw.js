@@ -21,7 +21,7 @@ var CACHE_NAME = 'hash-pwa-17'
 //       }))
 //     )
 // }
-
+ 
 importScripts('/service-worker.js')
 //The first time the user starts up the PWA, 'install' is triggered.
 self.addEventListener('install', function (event) {

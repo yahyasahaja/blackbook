@@ -62,12 +62,13 @@ function registerValidSW(swUrl) {
         const installingWorker = registration.installing
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
+            console.log(installingWorker.state)
             if (navigator.serviceWorker.controller) {
               // At this point, the old content will have been purged and
               // the fresh content will have been added to the cache.
               // It's the perfect time to display a "New content is
               // available please refresh." message in your web app.
-              console.log('New content is available please refresh.')
+              window.location.reload()
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
@@ -78,17 +79,38 @@ function registerValidSW(swUrl) {
         }
       }
 
-      registration.pushManager.getSubscription().then(async subscription => {
-        if (!subscription) 
-          subscription = await registration.pushManager.subscribe({ userVisibleOnly: true })
-
-        console.log('FROM SERVICE WORKER REGISTRATION', subscription)
-        await user.registerPushSubscription(subscription)
-      })
     })
     .catch(error => {
       console.error('Error during service worker registration:', error)
     })
+
+  navigator.serviceWorker.ready.then(registration => {
+    let activatingWorker = registration.active
+    console.log(registration.active)
+
+    if (activatingWorker.state === 'activated') {
+      subscribeRegistration(registration)
+    } else activatingWorker.onstatechange = () => {
+      console.log(activatingWorker.state)
+      if (activatingWorker.state === 'activated') {
+        subscribeRegistration(registration)
+      }
+    }
+  })
+}
+
+function subscribeRegistration(registration) {
+  registration.pushManager.getSubscription().then(async subscription => {
+    try {
+      if (!subscription)
+        subscription = await registration.pushManager.subscribe({ userVisibleOnly: true })
+
+      console.log('FROM SERVICE WORKER REGISTRATION', subscription)
+      await user.registerPushSubscription(subscription)
+    } catch (e) {
+      console.log('ERROR ON REGISTRERING SERVICE WORKER AT THE FIRST TIME', e)
+    }
+  })
 }
 
 function checkValidServiceWorker(swUrl) {
