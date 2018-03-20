@@ -26,7 +26,7 @@ export default class PrimaryButton extends Component {
       <button
         type={type}
         className={`${styles.container} ${disabled ? styles.disabled : ''} ${className || ''}`}
-        onClick={disabled ? onClick : () => {}}
+        onClick={disabled ? () => {} : onClick}
       >
         {icon ? <span className={`mdi mdi-${icon} ${styles.icon}`} /> : ''}
         {children}
