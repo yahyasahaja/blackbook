@@ -82,7 +82,7 @@ function registerValidSW(swUrl) {
         if (!subscription) 
           subscription = await registration.pushManager.subscribe({ userVisibleOnly: true })
 
-        console.log(subscription)
+        console.log('FROM SERVICE WORKER REGISTRATION', subscription)
         await user.registerPushSubscription(subscription)
       })
     })

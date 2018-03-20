@@ -128,7 +128,7 @@ class Home extends Component {
         relative={{
           title: { cart: true },
           search: { cart: false },
-        }}
+        }} 
 
         fly={{
           search: { cart: true },

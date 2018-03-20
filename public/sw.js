@@ -129,7 +129,7 @@ self.addEventListener('push', function (event) {
       context = { body: event.data.text() }
     }
   }
-
+  console.log('CONTEXT FROM PUSH LISTENER', context)
   ///// broadcast to Window
   if (context.body.includes('pesan') || context.threadId) {
     ///

@@ -20,7 +20,9 @@ import {
 class User {
   constructor() {
     //INIT_USER_DATA
-    this.fetchData()
+    this.fetchData().then(data => {
+      if (data) this.registerPushSubscription()
+    }).catch(e => console.log('CANT FETCH USER DATA', e))
   }
 
   @observable data = null
@@ -182,10 +184,8 @@ class User {
       if (!pushSubscription)
         pushSubscription = await getSubscription()
       
-      console.log('PUSH SUBSCRIPTION:', pushSubscription)
+      // console.log('REGISTERING THIS SUBSCRIPTION:', pushSubscription, this.isLoggedIn)
       if (!pushSubscription || !this.isLoggedIn) return false
-
-      console.log('processing registration..')
 
       let authToken = tokens.token
 
@@ -193,12 +193,12 @@ class User {
       pushSubscription = {
         endpoint: pushSubscription.endpoint,
         keys: {
-          auth: pushSubscription.kays.auth,
+          auth: pushSubscription.keys.auth,
           p256dh: pushSubscription.keys.p256dh
         }
       }
 
-      console.log('RESULT', pushSubscription)
+      console.log('PUSH SUBSCRIPTION TO BE PUSHED TO SERVER', pushSubscription)
       let { data: { is_ok } } = await axios.post(getIAMEndpoint('/renewpush'),
         pushSubscription,
         {

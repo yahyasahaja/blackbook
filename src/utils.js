@@ -6,9 +6,18 @@ export const matchProps = (next, current, context) => {
   return next[context] === current[context]
 }
 
-export const getSubscription = () => {
-  return navigator.serviceWorker.getRegistration('/sw.js')
-    .then(reg => reg.pushManager.getSubscription())
+export const getSubscription = async () => {
+  let reg, subscription
+
+  try {
+    reg = await navigator.serviceWorker.getRegistration('/sw.js')
+    subscription = await reg.pushManager.getSubscription()
+  } catch (e) {
+    console.log('CAN\'T GET SUBSCRIPTION')
+    subscription = null
+  }
+
+  return subscription
 }
 
 export const convertToMoneyFormat = (num, currency) => {
