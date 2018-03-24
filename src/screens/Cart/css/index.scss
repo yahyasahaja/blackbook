@@ -2,9 +2,13 @@
 
 .products {
   margin-top: 10px;
-  padding-bottom: 175px;
+  padding-bottom: 214px;
   display: flex;
   flex-direction: column;
+  
+  &.padded {
+    padding-bottom: 254px;
+  }
 }
 
 .detail {
@@ -24,10 +28,28 @@
     margin-left: -50%;
   }
 
-  div {
+  div.row {
     padding: 10px;
-    border-bottom: 1px solid #eee;
     display: flex;
+    
+    &:not(.voucher) {
+      border-bottom: 1px solid #eee;
+    }
+    
+    &.voucher {
+      flex-direction: column;
+    }
+
+    .voucherInput {
+      display: flex;
+      margin-top: 5px;
+
+      .voucherButton {
+        margin-left: 10px;
+        padding: 5px 10px;
+        flex: 0.2;
+      }
+    }
 
     .info {
       flex: 1;

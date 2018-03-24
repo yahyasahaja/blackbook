@@ -1,16 +1,22 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import gql from 'graphql-tag'
+import Checkbox from 'react-toolbox/lib/checkbox'
+import Input from 'react-toolbox/lib/input/Input'
 
 import PopupBar from '../../components/PopupBar'
 import { appStack, cart } from '../../services/stores'
 import PrimaryButton from '../../components/PrimaryButton'
+import SecondaryButton from '../../components/SecondaryButton'
 import CartItem from '../../components/Cart/CartItem'
 import { convertToMoneyFormat } from '../../utils'
 
 import client from '../../services/graphql/orderingClient'
 
 import styles from './css/index.scss'
+import theme from '../../assets/css/theme.scss'
+import checkBoxTheme from './css/checkbox.scss'
+import inputTheme from './css/input.scss'
 
 @observer
 export default class Cart extends Component {
@@ -21,6 +27,8 @@ export default class Cart extends Component {
 
   state = {
     shippingCost: null,
+    useVoucher: false,
+    voucherCode: '',
   }
 
   componentDidMount() {
@@ -39,25 +47,23 @@ export default class Cart extends Component {
     }))
 
     try {
-      const { data: { calcShippingCostTwn } } = await client.mutate(
-        {
-          mutation: calculateShippingCostTaiwan,
-          variables: {
-            input: {
-              items: input
-            },
+      const { data: { calcShippingCostTwn } } = await client.mutate({
+        mutation: calculateShippingCostTaiwan,
+        variables: {
+          input: {
+            items: input,
           },
         },
-      )
+      })
       this.setState({ shippingCost: calcShippingCostTwn })
-    } catch(err) {
+    } catch (err) {
       console.log(err)
     }
   }
 
   renderProducts() {
     return (
-      <div className={styles.products}>
+      <div className={`${styles.products} ${this.state.useVoucher && styles.padded}`}>
         {cart.data
           .slice()
           .map((item, index) => (
@@ -74,7 +80,7 @@ export default class Cart extends Component {
   renderDetail() {
     return (
       <div className={styles.detail}>
-        <div>
+        <div className={styles.row}>
           <span className={styles.info}>Ongkos Kirim</span>
           <span className={styles.amount}>
             {this.state.shippingCost
@@ -82,7 +88,7 @@ export default class Cart extends Component {
               : 'Menghitung ongkos kirim...'}
           </span>
         </div>
-        <div>
+        <div className={styles.row}>
           <span className={styles.info}>Total Pembayaran</span>
           <span className={styles.amount}>
             {convertToMoneyFormat(
@@ -91,7 +97,38 @@ export default class Cart extends Component {
             )}
           </span>
         </div>
-        <PrimaryButton disabled={this.state.shippingCost === null} onClick={() => {}} className={styles.buyButton}>
+        <div className={`${styles.row} ${styles.voucher}`}>
+          <Checkbox
+            theme={checkBoxTheme}
+            checked={this.state.useVoucher}
+            label="Saya ingin menggunakan kupon belanja"
+            onChange={() =>
+              this.setState({ useVoucher: !this.state.useVoucher })
+            }
+          />
+          {this.state.useVoucher && (
+            <div className={styles.voucherInput}>
+              <Input
+                theme={{...theme, ...inputTheme}}
+                type="Masukkan Kode Voucher"
+                hint="Kode Voucher"
+                value={this.state.voucherCode}
+                onChange={val => this.setState({ voucherCode: val })}
+              />
+              <SecondaryButton
+                onClick={() => {}}
+                className={styles.voucherButton}
+              >
+                GUNAKAN
+              </SecondaryButton>
+            </div>
+          )}
+        </div>
+        <PrimaryButton
+          disabled={this.state.shippingCost === null}
+          onClick={() => {}}
+          className={styles.buyButton}
+        >
           LANJUTKAN
         </PrimaryButton>
       </div>
@@ -132,6 +169,6 @@ export default class Cart extends Component {
 
 const calculateShippingCostTaiwan = gql`
   mutation CalcShippingCost($input: CalcShippingCostInput!) {
-    CalcShippingCost(input: $input)
+    calcShippingCostTwn(input: $input)
   }
 `
