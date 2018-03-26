@@ -1,7 +1,7 @@
 //MODULES
 import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 //STYLES
 import styles from './css/product-card.scss'
@@ -20,7 +20,7 @@ const convertToMoneyFormat = (num, currency) => {
     .toString()
     .split('')
     .reverse()
-    .reduce(function(acc, num, i) {
+    .reduce(function (acc, num, i) {
       return num == '-' ? acc : num + (i && !(i % 3) ? '.' : '') + acc
     }, '')
 
@@ -66,7 +66,7 @@ class ProductCard extends Component {
 
   renderAmountOption() {
     const options = []
-    for(let i = 1; i<=30; i++) {
+    for (let i = 1; i <= 30; i++) {
       options.push(<option key={i}>{i}</option>)
     }
 
@@ -90,7 +90,10 @@ class ProductCard extends Component {
       }
 
     return (
-      <div className={styles.container}>
+      <div 
+        className={styles.container} 
+        onClick={() => this.props.history.push(`/product/${id}`)}
+      >
         <div className={styles.picture}>
           <ImageLoader src={image} alt="Product Image" />
         </div>
@@ -103,7 +106,10 @@ class ProductCard extends Component {
             </span>
           </div>
 
-          <div className={styles.actions}>
+          <div 
+            className={styles.actions}
+            onClick={e => e.stopPropagation()} 
+          >
             {this.state.isVariantOpen ? (
               <div className={styles.variantContent}>
                 <p>
@@ -118,7 +124,7 @@ class ProductCard extends Component {
                     <label>Varian</label>
                     <div className={styles.select}>
                       <span className={styles.selectText}>{this.state.variant}</span>
-                      <select onChange={event => this.setState({variant: event.target.value})}>
+                      <select onChange={event => this.setState({ variant: event.target.value })}>
                         {variants.map(variant => (
                           <option key={variant.name}>{variant.name}</option>
                         ))}
@@ -129,8 +135,8 @@ class ProductCard extends Component {
                     <label>Jumlah</label>
                     <div className={styles.select}>
                       <span className={styles.selectText}>{this.state.amount}</span>
-                      <select onChange={event => this.setState({amount: event.target.value})}>
-                        { this.renderAmountOption() }
+                      <select onChange={event => this.setState({ amount: event.target.value })}>
+                        {this.renderAmountOption()}
                       </select>
                     </div>
                   </div>
@@ -149,7 +155,7 @@ class ProductCard extends Component {
                   >
                     Suka
                   </FlatButton>
-                  <Link to={{pathname: '/chat/new', state: { productId: id }}}>
+                  <Link to={{ pathname: '/chat/new', state: { productId: id } }}>
                     <FlatButton icon="forum">Chat</FlatButton>
                   </Link>
                   <FlatButton icon="share">Bagikan</FlatButton>
@@ -169,4 +175,4 @@ class ProductCard extends Component {
   }
 }
 
-export default ProductCard
+export default withRouter(ProductCard)

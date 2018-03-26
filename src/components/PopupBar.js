@@ -10,6 +10,12 @@ import styles from './css/popup-bar.scss'
 export const ANIMATE_HORIZONTAL = 'animateHorizontal'
 export const ANIMATE_VERTICAL = 'animateVertical'
 
+//COMPONENTS
+import Badge from './Badge'
+
+//STORES
+import { badges } from '../services/stores'
+
 //COMPONENT
 @observer class Popup extends Component {
   componentDidMount() {
@@ -82,7 +88,7 @@ export const ANIMATE_VERTICAL = 'animateVertical'
         if (rightComponent) return <rightComponent />
         if (cart || icons) return <div className={styles.right} >
           {(() => {
-            if (cart) return <Link to="/cart" className={`mdi mdi-cart ${styles.cart}`} />
+            if (cart) return <Link to="/cart" className={styles.cart}><Badge badge={badges.CART} icon="cart" /></Link>
             if (icons) return icons.map((data, i) => {
               <Link
                 to={data.to} className={`mdi mdi-${data.icon} ${styles.cart}`}

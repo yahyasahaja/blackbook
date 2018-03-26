@@ -1,6 +1,6 @@
 @import '../../assets/css/config.scss';
-
-.container {
+.container,
+.container:visited {
   display: block;
   width: 95%;
   margin: auto;
@@ -9,32 +9,27 @@
   border-radius: 5px;
   box-shadow: 0 2px 15px 3px #d8d8d8;
   margin-bottom: 15px;
-
+  color: inherit;
   .picture {
     width: 100%;
     overflow: hidden;
-
     img {
       width: 100%;
       object-fit: contain;
       height: 170px;
     }
   }
-
   .wrapper {
     padding: 10px;
     padding-bottom: 0;
-
     .content {
       display: block;
       margin: 10px 0;
-
       .name {
         display: block;
         font-weight: bold;
         font-size: 12pt;
       }
-
       .price {
         display: block;
         font-size: 11pt;
@@ -42,7 +37,6 @@
         font-weight: 100;
       }
     }
-
     .actions {
       display: flex;
       justify-content: space-between;
@@ -50,61 +44,51 @@
       margin-top: 10px;
       padding-top: 5px;
       flex-wrap: wrap;
-
       .variantContent {
         flex: 1;
         display: flex;
         flex-direction: column;
-
         p {
           font-size: 16px;
           margin: 5px 0;
         }
-
         .close {
           float: right;
           font-size: 20px;
           line-height: 24px;
         }
-
         .buy {
           font-size: 11pt;
           margin: 10px 0 5px 0;
         }
       }
-
       .variant {
         display: flex;
         flex: 1;
         flex-direction: row;
         padding-top: 10px;
         position: relative;
-
         div.row {
           display: flex;
           flex-direction: column;
           flex: 3;
           margin-right: 10px;
-
           &:last-child {
             flex: 1;
             padding-left: 10px;
             border-left: 1px solid #e0e0e0;
             margin-right: 0px;
           }
-
           label {
             color: #333;
             font-size: 14px;
             width: 70px;
           }
-
           div.select {
             display: flex;
             flex: 1;
             position: relative;
             min-height: 30px;
-
             .selectText {
               display: flex;
               font-size: 18px;
@@ -114,7 +98,6 @@
               height: auto;
               padding-right: 25px;
             }
-
             select {
               position: absolute;
               top: 0px;
@@ -130,17 +113,14 @@
               height: 30px;
               padding-right: 20px;
               color: transparent;
-  
               &::-ms-expand {
                 display: none;
               }
-
               option {
                 width: 100%;
                 color: black;
               }
             }
-  
             &:after {
               content: '\F140';
               font: normal normal normal 24px/1 'Material Design Icons';
@@ -154,19 +134,16 @@
           }
         }
       }
-
       .left {
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
       }
-
       @media only screen and(max-width: 350px) {
         .right {
           width: 100%;
           margin-bottom: 10px;
         }
-
         .left {
           width: 100%;
           margin-bottom: 10px;

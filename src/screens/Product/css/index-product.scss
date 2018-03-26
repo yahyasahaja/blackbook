@@ -1,0 +1,170 @@
+.container {
+  display: block;
+  background: #f2f2f2;
+  min-height: 100vh;
+  padding-top: 55px;
+
+  .card {
+    background: white;
+    margin-bottom: 10px;
+
+    .seller {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+
+      img {
+        width: 70px;
+        height: 70px;
+        border-radius: 100px;
+        margin-right: 10px;
+      }
+
+      span {
+        display: inline;
+      }
+    }
+
+    .wrapper {
+      padding: 20px;
+      .content {
+        display: block;
+        margin: 10px 0;
+        .name {
+          display: block;
+          font-weight: bold;
+          font-size: 12pt;
+        }
+        .price {
+          display: block;
+          font-size: 11pt;
+          color: red;
+          font-weight: 100;
+        }
+
+        .desc {
+          display: block;
+          margin: 15px 0;
+        }
+      }
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #e0e0e0;
+        margin-top: 10px;
+        padding-top: 5px;
+        flex-wrap: wrap;
+        .variantContent {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          p {
+            font-size: 16px;
+            margin: 5px 0;
+          }
+          .close {
+            float: right;
+            font-size: 20px;
+            line-height: 24px;
+          }
+          .buy {
+            font-size: 11pt;
+            margin: 10px 0 5px 0;
+          }
+        }
+        .variant {
+          display: flex;
+          flex: 1;
+          flex-direction: row;
+          padding-top: 10px;
+          position: relative;
+          div.row {
+            display: flex;
+            flex-direction: column;
+            flex: 3;
+            margin-right: 10px;
+            &:last-child {
+              flex: 1;
+              padding-left: 10px;
+              border-left: 1px solid #e0e0e0;
+              margin-right: 0px;
+            }
+            label {
+              color: #333;
+              font-size: 14px;
+              width: 70px;
+            }
+            div.select {
+              display: flex;
+              flex: 1;
+              position: relative;
+              min-height: 30px;
+              .selectText {
+                display: flex;
+                font-size: 18px;
+                flex: 1;
+                color: black;
+                pointer-events: none;
+                height: auto;
+                padding-right: 25px;
+              }
+              select {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                flex: 1;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background: none;
+                border: none;
+                font-family: "Raleway", "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+                font-size: 18px;
+                height: 30px;
+                padding-right: 20px;
+                color: transparent;
+                &::-ms-expand {
+                  display: none;
+                }
+                option {
+                  width: 100%;
+                  color: black;
+                }
+              }
+              &:after {
+                content: '\F140';
+                font: normal normal normal 24px/1 'Material Design Icons';
+                right: 0px;
+                top: 3px;
+                position: absolute;
+                pointer-events: none;
+                color: #bbb;
+                background-color: #fff;
+              }
+            }
+          }
+        }
+        .left {
+          display: flex;
+          justify-content: space-between;
+          flex-wrap: wrap;
+        }
+        @media only screen and(max-width: 350px) {
+          .right {
+            width: 100%;
+            margin-bottom: 10px;
+          }
+          .left {
+            width: 100%;
+            margin-bottom: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.loading {
+  display: block;
+  margin: auto;
+}

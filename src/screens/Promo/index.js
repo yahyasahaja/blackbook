@@ -101,7 +101,6 @@ class Promo extends Component {
 
   renderCards() {
     let { activePromotions } = this.state
-    console.log(activePromotions)
 
     return activePromotions.map((data, i) =>
       <PromoCard

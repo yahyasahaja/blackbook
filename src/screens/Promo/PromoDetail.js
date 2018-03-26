@@ -18,7 +18,7 @@ import ImageLoader from '../../components/ImageLoader'
 //STORE
 import { appStack } from '../../services/stores'
 
-//COMPONENT
+//COMPONENTs
 @observer
 class PromoDetail extends Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class PromoDetail extends Component {
 
   copy = () => {
     this.inputCode.select()
-    document.execCommand('copy')
+    document.execCommand('Copy')
   }
 
   renderContent = () => {
@@ -87,7 +87,7 @@ class PromoDetail extends Component {
                 type="text"
                 value={code || 'Loading Code Promo..'}
                 ref={el => this.inputCode = el}
-                disabled
+                onChange={() => 0}
               />
 
               <button
