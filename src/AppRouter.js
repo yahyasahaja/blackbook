@@ -19,6 +19,7 @@ const Auth = asyncComponent(() => import('./screens/Auth'))
 const Password = asyncComponent(() => import('./screens/Account/Password'))
 const Profile = asyncComponent(() => import('./screens/Account/Profile'))
 const Cart = asyncComponent(() => import('./screens/Cart'))
+const PromoDetail = asyncComponent(() => import('./screens/Promo/PromoDetail'))
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -52,7 +53,7 @@ let BOTTOM_TAB_BAR_DATA = [
       goOffline()
       show('You\'re offline!')
     }
-    
+
     if (window.navigator.onLine) goOnline()
     else goOffline()
   }
@@ -80,7 +81,7 @@ let BOTTOM_TAB_BAR_DATA = [
 
   render() {
     let { onlineStatus: { isOnline }, snackbar: { data: snackbar } } = this.props
-    
+
     return (
       <BrowserRouter>
         <div className={`${styles.container} ${isOnline ? '' : styles.offline}`}>
@@ -98,6 +99,7 @@ let BOTTOM_TAB_BAR_DATA = [
             <Route path="/cart" component={Cart} />
             <Route path="/account/profile" component={Profile} />
             <Route path="/account/password" component={Password} />
+            <Route path="/promo/:promotion_id" component={PromoDetail} />
           </Switch>
 
           <section>

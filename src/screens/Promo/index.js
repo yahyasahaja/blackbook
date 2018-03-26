@@ -21,7 +21,7 @@ const MAX_FETCH_LENGTH = 5
 
 //COMPONENT
 @observer
-class Home extends Component {
+class Promo extends Component {
   componentWillReceiveProps(nextProps) {
     this.checkSelectedChanges(nextProps)
     this.checkAllCategoriesChanges(nextProps)
@@ -101,13 +101,14 @@ class Home extends Component {
 
   renderCards() {
     let { activePromotions } = this.state
-    
-    return activePromotions.map((data, i) => 
-      <PromoCard 
-        {...data} 
+    console.log(activePromotions)
+
+    return activePromotions.map((data, i) =>
+      <PromoCard
+        {...data}
         key={i}
-        to={`/promotions/${data.id}`} 
-        data={data} 
+        to={`/promo/${data.id}`}
+        data={data}
       />
     )
   }
@@ -161,7 +162,7 @@ query activePromotions($limit: Int, $offset: Int) {
       begin
       end
     }
-    
+
     totalCount
   }
 }
@@ -180,4 +181,4 @@ export default compose(
       }
     }
   }),
-)(Home)
+)(Promo)

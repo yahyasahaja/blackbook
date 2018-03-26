@@ -1,0 +1,95 @@
+@import '../../../assets/css/config.scss';
+.container {
+  display: block;
+  padding-top: 55px;
+  background: rgb(214, 214, 214);
+  min-height: 100vh;
+  .loading {
+    display: block;
+    margin: auto;
+  }
+  .wrapper-up {
+    display: block;
+    background: white;
+    .image {
+      display: block;
+      width: 100%;
+      height: 250px;
+      img {
+        display: block;
+        margin: auto;
+        height: 100%;
+      }
+    }
+    .desc {
+      display: block;
+      margin-top: 20px;
+      padding: 20px;
+      text-align: center;
+      span {
+        font-size: 15pt;
+        text-align: center;
+      }
+    }
+  }
+  .wrapper-down {
+    display: block;
+    background: white;
+    margin-top: 15px;
+    color: #a0a0a0;
+    padding: 20px;
+    .up,
+    .down {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 15pt;
+      padding: 10px;
+      .icon {
+        font-size: 30pt;
+      }
+    }
+    .up {
+      border-bottom: 1px solid rgb(155, 155, 155);
+    }
+    .down {
+      .title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .icon {
+          margin-right: 10px;
+        }
+      }
+      .form-promo {
+        display: flex;
+        border: 1px solid rgb(155, 155, 155);
+        border-radius: 5px;
+        overflow: hidden;
+        .code-promo {
+          display: block;
+          border-right: 1px solid rgb(155, 155, 155);
+          padding: 15px;
+          color: $secondary-color;
+          background: #f5f5f5;
+        }
+        input {
+          font-size: 15pt;
+          border: none;
+        }
+        button {
+          font-size: 15pt;
+          background: white;
+          color: #a0a0a0;
+          border: none;
+          font-weight: 300;
+          cursor: pointer;
+          &:hover {
+            background: rgb(230, 230, 230);
+          }
+        }
+      }
+    }
+  }
+}
