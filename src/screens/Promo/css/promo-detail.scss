@@ -22,15 +22,17 @@
         width: 100%;
       }
     }
-    .desc {
+    .title {
       display: block;
       margin-top: 20px;
-      padding: 20px;
+      padding: 10px;
       text-align: center;
-      span {
-        font-size: 15pt;
-        text-align: center;
-      }
+      font-size: 15pt;
+    }
+
+    .desc {
+      font-size: 12pt;
+      padding: 10px;
     }
   }
   .wrapper-down {
@@ -39,6 +41,16 @@
     margin-top: 15px;
     color: #a0a0a0;
     padding: 20px;
+
+    .wrapper {
+      display: block;
+      font-size: 12pt;
+      
+      .title {
+        font-size: 12pt;
+      }
+    }
+
     .up,
     .down {
       display: flex;

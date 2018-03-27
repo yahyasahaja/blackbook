@@ -88,7 +88,7 @@ class ProductCard extends Component {
         value: 0,
         currency: 0,
       }
-
+      
     return (
       <div 
         className={styles.container} 

@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import moment from 'moment'
+import Markdown from 'react-remarkable'
 
 //STYLES
 import styles from './css/promo-detail.scss'
@@ -51,16 +52,18 @@ class PromoDetail extends Component {
         </div>
       )
 
-    let { description, code, image, begin, end } = this.props.promotionQuery.promotion
+    let { title, description, code, image, begin, end, terms } = this.props.promotionQuery.promotion
     return (
       <div className={styles.container}>
         <div className={styles['wrapper-up']} >
           <div className={styles.image} >
             <ImageLoader src={image} alt="Promotion Image" />
           </div>
-
-          <div className={styles.desc} >
-            <span>{description || 'Loading deskripsi promo...'}</span>
+          <div className={styles.title} >
+            {title}
+          </div>
+          <div className={styles.desc}>
+            <Markdown>{description || 'Loading deskripsi promo...'}</Markdown>
           </div>
         </div>
 
@@ -98,6 +101,16 @@ class PromoDetail extends Component {
                 Salin Kode
               </button>
             </div>
+          </div>
+        </div>
+
+        <div className={styles['wrapper-down']}>
+          <div className={styles.wrapper}>
+            <div className={styles.title} >
+              Syarat dan Ketentuan
+            </div>
+
+            <Markdown>{terms}</Markdown>
           </div>
         </div>
       </div>
