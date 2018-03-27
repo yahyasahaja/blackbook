@@ -45,6 +45,12 @@ class PromoDetail extends Component {
     appStack.pop()
   }
 
+  componentDidMount() {
+    let product = this.props.productQuery.product
+
+    if (product) this.setState({ variant: product.variants[0].name })
+  }
+
   componentWillReceiveProps(nextProps) {
     this.checkAllProductChanges(nextProps)
   }
@@ -55,7 +61,7 @@ class PromoDetail extends Component {
 
     if (cur !== next && product && !next) {
       setTimeout(() => 
-        this.setState({ variant: product.variants[0].name, stock: product.variants[0].quantity }), 100)
+        this.setState({ variant: product.variants[0].name }), 100)
     }
   }
 
@@ -112,6 +118,31 @@ class PromoDetail extends Component {
     return options
   }
 
+  renderStock = () => {
+    let { product } = this.props.productQuery
+
+    if (!product) return
+
+    let { variants } = product
+
+    if (variants.length > 1) return (
+      <Fragment>
+        <div style={{fontWeight: 'bold'}} >Stock:</div>
+        {variants.map((data, i) => {
+          return (
+            <div key={i} >{data.name}: {data.quantity}</div>
+          )
+        })}
+      </Fragment>
+    )
+
+    return (
+      <Fragment>
+        <span><span style={{fontWeight: 'bold'}} >Stock:</span> {variants[0].quantity}</span>
+      </Fragment>
+    )
+  }
+
   renderContent = () => {
     if (this.props.productQuery.loading)
       return (
@@ -138,7 +169,12 @@ class PromoDetail extends Component {
         <div className={styles.card} >
           <div className={styles.picture}>
             <Slider
-              items={images.map(image => ({original: image.url, thumbnail: image.url}))}
+              items={images.map(image => ({original: image.url}))}
+              showThumbnails={false}
+              showBullets={true}
+              showPlayButton={false}
+              showFullscreenButton={false}
+
             >
             </Slider>
           </div>
@@ -150,7 +186,7 @@ class PromoDetail extends Component {
                 {convertToMoneyFormat(price.value, price.currency)}
               </span>
               <span className={styles.desc}>{description}</span>
-              <span>Stock: {this.state.stock}</span>
+              {this.renderStock()}
             </div>
 
             <div className={styles.actions}>
@@ -235,7 +271,7 @@ class PromoDetail extends Component {
   render() {
     return (
       <PopupBar
-        title="Detail Promo" {...this.props}
+        title="Detail Produk" {...this.props}
         renderContent={this.renderContent}
         anim={ANIMATE_HORIZONTAL}
         cart

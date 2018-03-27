@@ -37,11 +37,13 @@ import { badges } from '../services/stores'
     window.removeEventListener('gesturechange', this.checkScroll)
   }
 
-  onBack = () => {
+  onBack = e => {
     let { goBack } = this.props.history
-    let { backLink } = this.props
-
+    let { backLink, history } = this.props
     if (backLink) return
+    
+    e.preventDefault()
+    if (history.length <= 2) return history.push('/home')
     goBack()
   }
 
