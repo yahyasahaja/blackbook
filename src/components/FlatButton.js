@@ -8,12 +8,13 @@ import styles from './css/flat-button.scss'
 //COMPONENT
 export default class FlatButton extends Component {
   render() {
-    let { to, onClick, className, children, icon, active } = this.props
+    let { to, onClick, className, children, icon, active, onMouseOver } = this.props
 
     if (to) return (
       <Link 
         to={to} onClick={onClick} 
         className={`${styles.container} ${active ? styles.active : ''} ${className || ''}`}
+        onMouseOver={onMouseOver}
       >
         {icon ? <span className={`mdi mdi-${icon} ${styles.icon}`} /> : ''}
         {children}
@@ -24,6 +25,7 @@ export default class FlatButton extends Component {
       <button 
         className={`${styles.container} ${active ? styles.active : ''} ${className || ''}`}
         onClick={onClick} 
+        onMouseDown={onMouseOver}
       >
         {icon? <span className={`mdi mdi-${icon} ${styles.icon}`} /> : '' }
         {children}

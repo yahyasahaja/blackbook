@@ -34,6 +34,7 @@ class ProductCard extends Component {
     isVariantOpen: false,
     variant: this.props.variants[0].name,
     amount: 1,
+    isShareActive: false
   }
 
   onLike = () => {
@@ -71,6 +72,25 @@ class ProductCard extends Component {
     }
 
     return options
+  }
+
+  toggleShare = () => {
+    this.setState({isShareActive: !this.state.isShareActive})
+  }
+
+  share = id => {
+    let { id: product_id } = this.props
+    let link = `${window.location.origin}/product/${product_id}`
+
+    window.open(
+      id === 'twitter'
+        ? `https://twitter.com/share?url=${link}`
+        : id === 'facebook'
+          ? `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=Blanja`
+          : `http://pinterest.com/pin/create/button/?url=${link}`, 
+      '', 
+      'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
+    )
   }
 
   render() {
@@ -158,7 +178,28 @@ class ProductCard extends Component {
                   <Link to={{ pathname: '/chat/new', state: { productId: id } }}>
                     <FlatButton icon="forum">Chat</FlatButton>
                   </Link>
-                  <FlatButton icon="share">Bagikan</FlatButton>
+                  <FlatButton onMouseOver={this.toggleShare} icon="share">Bagikan</FlatButton>
+                  <div 
+                    className={
+                      `${this.state.isShareActive ? styles.active : ''} ${styles.share}`
+                    } 
+                  >
+                    <a 
+                      onClick={this.share.bind(this, 'facebook')} 
+                      href="javascript:void(0)" 
+                      className={`mdi mdi-facebook ${styles.icon} ${styles.facebook}`}
+                    />
+                    <a 
+                      onClick={this.share.bind(this, 'twitter')} 
+                      href="javascript:void(0)" 
+                      className={`mdi mdi-twitter ${styles.icon} ${styles.twitter}`}
+                    />
+                    <a 
+                      onClick={this.share.bind(this, 'pinterest')} 
+                      href="javascript:void(0)" 
+                      className={`mdi mdi-pinterest ${styles.icon} ${styles.instagram}`}
+                    />
+                  </div>
                 </div>
 
                 <div className={styles.right}>
