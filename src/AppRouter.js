@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Snackbar from 'react-toolbox/lib/snackbar'
 import { observer } from 'mobx-react'
+import Dialog from 'react-toolbox/lib/dialog'
 
 //SCREENS
 import asyncComponent from './components/AsyncComponent'
@@ -29,7 +30,7 @@ import styles from './assets/css/app-router.scss'
 import BottomTabBar from './components/BottomTabBar'
 
 //STORE
-import { appStack, badges } from './services/stores'
+import { appStack, badges, dialog } from './services/stores'
 
 //INNER_CONFIG
 let BOTTOM_TAB_BAR_DATA = [
@@ -114,6 +115,18 @@ let BOTTOM_TAB_BAR_DATA = [
               onTimeout={this.closeSnackbar}
               type={snackbar.type}
             />
+          </section>
+
+          <section>
+            <Dialog
+              actions={dialog.actions}
+              active={dialog.active}
+              onEscKeyDown={dialog.onEscKeyDown}
+              onOverlayClick={dialog.onOverlayClick}
+              title={dialog.title}
+            >
+              {dialog.content}
+            </Dialog>
           </section>
         </div>
       </BrowserRouter>

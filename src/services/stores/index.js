@@ -8,6 +8,7 @@ import badges from './Badges'
 import tokens from './Tokens'
 import user from './User'
 import cart from './Cart'
+import dialog from './Dialog'
 
 export { 
   categories,
@@ -19,7 +20,8 @@ export {
   badges,
   tokens,
   user,
-  cart
+  cart,
+  dialog,
 }
 
 export default { 
@@ -32,5 +34,6 @@ export default {
   badges,
   tokens,
   user,
-  cart
+  cart,
+  dialog,
 }

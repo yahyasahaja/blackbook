@@ -1,3 +1,5 @@
+@import '../../../assets/css/config.scss';
+
 .container {
   display: block;
   width: 100%;
@@ -60,6 +62,35 @@
       span {
         color: #e74c3c !important;
       }
+    }
+  }
+}
+
+.berjualan {
+  display: block;
+  
+  .link, .link:visited {
+    color: $secondary-color;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .img-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+
+    .google {
+      width: 150px;
+    }
+
+    .apple {
+      width: 140px;
+      padding: 8px;
     }
   }
 }

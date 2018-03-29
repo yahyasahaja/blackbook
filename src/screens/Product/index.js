@@ -60,7 +60,7 @@ class PromoDetail extends Component {
     let { productQuery: { loading: cur } } = this.props
 
     if (cur !== next && product && !next) {
-      setTimeout(() => 
+      setTimeout(() =>
         this.setState({ variant: product.variants[0].name }), 100)
     }
   }
@@ -70,7 +70,8 @@ class PromoDetail extends Component {
     isVariantOpen: false,
     amount: 1,
     variant: null,
-    stock: 0
+    stock: 0,
+    isShareActive: false,
   }
 
   copy = () => {
@@ -100,7 +101,7 @@ class PromoDetail extends Component {
     cart.add({
       product: {
         ...product,
-        image: product.images[0].url 
+        image: product.images[0].url
       },
       variant,
       amount,
@@ -127,7 +128,7 @@ class PromoDetail extends Component {
 
     if (variants.length > 1) return (
       <Fragment>
-        <div style={{fontWeight: 'bold'}} >Stock:</div>
+        <div style={{ fontWeight: 'bold' }} >Stock:</div>
         {variants.map((data, i) => {
           return (
             <div key={i} >{data.name}: {data.quantity}</div>
@@ -138,8 +139,27 @@ class PromoDetail extends Component {
 
     return (
       <Fragment>
-        <span><span style={{fontWeight: 'bold'}} >Stock:</span> {variants[0].quantity}</span>
+        <span><span style={{ fontWeight: 'bold' }} >Stock:</span> {variants[0].quantity}</span>
       </Fragment>
+    )
+  }
+
+  toggleShare = () => {
+    this.setState({ isShareActive: !this.state.isShareActive })
+  }
+
+  share = id => {
+    let { product_id } = this.props.match.params
+    let link = `${window.location.origin}/product/${product_id}`
+
+    window.open(
+      id === 'twitter'
+        ? `https://twitter.com/share?url=${link}`
+        : id === 'facebook'
+          ? `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=Blanja`
+          : `http://pinterest.com/pin/create/button/?url=${link}`,
+      '',
+      'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
     )
   }
 
@@ -169,7 +189,7 @@ class PromoDetail extends Component {
         <div className={styles.card} >
           <div className={styles.picture}>
             <Slider
-              items={images.map(image => ({original: image.url}))}
+              items={images.map(image => ({ original: image.url }))}
               showThumbnails={false}
               showBullets={true}
               showPlayButton={false}
@@ -235,12 +255,33 @@ class PromoDetail extends Component {
                           icon={this.liked ? 'heart' : 'heart-outline'}
                           onClick={this.onLike}
                         >
-                          Suka
+                          Suka 
                         </FlatButton>
                         <Link to={{ pathname: '/chat/new', state: { productId: id } }}>
                           <FlatButton icon="forum">Chat</FlatButton>
                         </Link>
-                        <FlatButton icon="share">Bagikan</FlatButton>
+                        <FlatButton onMouseOver={this.toggleShare} icon="share">Bagikan</FlatButton>
+                        <div
+                          className={
+                            `${this.state.isShareActive ? styles.active : ''} ${styles.share}`
+                          }
+                        >
+                          <a
+                            onClick={this.share.bind(this, 'facebook')}
+                            href="javascript:void(0)"
+                            className={`mdi mdi-facebook ${styles.icon} ${styles.facebook}`}
+                          />
+                          <a
+                            onClick={this.share.bind(this, 'twitter')}
+                            href="javascript:void(0)"
+                            className={`mdi mdi-twitter ${styles.icon} ${styles.twitter}`}
+                          />
+                          <a
+                            onClick={this.share.bind(this, 'pinterest')}
+                            href="javascript:void(0)"
+                            className={`mdi mdi-pinterest ${styles.icon} ${styles.instagram}`}
+                          />
+                        </div>
                       </div>
 
                       <div className={styles.right}>
