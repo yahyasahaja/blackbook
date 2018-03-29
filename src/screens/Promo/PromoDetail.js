@@ -6,7 +6,6 @@ import { observer } from 'mobx-react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import moment from 'moment'
-import Markdown from 'react-remarkable'
 
 //STYLES
 import styles from './css/promo-detail.scss'
@@ -63,7 +62,7 @@ class PromoDetail extends Component {
             {title}
           </div>
           <div className={styles.desc}>
-            <Markdown>{description || 'Loading deskripsi promo...'}</Markdown>
+            <div dangerouslySetInnerHTML={{__html: description || 'Loading deskripsi promo...'}} />
           </div>
         </div>
 
@@ -110,7 +109,7 @@ class PromoDetail extends Component {
               Syarat dan Ketentuan
             </div>
 
-            <Markdown>{terms}</Markdown>
+            <div dangerouslySetInnerHTML={{__html: terms}} />
           </div>
         </div>
       </div>
@@ -124,6 +123,7 @@ class PromoDetail extends Component {
         renderContent={this.renderContent}
         backLink="/promo"
         anim={ANIMATE_HORIZONTAL}
+        cart
       />
     )
   }
