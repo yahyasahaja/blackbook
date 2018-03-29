@@ -93,10 +93,10 @@ class Account extends Component {
                   melalui komputer.
 
                   <div className={styles['img-wrapper']} >
-                    <a href="https://google.com" target="_blank" >
+                    <a href="https://blanja.tw/sellerapp/android" target="_blank" >
                       <img className={styles.google} src="/static/img/google_play_badge.png" alt="Google Play Badge" />
                     </a>
-                    <a href="https://google.com" target="_blank" >
+                    <a href="https://blanja.tw/sellerapp/ios" target="_blank" >
                       <img className={styles.apple} src="/static/img/app_store_badge.svg" alt="Google Play Badge" />
                     </a>
                   </div>
