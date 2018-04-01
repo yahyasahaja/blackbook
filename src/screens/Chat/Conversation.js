@@ -11,7 +11,6 @@ import client from '../../services/graphql/chatClient'
 import styles from './css/conversation.scss'
 import loadingTheme from './css/loading.scss'
 import loadingSubmitTheme from './css/loading-submit.scss'
-import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 import { appStack, onlineStatus } from '../../services/stores'
 
@@ -57,9 +56,15 @@ class Conversation extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     window.addEventListener('scroll', this.checkScroll)
     window.addEventListener('gesturechange', this.checkScroll)
+
+    navigator.serviceWorker.onmessage = (e) => {
+      if(e.type === 'message' && e.data.threadId === Number(this.props.match.params.id)) {
+        this.refetchMessage()
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -153,6 +158,12 @@ class Conversation extends Component {
         this.setState({ refetchSending: false })
       }
     }
+  }
+
+  async refetchMessage() {
+    this.setState({ refetchSending: true })
+    this.props.data.refetch()
+    this.setState({ refetchSending: false })
   }
 
   renderMessages(messages) {

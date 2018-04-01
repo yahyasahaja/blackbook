@@ -36,4 +36,5 @@ export default {
   matchLoading,
   matchProps,
   convertToMoneyFormat,
+  getSubscription,
 }
