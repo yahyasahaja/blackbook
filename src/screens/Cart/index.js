@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import Checkbox from 'react-toolbox/lib/checkbox'
 import Input from 'react-toolbox/lib/input/Input'
 
-import PopupBar from '../../components/PopupBar'
+import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import { appStack, cart } from '../../services/stores'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
@@ -109,14 +109,14 @@ export default class Cart extends Component {
           {this.state.useVoucher && (
             <div className={styles.voucherInput}>
               <Input
-                theme={{...theme, ...inputTheme}}
+                theme={{ ...theme, ...inputTheme }}
                 type="Masukkan Kode Voucher"
                 hint="Kode Voucher"
                 value={this.state.voucherCode}
                 onChange={val => this.setState({ voucherCode: val })}
               />
               <SecondaryButton
-                onClick={() => {}}
+                onClick={() => { }}
                 className={styles.voucherButton}
               >
                 GUNAKAN
@@ -126,7 +126,7 @@ export default class Cart extends Component {
         </div>
         <PrimaryButton
           disabled={this.state.shippingCost === null}
-          onClick={() => {}}
+          onClick={() => { }}
           className={styles.buyButton}
         >
           LANJUTKAN
@@ -138,6 +138,7 @@ export default class Cart extends Component {
   render() {
     return (
       <PopupBar
+        anim={ANIMATE_HORIZONTAL}
         onBack={e => {
           e.preventDefault()
           this.props.history.goBack()
