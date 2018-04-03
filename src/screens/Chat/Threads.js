@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import ThreadItem from '../../components/Chat/ThreadItem'
 import client from '../../services/graphql/chatClient'
-import { user, onlineStatus } from '../../services/stores'
+import { user, onlineStatus, badges } from '../../services/stores'
 
 import styles from './css/index.scss'
 import loadingTheme from './css/loading-submit.scss'
@@ -18,6 +18,21 @@ class Threads extends Component {
     }
 
     if(onlineStatus.isOnline) this.props.data.refetch()
+  }
+
+  componentDidMount() {
+    // refetch when there is a new notification
+    navigator.serviceWorker.onmessage = (e) => {
+      if(e.type === 'message') {
+        this.props.data.refetch()
+        badges.inc(badges.CHAT)
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    // remove notification listener
+    navigator.serviceWorker.onmessage = null
   }
 
   render() {

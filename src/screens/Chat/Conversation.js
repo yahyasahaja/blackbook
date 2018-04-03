@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react'
+import { Link } from 'react-router-dom'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import moment from 'moment'
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
@@ -12,7 +13,7 @@ import styles from './css/conversation.scss'
 import loadingTheme from './css/loading.scss'
 import loadingSubmitTheme from './css/loading-submit.scss'
 
-import { appStack, onlineStatus } from '../../services/stores'
+import { appStack, onlineStatus, badges } from '../../services/stores'
 
 @observer
 class Conversation extends Component {
@@ -60,17 +61,23 @@ class Conversation extends Component {
     window.addEventListener('scroll', this.checkScroll)
     window.addEventListener('gesturechange', this.checkScroll)
 
-    navigator.serviceWorker.onmessage = (e) => {
-      if(e.type === 'message' && e.data.threadId === Number(this.props.match.params.id)) {
+    navigator.serviceWorker.onmessage = e => {
+      if (
+        e.type === 'message' &&
+        e.data.threadId === Number(this.props.match.params.id)
+      ) {
         this.refetchMessage()
       }
     }
+
+    badges.set(badges.CHAT, 0)
   }
 
   componentWillUnmount() {
     appStack.pop()
     window.removeEventListener('scroll', this.checkScroll)
     window.removeEventListener('gesturechange', this.checkScroll)
+    navigator.serviceWorker.onmessage = null
   }
 
   componentDidUpdate() {
@@ -155,6 +162,7 @@ class Conversation extends Component {
       } else {
         // if not new message, refetch
         await data.refetch()
+        this.scrollToBottom()
         this.setState({ refetchSending: false })
       }
     }
@@ -220,34 +228,42 @@ class Conversation extends Component {
           paddingTop: 56,
         }}
       >
-        <div className={styles.productBar}>
-          <div className={styles.imagePlaceholder}>
-            {product &&
-              (!product.loading && <img src={product.product.images[0].url} />)}
-          </div>
-          <div className={styles.content}>
-            <p>
-              {product && !product.loading
-                ? product.product.name
-                : 'Memuat produk...'}
-            </p>
-            {product ? (
-              product.loading ? (
-                <span>memuat...</span>
+        <Link
+          to={{
+            pathname: `/product/${product ? (product.loading ? '#' : product.product.id) : '#'}}`,
+          }}
+        >
+          <div className={styles.productBar}>
+            <div className={styles.imagePlaceholder}>
+              {product &&
+                (!product.loading && (
+                  <img src={product.product.images[0].url} />
+                ))}
+            </div>
+            <div className={styles.content}>
+              <p>
+                {product && !product.loading
+                  ? product.product.name
+                  : 'Memuat produk...'}
+              </p>
+              {product ? (
+                product.loading ? (
+                  <span>memuat...</span>
+                ) : (
+                  <span>
+                    {this.convertToMoneyFormat(
+                      product.product.price.value,
+                      product.product.price.currency,
+                    )}
+                  </span>
+                )
               ) : (
-                <span>
-                  {this.convertToMoneyFormat(
-                    product.product.price.value,
-                    product.product.price.currency,
-                  )}
-                </span>
-              )
-            ) : (
-              <span>memuat...</span>
-            )}
+                <span>memuat...</span>
+              )}
+            </div>
+            <span className={`mdi mdi-chevron-right ${styles.chevronRight}`} />
           </div>
-          <span className={`mdi mdi-chevron-right ${styles.chevronRight}`} />
-        </div>
+        </Link>
         {(this.props.data &&
           this.props.data.loading &&
           !this.state.refetchSending) ||
@@ -329,6 +345,7 @@ const getMessagesQuery = gql`
 const getProductQuery = gql`
   query Product($id: ID!) {
     product(productId: $id) {
+      id
       name
       price {
         currency
@@ -379,7 +396,7 @@ export default compose(
       variables: {
         id: props.match.params.id,
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
     }),
     props: ({ data: { loading, thread, fetchMore, refetch } }) => {
       const loadMoreMessages = () => {

@@ -59,6 +59,13 @@ let BOTTOM_TAB_BAR_DATA = [
 
     if (window.navigator.onLine) goOnline()
     else goOffline()
+
+    // new message badge
+    navigator.serviceWorker.onmessage = (e) => {
+      if(e.type === 'message') {
+        badges.inc(badges.CHAT)
+      }
+    }
   }
 
   closeSnackbar = () => {

@@ -18,7 +18,7 @@ import AppRouter from './AppRouter'
 
 //SERVICES
 import client from './services/graphql/productClient'
-import { onlineStatus, snackbar, tokens } from './services/stores'
+import { onlineStatus, snackbar, tokens, badges } from './services/stores'
 
 //SERVICE_WORKER
 import registerServiceWorker from './registerServiceWorker'
