@@ -22,6 +22,7 @@ const Profile = asyncComponent(() => import('./screens/Account/Profile'))
 const Cart = asyncComponent(() => import('./screens/Cart'))
 const PromoDetail = asyncComponent(() => import('./screens/Promo/PromoDetail'))
 const Product = asyncComponent(() => import('./screens/Product'))
+const Transaction = asyncComponent(() => import('./screens/Account/Transaction'))
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -101,6 +102,7 @@ let BOTTOM_TAB_BAR_DATA = [
             <Route path="/cart" component={Cart} />
             <Route path="/account/profile" component={Profile} />
             <Route path="/account/password" component={Password} />
+            <Route path="/account/transaction" component={Transaction} />
             <Route path="/promo/:promotion_id" component={PromoDetail} />
             <Route path="/product/:product_id" component={Product} />
           </Switch>

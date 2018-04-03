@@ -1,0 +1,31 @@
+@import '../../assets/css/config.scss';
+
+.container {
+  display: flex;
+  width: 90%;
+  border-radius: 5px;
+  border: 1px solid $primary-color;
+  margin: auto;
+  cursor: pointer;
+  
+  .tab, .tab:visited {
+    display: block;
+    flex: 1;
+    color: $primary-color;
+    padding: 10px;
+    background: none;
+    border: none;
+    transition: .3s;
+    cursor: pointer;
+    
+    &.selected {
+      background: $primary-color;
+      color: white;
+    }
+
+    &:active {
+      opacity: .2;
+      transition: .1s;
+    }
+  }
+}
