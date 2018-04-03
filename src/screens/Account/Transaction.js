@@ -32,7 +32,7 @@ class Auth extends Component {
   }
 
   state = {
-    
+
   }
 
   onClick = () => {
@@ -55,9 +55,9 @@ class Auth extends Component {
       <div className={styles.container} >
         <div className={styles.scope} >
           <ScopeBar data={this.scopeBarData} />
-          <div className={styles.list} >
-            <TransactionList />
-          </div>  
+        </div>
+        <div className={styles.list} >
+          <TransactionList />
         </div>
       </div>
     )
