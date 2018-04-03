@@ -1,8 +1,16 @@
 .container {
   display: block;
   width: 100%;
-  padding: 15px;
-  padding-top: 80px;
+  padding-top: 55px;
   background: #f8f8f8;
   min-height: 100vh;
+
+  .scope {
+    display: block;
+    position: fixed;
+    margin-top: 56px;
+    padding: 8px;
+    border-bottom: 1px solid black;
+    width: 100%;
+  }
 }

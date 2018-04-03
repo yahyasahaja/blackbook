@@ -174,7 +174,7 @@ class PromoDetail extends Component {
           />
         </div>
       )
-
+    
     let { name, images, id, price, variants, description, seller } = this.props.productQuery.product
     this.liked = false
     let fav = favorites.data.slice()
@@ -355,7 +355,6 @@ query productQuery ($id: ID!) {
     },
     country,
     liked,
-    status,
     created,
     updated
   }

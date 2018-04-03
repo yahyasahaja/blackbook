@@ -52,7 +52,9 @@ class Auth extends Component {
   renderContent = () => {
     return (
       <div className={styles.container} >
-        <ScopeBar data={this.scopeBarData} />
+        <div className={styles.scope} >
+          <ScopeBar data={this.scopeBarData} />
+        </div>
       </div>
     )
   }
