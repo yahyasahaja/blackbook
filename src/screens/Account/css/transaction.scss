@@ -2,15 +2,17 @@
   display: block;
   width: 100%;
   padding-top: 55px;
-  background: #f8f8f8;
+  background: white;
   min-height: 100vh;
+  max-width: 480px;
 
   .scope {
     display: block;
     position: fixed;
-    margin-top: 56px;
     padding: 8px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #e1e1e1;
     width: 100%;
+    max-width: 480px;    
+    background: #f8f8f8;
   }
 }
