@@ -230,7 +230,7 @@ class Conversation extends Component {
       >
         <Link
           to={{
-            pathname: `/product/${product ? (product.loading ? '#' : product.product.id) : '#'}}`,
+            pathname: `/product/${product ? (product.loading ? '#' : product.product.id) : '#'}`,
           }}
         >
           <div className={styles.productBar}>
