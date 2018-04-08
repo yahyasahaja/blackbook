@@ -55,6 +55,12 @@ class Conversation extends Component {
     if (nextProps.product && nextProps.product.product) {
       this.setState({ title: nextProps.product.product.seller.name })
     }
+
+    if (this.props.threadId) {
+      if (this.props.threadId.thread && this.props.threadId.thread.id !== null) {
+        this.props.history.replace(`/chat/${this.props.threadId.thread.id}`)  
+      }
+    }
   }
 
   async componentDidMount() {
@@ -78,6 +84,12 @@ class Conversation extends Component {
     window.removeEventListener('scroll', this.checkScroll)
     window.removeEventListener('gesturechange', this.checkScroll)
     navigator.serviceWorker.onmessage = null
+
+    navigator.serviceWorker.onmessage = (e) => {
+      if(e.type === 'message') {
+        badges.inc(badges.CHAT)
+      }
+    }
   }
 
   componentDidUpdate() {
@@ -144,8 +156,19 @@ class Conversation extends Component {
 
     this.setState({ loading: true, refetchSending: true })
 
-    const { submit, data } = this.props
-    const { data: res } = await submit(message)
+    const { data } = this.props
+    // const { data: res } = await submit(message)
+    const { data: res } = await client.mutate({
+      mutation: sendMessageMutation,
+      variables: {
+        id:
+          this.props.match.params.id === 'new'
+            ? -1
+            : this.props.match.params.id,
+        message,
+        productId: this.props.location.state ? this.props.location.state.productId : null,
+      },
+    })
 
     if (!res.error) {
       // clear input
@@ -229,9 +252,8 @@ class Conversation extends Component {
         }}
       >
         <Link
-          to={{
-            pathname: `/product/${product ? (product.loading ? '#' : product.product.id) : '#'}`,
-          }}
+          onClick={e => (!product || product.loading) && e.preventDefault()}
+          to={`${product ? (product.loading ? '' : `/product/${product.product.id}`) : ''}`}
         >
           <div className={styles.productBar}>
             <div className={styles.imagePlaceholder}>
@@ -361,6 +383,15 @@ const getProductQuery = gql`
   }
 `
 
+const getThreadId = gql`
+  query ThreadId($productId: String!) {
+    thread(perspective: BUYER, threadId: -1, productId: $productId) {
+      id
+      productId
+    }
+  }
+`
+
 const sendMessageMutation = gql`
   mutation SendMessage($id: Int!, $message: String!, $productId: String) {
     pushMessage(text: $message, threadId: $id, productId: $productId) {
@@ -371,24 +402,24 @@ const sendMessageMutation = gql`
 `
 
 export default compose(
-  graphql(sendMessageMutation, {
-    props: ({ mutate, ownProps }) => ({
-      submit: message =>
-        mutate({
-          variables: {
-            id:
-              ownProps.match.params.id === 'new'
-                ? -1
-                : ownProps.match.params.id,
-            message,
-            productId: ownProps.location.state.productId,
-          },
-        }),
-    }),
-    options: {
-      client,
-    },
-  }),
+  // graphql(sendMessageMutation, {
+  //   props: ({ mutate, ownProps }) => ({
+  //     submit: message =>
+  //       mutate({
+  //         variables: {
+  //           id:
+  //             ownProps.match.params.id === 'new'
+  //               ? -1
+  //               : ownProps.match.params.id,
+  //           message,
+  //           productId: ownProps.location.state.productId,
+  //         },
+  //       }),
+  //   }),
+  //   options: {
+  //     client,
+  //   },
+  // }),
   graphql(getMessagesQuery, {
     skip: props => props.match.params.id === 'new',
     options: props => ({
@@ -458,4 +489,14 @@ export default compose(
       }
     },
   }),
+  graphql(getThreadId, {
+    name: 'threadId',
+    skip: props => props.match.params.id !== 'new',
+    options: props => ({
+      client,
+      variables: {
+        productId: props.location.state.productId,
+      },
+    }),
+  })
 )(Conversation)
