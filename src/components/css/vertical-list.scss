@@ -1,0 +1,19 @@
+.container {
+  display: block;
+  margin-bottom: 5px;
+
+  .key {
+    display: block;
+    color: #787878;
+    padding: 10px;
+    padding-bottom: 0;
+  }
+
+  .value {
+    display: block;
+    color: inherit;
+    padding: 10px;
+    font-weight: bold;
+    padding-top: 2px;
+  }
+}

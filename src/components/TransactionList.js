@@ -1,5 +1,7 @@
 //MODULES
 import React, { Component } from 'react'
+import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 //STYLES
 import styles from './css/transaction-list.scss'
@@ -9,54 +11,124 @@ import PrimaryButton from './PrimaryButton'
 
 //COMPONENT
 class EditableList extends Component {
-  render() { 
+  renderImages(sellers) {
+    let images = []
+
+    for (let seller of sellers)
+      for (let item of seller.items)
+        for (let image of item.product.images)
+          images.push(image.url)
+
+    return images.slice(0, 4).map((url, i) => {
+
+      return (
+        <div key={i} className={styles.wrapper} >
+          <img src={url} alt="" />
+          {
+            images.length > 4 && i == 3 ? (
+              <div className={styles.overlay} >
+                +{images.length - 4}
+              </div>
+            ) : ''
+          }
+        </div>
+      )
+    })
+  }
+
+  onButtonClick(btn, e) {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    let { order: { id } } = this.props
+
+    let detailLink = `/account/transaction/detail/${id}`
+    let payLink = `/account/transaction/pay/${id}`
+
+    this.props.history.push(btn === 'detail' ? detailLink : payLink)
+  }
+
+  render() {
     let {
       className,
       style,
-      disabled
-    } = this.props 
-    
+      disabled,
+      order: {
+        id,
+        status,
+        time,
+        sellers,
+        country
+      }
+    } = this.props
+
+    let detailLink = `/account/transaction/detail/${id}`
+
     return (
-      <div 
-        className={`${styles.container} ${disabled ? styles.disabled : ''} ${className}`} 
-        style={style || {}} 
+      <Link
+        className={`${styles.container} ${disabled ? styles.disabled : ''} ${className}`}
+        style={style || {}}
+        to={detailLink}
       >
-        <div className={`${styles.section} ${styles.section1}`} > 
+        <div className={`${styles.section} ${styles.section1}`} >
           <div className={styles.left} >
-            <div className={styles.id} >IVAA00000000005</div>
-            <div>10/14/2018</div>
+            <div className={styles.id} >{id}</div>
+            <div>{moment(time).format('DD MM YYYY')}</div>
           </div>
 
           <div className={styles.right} >
-            <span>NTD 897</span>
+            <span>{`${
+              country === 'TWN'
+                ? 'NTD'
+                : country === 'HKG'
+                  ? 'HKD'
+                  : 'Rp'
+            } ${
+              sellers.reduce((prev, cur) => {
+                return prev + cur.items.reduce((prev, cur) => {
+                  return prev + cur.price + cur.quantity
+                }, 0)
+              }, 0)}`}</span>
           </div>
         </div>
         <div className={styles.devider} />
-        <div className={`${styles.section} ${styles.section2}`} > 
-          <div className={styles.wrapper} >
-            <img src="/static/img/google_play_badge.png" alt=""/>
-          </div>
-          <div className={styles.wrapper} >
-            <img src="/static/img/google_play_badge.png" alt=""/>
-          </div>
-          <div className={styles.wrapper} >
-            <img src="/static/img/google_play_badge.png" alt=""/>
-          </div>
-          <div className={styles.wrapper} >
-            <img src="/static/img/google_play_badge.png" alt=""/>
-          </div>
-          
+        <div className={`${styles.section} ${styles.section2}`} >
+          {this.renderImages(sellers)}
         </div>
         <div className={styles.devider} />
-        <div className={`${styles.section} ${styles.section3}`} > 
+        <div className={`${styles.section} ${styles.section3}`} >
           <div className={styles.des} >Status Terakhir: </div>
-          <div className={styles.status} >Dalam Proses Pembayaran</div>
+          <div className={styles.status} >{
+            status === 'COMPLETE'
+              ? 'LUNAS'
+              : status === 'UNPAID'
+                ? 'BELUM LUNAS'
+                : status === 'PAID'
+                  ? 'SUDAH LUNAS'
+                  : 'DALAM PROSES'
+          }</div>
         </div>
         <div className={styles.devider} />
-        <div className={`${styles.section} ${styles.section4}`} > 
-          <PrimaryButton className={styles.button} >Detail Transaksi</PrimaryButton>
+        <div
+          className={`${styles.section} ${styles.section4}`} 
+          onClick={e => e.stopPropagation()} 
+        >
+          <PrimaryButton 
+            className={styles['transaction-list']} 
+            onClick={this.onButtonClick.bind(this, 'detail')}
+          >Detail Transaksi</PrimaryButton>
+          {
+            status === 'UNPAID'
+              ? (
+                <PrimaryButton 
+                  className={styles.pay} 
+                  onClick={this.onButtonClick.bind(this, 'pay')}
+                >Bayar</PrimaryButton>
+              )
+              : ''
+          }
         </div>
-      </div>
+      </Link>
     )
   }
 }

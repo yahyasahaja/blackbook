@@ -6,20 +6,10 @@
   min-height: 100vh;
   max-width: 480px;
 
-  .scope {
-    display: block;
-    position: fixed;
-    padding: 8px;
-    border-bottom: 1px solid #e1e1e1;
+  .info {
+    background: white;
     width: 100%;
-    max-width: 480px;    
-    background: #f8f8f8;
-    top: 56px;
-    height: 52px;
-  }
-
-  .list {
-    margin-top: 60px;
+    padding: 10px;
   }
 }
 
