@@ -33,7 +33,7 @@ class TransactionPayment extends Component {
   }
 
   async openPopup(payment) {
-    if (Date.now() < new Date(payment.expDate)) {
+    if (Date.now() > new Date(payment.expDate)) {
       try {
         this.setState({renewLoading: payment.id})
         let { data: replaceOrderPayment } = await client.mutate({
