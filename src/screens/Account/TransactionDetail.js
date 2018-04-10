@@ -159,7 +159,7 @@ class TransactionDetail extends Component {
         <PopupBar
           title="Transaction Detail" {...this.props}
           renderContent={this.renderContent.bind(this)}
-          backLink="/account"
+          backLink="/account/transaction"
           anim={ANIMATE_HORIZONTAL}
         />
         {
