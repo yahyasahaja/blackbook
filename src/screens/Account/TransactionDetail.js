@@ -37,12 +37,6 @@ class TransactionDetail extends Component {
     appStack.pop()
   }
 
-  componentDidMount() {
-    this.props.getOrderQuery.refetch().then(res => {
-      this.setState({order: res.data.order})
-    })
-  }
-
   handleToggle = () => {
     this.setState({ active: !this.state.active })
   }
@@ -80,14 +74,13 @@ class TransactionDetail extends Component {
   renderContent() {
     let {
       getOrderQuery: {
-        loading,
         order
       }
     } = this.props
 
     let { order: orderState } = this.state
 
-    if (loading && !orderState) return (
+    if (!order) return (
       <div className={styles.loading} >
         <div>
           <ProgressBar
@@ -98,8 +91,6 @@ class TransactionDetail extends Component {
         </div>
       </div>
     )
-
-    console.log('WOOOOII', orderState)
 
     if (orderState) order = orderState
 
@@ -240,6 +231,7 @@ export default compose(
       variables: {
         orderId: props.match.params.transaction_id
       },
-    })
+      fetchPolicy: 'cache-and-network'
+    }),
   }),
 )(TransactionDetail)
