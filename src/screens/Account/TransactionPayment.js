@@ -83,7 +83,7 @@ class TransactionPayment extends Component {
         <div className={styles.left} >
           { renewLoading === payment.id ? 'Loading ... ' : convertStatus(payment.status)}
           {
-            Date.now() < new Date(payment.expDate)
+            Date.now() > new Date(payment.expDate)
               ? <PrimaryButton className={styles.renew} >Renew</PrimaryButton>
               : ''
           }
