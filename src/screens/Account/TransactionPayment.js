@@ -13,14 +13,44 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
+import PrimaryButton from '../../components/PrimaryButton'
 
 //UTILS
 import { convertStatus, convertCountryCurrency } from '../../utils'
 
+//STORE
+import { appStack, snackbar } from '../../services/stores'
+
 //COMPONENT
 class TransactionPayment extends Component {
-  openPopup(url) {
-    this.setState({popupUrl: url})
+  constructor(props) {
+    super(props)
+    this.id = appStack.push()
+  }
+
+  componentWillUnmount() {
+    appStack.pop()
+  }
+
+  async openPopup(payment) {
+    if (Date.now() < new Date(payment.expDate)) {
+      try {
+        this.setState({renewLoading: payment.id})
+        let { data: replaceOrderPayment } = await client.mutate({
+          mutation: renewBarCode,
+          variables: {
+            orderPaymentId: payment.id
+          }
+        })
+
+        if (replaceOrderPayment) this.props.orderQuery.refetch()
+      } catch (e) {
+        snackbar.show('Renew failed, please try again')
+      }
+      
+      this.setState({renewLoading: false})
+
+    } else this.setState({popupUrl: payment.url})
   }
 
   renderList = () => {
@@ -30,6 +60,8 @@ class TransactionPayment extends Component {
         order
       }
     } = this.props
+
+    let { renewLoading } = this.state
 
     if (loading) return (
       <div className={styles.loading} >
@@ -46,10 +78,15 @@ class TransactionPayment extends Component {
     return order.payments.map((payment, i) => (
       <div 
         key={i} className={styles.list}
-        onClick={this.openPopup.bind(this, payment.url)} 
+        onClick={this.openPopup.bind(this, payment)} 
       >
         <div className={styles.left} >
-          {convertStatus(payment.status)}
+          { renewLoading === payment.id ? 'Loading ... ' : convertStatus(payment.status)}
+          {
+            Date.now() < new Date(payment.expDate)
+              ? <PrimaryButton className={styles.renew} >Renew</PrimaryButton>
+              : ''
+          }
         </div>
 
         <div className={styles.right} >
@@ -81,7 +118,7 @@ class TransactionPayment extends Component {
 
   state = {
     popupUrl: null,
-    coba: ''
+    renewLoading: false,
   }
 
   render() {
@@ -112,6 +149,15 @@ query orderQuery($orderId: ID!) {
   }
 }
 `
+
+const renewBarCode = gql`
+mutation renewBarCode($orderPaymentId: ID!) {
+  replaceOrderPayment(orderPaymentId: $orderPaymentId) {
+    id
+  }
+}
+`
+
 export default compose(
   graphql(orderQuery, {
     name: 'orderQuery',
