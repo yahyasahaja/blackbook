@@ -34,6 +34,12 @@ export default class TransactionDetailCard extends Component {
 
     status = this.translateStatus(status)
 
+    let statusColor
+
+    if (status === 'BELUM LUNAS') statusColor = '#e74c3c'
+    else if (status === 'SELESAI') statusColor = '#16a085'
+    else statusColor = '#2980b9'
+
     return (
       <div className={styles.container} >
         <div className={styles.sender} >
@@ -57,7 +63,10 @@ export default class TransactionDetailCard extends Component {
         }
         
         <div className={styles.confirmation} >
-          <div className={styles.status} >{status}</div>
+          <div 
+            className={styles.status} 
+            style={{color: statusColor}}
+          >{status}</div>
           {
             status === 'DALAM PENGIRIMAN'
               ? <PrimaryButton 

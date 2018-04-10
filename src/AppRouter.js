@@ -24,6 +24,7 @@ const PromoDetail = asyncComponent(() => import('./screens/Promo/PromoDetail'))
 const Product = asyncComponent(() => import('./screens/Product'))
 const Transaction = asyncComponent(() => import('./screens/Account/Transaction'))
 const TransactionDetail = asyncComponent(() => import('./screens/Account/TransactionDetail'))
+const TransactionPayment = asyncComponent(() => import('./screens/Account/TransactionPayment'))
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -113,6 +114,10 @@ let BOTTOM_TAB_BAR_DATA = [
             <Route 
               path="/account/transaction/detail/:transaction_id" 
               component={TransactionDetail} 
+            />
+            <Route 
+              path="/account/transaction/payment/:transaction_id" 
+              component={TransactionPayment} 
             />
             <Route path="/account/transaction" component={Transaction} />
             <Route path="/promo/:promotion_id" component={PromoDetail} />

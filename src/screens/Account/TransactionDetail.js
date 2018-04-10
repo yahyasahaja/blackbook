@@ -140,7 +140,6 @@ class TransactionDetail extends Component {
   }
 
   render() {
-    console.log(this.state.currentConfirmSeller)
     return (
       <React.Fragment>
         <PopupBar

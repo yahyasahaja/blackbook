@@ -25,11 +25,29 @@ export const convertToMoneyFormat = (num, currency) => {
     .toString()
     .split('')
     .reverse()
-    .reduce(function(acc, num, i) {
+    .reduce(function (acc, num, i) {
       return num == '-' ? acc : num + (i && !(i % 3) ? '.' : '') + acc
     }, '')
 
   return `${currency} ${res}`
+}
+
+export const convertStatus = (status) => {
+  return status === 'COMPLETE'
+    ? 'LUNAS'
+    : status === 'UNPAID'
+      ? 'BELUM LUNAS'
+      : status === 'PAID'
+        ? 'SUDAH LUNAS'
+        : 'DALAM PROSES'
+}
+
+export const convertCountryCurrency = country => {
+  return country === 'TWN'
+    ? 'NTD'
+    : country === 'HKG'
+      ? 'HKD'
+      : 'Rp'
 }
 
 export default {
@@ -37,4 +55,6 @@ export default {
   matchProps,
   convertToMoneyFormat,
   getSubscription,
+  convertStatus,
+  convertCountryCurrency,
 }

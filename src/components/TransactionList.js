@@ -43,7 +43,7 @@ class EditableList extends Component {
     let { order: { id } } = this.props
 
     let detailLink = `/account/transaction/detail/${id}`
-    let payLink = `/account/transaction/pay/${id}`
+    let payLink = `/account/transaction/payment/${id}`
 
     this.props.history.push(btn === 'detail' ? detailLink : payLink)
   }

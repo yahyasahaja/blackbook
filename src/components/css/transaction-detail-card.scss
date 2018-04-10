@@ -1,13 +1,16 @@
+@import '../../assets/css/config.scss';
+
 .container {
   display: block;
   border: 1px solid #dcdcdc;
   margin: 10px 0;
   border-radius: 5px;
+  font-weight: 500;
 
   .sender {
     padding: 10px;
     font-size: 15pt;
-    font-weight: bold;
+    font-weight: 500;
   }
 
   .item {
@@ -39,5 +42,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    font-weight: bold;
+    color: $secondary-color;
   }
 }
