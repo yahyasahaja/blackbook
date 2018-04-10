@@ -16,9 +16,13 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 import VerticalList from '../../components/VerticalList'
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import TransactionDetailCard from '../../components/TransactionDetailCard'
+import PrimaryButton from '../../components/PrimaryButton'
 
 //STORE
 import { appStack } from '../../services/stores'
+
+//UTILS
+import { convertCountryCurrency, convertStatus } from '../../utils'
 
 //COMPONENT
 class TransactionDetail extends Component {
@@ -46,8 +50,8 @@ class TransactionDetail extends Component {
         }
       }
     })
-    
-    this.setState({active: false})
+
+    this.setState({ active: false })
   }
 
   actions = [
@@ -56,7 +60,7 @@ class TransactionDetail extends Component {
   ]
 
   confirm = seller => {
-    this.setState({active: true, currentConfirmSeller: seller})
+    this.setState({ active: true, currentConfirmSeller: seller })
   }
 
   state = {
@@ -95,34 +99,28 @@ class TransactionDetail extends Component {
     let list = [
       { key: 'Nomor Transaksi', value: id },
       {
-        key: 'Status Transaksi', value: status === 'COMPLETE'
-          ? 'LUNAS'
-          : status === 'UNPAID'
-            ? 'BELUM LUNAS'
-            : status === 'PAID'
-              ? 'SUDAH LUNAS'
-              : 'DALAM PROSES'
+        key: 'Status Transaksi', value: status !== 'UNPAID' ? convertStatus(status) : (
+          <div className={styles.status} >
+            {convertStatus(status)}
+            <PrimaryButton to={`/account/transaction/payment/${id}`} >Bayar</PrimaryButton>
+          </div>
+        )
       },
       { key: 'Alamat', value: shippingAddress },
       {
-        key: 'Total Pembayaran', value: `${
-          country === 'TWN'
-            ? 'NTD'
-            : country === 'HKG'
-              ? 'HKD'
-              : 'Rp'
-        } ${sellers.reduce((prev, cur) => {
-          return prev + cur.items.reduce((prev, cur) => {
-            return prev + cur.price + cur.quantity
+        key: 'Total Pembayaran', value: `${convertCountryCurrency(country)} ${
+          sellers.reduce((prev, cur) => {
+            return prev + cur.items.reduce((prev, cur) => {
+              return prev + cur.price + cur.quantity
+            }, 0)
           }, 0)
-        }, 0)
         }`
       },
       {
         key: 'Daftar Barang', value: sellers.map(
-          (s, i) => <TransactionDetailCard 
-            onConfirm={() => this.confirm(s)} 
-            key={i} seller={s} 
+          (s, i) => <TransactionDetailCard
+            onConfirm={() => this.confirm(s)}
+            key={i} seller={s}
           />
         )
       }

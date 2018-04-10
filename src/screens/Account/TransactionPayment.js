@@ -19,6 +19,10 @@ import { convertStatus, convertCountryCurrency } from '../../utils'
 
 //COMPONENT
 class TransactionPayment extends Component {
+  openPopup(url) {
+    this.setState({popupUrl: url})
+  }
+
   renderList = () => {
     let {
       orderQuery: {
@@ -40,7 +44,10 @@ class TransactionPayment extends Component {
     )
 
     return order.payments.map((payment, i) => (
-      <div key={i} className={styles.list} >
+      <div 
+        key={i} className={styles.list}
+        onClick={this.openPopup.bind(this, payment.url)} 
+      >
         <div className={styles.left} >
           {convertStatus(payment.status)}
         </div>
@@ -55,17 +62,33 @@ class TransactionPayment extends Component {
     ))
   }
 
-  renderContent = () => {
+  renderContent() {
+    let { popupUrl } = this.state
+    
     return <div className={styles.container} >
       {this.renderList()}
+      
+      {
+        popupUrl
+          ? <div className={styles.popup} >
+            <div className={styles.close} onClick={() => this.setState({popupUrl: null})} >&times;</div>
+            <iframe src={popupUrl}></iframe>
+          </div>
+          : ''
+      }
     </div>
+  }
+
+  state = {
+    popupUrl: null,
+    coba: ''
   }
 
   render() {
     return (
       <PopupBar
         title={`Pembayaran ${this.props.match.params.transaction_id}`} {...this.props}
-        renderContent={this.renderContent}
+        renderContent={this.renderContent.bind(this)}
         backLink="/account/transaction"
         anim={ANIMATE_HORIZONTAL}
       />
