@@ -100,7 +100,7 @@ class EditableList extends Component {
           <div className={styles.des} >Status Terakhir: </div>
           <div className={styles.status} >{
             status === 'COMPLETE'
-              ? 'LUNAS'
+              ? 'SELESAI'
               : status === 'UNPAID'
                 ? 'BELUM LUNAS'
                 : status === 'PAID'

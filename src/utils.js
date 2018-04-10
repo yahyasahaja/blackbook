@@ -34,7 +34,7 @@ export const convertToMoneyFormat = (num, currency) => {
 
 export const convertStatus = (status) => {
   return status === 'COMPLETE'
-    ? 'LUNAS'
+    ? 'SELESAI'
     : status === 'UNPAID'
       ? 'BELUM LUNAS'
       : status === 'PAID'

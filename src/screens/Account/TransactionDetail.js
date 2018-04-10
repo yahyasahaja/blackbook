@@ -49,7 +49,7 @@ class TransactionDetail extends Component {
           status: 'RECEIVED'
         }
       }
-    })
+    }).then(() => this.props.getOrderQuery.refetch())
 
     this.setState({ active: false })
   }
