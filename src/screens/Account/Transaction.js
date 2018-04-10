@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
-// import _ from 'lodash'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
@@ -60,9 +59,9 @@ class Transaction extends Component {
   ]
 
   renderList() {
-    let { myOrders, loading } = this.props.retreiveTransactionData
+    let { myOrders } = this.props.retreiveTransactionData
     
-    if (loading) return (
+    if (!myOrders) return (
       <div className={styles.loading} >
         <div>
           <ProgressBar
@@ -139,7 +138,7 @@ export default compose(
       variables: {
         offset: 0,
         status: ['UNPAID', 'PAID', 'PROGRESS']
-      }
+      },
     })
   }),
 )(Transaction)

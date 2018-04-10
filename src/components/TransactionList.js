@@ -1,7 +1,6 @@
 //MODULES
 import React, { Component } from 'react'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
 
 //STYLES
 import styles from './css/transaction-list.scss'
@@ -62,13 +61,10 @@ class EditableList extends Component {
       }
     } = this.props
 
-    let detailLink = `/account/transaction/detail/${id}`
-
     return (
-      <Link
+      <div
         className={`${styles.container} ${disabled ? styles.disabled : ''} ${className}`}
         style={style || {}}
-        to={detailLink}
       >
         <div className={`${styles.section} ${styles.section1}`} >
           <div className={styles.left} >
@@ -128,7 +124,7 @@ class EditableList extends Component {
               : ''
           }
         </div>
-      </Link>
+      </div>
     )
   }
 }

@@ -78,7 +78,7 @@ class Account extends Component {
               caption='Daftar Transaksi' 
               leftIcon='playlist_add_check' 
               onClick={() => {
-                this.props.history.push('/account/transaction')
+                this.props.history.push('/account/transaction/')
               }}
             />
             <ListItem

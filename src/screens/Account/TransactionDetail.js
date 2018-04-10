@@ -4,6 +4,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import Dialog from 'react-toolbox/lib/dialog'
+import { observer } from 'mobx-react'
 
 //GRAPHQL
 import client from '../../services/graphql/orderingClient'
@@ -25,6 +26,7 @@ import { appStack } from '../../services/stores'
 import { convertCountryCurrency, convertStatus } from '../../utils'
 
 //COMPONENT
+@observer
 class TransactionDetail extends Component {
   constructor(props) {
     super(props)
@@ -33,6 +35,12 @@ class TransactionDetail extends Component {
 
   componentWillUnmount() {
     appStack.pop()
+  }
+
+  componentDidMount() {
+    this.props.getOrderQuery.refetch().then(res => {
+      this.setState({order: res.data.order})
+    })
   }
 
   handleToggle = () => {
@@ -65,10 +73,11 @@ class TransactionDetail extends Component {
 
   state = {
     active: false,
-    currentConfirmSeller: {}
+    currentConfirmSeller: {},
+    order: null
   }
 
-  renderContent = () => {
+  renderContent() {
     let {
       getOrderQuery: {
         loading,
@@ -76,7 +85,9 @@ class TransactionDetail extends Component {
       }
     } = this.props
 
-    if (loading) return (
+    let { order: orderState } = this.state
+
+    if (loading && !orderState) return (
       <div className={styles.loading} >
         <div>
           <ProgressBar
@@ -87,6 +98,10 @@ class TransactionDetail extends Component {
         </div>
       </div>
     )
+
+    console.log('WOOOOII', orderState)
+
+    if (orderState) order = orderState
 
     let {
       id,
@@ -138,12 +153,13 @@ class TransactionDetail extends Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <React.Fragment>
         <PopupBar
           title="Transaction Detail" {...this.props}
-          renderContent={this.renderContent}
-          backLink="/account/transaction"
+          renderContent={this.renderContent.bind(this)}
+          backLink="/account"
           anim={ANIMATE_HORIZONTAL}
         />
         {
@@ -223,7 +239,7 @@ export default compose(
       client,
       variables: {
         orderId: props.match.params.transaction_id
-      }
+      },
     })
   }),
 )(TransactionDetail)
