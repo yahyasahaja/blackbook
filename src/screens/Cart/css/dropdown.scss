@@ -1,0 +1,13 @@
+@import '../../../assets/css/config.scss';
+
+.dropdown > div {
+  padding-bottom: 5px !important;
+}
+
+.selected {
+  color: $primary_color !important;
+}
+
+label {
+  color: #333333 !important;
+}

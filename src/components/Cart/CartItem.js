@@ -5,9 +5,9 @@ import styles from './css/cart-item.scss'
 import { cart } from '../../services/stores'
 import { convertToMoneyFormat } from '../../utils'
 
-export default class ThreadItem extends Component {
+export default class CartItem extends Component {
   state = {
-    removed: false
+    removed: false,
   }
 
   remove(index) {
@@ -21,12 +21,20 @@ export default class ThreadItem extends Component {
   render() {
     const {
       index,
-      product: { name, image, price: { currency, value } },
+      product: { id, name, image, price: { currency, value } },
       variant,
       amount,
+      history,
     } = this.props
     return (
-      <div className={`${styles.container} ${this.state.removed ? styles.removed : ''}`}>
+      <div
+        onClick={() => {
+          history.push(`/product/${id}`)
+        }}
+        className={`${styles.container} ${
+          this.state.removed ? styles.removed : ''
+        }`}
+      >
         <div
           className={styles.image}
           style={{ backgroundImage: `url(${image})` }}
@@ -40,7 +48,12 @@ export default class ThreadItem extends Component {
         </div>
         <div className={styles.right}>
           <span
-            onClick={() => this.remove(index)}
+            onClick={(e) => {
+              this.remove(index)
+              if (!e) e = window.event
+              e.cancelBubble = true
+              if (e.stopPropagation) e.stopPropagation()          
+            }}
             className={`mdi mdi-delete ${styles.delete}`}
           />
           <span className={styles.price}>

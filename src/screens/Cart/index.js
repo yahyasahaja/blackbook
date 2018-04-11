@@ -3,9 +3,10 @@ import { observer } from 'mobx-react'
 import gql from 'graphql-tag'
 import Checkbox from 'react-toolbox/lib/checkbox'
 import Input from 'react-toolbox/lib/input/Input'
+import Dialog from 'react-toolbox/lib/dialog'
 
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
-import { appStack, cart } from '../../services/stores'
+import { appStack, cart, user } from '../../services/stores'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 import CartItem from '../../components/Cart/CartItem'
@@ -16,7 +17,7 @@ import client from '../../services/graphql/orderingClient'
 import styles from './css/index.scss'
 import theme from '../../assets/css/theme.scss'
 import checkBoxTheme from './css/checkbox.scss'
-import inputTheme from './css/input.scss'
+import inputTheme from './css/inputVoucher.scss'
 
 @observer
 export default class Cart extends Component {
@@ -26,6 +27,7 @@ export default class Cart extends Component {
   }
 
   state = {
+    loginAlert: false,
     shippingCost: null,
     useVoucher: false,
     voucherCode: '',
@@ -63,7 +65,10 @@ export default class Cart extends Component {
 
   renderProducts() {
     return (
-      <div className={`${styles.products} ${this.state.useVoucher && styles.padded}`}>
+      <div
+        className={`${styles.products} ${this.state.useVoucher &&
+          styles.padded}`}
+      >
         {cart.data
           .slice()
           .map((item, index) => (
@@ -71,10 +76,24 @@ export default class Cart extends Component {
               key={`${item.product.id}-${item.variant}`}
               index={index}
               {...item}
+              history={this.props.history}
             />
           ))}
       </div>
     )
+  }
+
+  checkIsLoggedIn() {
+    // show alert if not logged in
+    if (!user.isLoggedIn) {
+      this.setState({ loginAlert: true })
+      return
+    }
+
+    // continue if logged in
+    this.props.history.push('/cart/process', {
+      shippingCost: this.state.shippingCost,
+    })
   }
 
   renderDetail() {
@@ -110,13 +129,13 @@ export default class Cart extends Component {
             <div className={styles.voucherInput}>
               <Input
                 theme={{ ...theme, ...inputTheme }}
-                type="Masukkan Kode Voucher"
+                type="text"
                 hint="Kode Voucher"
                 value={this.state.voucherCode}
                 onChange={val => this.setState({ voucherCode: val })}
               />
               <SecondaryButton
-                onClick={() => { }}
+                onClick={() => {}}
                 className={styles.voucherButton}
               >
                 GUNAKAN
@@ -126,7 +145,7 @@ export default class Cart extends Component {
         </div>
         <PrimaryButton
           disabled={this.state.shippingCost === null}
-          onClick={() => { }}
+          onClick={() => this.checkIsLoggedIn()}
           className={styles.buyButton}
         >
           LANJUTKAN
@@ -155,6 +174,23 @@ export default class Cart extends Component {
           flexDirection: 'column',
         }}
       >
+        <Dialog
+          actions={[
+            {
+              label: 'login',
+              onClick: () => {
+                this.setState({ loginAlert: false })
+                this.props.history.push('/auth/login')
+              },
+            },
+          ]}
+          active={this.state.loginAlert}
+          onEscKeyDown={() => this.setState({ loginAlert: false })}
+          onOverlayClick={() => this.setState({ loginAlert: false })}
+        >
+          <p>Silahkan login terlebih dahulu untuk melakukan transaksi</p>
+        </Dialog>
+
         {cart.data.length === 0 && (
           <p className={styles.empty}>
             Keranjang belanja anda masih kosong

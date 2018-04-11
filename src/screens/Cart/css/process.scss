@@ -1,0 +1,66 @@
+@import '../../../assets/css/config.scss';
+
+.section {
+  background-color: white;
+  margin-top: 10px;
+  padding: 10px;
+
+  &.action {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: $max_width;
+    left: 50%;
+    margin-left: -240px;
+    border-top: 1px solid #e1e1e1;
+
+    @media screen and (max-width: 480px) {
+      margin-left: -50%;
+    }
+  }
+
+  .check {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+  
+  img {
+    height: 40px;
+    width: auto;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+
+  p {
+    color: #333;
+  }
+
+  .foto {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border: none;
+    border-radius: 3px;
+  }
+
+  .buyButton {
+    width: calc(100% - 20px);
+    margin: 10px;
+  }
+
+  .hint {
+    font-size: 14px;
+    margin-top: -5px;
+
+    @media screen and (max-width: 400px) {
+      font-size: 12px;
+      margin-top: -10px;
+      display: block;
+    }
+  }
+}
+
+.loading {
+  text-align: center;
+  margin-top: 20px;
+}

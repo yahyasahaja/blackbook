@@ -2,15 +2,13 @@
 
 .container {
   background-color: white;
-  padding: 10px;
+  padding: 5px 10px;
   display: flex;
   margin-bottom: 1px;
   opacity: 1;
-  transition: .2s ease-out opacity;
-  cursor: pointer;
 
-  &.removed {
-    opacity: 0;
+  &:not(:last-child) {
+    border-bottom: 1px solid #eee;
   }
 
   .image {
@@ -54,12 +52,6 @@
     align-items: flex-end;
     justify-content: center;
     margin-left: 5px;
-
-    .delete {
-      font-size: 24px;
-      color: #a5a5a5;
-      cursor: pointer;
-    }
 
     .price {
       color: $primary_color;

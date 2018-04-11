@@ -1,10 +1,9 @@
 //MODULES
 import { observable, action, computed } from 'mobx'
 import badges from './Badges'
+import ImagePlaceholder from '../../assets/img/image-placeholder.jpeg'
 
-import {
-  CART_STORAGE_URI,
-} from '../../config'
+import { CART_STORAGE_URI } from '../../config'
 
 //STORE
 class Cart {
@@ -17,13 +16,31 @@ class Cart {
   }
 
   @observable data = []
+  @observable address = 'none'
+  @observable channel = 'none'
+  @observable addressList = []
+  @observable saveNewAddress = false
+  @observable
+  newAddress = {
+    address: '',
+    city: '',
+    zip_code: '',
+    country: 'TWN',
+  }
+  @observable addressFoto = ImagePlaceholder
+  @observable addressFotoFile = ''
+  @observable addressFotoInformation = ''
+  @observable shippingCost = 0;
 
   @action
   add(arg) {
     let state = this.data.slice()
 
     // check if already exists
-    const index = state.findIndex(item => item.product.id === arg.product.id && item.variant === arg.variant)
+    const index = state.findIndex(
+      item =>
+        item.product.id === arg.product.id && item.variant === arg.variant,
+    )
     if (index !== -1) {
       // update amount
       const updated = state[index]
@@ -42,7 +59,7 @@ class Cart {
   @action
   remove(index) {
     let state = this.data.slice()
-    
+
     state.splice(index, 1)
 
     this.data.replace(state)
@@ -53,7 +70,12 @@ class Cart {
 
   @computed
   get totalPrice() {
-    return this.data.slice().reduce((total, item) => total + (item.product.price.value * item.amount), 0)
+    return this.data
+      .slice()
+      .reduce(
+        (total, item) => total + item.product.price.value * item.amount,
+        0,
+      )
   }
 }
 

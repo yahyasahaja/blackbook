@@ -20,6 +20,8 @@ const Auth = asyncComponent(() => import('./screens/Auth'))
 const Password = asyncComponent(() => import('./screens/Account/Password'))
 const Profile = asyncComponent(() => import('./screens/Account/Profile'))
 const Cart = asyncComponent(() => import('./screens/Cart'))
+const CartProcess = asyncComponent(() => import('./screens/Cart/Process'))
+const CartConfirm = asyncComponent(() => import('./screens/Cart/Confirmation'))
 const PromoDetail = asyncComponent(() => import('./screens/Promo/PromoDetail'))
 const Product = asyncComponent(() => import('./screens/Product'))
 const Transaction = asyncComponent(() => import('./screens/Account/Transaction'))
@@ -108,6 +110,8 @@ let BOTTOM_TAB_BAR_DATA = [
             <Route path="/auth" component={Auth} />
             <Route path="/category/:category_name" component={Category} />
             <Route path="/chat/:id" component={Conversation} />
+            <Route path="/cart/process" component={CartProcess} />
+            <Route path="/cart/confirm" component={CartConfirm} />
             <Route path="/cart" component={Cart} />
             <Route path="/account/profile" component={Profile} />
             <Route path="/account/password" component={Password} />
@@ -122,6 +126,9 @@ let BOTTOM_TAB_BAR_DATA = [
             <Route path="/account/transaction" component={Transaction} />
             <Route path="/promo/:promotion_id" component={PromoDetail} />
             <Route path="/product/:product_id" component={Product} />
+          </Switch>
+          <Switch>
+
           </Switch>
 
           <section>
