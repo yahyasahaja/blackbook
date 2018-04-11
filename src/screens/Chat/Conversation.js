@@ -56,9 +56,9 @@ class Conversation extends Component {
       this.setState({ title: nextProps.product.product.seller.name })
     }
 
-    if (this.props.threadId) {
-      if (this.props.threadId.thread && this.props.threadId.thread.id !== null) {
-        this.props.history.replace(`/chat/${this.props.threadId.thread.id}`)  
+    if (nextProps.threadId) {
+      if (nextProps.threadId.thread && nextProps.threadId.thread.id !== null) {
+        nextProps.history.replace(`/chat/${nextProps.threadId.thread.id}`)  
       }
     }
   }
