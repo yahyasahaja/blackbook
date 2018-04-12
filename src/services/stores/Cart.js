@@ -17,7 +17,9 @@ class Cart {
 
   @observable data = []
   @observable address = 'none'
+  @observable channelIndex = 'none'
   @observable channel = 'none'
+  @observable channelName = 'none'
   @observable addressList = []
   @observable saveNewAddress = false
   @observable
@@ -66,6 +68,13 @@ class Cart {
     badges.set(badges.CART, this.data.length)
 
     localStorage.setItem(CART_STORAGE_URI, JSON.stringify(state))
+  }
+
+  @action
+  clear() {
+    this.data.clear()
+    badges.set(badges.CART, 0)
+    localStorage.setItem(CART_STORAGE_URI, JSON.stringify([]))
   }
 
   @computed

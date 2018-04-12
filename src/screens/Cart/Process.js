@@ -207,9 +207,10 @@ class Process extends Component {
 
   // channel section
   renderChannel() {
-    const channels = this.props.channels.myChannels.map(channel => ({
-      value: channel.key,
+    const channels = this.props.channels.myChannels.map((channel, index) => ({
+      value: index + 1,
       label: channel.name,
+      key: channel.key
     }))
 
     channels.unshift({
@@ -227,9 +228,13 @@ class Process extends Component {
       <div className={styles.section}>
         <Dropdown
           label="CHANNEL PEMBAYARAN"
-          onChange={value => cart.channel = value}
+          onChange={value => {
+            cart.channelIndex = value
+            cart.channel = channels[value].key
+            cart.channelName = channels[value].label
+          }}
           source={channels}
-          value={cart.channel}
+          value={cart.channelIndex}
           theme={dropdownTheme}
         />
         {cart.channel !== 'none' && (
@@ -291,6 +296,7 @@ class Process extends Component {
       addressFotoFile,
       addressFotoInformation,
       channel,
+      channelName,
     } = cart
     if (!this.check()) {
       this.setState({ dataAlertVisible: true })
@@ -316,6 +322,7 @@ class Process extends Component {
       saveNewAddress: cart.saveNewAddress,
       address: confirmAddress,
       channel,
+      channelName,
     })
   }
 
