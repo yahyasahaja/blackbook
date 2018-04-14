@@ -35,7 +35,7 @@ class TransactionPayment extends Component {
   async openPopup(payment) {
     if (Date.now() > new Date(payment.expDate)) {
       try {
-        this.setState({renewLoading: payment.id})
+        this.setState({ renewLoading: payment.id })
         let { data: replaceOrderPayment } = await client.mutate({
           mutation: renewBarCode,
           variables: {
@@ -47,10 +47,13 @@ class TransactionPayment extends Component {
       } catch (e) {
         snackbar.show('Renew failed, please try again')
       }
-      
-      this.setState({renewLoading: false})
 
-    } else this.setState({popupUrl: payment.url})
+      this.setState({ renewLoading: false })
+
+    } else {
+      this.timerToError = setTimeout(() => this.setState({errorIFrame: true}), 5000)
+      this.setState({ popupUrl: payment.url.replace(/ /g,'') })
+    }
   }
 
   renderList = () => {
@@ -76,12 +79,12 @@ class TransactionPayment extends Component {
     )
 
     return order.payments.map((payment, i) => (
-      <div 
+      <div
         key={i} className={styles.list}
-        onClick={this.openPopup.bind(this, payment)} 
+        onClick={this.openPopup.bind(this, payment)}
       >
         <div className={styles.left} >
-          { renewLoading === payment.id ? 'Loading ... ' : convertStatus(payment.status)}
+          {renewLoading === payment.id ? 'Loading ... ' : convertStatus(payment.status)}
           {
             Date.now() > new Date(payment.expDate)
               ? <PrimaryButton className={styles.renew} >Renew</PrimaryButton>
@@ -100,16 +103,28 @@ class TransactionPayment extends Component {
   }
 
   renderContent() {
-    let { popupUrl } = this.state
-    
+    let { popupUrl, errorIFrame } = this.state
+    console.log('POPUPURL', popupUrl)
     return <div className={styles.container} >
       {this.renderList()}
-      
+
       {
         popupUrl
           ? <div className={styles.popup} >
-            <div className={styles.close} onClick={() => this.setState({popupUrl: null})} >&times;</div>
-            <iframe src={popupUrl}></iframe>
+            <div className={styles.close} onClick={() => this.setState({ popupUrl: null })} >&times;</div>
+            {
+              errorIFrame
+                ? <span className={styles.error} >An Error Occured</span>
+                : <iframe
+                  ref={el => this.iframe = el}
+                  onLoad={e => {
+                    console.log('TRIGGERED', e.target.innerHTML)
+                    clearTimeout(this.timerToError)
+                  }}
+                  src={popupUrl}
+                  frameBorder={0}
+                />
+            }
           </div>
           : ''
       }
@@ -118,6 +133,7 @@ class TransactionPayment extends Component {
 
   state = {
     popupUrl: null,
+    errorIFrame: false,
     renewLoading: false,
   }
 

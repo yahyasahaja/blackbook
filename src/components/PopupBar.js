@@ -107,12 +107,19 @@ import { badges } from '../services/stores'
     let {
       /*cart, component,*/ backLink, onBack,
       /*rightComponent, icons,*/ anim, renderContent,
+      onTop, //boolean
       anotherComponents //array
     } = this.props
     let { shouldAppear } = this.state
     let style, contentStyle, animClassName
     if (!anim) style = {
       opacity: 1
+    }
+
+    if (onTop === false) style = {
+      ...style,
+      overflowY: 'hidden',
+      maxHeight: '100vh'
     }
 
     if (this.bar) contentStyle = {

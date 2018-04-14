@@ -1,28 +1,15 @@
 {
-  "ecmaVersion": "6",
-  "libs": [],
-  "loadEagerly": [],
+  "ecmaVersion": "7",
+  "libs": [
+    "browser"
+  ],
+  "loadEagerly": [
+    "src/**/*.js"
+  ],
+  "dontLoad": [
+    "node_modules/**"
+  ],
   "plugins": {
-    "doc_comment": true,
-    "modules": {
-      "dontLoad": "",
-      "load": "",
-      "modules": ""
-    },
-    "node_resolve": {},
-    "node": {
-      "dontLoad": "",
-      "load": "",
-      "modules": ""
-    },
-    "complete_strings": {
-      "maxLength": 15
-    },
-    "requirejs": {
-      "baseURL": "",
-      "paths": "",
-      "override": ""
-    }
-  },
-  "dontLoad": []
+    "doc_comment": true
+  }
 }

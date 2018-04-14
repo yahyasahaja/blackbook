@@ -44,7 +44,8 @@ class TransactionDetail extends Component {
   confirmSeller = () => {
     let loc = this.state.currentConfirmSeller
 
-    this.props.confirmOrder({
+    client.mutate({
+      mutation: confirmOrder,
       variables: {
         orderSellerId: loc.id,
         input: {
@@ -148,7 +149,7 @@ class TransactionDetail extends Component {
     return (
       <React.Fragment>
         <PopupBar
-          title="Transaction Detail" {...this.props}
+          title="Detil Transaksi" {...this.props}
           renderContent={this.renderContent.bind(this)}
           backLink="/account/transaction"
           anim={ANIMATE_HORIZONTAL}
@@ -218,12 +219,6 @@ mutation ConfirmReceviedGoods($orderSellerId: ID!, $input: OrderSellerStatusInpu
 `
 
 export default compose(
-  graphql(confirmOrder, {
-    name: 'confirmOrder',
-    options: {
-      client
-    }
-  }),
   graphql(getOrderQuery, {
     name: 'getOrderQuery',
     options: props => ({

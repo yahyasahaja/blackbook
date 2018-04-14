@@ -4,6 +4,7 @@ import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
+import { Route } from 'react-router-dom'
 
 //GRAPHQL
 import client from '../../services/graphql/orderingClient'
@@ -19,6 +20,10 @@ import TransactionList from '../../components/TransactionList'
 
 //STORE
 import { user, appStack } from '../../services/stores'
+
+//ROUTER
+import TransactionDetail from './TransactionDetail'
+import TransactionPayment from './TransactionPayment'
 
 //COMPONENT
 @observer
@@ -40,7 +45,7 @@ class Transaction extends Component {
   onClick(status) {
     if (status === 'process') status = ['UNPAID', 'PAID', 'PROGRESS']
     else status = ['COMPLETE']
-    
+
     this.props.retreiveTransactionData.refetch({
       offset: 0,
       status
@@ -60,7 +65,7 @@ class Transaction extends Component {
 
   renderList() {
     let { myOrders } = this.props.retreiveTransactionData
-    
+
     if (!myOrders) return (
       <div className={styles.loading} >
         <div>
@@ -94,13 +99,26 @@ class Transaction extends Component {
   }
 
   render() {
+    appStack.stack
+    console.log('STCK', appStack.stack.slice())
     return (
-      <PopupBar
-        title="Daftar Transaksi" {...this.props}
-        renderContent={this.renderContent}
-        backLink="/account"
-        anim={ANIMATE_HORIZONTAL}
-      />
+      <React.Fragment>
+        <PopupBar
+          onTop={appStack.stack[appStack.stack.length - 1] === this.id}
+          title="Daftar Transaksi" {...this.props}
+          renderContent={this.renderContent}
+          backLink="/account"
+          anim={ANIMATE_HORIZONTAL}
+        />
+        <Route
+          path="/account/transaction/detail/:transaction_id"
+          component={TransactionDetail}
+        />
+        <Route
+          path="/account/transaction/payment/:transaction_id"
+          component={TransactionPayment}
+        />
+      </React.Fragment>
     )
   }
 }

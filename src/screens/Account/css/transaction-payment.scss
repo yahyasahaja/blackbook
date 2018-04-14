@@ -1,3 +1,5 @@
+@import '../../../assets/css/config.scss';
+
 .container {
   display: block;
   width: 100%;
@@ -46,6 +48,14 @@
     background: white;
     width: 100%;
     z-index: 99;
+
+    .error {
+      text-align: center;
+      font-size: 15pt;
+      font-weight: 100;
+      display: block;
+      color: $secondary-color;
+    }
 
     .close {
       font-size: 64pt;

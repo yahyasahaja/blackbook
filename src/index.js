@@ -18,7 +18,8 @@ import AppRouter from './AppRouter'
 
 //SERVICES
 import client from './services/graphql/productClient'
-import { onlineStatus, snackbar, tokens, badges } from './services/stores'
+import { onlineStatus, snackbar, tokens } from './services/stores'
+
 
 //SERVICE_WORKER
 import registerServiceWorker from './registerServiceWorker'
@@ -30,30 +31,28 @@ axios.defaults.headers['Authorization'] = tokens.token
 
 @observer
 class App extends Component {
-  componentDidMount() {
-
-  }
-
   render() {
-    if (!tokens.token) return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: '100vh'
-        }}
-      >
-        <ProgressBar
-          type='circular'
-          mode='indeterminate' multicolor
-        />
-      </div>
-    )
+    if (!tokens.token)
+      return (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100vh'
+          }}
+        >
+          <ProgressBar
+            type="circular"
+            mode="indeterminate"
+            multicolor="multicolor"
+          />
+        </div>
+      )
 
     return (
-      <ApolloProvider client={client} >
+      <ApolloProvider client={client}>
         <ThemeProvider theme={contextTheme}>
           <AppRouter onlineStatus={onlineStatus} snackbar={snackbar} />
         </ThemeProvider>
@@ -62,9 +61,6 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('app')
-)
+ReactDOM.render(<App />, document.getElementById('app'))
 
 registerServiceWorker()
