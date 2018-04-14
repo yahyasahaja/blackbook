@@ -51,8 +51,8 @@ class TransactionPayment extends Component {
       this.setState({ renewLoading: false })
 
     } else {
-      this.timerToError = setTimeout(() => this.setState({errorIFrame: true}), 5000)
-      this.setState({ popupUrl: payment.url.replace(/ /g,'') })
+      this.timerToError = setTimeout(() => this.setState({ errorIFrame: true }), 5000)
+      this.setState({ errorIFrame: false, popupUrl: payment.url.replace(/ /g, '') })
     }
   }
 
@@ -112,18 +112,15 @@ class TransactionPayment extends Component {
         popupUrl
           ? <div className={styles.popup} >
             <div className={styles.close} onClick={() => this.setState({ popupUrl: null })} >&times;</div>
-            {
-              errorIFrame
-                ? <span className={styles.error} >An Error Occured</span>
-                : <iframe
-                  ref={el => this.iframe = el}
-                  onLoad={e => {
-                    console.log('TRIGGERED', e.target.innerHTML)
-                    clearTimeout(this.timerToError)
-                  }}
-                  src={popupUrl}
-                  frameBorder={0}
-                />
+            <iframe
+              ref={el => this.iframe = el}
+              // onLoad={e => {
+              //   console.log('TRIGGERED', e.target.innerHTML)
+              //   clearTimeout(this.timerToError)
+              // }}
+              src={popupUrl}
+              frameBorder={0}
+            />
             }
           </div>
           : ''
