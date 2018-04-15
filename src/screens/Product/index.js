@@ -6,7 +6,7 @@ import { observer } from 'mobx-react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Link } from 'react-router-dom'
-import Slider from 'react-image-gallery'
+import Slider from '../../components/Slider'
 
 //STYLES
 import styles from './css/index-product.scss'
@@ -189,7 +189,7 @@ class PromoDetail extends Component {
         <div className={styles.card} >
           <div className={styles.picture}>
             <Slider
-              items={images.map(image => ({ original: image.url }))}
+              items={images.map(image => image.url)}
               showThumbnails={false}
               showBullets={true}
               showPlayButton={false}

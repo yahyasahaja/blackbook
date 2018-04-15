@@ -103,8 +103,8 @@ class TransactionPayment extends Component {
   }
 
   renderContent() {
-    let { popupUrl, errorIFrame } = this.state
-    console.log('POPUPURL', popupUrl)
+    let { popupUrl } = this.state
+    
     return <div className={styles.container} >
       {this.renderList()}
 
