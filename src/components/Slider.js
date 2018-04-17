@@ -113,7 +113,7 @@ export default class Slider extends Component {
   onTouchEnd = () => {
     let maxWidth = this.container.clientWidth
     let length = this.props.items.length
-    console.log(this.dir)
+    
     let targetX = this.dir < 0 
       ? Math.floor(this.moveX / maxWidth) * maxWidth 
       : Math.ceil(this.moveX / maxWidth) * maxWidth
