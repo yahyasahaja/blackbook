@@ -8,6 +8,7 @@ import styles from './css/slider.scss'
 export default class Slider extends Component {
   componentDidMount() {
     this._mounted = true
+    this.setState({zooms: this.props.items.map(() => 1)})
   }
 
   componentWillUnmount() {
@@ -39,13 +40,18 @@ export default class Slider extends Component {
 
     return items.map((url, i) => {
       let width = `${100 / items.length}%`
+      let { zooms } = this.state
+      let zoom = zooms.length > i && this.state.isFullScreen ? zooms[i] : 1
 
       return (
         <div 
           className={styles.item} style={{width}} key={i} 
-          onClick={e => e.stopPropagation()}
+          style={{transform: `scaleY(${zoom})`}}
         >
-          <img src={url} alt="Item URL" className={styles.img} />
+          <img 
+            src={url} alt="Item URL" className={styles.img} 
+            style={{transform: `scaleX(${zoom})`}}
+          />
         </div>
       )
     })
@@ -60,14 +66,26 @@ export default class Slider extends Component {
     })
   }
 
+  prevX = 0
+  nextX = 0
+  difX = 0
+  dir = 0
+
   onTouchMove = e => {
-    let currentPosition = e.touches[0].pageX
+    let currentPosition = this.nextX = e.touches[0].pageX
     this.canFullScreen = false
+    this.difX = this.nextX - this.prevX
+    let range = 3
     
     this.setState({
       moveX: this.moveX = this.state.lastPosition + currentPosition - this.state.startPosition, 
       currentPosition,
     })
+
+    if (this.difX < range && this.difX > -range) this.dir = 0
+    else this.dir = this.difX
+
+    this.prevX = this.nextX
   }
 
   chevronClick (to) {
@@ -95,8 +113,8 @@ export default class Slider extends Component {
   onTouchEnd = () => {
     let maxWidth = this.container.clientWidth
     let length = this.props.items.length
-    let half = maxWidth / 2
-    let targetX = this.moveX % maxWidth < -half 
+    console.log(this.dir)
+    let targetX = this.dir < 0 
       ? Math.floor(this.moveX / maxWidth) * maxWidth 
       : Math.ceil(this.moveX / maxWidth) * maxWidth
 
@@ -135,14 +153,35 @@ export default class Slider extends Component {
     lastPosition: 0,
     selected: 0,
     isFullScreen: false,
+    zooms: []
   }
 
   canFullScreen = false
 
   onMouseUp = () => {
     if (this.canFullScreen && Date.now() - this.dateDown < 1000) {
-      this.setState({isFullScreen: true})
+      this.setState({isFullScreen: true, zooms: this.state.zooms.map(() => 1)})
     }
+  }
+
+  zoomIn = () => {
+    let { selected, zooms } = this.state
+    let zoom = zooms[selected] + .5
+
+    if (zoom > 3) zoom = 3
+    zooms = zooms.slice()
+    zooms[selected] = zoom
+    this.setState({zooms})
+  }
+
+  zoomOut = () => {
+    let { selected, zooms } = this.state
+    let zoom = zooms[selected] - .5
+
+    if (zoom < 1) zoom = 1
+    zooms = zooms.slice()
+    zooms[selected] = zoom
+    this.setState({zooms})
   }
 
   render() {
@@ -206,12 +245,24 @@ export default class Slider extends Component {
 
           {
             isFullScreen
-              ? <div 
-                className={styles.close} 
-                onClick={() => this.setState({isFullScreen: false})}
-              >
-                &times;
-              </div>
+              ? (
+                <React.Fragment>  
+                  <span 
+                    className={`${styles.zoomin} mdi mdi-magnify-plus-outline`} 
+                    onClick={this.zoomIn}
+                  />
+                  <span 
+                    className={`${styles.zoomout} mdi mdi-magnify-minus-outline`} 
+                    onClick={this.zoomOut}
+                  />
+                  <div 
+                    className={styles.close} 
+                    onClick={() => this.setState({isFullScreen: false})}
+                  >
+                    &times;
+                  </div>
+                </React.Fragment>  
+              )
               : ''
           }
         </div>

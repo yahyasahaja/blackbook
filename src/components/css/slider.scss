@@ -2,7 +2,6 @@
   display: block;
   position: relative;
   max-width: 480px;
-  max-height: 300px;
   overflow: hidden;
   transition: .3s;
   
@@ -21,6 +20,21 @@
       transition: .3s;
     }
 
+    .zoomin, .zoomout {
+      color: white;
+      position: absolute;
+      top: 19px;
+      right: 77px;
+      display: block;
+      font-weight: 100;
+      line-height: 30px;
+      font-size: 27pt;
+    }
+
+    .zoomin {
+      right: 125px;
+    }
+
     .close {
       font-size: 55pt;
       color: white;
@@ -33,16 +47,17 @@
     }
     
     .wrapper {
-      display: block;
+      display: flex;
       position: relative;
       height: 100%;
+      align-items: center;
 
       .item {
         position: relative;
         top: 0;
         width: 100%;
         float: left;
-        height: 100%;
+        overflow: hidden;
 
         img {
           width: 100%;
