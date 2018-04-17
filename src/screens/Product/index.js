@@ -298,7 +298,13 @@ class PromoDetail extends Component {
 
         <div className={styles.card} >
           <div className={styles.seller} >
-            <img src={seller.profilePicture} />
+            {
+              seller.profilePicture
+                ? <img src={seller.profilePicture} />
+                : <div className={styles.pic}>{
+                  seller.name.split(' ').slice(0, 2).map(d => d[0]).join('')
+                }</div>
+            }
             <span>
               <div>{seller.name}</div>
               <div>{seller.country}</div>

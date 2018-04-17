@@ -13,6 +13,20 @@
       align-items: center;
       padding: 20px;
 
+      .pic {
+        display: flex;
+        width: 70px;
+        height: 70px;
+        border-radius: 100px;
+        background: white;
+        font-size: 25pt;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        border: 3px solid #595959;
+        margin-right: 10px;
+      }
+
       img {
         width: 70px;
         height: 70px;
