@@ -100,7 +100,7 @@ class Transaction extends Component {
 
   render() {
     appStack.stack
-    console.log('STCK', appStack.stack.slice())
+    // console.log('STCK', appStack.stack.slice())
     return (
       <React.Fragment>
         <PopupBar

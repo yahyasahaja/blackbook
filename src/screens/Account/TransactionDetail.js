@@ -99,6 +99,9 @@ class TransactionDetail extends Component {
       id,
       status,
       shippingAddress,
+      shippingImageUrl,
+      shippingZipCode,
+      shippingInfo,
       sellers,
       country
     } = order
@@ -109,11 +112,30 @@ class TransactionDetail extends Component {
         key: 'Status Transaksi', value: status !== 'UNPAID' ? convertStatus(status) : (
           <div className={styles.status} >
             {convertStatus(status)}
-            <PrimaryButton to={`/account/transaction/payment/${id}`} >Bayar</PrimaryButton>
+            <PrimaryButton 
+              className={styles.pay}
+              to={`/account/transaction/payment/${id}`} 
+            >Bayar</PrimaryButton>
           </div>
         )
       },
-      { key: 'Alamat', value: shippingAddress },
+      { key: 'Alamat', value: (
+        <div>
+          <div>{shippingAddress}</div>
+          <div>{shippingZipCode}</div>
+          {
+            shippingImageUrl
+              ? <div className={styles.img} ><img src={shippingImageUrl} alt=""/></div>
+              : ''
+          }
+
+          {
+            shippingInfo
+              ? <div>{shippingInfo}</div>
+              : ''
+          }
+        </div>
+      ) },
       {
         key: 'Total Pembayaran', value: `${convertCountryCurrency(country)} ${
           sellers.reduce((prev, cur) => {
@@ -145,7 +167,6 @@ class TransactionDetail extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <React.Fragment>
         <PopupBar
@@ -181,6 +202,8 @@ query getOrder($orderId: ID!) {
     id
     shippingAddress
     shippingZipCode
+    shippingImageUrl
+    shippingInfo
     discount
     status
     country

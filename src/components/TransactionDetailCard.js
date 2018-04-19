@@ -71,6 +71,7 @@ export default class TransactionDetailCard extends Component {
             status === 'DALAM PENGIRIMAN'
               ? <PrimaryButton 
                 onClick={this.props.onConfirm}
+                className={styles.btn}
               >Konfirmasi</PrimaryButton>
               : ''
           }
