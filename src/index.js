@@ -9,6 +9,8 @@ import { observer } from 'mobx-react'
 // OfflinePluginRuntime.install()
 import axios from 'axios'
 
+registerServiceWorker()
+
 //CSS
 import theme from './assets/theme/theme.js'
 import 'react-image-gallery/styles/css/image-gallery.css'
@@ -19,7 +21,6 @@ import AppRouter from './AppRouter'
 //SERVICES
 import client from './services/graphql/productClient'
 import { onlineStatus, snackbar, tokens } from './services/stores'
-
 
 //SERVICE_WORKER
 import registerServiceWorker from './registerServiceWorker'
@@ -62,5 +63,3 @@ class App extends Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('app'))
-
-registerServiceWorker()
