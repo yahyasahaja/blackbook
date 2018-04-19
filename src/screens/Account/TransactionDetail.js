@@ -118,7 +118,7 @@ class TransactionDetail extends Component {
         key: 'Total Pembayaran', value: `${convertCountryCurrency(country)} ${
           sellers.reduce((prev, cur) => {
             return prev + cur.items.reduce((prev, cur) => {
-              return prev + cur.price + cur.quantity
+              return prev + cur.price * cur.quantity
             }, 0)
           }, 0)
         }`
