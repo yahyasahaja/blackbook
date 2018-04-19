@@ -4,6 +4,20 @@ import badges from './Badges'
 
 //STORE
 class Favorites {
+  constructor() {
+    try {
+      let favorites = window.localStorage.getItem('favorites')
+      favorites = JSON.parse(favorites)
+      
+      if (favorites) {
+        this.data = observable(favorites)
+        badges.set(badges.LIKED, this.data.length)
+      }
+    } catch (e) {
+      console.log('ERROR AT FAVORITES CONSTRUCTOR', e)
+    }
+  }
+
   @observable data = []
 
   @action
@@ -13,6 +27,7 @@ class Favorites {
     (state = state.slice()).push(arg)
     this.data.replace(state)
     badges.set(badges.LIKED, this.data.length)
+    window.localStorage.setItem('favorites', JSON.stringify(state))
   }
 
   @action
@@ -26,6 +41,7 @@ class Favorites {
 
     this.data.replace(state)
     badges.set(badges.LIKED, this.data.length)
+    window.localStorage.setItem('favorites', JSON.stringify(state))
   }
 }
 
