@@ -50,6 +50,8 @@ class Home extends Component {
   checkAllProductsChanges(nextProps) {
     let { allPromotedsQuery: { loading: newLoading, error: newError } } = nextProps
     let { allPromotedsQuery: { loading: curLoading } } = this.props
+
+    console.log('TRIGGERED', nextProps)
     
     if (curLoading !== newLoading && !newLoading && !newError) {
       let allPromoteds = nextProps.allPromotedsQuery.allPromoteds
@@ -64,7 +66,7 @@ class Home extends Component {
         products: [...this.state.products, ...products],
         offset: offset + MAX_FETCH_LENGTH,
         isFetchDisabled: this.state.products.length === allPromoteds.totalCount
-      })
+      }, () => console.log('UPDATE', this.state, products))
     } else if (newError) {
       tokens.refetchAPIToken().then(() => window.location.reload())
     }
