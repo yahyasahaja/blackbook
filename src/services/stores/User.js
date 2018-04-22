@@ -31,31 +31,56 @@ class User {
   @observable isLoadingUpdateProfile
   @observable isLoadingUpdatePassword
   @observable isLoadingLogin
+  @observable isLoadingUploadProfilePic
 
   @action
   setData = data => {
     return this.data = observable(data)
   }
 
-  @action
-  async uploadProfilePicture(file) {
+  async uploadProfilePicture(files) {
     let fileType
+    let file = files[0]
 
     if (file.type.indexOf('jpg') !== -1) fileType = 'jpg'
     else if (file.type.indexOf('jpeg') !== -1) fileType = 'jpeg'
     else if (file.type.indexOf('png') !== -1) fileType = 'png'
+    
+    let reader = new FileReader()
+    reader.onloadend = ev => this.processUploadProfilePicFile(ev.target.result, fileType)
+    reader.readAsArrayBuffer(file)
+  }
 
-    if (!fileType) return false
+  async processUploadProfilePicFile(data, fileType) {
+    try {
+      console.log(fileType, `Bearer ${tokens.token}`)
+      this.isLoadingUploadProfilePic = true
+      let { data: { is_ok, uri } } = await axios.post(
+        getIAMEndpoint(`/iam/profpic/${fileType}`),
+        {},
+        {
+          headers: {
+            Authorization: tokens.token
+          }
+        }
+      )
+      
+      if (!is_ok) return false
+      
+      delete axios.defaults.headers['Authorization']
+      await axios.put(uri, data, {
+        headers: {
+          'x-ms-blob-type': 'BlockBlob',
+        }
+      })
+      
+      axios.defaults.headers['Authorization'] = tokens.token
+      this.getProfilePictureURL()
+    } catch (e) {
+      console.log(e)
+    }
 
-    let formData = new FormData()
-    formData.append('file', file)
-
-    let { is_ok, uri } = await axios.post(getIAMEndpoint(`/iam/profpic/${fileType}`), formData)
-
-    if (!is_ok) return false
-
-    this.profilePictureURL = uri
-    return uri
+    this.isLoadingUploadProfilePic = false
   }
 
   @action
