@@ -52,7 +52,7 @@ let BOTTOM_TAB_BAR_DATA = [
     let { onlineStatus: { goOffline, goOnline }, snackbar: { show } } = this.props
     window.ononline = () => {
       goOnline()
-      window.location.reload()
+      // window.location.reload()
     }
     window.onoffline = () => {
       goOffline()

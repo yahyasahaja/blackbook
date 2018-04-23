@@ -207,7 +207,7 @@ class Process extends Component {
 
   // channel section
   renderChannel() {
-    const channels = this.props.channels.myChannels.map((channel, index) => ({
+    const channels = this.props.channels.allChannels.map((channel, index) => ({
       value: index + 1,
       label: channel.name,
       key: channel.key
@@ -364,8 +364,8 @@ class Process extends Component {
         >
           <p>{this.state.dataAlert}</p>
         </Dialog>
-        {channels.myChannels && user.getUser && this.renderAddress()}
-        {channels.myChannels && user.getUser && this.renderChannel()}
+        {channels.allChannels && user.getUser && this.renderAddress()}
+        {channels.allChannels && user.getUser && this.renderChannel()}
         {(channels.loading || user.loading) && (
           <div className={styles.loading}>
             <ProgressBar
@@ -391,7 +391,7 @@ class Process extends Component {
 
 const getAllChannelsQuery = gql`
   query getAllChannels {
-    myChannels {
+    allChannels {
       country
       name
       key

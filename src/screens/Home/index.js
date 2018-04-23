@@ -48,14 +48,16 @@ class Home extends Component {
   }
 
   checkAllProductsChanges(nextProps) {
-    let { allPromotedsQuery: { loading: newLoading, error: newError } } = nextProps
-    let { allPromotedsQuery: { loading: curLoading } } = this.props
+    let { activePromotedsQuery: { loading: newLoading, error: newError } } = nextProps
+    let { activePromotedsQuery: { loading: curLoading } } = this.props
+
+    // console.log('TRIGGERED', nextProps)
     
     if (curLoading !== newLoading && !newLoading && !newError) {
-      let allPromoteds = nextProps.allPromotedsQuery.allPromoteds
+      let activePromoteds = nextProps.activePromotedsQuery.activePromoteds
       let { offset } = this.state
 
-      let products = allPromoteds.promoteds.map(({product}) => {
+      let products = activePromoteds.promoteds.map(({product}) => {
         if (product.images.length > 0)
           return { ...product, image: product.images[0].url }
       })
@@ -63,8 +65,8 @@ class Home extends Component {
       this.setState({
         products: [...this.state.products, ...products],
         offset: offset + MAX_FETCH_LENGTH,
-        isFetchDisabled: this.state.products.length === allPromoteds.totalCount
-      })
+        isFetchDisabled: this.state.products.length === activePromoteds.totalCount
+      }, () => console.log('UPDATE', this.state, products))
     } else if (newError) {
       tokens.refetchAPIToken().then(() => window.location.reload())
     }
@@ -91,7 +93,7 @@ class Home extends Component {
     let scrollPosition = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
     let pageHeight = document.body.scrollHeight
     let screenHeight = document.body.offsetHeight
-    let { allPromotedsQuery: { loading, refetch } } = this.props
+    let { activePromotedsQuery: { loading, refetch } } = this.props
     let { offset } = this.state
 
     if (loading) return
@@ -121,7 +123,7 @@ class Home extends Component {
   }
 
   render() {
-    let { allPromotedsQuery: { loading } } = this.props
+    let { activePromotedsQuery: { loading } } = this.props
 
     return (
       <TopBar
@@ -169,9 +171,9 @@ query {
 }
 `
 
-const allPromotedsQuery = gql`
-query allPromoteds($limit: Int, $offset: Int) {
-  allPromoteds(limit: $limit, offset: $offset) {
+const activePromotedsQuery = gql`
+query activePromoteds($limit: Int, $offset: Int) {
+  activePromoteds(limit: $limit, offset: $offset) {
     promoteds {
       product {
         id,
@@ -198,8 +200,8 @@ export default compose(
     name: 'allCategoriesQuery',
     skip: () => categoriesStore.data === null
   }),
-  graphql(allPromotedsQuery, {
-    name: 'allPromotedsQuery',
+  graphql(activePromotedsQuery, {
+    name: 'activePromotedsQuery',
     options: () => {
       return {
         variables: { limit: MAX_FETCH_LENGTH, offset: 0 }

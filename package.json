@@ -87,7 +87,7 @@
     "dev-server": "NODE_ENV=development nodemon server/index.js --exec babel-node --watch server",
     "build-server": "babel server -d build-server",
     "test": "node scripts/test.js --env=jsdom",
-    "postinstall": "yarn build && yarn run build-server",
+    "postinstall": "yarn build",
     "toolbox": "react-toolbox-themr"
   },
   "jest": {

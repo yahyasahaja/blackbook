@@ -35,7 +35,7 @@ class Auth extends Component {
   }
 
   componentWillReact() {
-    this.setState({...user.data})
+    this.setState({ ...user.data })
   }
 
   renderProfilePicture() {
@@ -46,12 +46,21 @@ class Auth extends Component {
 
     if (profilePictureURL) if (profilePictureURL.length > 0) return (
       <label htmlFor="pic" className={styles.pic} >
-        <img src={profilePictureURL} alt="Profile Picture" />
+        {
+          !user.isLoadingUploadProfilePic
+            ? <img src={profilePictureURL} alt="Profile Picture" />
+            : (
+              <div className={styles['pic-loading']} >
+                <span>uploading...</span>
+              </div>
+            )
+        }
+
         <span className={`mdi mdi-pencil ${styles.edit}`} />
-        <input 
-          id="pic" name="pic" type="file" style={{display: 'none'}} 
+        <input
+          id="pic" name="pic" type="file" style={{ display: 'none' }}
           onChange={e => {
-            user.uploadProfilePicture(e.target.files[0])
+            user.uploadProfilePicture(e.target.files || e.dataTransfer.files)
           }}
           accept=".jpg, .jpeg, .png"
         />
@@ -84,7 +93,7 @@ class Auth extends Component {
   updateProfile = () => {
     if (user.isLoadingUpdateProfile) return
 
-    this.setState({active: false}, () => {
+    this.setState({ active: false }, () => {
       user.updateProfile({
         ...this.state
       }).then(token => {
@@ -94,7 +103,7 @@ class Auth extends Component {
   }
 
   handleToggle = () => {
-    this.setState({active: !this.state.active})
+    this.setState({ active: !this.state.active })
   }
 
   actions = [
@@ -196,7 +205,7 @@ class Auth extends Component {
       <PrimaryButton
         className={styles.button}
         type="submit"
-        onClick={() => this.setState({active: true})}
+        onClick={() => this.setState({ active: true })}
       >
         Simpan Profile
       </PrimaryButton>
@@ -206,6 +215,7 @@ class Auth extends Component {
   render() {
     user.data
     user.profilePictureURL
+    user.isLoadingUploadProfilePic
     return (
       <PopupBar
         title="Profil" {...this.props}

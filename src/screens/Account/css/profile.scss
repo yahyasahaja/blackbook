@@ -21,7 +21,7 @@
       border-radius: 100px;
     }
 
-    .pic, .picture-default {
+    .pic, .picture-default, .pic-loading {
       display: flex;
       width: 150px;
       height: 150px;
@@ -30,6 +30,14 @@
       font-size: 40pt;
       justify-content: center;
       align-items: center;
+    }
+
+    .pic-loading {
+      font-size: 20px;
+      border: 3px solid #595959;
+      background: white;
+      overflow: hidden;
+      border-radius: 100px;
     }
 
     .pic {
@@ -42,6 +50,7 @@
         display: block;
         box-shadow: 2px 2px 15px #d5d5d5;
         background: white;
+        object-fit: cover;
       }
 
       .edit {

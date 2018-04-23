@@ -34,7 +34,7 @@ export class AsyncComponent extends Component {
           type='circular' theme={ProgressBarTheme}
           mode='indeterminate'
         />
-      </div>
+      </div> 
     )
 
     return this.props.children(this.state.Component)

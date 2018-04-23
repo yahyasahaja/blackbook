@@ -44,5 +44,9 @@
     padding: 10px;
     font-weight: bold;
     color: $secondary-color;
+
+    .btn {
+      width: auto;
+    }
   }
 }
