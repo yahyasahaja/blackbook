@@ -94,7 +94,7 @@ class Login extends Component {
         <form className={styles.form} onSubmit={this.onSubmit} >
           <div className={styles.handphone} >
             <Dropdown
-              name="country_code"
+              className="country_code"
               onChange={this.handleChange.bind(this, 'countryCode')}
               source={countryCodes}
               value={this.state.countryCode}

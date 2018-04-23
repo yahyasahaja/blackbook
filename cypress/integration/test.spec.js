@@ -14,13 +14,19 @@ describe('Index page', () => {
     cy.url().should('include', '/promo')
   })
 
-  it('Open chat page when click chat button', () => {
-    cy.get('a[href="/chat"]').click()
-    cy.url().should('include', '/chat')
-  })
-
   it('Open account page when click account button', () => {
     cy.get('a[href="/account"]').click()
+    cy.url().should('include', '/account')
+  })
+
+  it('Redirect to account page when click chat button and not logged in', () => {
+    cy.get('a[href="/chat"]').click()
+    cy.url().should('include', '/account')
+  })
+
+  it('Open chat page when click chat button if logged in', () => {
+    // cy.login()
+    cy.get('a[href="/chat"]').click()
     cy.url().should('include', '/account')
   })
 })

@@ -11,8 +11,10 @@ describe('Login', () => {
   })
 
   it('Set local storage token after login', () => {
+    cy.get('.country_code').as('countryCode')
+    cy.get('@countryCode').click()
+    cy.get('@countryCode').contains('+62').click()
     cy.get('input[name=phone_number]').type('6283333333333')
     cy.get('input[name=password]').type('12qwaszx')
-
   })
 })
