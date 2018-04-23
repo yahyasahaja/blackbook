@@ -62,13 +62,8 @@ else
 function checkRoute(path, router) {
   if (path.indexOf(router) !== 0) return false
 
-  if (path.length > router.length) {
-    if (path[router.length] === '/') {
-      return true
-    }
-  }
-
-  return true
+  if (path.length > router.length) 
+    return path[router.length] === '/'
 }
 
 function fetchData(event) {
