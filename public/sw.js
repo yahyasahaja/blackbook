@@ -2,7 +2,7 @@
 var doCache = self.location.hostname.indexOf('localhost') === -1
 
 // Name our cache
-var CACHE_NAME = 'hash-pwa-19'
+var CACHE_NAME = 'hash-pwa-20'
 
 // // Delete old caches that are not our current one!
 // self.addEventListener('activate', event => {
@@ -64,6 +64,8 @@ function checkRoute(path, router) {
 
   if (path.length > router.length) 
     return path[router.length] === '/'
+
+  return true
 }
 
 function fetchData(event) {
