@@ -1,10 +1,12 @@
 //MODULES
 import React, { Component } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import _ from 'lodash'
+// import _ from 'lodash'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react'
+import { Link } from 'react-router-dom'
+import { List, ListItem, ListSubHeader } from 'react-toolbox/lib/list'
 
 //STYLES
 import styles from './css/index.scss'
@@ -13,8 +15,13 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 //COMPONENTS
 import TopBar, { APPEAR } from '../../components/TopBar'
 import Card from '../../components/ProductCard'
-import Pills from '../../components/Pills'
-import Separator from '../../components/Separator'
+// import Pills from '../../components/Pills'
+// import Separator from '../../components/Separator'
+
+//SVG
+import Smartphone from '../../assets/img/smartphone-white.svg'
+import Dress from '../../assets/img/dress-white.svg'
+import TShirt from '../../assets/img/t-shirt-white.svg'
 
 //STORE
 import { categories as categoriesStore, appStack, favorites, tokens } from '../../services/stores'
@@ -107,6 +114,7 @@ class Home extends Component {
     products: [],
     offset: 0,
     isFetchDisabled: false,
+    areAllCategoriesPoppedUp: false,
   }
 
   renderCards() {
@@ -116,14 +124,92 @@ class Home extends Component {
   }
 
   renderCategories() {
-    let categories = categoriesStore.data
+    let data = [
+      {
+        img: <img src={Smartphone} />,
+        name: 'Handphone',
+        id: 'Handphone'
+      },
+      {
+        img: <img src={Dress} />,
+        name: <span>Fashion<br /> Wanita</span>,
+        id: 'Fashion Wanita'
+      },
+      {
+        img: <img src={TShirt} />,
+        name: <span>Fashion<br /> Pria</span>,
+        id: 'Fashion Pria'
+      },
+      {
+        img: <span className="mdi mdi-format-list-bulleted" />,
+        name: 'Kategori',
+        id: 'categories'
+      },
+    ]
 
-    if (!categories) return
-    return _.map(categories, (data, i) => <Pills to={`/category/${i}`} label={i} key={i} />)
+    return data.map((data, i) => {
+      return (
+        <Link 
+          to={`/category/${data.id}`}
+          key={i} 
+          className={styles.category} 
+          onClick={e => {
+            if (data.id === 'categories') {
+              e.preventDefault()
+              this.setState({areAllCategoriesPoppedUp: true})
+            }
+          }}
+        >
+          <div className={styles.img} >
+            {data.img}
+          </div>
+          <span className={styles['category-name']} >{data.name}</span>
+        </Link>
+      )
+    })
+  }
+
+  renderAllCategories() {
+    let { allCategoriesQuery: { allCategories } } = this.props
+    let { areAllCategoriesPoppedUp } = this.state
+    
+    if (!areAllCategoriesPoppedUp || !allCategories) return
+    
+    return (
+      <div className={styles['all-categories']} >
+        <div className={styles.header} >
+          <span onClick={
+            () => this.setState({areAllCategoriesPoppedUp: false})
+          } className={`mdi mdi-arrow-left ${styles.back}`} />
+          <span className={styles.title} >Semua Kategori</span>
+        </div>
+        <List selectable ripple>
+          {allCategories.map((data, i) => {
+            return (
+              <ListItem
+                key={i}
+                caption={data.name}
+                onClick={() => {
+                  this.setState({areAllCategoriesPoppedUp: false})
+                  this.props.history.push(`/category/${data.name}`)
+                }}
+              />
+            )
+          })}
+        </List>
+      </div>
+    )
   }
 
   render() {
     let { activePromotedsQuery: { loading } } = this.props
+    let { areAllCategoriesPoppedUp } = this.state
+    let style = {}
+
+    if (areAllCategoriesPoppedUp) style = {
+      maxHeight: '100vh',
+      overflow: 'hidden',
+    }
 
     return (
       <TopBar
@@ -139,22 +225,28 @@ class Home extends Component {
 
         isSelected={this.props.isSelected}
         style={{ background: 'rgb(239, 239, 239)' }}
-      >
-        <Separator>Categories</Separator>
-        <div className={styles.categories} >
-          {this.renderCategories()}
+        wrapperStyle={{ padding: 0 }}
+      > 
+        <div
+          style={style}
+        >
+          <div className={styles.categories} >
+            {this.renderCategories()}
+          </div>
+          
+          {this.renderCards()}
+          {
+            loading
+              ? <ProgressBar
+                className={styles.loading} 
+                type='circular' theme={ProgressBarTheme}
+                mode='indeterminate'
+              />
+              : ''
+          }
         </div>
-        
-        {this.renderCards()}
-        {
-          loading
-            ? <ProgressBar
-              className={styles.loading} 
-              type='circular' theme={ProgressBarTheme}
-              mode='indeterminate'
-            />
-            : ''
-        }
+
+        {this.renderAllCategories()}
       </TopBar>
     )
   }
