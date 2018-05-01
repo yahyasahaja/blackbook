@@ -72,14 +72,25 @@ describe('Cart', () => {
     })
   })
 
-  // it('Has correct total price', () => {
-  //   const cartData = localStorage.getItem('cart')
-  //   const data = JSON.parse(cartData)
-  //   const total = data.reduce((prev, val) => {
-  //     return prev + val.amount * val.product.price.value
-  //   }, 0)
-  //   console.log(total)
-  // })
+  it('Has correct total price', () => {
+    const cartData = localStorage.getItem('cart')
+    const data = JSON.parse(cartData)
+    const total = data.reduce((prev, val) => {
+      return prev + val.amount * val.product.price.value
+    }, 0)
+
+    cy.get('[data-testid="cart-total"]').then(el => {
+      const totalCart = el.data('total')
+
+      cy.get('[data-testid="cart-shipping-cost"]').then(el => {
+        const shippingCost = el.data('shipping-cost')
+
+        // console.log(total, shippingCost)
+        const sum = total + Number(shippingCost)
+        expect(sum).to.be.equals(Number(totalCart))
+      })
+    })
+  })
 
   // TODO: coupon test
 

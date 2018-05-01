@@ -117,7 +117,7 @@ export default class Cart extends Component {
         </div>
         <div className={styles.row}>
           <span className={styles.info}>Total Pembayaran</span>
-          <span className={styles.amount}>
+          <span data-testid="cart-total" data-total={cart.totalPrice + (this.state.shippingCost || 0)} className={styles.amount}>
             {convertToMoneyFormat(
               cart.totalPrice + (this.state.shippingCost || 0),
               'NTD',
