@@ -6,7 +6,7 @@ import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
-import { List, ListItem, ListSubHeader } from 'react-toolbox/lib/list'
+import { List, ListItem } from 'react-toolbox/lib/list'
 
 //STYLES
 import styles from './css/index.scss'

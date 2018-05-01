@@ -7,9 +7,9 @@ import styles from './css/separator.scss'
 //COMPONENT
 export default class Pills extends Component {
   render() {
-    let { children } = this.props
+    let { children, className } = this.props
     return (
-      <div className={styles.container} >
+      <div className={`${className} ${styles.container}`} >
         <div className={styles.line1} /> 
         <span>{children}</span>
         <div className={styles.line2} /> 

@@ -3,10 +3,9 @@ import React, { Component, Fragment } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Link } from 'react-router-dom'
-import Slider from '../../components/Slider'
 
 //STYLES
 import styles from './css/index-product.scss'
@@ -16,6 +15,9 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import FlatButton from '../../components/FlatButton'
 import PrimaryButton from '../../components/PrimaryButton'
+import Slider from '../../components/Slider'
+import Card from '../../components/ProductCard'
+import Separator from '../../components/Separator'
 
 //STORE
 import { appStack, favorites, cart, snackbar } from '../../services/stores'
@@ -33,6 +35,9 @@ const convertToMoneyFormat = (num, currency) => {
   return `${currency} ${res}`
 }
 
+//CONSTS
+const MAX_FETCH_LENGTH = 5
+
 //COMPONENTs
 @observer
 class PromoDetail extends Component {
@@ -45,17 +50,87 @@ class PromoDetail extends Component {
     appStack.pop()
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.checkAllProductsChanges(nextProps)
+    this.checkThisProductChanges(nextProps)
+  }
+
+  checkSelectedChanges(nextProps) {
+    let isSelectedCurrent = nextProps.isSelected
+    let isSelectedBefore = this.props.isSelected
+
+    if (isSelectedCurrent != isSelectedBefore)
+      this.addScrollListener(isSelectedCurrent)
+  }
+
+  checkAllProductsChanges(nextProps) {
+    let { productRelationsQuery: { loading: newLoading, error: newError } } = nextProps
+    let { productRelationsQuery: { loading: curLoading } } = this.props
+
+    // console.log('TRIGGERED', nextProps)
+
+    if (curLoading !== newLoading && !newLoading && !newError) {
+      this.updateAndFetchMoreProductRelations(nextProps)
+    } else if (newError) {
+      //tokens.refetchAPIToken().then(() => window.location.reload())
+    }
+  }
+
+  updateAndFetchMoreProductRelations(nextProps) {
+    let productRelations = nextProps.productRelationsQuery.productRelations
+    let { offset } = this.state
+
+    if (!productRelations) return
+
+    let products = productRelations.map(({ product }) => {
+      if (product.images.length > 0)
+        return { ...product, image: product.images[0].url }
+    })
+
+    this.setState({
+      products: [...products],
+      offset: offset + MAX_FETCH_LENGTH,
+      isFetchDisabled: this.state.products.length === 5
+    }, () => console.log('UPDATE', this.state, products))
+  }
+
   componentDidMount() {
-    let product = this.props.productQuery.product
+    let { productQuery: { product } } = this.props
 
     if (product) this.setState({ variant: product.variants[0].name })
+    this.updateAndFetchMoreProductRelations(this.props)
+
+    this.before = this.current = document.documentElement.scrollTop
+    window.scrollTo(0, 0)
+    this.addScrollListener(this.props.isSelected)
+    this.checkScroll()
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.checkAllProductChanges(nextProps)
+  addScrollListener(isSelected) {
+    if (isSelected) {
+      window.addEventListener('scroll', this.checkScroll)
+      window.addEventListener('gesturechange', this.checkScroll)
+    } else {
+      window.removeEventListener('scroll', this.checkScroll)
+      window.removeEventListener('gesturechange', this.checkScroll)
+    }
   }
 
-  checkAllProductChanges(nextProps) {
+  checkScroll = () => {
+    let scrollPosition = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+    let pageHeight = document.body.scrollHeight
+    let screenHeight = document.body.offsetHeight
+    let { productRelationsQuery: { loading, refetch } } = this.props
+    let { offset } = this.state
+
+    if (loading) return
+    if (scrollPosition < pageHeight - screenHeight - screenHeight * .1) return
+    if (this.state.isFetchDisabled) return
+    if (appStack.isPopupActive) return
+    refetch({ limit: MAX_FETCH_LENGTH, offset })
+  }
+
+  checkThisProductChanges(nextProps) {
     let { productQuery: { loading: next, product } } = nextProps
     let { productQuery: { loading: cur } } = this.props
 
@@ -72,6 +147,9 @@ class PromoDetail extends Component {
     variant: null,
     stock: 0,
     isShareActive: false,
+    products: [],
+    offset: 0,
+    isFetchDisabled: false,
   }
 
   copy = () => {
@@ -163,6 +241,14 @@ class PromoDetail extends Component {
     )
   }
 
+  renderCards() {
+    let { products } = this.state
+
+    console.log(products)
+
+    return products.map((data, i) => <Card favorites={favorites} {...data} key={i} data={data} />)
+  }
+
   renderContent = () => {
     if (this.props.productQuery.loading)
       return (
@@ -174,7 +260,7 @@ class PromoDetail extends Component {
           />
         </div>
       )
-    
+
     let { name, images, id, price, variants, description, seller } = this.props.productQuery.product
     this.liked = false
     let fav = favorites.data.slice()
@@ -255,7 +341,7 @@ class PromoDetail extends Component {
                           icon={this.liked ? 'heart' : 'heart-outline'}
                           onClick={this.onLike}
                         >
-                          Suka 
+                          Suka
                         </FlatButton>
                         <Link to={{ pathname: '/chat/new', state: { productId: id } }}>
                           <FlatButton icon="forum">Chat</FlatButton>
@@ -311,6 +397,18 @@ class PromoDetail extends Component {
             </span>
           </div>
         </div>
+
+        <Separator className={styles.separator} >Produk Menarik Lainnya</Separator>
+        {this.renderCards()}
+        {
+          this.props.productRelationsQuery.loading
+            ? <ProgressBar
+              className={styles.loading}
+              type='circular' theme={ProgressBarTheme}
+              mode='indeterminate'
+            />
+            : ''
+        }
       </div>
     )
   }
@@ -367,13 +465,69 @@ query productQuery ($id: ID!) {
 }
 `
 
-export default graphql(
-  productQuery, {
-    name: 'productQuery',
-    options: props => {
-      return {
-        variables: { id: props.match.params.product_id }
+const productRelationsQuery = gql`
+query productRelationsQuery ($productId: ID!, $limit: Int) {
+  productRelations(productId: $productId, limit: $limit) {
+    product {
+      id,
+      name,
+      sku,
+      description,
+      images {
+        url,
+        priority
+      },
+      variants {
+        name,
+        quantity 
+      },
+      keywords,
+      category,
+      shipping {
+        length,
+        width,
+        height,
+        weight
+      },
+      seller {
+        name,
+        profilePicture,
+        country,
+      },
+      price {
+        value,
+        currency
+      },
+      country,
+      liked,
+      created,
+      updated
+    }
+    
+    count
+  }
+}
+`
+
+export default compose(
+  graphql(
+    productQuery, {
+      name: 'productQuery',
+      options: props => {
+        return {
+          variables: { id: props.match.params.product_id }
+        }
       }
     }
-  }
+  ),
+  graphql(
+    productRelationsQuery, {
+      name: 'productRelationsQuery',
+      options: props => {
+        return {
+          variables: { productId: props.match.params.product_id, limit: MAX_FETCH_LENGTH }
+        }
+      }
+    }
+  ),
 )(PromoDetail)
