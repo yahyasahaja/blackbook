@@ -13,6 +13,7 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import EditableList from '../../components/EditableList'
 import PrimaryButton from '../../components/PrimaryButton'
+import loadingTheme from '../Chat/css/loading-submit.scss'
 
 //STORE
 import { user, snackbar, appStack } from '../../services/stores'
@@ -51,7 +52,9 @@ class Auth extends Component {
             ? <img src={profilePictureURL} alt="Profile Picture" />
             : (
               <div className={styles['pic-loading']} >
-                <span>uploading...</span>
+                <div className={styles.loading}>
+                  <ProgressBar theme={loadingTheme} type="circular" mode="indeterminate" />
+                </div>
               </div>
             )
         }
@@ -63,6 +66,7 @@ class Auth extends Component {
             user.uploadProfilePicture(e.target.files || e.dataTransfer.files)
           }}
           accept=".jpg, .jpeg, .png"
+          disabled={user.isLoadingUploadProfilePic}
         />
       </label>
     )

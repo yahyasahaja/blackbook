@@ -2,7 +2,7 @@
 var doCache = self.location.hostname.indexOf('localhost') === -1
 
 // Name our cache
-var CACHE_NAME = 'hash-pwa-18'
+var CACHE_NAME = 'hash-pwa-21'
 
 // // Delete old caches that are not our current one!
 // self.addEventListener('activate', event => {
@@ -58,10 +58,20 @@ else
   finalHTMLLocation = htmlLocation
 
 //console.log(htmlLocation, hashedHTMLLocation)
+
+function checkRoute(path, router) {
+  if (path.indexOf(router) !== 0) return false
+
+  if (path.length > router.length) 
+    return path[router.length] === '/'
+
+  return true
+}
+
 function fetchData(event) {
   let path = new URL(event.request.url).pathname
   if (path.indexOf('/api') !== 0)
-    for (let i in routers) if (path.indexOf(routers[i]) === 0) {
+    for (let i in routers) if (checkRoute(path, routers[i])) {
       //console.log('DI FETCH', hashedHTMLLocation)
       return caches.match(finalHTMLLocation)
     }

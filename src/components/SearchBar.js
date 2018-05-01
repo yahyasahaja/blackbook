@@ -12,7 +12,7 @@ import Badge from '../components/Badge'
 import { badges } from '../services/stores'
 
 //COMPONENT
-export default class Home extends Component {
+export default class SearchBar extends Component {
   render() {
     let {cart} = this.props
     return (
