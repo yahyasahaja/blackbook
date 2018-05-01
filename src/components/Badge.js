@@ -17,7 +17,7 @@ class Badge extends Component {
     return (
       <div className={styles.container} >
         <span className={`mdi mdi-${icon} ${className}`} />
-        {badges.data[badge] ? <div className={styles.badge}>{badges.data[badge]}</div> : ''}
+        {badges.data[badge] ? <div data-testid="badge-count" className={styles.badge}>{badges.data[badge]}</div> : ''}
       </div>
     )
   }

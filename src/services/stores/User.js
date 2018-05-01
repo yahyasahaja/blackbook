@@ -124,6 +124,7 @@ class User {
 
       return false
     } catch (err) {
+      this.isLoadingLogin = false
       console.log('ERROR ON LOGGING IN', err)
       return false
     }

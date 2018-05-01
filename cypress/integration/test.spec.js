@@ -24,9 +24,15 @@ describe('Index page', () => {
     cy.url().should('include', '/account')
   })
 
-  it('Open chat page when click chat button if logged in', () => {
-    // cy.login()
+  it('Open chat page when click chat button if logged in', () => {    
+    cy.visit('/', {
+      onBeforeLoad: (win) => {
+        cy.spy(win, 'fetch')
+      }
+    })
+    cy.login()
     cy.get('a[href="/chat"]').click()
-    cy.url().should('include', '/account')
+    cy.wait(500)
+    cy.url().should('include', '/chat')
   })
 })

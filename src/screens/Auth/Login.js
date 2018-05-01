@@ -49,7 +49,7 @@ class Login extends Component {
 
     if (countryCode === null) return
     user.login(`${countryCode}${telp}`, password).then(token => {
-      if (!token) snackbar.show('Login failed')
+      if (!token) snackbar.show('Nomor telepon atau password anda salah!')
     })
   }
 

@@ -112,7 +112,7 @@ class Account extends Component {
             />
             <ListItem
               caption='Keluar'
-              className={styles.logout}
+              className={`${styles.logout} logout-button`}
               leftIcon={<span className="mdi mdi-logout-variant" />}
               onClick={() => dialog.show(
                 'Keluar',
