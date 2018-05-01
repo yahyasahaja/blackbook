@@ -28,6 +28,7 @@ export default class CartItem extends Component {
     } = this.props
     return (
       <div
+        data-testid="cart-item"
         onClick={() => {
           history.push(`/product/${id}`)
         }}
@@ -48,6 +49,7 @@ export default class CartItem extends Component {
         </div>
         <div className={styles.right}>
           <span
+            data-testid="remove-cart-item"
             onClick={(e) => {
               this.remove(index)
               if (!e) e = window.event

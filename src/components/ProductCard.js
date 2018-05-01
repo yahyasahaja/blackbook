@@ -112,6 +112,7 @@ class ProductCard extends Component {
     return (
       <div 
         className={styles.container} 
+        data-testid="product-card"
         onClick={() => this.props.history.push(`/product/${id}`)}
       >
         <div className={styles.picture}>
@@ -127,6 +128,7 @@ class ProductCard extends Component {
           </div>
 
           <div 
+            data-testid="product-card-action"
             className={styles.actions}
             onClick={e => e.stopPropagation()} 
           >

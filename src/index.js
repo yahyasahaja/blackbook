@@ -28,7 +28,7 @@ import registerServiceWorker from './registerServiceWorker'
 const contextTheme = theme
 
 axios.defaults.headers['Content-Type'] = 'application/json'
-axios.defaults.headers['Authorization'] = tokens.token
+if (tokens.token) axios.defaults.headers['Authorization'] = tokens.token
 
 @observer
 class App extends Component {

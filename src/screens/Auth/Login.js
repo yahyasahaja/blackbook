@@ -49,7 +49,7 @@ class Login extends Component {
 
     if (countryCode === null) return
     user.login(`${countryCode}${telp}`, password).then(token => {
-      if (!token) snackbar.show('Login failed')
+      if (!token) snackbar.show('Nomor telepon atau password anda salah!')
     })
   }
 
@@ -94,6 +94,7 @@ class Login extends Component {
         <form className={styles.form} onSubmit={this.onSubmit} >
           <div className={styles.handphone} >
             <Dropdown
+              className="country_code"
               onChange={this.handleChange.bind(this, 'countryCode')}
               source={countryCodes}
               value={this.state.countryCode}
@@ -103,6 +104,7 @@ class Login extends Component {
 
             <div className={styles.telp} >
               <Input
+                name="phone_number"
                 type="tel"
                 label="Nomor Telepon"
                 onChange={this.handleChange.bind(this, 'telp')}
@@ -114,6 +116,7 @@ class Login extends Component {
           </div>
 
           <Input
+            name="password"
             type="password"
             label="Password"
             onChange={this.handleChange.bind(this, 'password')}

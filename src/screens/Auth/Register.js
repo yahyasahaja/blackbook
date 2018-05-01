@@ -76,7 +76,7 @@ class Register extends Component {
       address, 
       country: countryCode === '886' ? 'TWN' : 'IDN'
     }).then(token => {
-      if (!token) snackbar.show('Registration failed')
+      if (!token) snackbar.show('Registrasi gagal!')
     })
   }
 
@@ -106,6 +106,7 @@ class Register extends Component {
 
         <form className={styles.form} onSubmit={this.onSubmit} >
           <Input
+            name="name"
             type="text"
             label="Nama"
             onChange={this.handleChange.bind(this, 'name')}
@@ -117,6 +118,7 @@ class Register extends Component {
           <div className={styles.handphone} >
             <Dropdown
               auto
+              className="country_code"
               onChange={this.handleChange.bind(this, 'countryCode')}
               source={countryCodes}
               value={this.state.countryCode}
@@ -126,6 +128,7 @@ class Register extends Component {
 
             <div className={styles.telp} >
               <Input
+                name="phone_number"
                 type="tel"
                 label="Nomor Telepon"
                 onChange={this.handleChange.bind(this, 'telp')}
@@ -137,6 +140,7 @@ class Register extends Component {
           </div>
 
           <Input
+            name="password"
             type="password"
             label="Password"
             onChange={this.handleChange.bind(this, 'password')}
@@ -146,6 +150,7 @@ class Register extends Component {
           />
 
           <Input
+            name="address"
             type="text"
             label="Alamat"
             onChange={this.handleChange.bind(this, 'address')}

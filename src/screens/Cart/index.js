@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
+import { observe } from 'mobx'
 import gql from 'graphql-tag'
 import Checkbox from 'react-toolbox/lib/checkbox'
 import Input from 'react-toolbox/lib/input/Input'
@@ -35,13 +36,19 @@ export default class Cart extends Component {
 
   componentDidMount() {
     this.calculateShippingCost()
+    this.disposer = observe(cart.data, () => {
+      this.calculateShippingCost()
+    })
   }
 
   componentWillUnmount() {
+    this.disposer()
     appStack.pop()
   }
 
   async calculateShippingCost() {
+    this.setState({ shippingCost: null })
+
     // CalcShippingCostTwnInput form
     const input = cart.data.slice().map(item => ({
       productId: item.product.id,
@@ -66,6 +73,7 @@ export default class Cart extends Component {
   renderProducts() {
     return (
       <div
+        data-testid="cart-list"
         className={`${styles.products} ${this.state.useVoucher &&
           styles.padded}`}
       >
@@ -98,10 +106,10 @@ export default class Cart extends Component {
 
   renderDetail() {
     return (
-      <div className={styles.detail}>
+      <div data-testid="cart-detail" className={styles.detail}>
         <div className={styles.row}>
           <span className={styles.info}>Ongkos Kirim</span>
-          <span className={styles.amount}>
+          <span data-testid="cart-shipping-cost" data-shipping-cost={this.state.shippingCost} className={styles.amount}>
             {this.state.shippingCost
               ? convertToMoneyFormat(this.state.shippingCost, 'NTD')
               : 'Menghitung ongkos kirim...'}
@@ -109,7 +117,7 @@ export default class Cart extends Component {
         </div>
         <div className={styles.row}>
           <span className={styles.info}>Total Pembayaran</span>
-          <span className={styles.amount}>
+          <span data-testid="cart-total" data-total={cart.totalPrice + (this.state.shippingCost || 0)} className={styles.amount}>
             {convertToMoneyFormat(
               cart.totalPrice + (this.state.shippingCost || 0),
               'NTD',
@@ -192,7 +200,7 @@ export default class Cart extends Component {
         </Dialog>
 
         {cart.data.length === 0 && (
-          <p className={styles.empty}>
+          <p data-testid="cart-message" className={styles.empty}>
             Keranjang belanja anda masih kosong
             <span className="mdi mdi-cart-outline" />
           </p>
