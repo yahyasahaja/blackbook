@@ -1,5 +1,6 @@
 describe('Index page', () => {
   it('Visits the home page', () => {
+    localStorage.clear()
     cy.visit('/')
     cy.url().should('include', '/home')
   })

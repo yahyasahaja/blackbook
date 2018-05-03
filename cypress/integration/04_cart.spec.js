@@ -6,11 +6,10 @@ Cypress.LocalStorage.clear = (keys) => {
   }
 }
 
-// clear local storage because we want to start fresh
-localStorage.clear()
-
 describe('Cart', () => {
   it('Can visit cart page', () => {
+    // clear local storage because we want to start fresh
+    localStorage.clear()
     cy.visit('/')
     cy.get('a[href="/cart"]').eq(1).click()
     cy.url().should('include', '/cart')
@@ -73,23 +72,43 @@ describe('Cart', () => {
   })
 
   it('Has correct total price', () => {
+    cy.server()
+    cy.route('POST', 'https://ordering-service-testing.azurewebsites.net/graphql').as('orderingRequest')
+
+    cy.visit('/cart', {
+      onBeforeLoad: (win) => {
+        win.fetch = null
+      }
+    })
+
     const cartData = localStorage.getItem('cart')
     const data = JSON.parse(cartData)
     const total = data.reduce((prev, val) => {
       return prev + val.amount * val.product.price.value
     }, 0)
 
-    cy.get('[data-testid="cart-total"]').then(el => {
-      const totalCart = el.data('total')
-
-      cy.get('[data-testid="cart-shipping-cost"]').then(el => {
-        const shippingCost = el.data('shipping-cost')
-
-        // console.log(total, shippingCost)
-        const sum = total + Number(shippingCost)
-        expect(sum).to.be.equals(Number(totalCart))
+    cy.wait('@orderingRequest').then(() => {
+      cy.wait(500)
+      cy.get('[data-testid=cart-shipping-cost]').then(shippingCostElement => {
+        cy.get('[data-testid="cart-total"]').then(totalElement => {
+          const totalCart = totalElement.text().replace('.', '').split(' ')[1]
+          const shippingCost = shippingCostElement.text().replace('.', '').split(' ')[1]
+          const sum = total + Number(shippingCost)
+          expect(sum).to.be.equals(Number(totalCart))
+        })
       })
     })
+  })
+
+  it('Refetch shipping cost when item removed', () => {
+    cy.visit('/cart', {
+      onBeforeLoad: (win) => {
+        cy.spy(win, 'fetch')
+      }
+    })
+
+    cy.get('span[data-testid="remove-cart-item"]').eq(2).click()
+    cy.window().its('fetch').should('be.calledWith', 'https://ordering-service-testing.azurewebsites.net/graphql')
   })
 
   // TODO: coupon test

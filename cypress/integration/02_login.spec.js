@@ -1,7 +1,8 @@
 export const AUTHORIZATION_TOKEN_STORAGE_URI = 'hashAuthToken'
 
-describe('Authentication', () => {
+describe('Authentication', () => {  
   it('Visits the login page', () => {
+    localStorage.clear()
     cy.visit('/')
 
     cy.url().should('include', '/home')
