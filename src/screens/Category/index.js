@@ -321,6 +321,7 @@ query allProducts(
       images {
         url
       }
+      shareUrl
     }
     totalCount
   }

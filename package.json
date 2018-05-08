@@ -87,7 +87,7 @@
     "dev-server": "NODE_ENV=development nodemon server/index.js --exec babel-node --watch server",
     "build-server": "babel server -d build-server",
     "test": "node scripts/test.js --env=jsdom",
-    "postinstall": "yarn build",
+    "postinstall": "npm build",
     "toolbox": "react-toolbox-themr"
   },
   "jest": {
@@ -132,6 +132,10 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "engines": {
+    "node": "8.11",
+    "npm": "5"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

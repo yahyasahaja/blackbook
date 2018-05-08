@@ -3,7 +3,7 @@ import React, { Component }  from 'react'
 import { observer } from 'mobx-react'
 
 //STYLES
-// import styles from './css/index.scss'
+import styles from './css/index.scss'
 
 //COMPONENTS
 import TopBar, { HIDE } from '../../components/TopBar'
@@ -17,6 +17,13 @@ import { favorites } from '../../services/stores'
 class Favorite extends Component {
   renderCards() {
     let fav = favorites.data
+
+    if (fav.length === 0) return (
+      <div className={styles.empty} >
+        Anda Belum Memiliki Barang Favorite
+      </div>
+    )
+
     return fav.map((data, i) => {
       return <Card {...data} data={data} key={i} />
     })
