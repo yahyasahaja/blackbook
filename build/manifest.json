@@ -1,0 +1,35 @@
+{
+  "name": "Blanja E-Commerce INI",
+  "short_name": "Blanja",
+  "icons": [
+    {
+      "src": "/static/icon/favicon.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "/static/icon/apple-touch-icon-152x152.png",
+      "type": "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "/static/icon/msapplication-icon-144x144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/static/icon/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/static/icon/"
+    }
+  ],
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#ea0f00",
+  "theme_color": "#ea0f00",
+  "gcm_sender_id_comment": "OneSignal WPN, Do Not Change ID",
+  "gcm_sender_id": "519393577988"
+}

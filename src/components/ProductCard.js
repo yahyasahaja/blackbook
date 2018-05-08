@@ -79,8 +79,7 @@ class ProductCard extends Component {
   }
 
   share = id => {
-    let { id: product_id } = this.props
-    let link = `${window.location.origin}/product/${product_id}`
+    let link = this.props.shareUrl
 
     window.open(
       id === 'twitter'
