@@ -227,8 +227,8 @@ class PromoDetail extends Component {
   }
 
   share = id => {
-    let { product_id } = this.props.match.params
-    let link = `${window.location.origin}/product/${product_id}`
+    let { shareUrl } = this.props.productQuery.product
+    let link = shareUrl
 
     window.open(
       id === 'twitter'
@@ -461,6 +461,7 @@ query productQuery ($id: ID!) {
     liked,
     created,
     updated
+    shareUrl
   }
 }
 `
@@ -501,7 +502,8 @@ query productRelationsQuery ($productId: ID!, $limit: Int) {
       country,
       liked,
       created,
-      updated
+      updated,
+      shareUrl,
     }
     
     count
