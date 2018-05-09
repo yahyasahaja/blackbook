@@ -19,6 +19,7 @@ import PrimaryButton from '../../components/PrimaryButton'
 //INNER_CONFIG
 let countryCodes = [
   { value: '886', label: '+886' },
+  { value: '852', label: '+852' },
   { value: '62', label: '+62' },
 ]
 
@@ -69,12 +70,14 @@ class Register extends Component {
       name,
     } = this.state
 
+    console.log(this.state)
+
     user.register({
       name, 
       msisdn: `${countryCode}${telp}`, 
       password, 
       address, 
-      country: countryCode === '886' ? 'TWN' : 'IDN'
+      country: countryCode === '886' ? 'TWN' : countryCode === '852' ? 'HKG' : 'IDN'
     }).then(token => {
       if (!token) snackbar.show('Registrasi gagal!')
     })

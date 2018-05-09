@@ -63,9 +63,11 @@ let BOTTOM_TAB_BAR_DATA = [
     else goOffline()
 
     // new message badge
-    navigator.serviceWorker.onmessage = (e) => {
-      if(e.type === 'message') {
-        badges.inc(badges.CHAT)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.onmessage = (e) => {
+        if(e.type === 'message') {
+          badges.inc(badges.CHAT)
+        }
       }
     }
   }

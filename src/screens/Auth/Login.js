@@ -19,6 +19,7 @@ import PrimaryButton from '../../components/PrimaryButton'
 //INNER_CONFIG
 let countryCodes = [
   { value: '886', label: '+886' },
+  { value: '852', label: '+852'},
   { value: '62', label: '+62' },
 ]
 

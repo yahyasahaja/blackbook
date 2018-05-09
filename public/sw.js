@@ -36,8 +36,6 @@ function registerCaches() {
       const urlsToCache = [
         '/static/css/style.css',
         '/manifest.json',
-        'https://cdn.materialdesignicons.com/2.1.19/css/materialdesignicons.min.css',
-        'https://fonts.googleapis.com/css?family=Raleway:300,400,500,700',
       ]
 
       cache.addAll(urlsToCache)
@@ -45,7 +43,7 @@ function registerCaches() {
     })
 }
 
-let routers = ['/home', '/promo', '/disukai', '/chat', '/account']
+let routers = ['/home', '/promo', '/favorite', '/chat', '/account']
 
 // When the webpage goes to fetch files, we intercept that request and serve up the matching files
 // if we have them
