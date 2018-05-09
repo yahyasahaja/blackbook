@@ -30,7 +30,7 @@ export default function register() {
       // serve assets see https://github.com/facebookincubator/create-react-app/issues/2374
       return
     }
-
+    console.log('service wroker', 'serviceWorker' in navigator)
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/sw.js`
 
