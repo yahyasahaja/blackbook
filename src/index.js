@@ -9,8 +9,6 @@ import { observer } from 'mobx-react'
 // OfflinePluginRuntime.install()
 import axios from 'axios'
 
-registerServiceWorker()
-
 //CSS
 import theme from './assets/theme/theme.js'
 import 'react-image-gallery/styles/css/image-gallery.css'
@@ -24,6 +22,8 @@ import { onlineStatus, snackbar, tokens } from './services/stores'
 
 //SERVICE_WORKER
 import registerServiceWorker from './registerServiceWorker'
+
+registerServiceWorker()
 
 const contextTheme = theme
 
