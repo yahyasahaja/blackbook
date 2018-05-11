@@ -11,7 +11,6 @@ import axios from 'axios'
 
 //CSS
 import theme from './assets/theme/theme.js'
-import 'react-image-gallery/styles/css/image-gallery.css'
 
 //ROUTER
 import AppRouter from './AppRouter'
