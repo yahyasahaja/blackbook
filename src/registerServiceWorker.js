@@ -100,6 +100,7 @@ function registerValidSW(swUrl) {
 }
 
 function subscribeRegistration(registration) {
+  if (!registration.pushManager) return
   registration.pushManager.getSubscription().then(async subscription => {
     try {
       if (!subscription)
