@@ -20,7 +20,10 @@ class Favorite extends Component {
 
     if (fav.length === 0) return (
       <div className={styles.empty} >
-        Anda Belum Memiliki Barang Favorite
+        <span className={`mdi mdi-heart ${styles.icon}`} />
+        <span className={styles.text} >
+          Anda belum memiliki barang favorite
+        </span>
       </div>
     )
 

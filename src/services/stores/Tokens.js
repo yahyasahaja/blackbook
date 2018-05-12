@@ -19,6 +19,8 @@ class Tokens {
     else
       this.refetchAPIToken()
 
+    this.setAuthToken()
+
     if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)))
       this.authToken = observable(authToken)
   }
@@ -36,7 +38,8 @@ class Tokens {
 
   @computed
   get rawToken() {
-    return this.authToken || this.apiToken
+    if (this.authToken == 'undefined' || this.authToken == 'null') return this.apiToken
+    return this.authToken
   }
 
   @action
@@ -47,6 +50,7 @@ class Tokens {
       let token = data.toString()
       localStorage.setItem(API_TOKEN_STORAGE_URI, token)
       this.apiToken = observable(token)
+      this.setAuthToken()
       return data
     }
 
@@ -55,7 +59,7 @@ class Tokens {
 
   @action
   setAuthToken(token) {
-    this.authToken = token
+    this.authToken = token || this.rawToken
     axios.defaults.headers['Authorization'] = `Bearer ${token}`
     localStorage.setItem(AUTHORIZATION_TOKEN_STORAGE_URI, token)
     return token

@@ -14,3 +14,20 @@
     padding: 10px;
   }
 }
+
+.empty {
+  font-size: 15pt;
+  opacity: .3;
+  font-weight: 300;
+  text-align: center;
+
+  .icon {
+    text-align: center;
+    font-size: 30pt;
+    margin-top: 30px;
+  }
+
+  .text {
+    display: block;
+  }
+}

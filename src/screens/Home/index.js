@@ -73,7 +73,7 @@ class Home extends Component {
         products: [...this.state.products, ...products],
         offset: offset + MAX_FETCH_LENGTH,
         isFetchDisabled: this.state.products.length === activePromoteds.totalCount
-      }, () => console.log('UPDATE', this.state, products))
+      })
     } else if (newError) {
       tokens.refetchAPIToken().then(() => window.location.reload())
     }

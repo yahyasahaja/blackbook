@@ -163,9 +163,7 @@ class User {
   }) => {
     let data = {}
     this.isLoadingUpdateProfile = true
-
-    console.log(password, country)
-
+    
     if (name) data.name = name
     if (msisdn) data.msisdn = msisdn
     if (password) data.password = password
@@ -174,9 +172,7 @@ class User {
     if (zip_code) data.zip_code = zip_code
     if (subscription) data.push_id = JSON.stringify(subscription)
     if (city) data.city = city
-
-    console.log(data)
-
+    
     return axios.post(getIAMEndpoint('/register'), data)
       .then(({ data: { is_ok, data: token } }) => {
         this.isLoadingUpdateProfile = false

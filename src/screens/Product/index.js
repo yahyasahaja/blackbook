@@ -91,7 +91,7 @@ class PromoDetail extends Component {
       products: [...products],
       offset: offset + MAX_FETCH_LENGTH,
       isFetchDisabled: this.state.products.length === 5
-    }, () => console.log('UPDATE', this.state, products))
+    })
   }
 
   componentDidMount() {
@@ -235,7 +235,7 @@ class PromoDetail extends Component {
         ? `https://twitter.com/share?url=${link}`
         : id === 'facebook'
           ? `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=Blanja`
-          : `http://pinterest.com/pin/create/button/?url=${link}`,
+          : `https://social-plugins.line.me/lineit/share?url=${link}`, 
       '',
       'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
     )
@@ -362,10 +362,10 @@ class PromoDetail extends Component {
                             href="javascript:void(0)"
                             className={`mdi mdi-twitter ${styles.icon} ${styles.twitter}`}
                           />
-                          <a
-                            onClick={this.share.bind(this, 'pinterest')}
-                            href="javascript:void(0)"
-                            className={`mdi mdi-pinterest ${styles.icon} ${styles.instagram}`}
+                          <img
+                            src="/static/icon/line.png" 
+                            onClick={this.share.bind(this, 'line')} 
+                            className={`mdi mdi-pinterest ${styles.icon}`}
                           />
                         </div>
                       </div>
