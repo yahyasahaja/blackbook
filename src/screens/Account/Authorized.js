@@ -7,7 +7,7 @@ import { observer } from 'mobx-react'
 import styles from './css/authorized.scss'
 
 //STORE
-import { user, dialog } from '../../services/stores'
+import { user, dialog, tokens } from '../../services/stores'
 
 //COMPONENT
 @observer

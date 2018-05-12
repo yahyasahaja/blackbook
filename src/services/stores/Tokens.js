@@ -38,7 +38,12 @@ class Tokens {
 
   @computed
   get rawToken() {
-    if (this.authToken == 'undefined' || this.authToken == 'null') return this.apiToken
+    if (
+      this.authToken === null ||
+      this.authToken == 'undefined' || 
+      this.authToken == 'null'
+    ) return this.apiToken
+    
     return this.authToken
   }
 

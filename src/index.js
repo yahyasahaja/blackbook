@@ -11,6 +11,7 @@ import axios from 'axios'
 
 //CSS
 import theme from './assets/theme/theme.js'
+import ProgressbarTheme from './assets/css/theme-progress-bar.scss'
 
 //ROUTER
 import AppRouter from './AppRouter'
@@ -32,7 +33,8 @@ if (tokens.token) axios.defaults.headers['Authorization'] = tokens.token
 @observer
 class App extends Component {
   render() {
-    if (!tokens.token)
+    console.log(tokens.rawToken)
+    if (!tokens.rawToken)
       return (
         <div
           style={{
@@ -43,10 +45,10 @@ class App extends Component {
             height: '100vh'
           }}
         >
-          <ProgressBar
-            type="circular"
-            mode="indeterminate"
-            multicolor="multicolor"
+          <ProgressBar 
+            theme={ProgressbarTheme} 
+            type="circular" 
+            mode="indeterminate" 
           />
         </div>
       )
