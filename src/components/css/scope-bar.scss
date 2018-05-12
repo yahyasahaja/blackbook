@@ -17,6 +17,7 @@
     border: none;
     transition: .3s;
     cursor: pointer;
+    margin: 0;
     
     &.selected {
       background: $primary-color;
