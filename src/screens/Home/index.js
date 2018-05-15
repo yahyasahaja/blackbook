@@ -280,6 +280,7 @@ query activePromoteds($limit: Int, $offset: Int) {
         images {
           url
         }
+        shareUrl
       }
     }
     totalCount

@@ -286,7 +286,7 @@ module.exports = {
       navigateFallbackWhitelist: [/^(?!\/__).*/],
       // Don't precache sourcemaps (they're large) and build asset manifest:
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
-      cacheId: 'blanja-hash-cra-v22',
+      cacheId: `blanja-hash-cra-v22 ${Date.now()}`,
 
     }),
     // Moment.js is an extremely popular library that bundles large locale files
