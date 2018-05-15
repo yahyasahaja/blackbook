@@ -30,7 +30,7 @@ export default function register() {
       // serve assets see https://github.com/facebookincubator/create-react-app/issues/2374
       return
     }
-    console.log('service wroker', 'serviceWorker' in navigator)
+    
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/sw.js`
 
@@ -62,7 +62,7 @@ function registerValidSW(swUrl) {
         const installingWorker = registration.installing
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
-            console.log(installingWorker.state)
+            // console.log(installingWorker.state)
             if (navigator.serviceWorker.controller) {
               // At this point, the old content will have been purged and
               // the fresh content will have been added to the cache.

@@ -1,9 +1,12 @@
 // Set this to true for production
-var doCache = self.location.hostname.indexOf('localhost') === -1
+var doCache = self.location.hostname.indexOf('localhost') === -1 || true
+
+importScripts('/service-worker.js')
 
 // Name our cache
-var CACHE_NAME = 'hash-pwa-22'
-
+var cn = cacheName
+var CACHE_NAME = 'hash-pwa-22' + cn.substring(cn.indexOf(':')+1,cn.indexOf(';'))
+console.log(CACHE_NAME)
 // // Delete old caches that are not our current one!
 // self.addEventListener('activate', event => {
 //   event.waitUntil(checkAndDeleteOlderCaches())
@@ -22,7 +25,6 @@ var CACHE_NAME = 'hash-pwa-22'
 //     )
 // }
  
-importScripts('/service-worker.js')
 //The first time the user starts up the PWA, 'install' is triggered.
 self.addEventListener('install', function (event) {
   if (doCache) event.waitUntil(registerCaches())
