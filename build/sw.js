@@ -1,5 +1,5 @@
 // Set this to true for production
-var doCache = self.location.hostname.indexOf('localhost') === -1 || true
+var doCache = self.location.hostname.indexOf('localhost') === -1
 
 importScripts('/service-worker.js')
 
