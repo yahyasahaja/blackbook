@@ -19,10 +19,10 @@ class Tokens {
     else
       this.refetchAPIToken()
 
-    this.setAuthToken()
-
-    if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)))
+    if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI))) {
       this.authToken = observable(authToken)
+      this.setAuthToken(authToken)
+    } else this.setAuthToken()
   }
 
   //THIS MUST BE RAW TOKEN, NO BEARER!
@@ -65,9 +65,10 @@ class Tokens {
   @action
   setAuthToken(token) {
     this.authToken = token || this.rawToken
-    axios.defaults.headers['Authorization'] = `Bearer ${token}`
-    localStorage.setItem(AUTHORIZATION_TOKEN_STORAGE_URI, token)
-    return token
+    
+    localStorage.setItem(AUTHORIZATION_TOKEN_STORAGE_URI, this.authToken)
+    axios.defaults.headers['Authorization'] = `Bearer ${this.authToken}`
+    return this.authToken
   }
 
   @action

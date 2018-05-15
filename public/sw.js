@@ -2,7 +2,7 @@
 var doCache = self.location.hostname.indexOf('localhost') === -1
 
 // Name our cache
-var CACHE_NAME = 'hash-pwa-21'
+var CACHE_NAME = 'hash-pwa-22'
 
 // // Delete old caches that are not our current one!
 // self.addEventListener('activate', event => {

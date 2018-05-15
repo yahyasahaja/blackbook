@@ -32,6 +32,7 @@ class User {
   @observable isLoadingUpdatePassword
   @observable isLoadingLogin
   @observable isLoadingUploadProfilePic
+  @observable isLoadingSendingOTP
 
   @action
   setData = data => {
@@ -184,6 +185,34 @@ class User {
 
         return false
       })
+  }
+
+  @action
+  sendOTP = async msisdn => {
+    try {
+      this.isLoadingSendingOTP = true
+      let res = await axios.post(getIAMEndpoint(`/otp-sms/${msisdn}`))
+      this.isLoadingSendingOTP = false
+
+      return res
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  @action
+  confirmOTP = async (msisdn, otp, secret) => {
+    try {
+      this.isLoadingSendingOTP = true
+      let { data: { is_ok }} = await axios.post(getIAMEndpoint(`/otp-sms/${msisdn}`), {
+        secret, otp
+      })
+      this.isLoadingSendingOTP = false
+
+      return is_ok
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   @action

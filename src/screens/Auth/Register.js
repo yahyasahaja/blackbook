@@ -4,7 +4,9 @@ import Input from 'react-toolbox/lib/input/Input'
 import Dropdown from 'react-toolbox/lib/dropdown'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
+import { observable, computed, action } from 'mobx'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
+import Dialog from 'react-toolbox/lib/dialog'
 
 //STYLES 
 import styles from './css/register.scss'
@@ -36,11 +38,15 @@ class Register extends Component {
 
   componentWillUnmount() {
     appStack.pop()
+    this.isUnmounted = true
   }
 
   componentDidMount() {
     this.props.setTitle('Daftar')
   }
+
+  isUnmounted = false
+  DEFAULT_COUNT = 5
 
   state = {
     countryCode: '886',
@@ -49,34 +55,149 @@ class Register extends Component {
     address: '',
     name: '',
     gender: '',
+    otp: '',
+    otp_error: ''
+  }
+
+  @observable otpModalActive = false
+  @observable otpConfirmationActions = [
+    {
+      label: 'Kirim Ulang', onClick: () => {
+        this.toggleActive()
+      },
+      disabled: false
+    },
+    {
+      label: 'Konfirmasi', onClick: () => {
+        this.toggleActive()
+      }
+    },
+  ]
+  @observable count = this.DEFAULT_COUNT
+  @observable secret = ''
+  
+  @computed
+  get msisdn() {
+    let { countryCode, telp } = this.state
+    return `${countryCode}${telp}`
+  }
+
+  @computed
+  get canResend() {
+    return this.count <= 0
+  }
+
+  @action
+  decreaseCount() {
+    if (this.canResend) {
+      this.otpConfirmationActions = observable([
+        {
+          label: 'Kirim Ulang', onClick: this.onResendClicked,
+          disabled: false
+        },
+        {
+          label: 'Konfirmasi', onClick: this.onConfirmClicked
+        },
+      ])
+
+      if (this.intervalId !== null) clearInterval(this.intervalId)
+      this.intervalId = null
+
+      return
+    }
+
+    this.otpConfirmationActions = observable([
+      {
+        label: `Kirim Ulang (${--this.count})`, onClick: this.onResendClicked,
+        disabled: true
+      },
+      {
+        label: 'Konfirmasi', onClick: this.onConfirmClicked
+      },
+    ])
+  }
+
+  onResendClicked = () => {
+    this.sendOtp()
+  }
+
+  onConfirmClicked = async () => {
+    let is_ok = await user.confirmOTP(this.msisdn, this.state.otp, this.secret)
+
+    if (!is_ok) {
+      this.setState({otp_error: 'Kode konfirmasi tidak valid'})
+      return snackbar.show('Kode konfirmasi tidak valid')
+    }
+    
+    this.register()
+  }
+
+  @action
+  resetCount() {
+    this.count = this.DEFAULT_COUNT
+  }
+
+  @action
+  showConfirmationModal() {
+    this.otpModalActive = true
+  }
+
+  toggleActiveConfirmationModal = () => {
+    this.otpModalActive = !this.otpModalActive
   }
 
   handleChange(name, value) {
     if (name === 'telp')
-      if (value[0] === '0') 
+      if (value[0] === '0')
         value = value.split('').slice(1).join('')
 
-    this.setState({ [name]: value })
+    this.setState({ [name]: value, [`${name}_error`]: '' })
   }
 
-  onSubmit = e => {
+  onSubmit = async e => {
     e.preventDefault()
     e.stopPropagation()
+
+    await this.sendOtp()
+    this.showConfirmationModal()
+  }
+
+  intervalId = null
+
+  @action
+  async sendOtp() {
+    this.resetCount()
+    let { data } = await user.sendOTP(this.msisdn)
+
+    if (!data) return
+    let { is_ok, data: secret } = data
+
+    if (!is_ok) return snackbar.show('Gagal mengirimkan kode OTP')
+
+    this.secret = secret
+
+    this.intervalId = setInterval(() => {
+      if (!this.isUnmounted) {
+        this.decreaseCount()
+      }
+    }, 1000)
+  }
+
+  register() {
     let {
       countryCode,
-      telp,
       password,
       address,
       name,
     } = this.state
 
-    console.log(this.state)
-
+    let { msisdn } = this
+    
     user.register({
-      name, 
-      msisdn: `${countryCode}${telp}`, 
-      password, 
-      address, 
+      name,
+      msisdn,
+      password,
+      address,
       country: countryCode === '886' ? 'TWN' : countryCode === '852' ? 'HKG' : 'IDN'
     }).then(token => {
       if (!token) snackbar.show('Registrasi gagal!')
@@ -84,7 +205,7 @@ class Register extends Component {
   }
 
   renderButton() {
-    if (user.isLoadingUpdateProfile) return (
+    if (user.isLoadingUpdateProfile || user.isLoadingSendingOTP) return (
       <div className={styles['loading-wrapper']} >
         <ProgressBar
           className={styles.loading}
@@ -168,6 +289,42 @@ class Register extends Component {
           <span className={styles.ref} >
             Sudah memiliki akun? <Link to="/auth/login" >Login disini</Link>
           </span>
+
+          <Dialog
+            actions={
+              !user.isLoadingSendingOTP
+                ? this.otpConfirmationActions.slice()
+                : []
+            }
+            active={this.otpModalActive}
+            title="Konfirmasi OTP"
+          >
+            {
+              user.isLoadingSendingOTP
+                ? (
+                  <div className={styles['loading-wrapper']} >
+                    <ProgressBar
+                      className={styles.loading}
+                      type='circular'
+                      mode='indeterminate' theme={ProgressBarTheme}
+                    />
+                  </div>
+                )
+                : (
+                  <div className={styles.modal} >
+                    <Input
+                      name="otp"
+                      type="text"
+                      label="Nomor OTP"
+                      onChange={this.handleChange.bind(this, 'otp')}
+                      value={this.state.otp}
+                      theme={theme}
+                      error={this.state.otp_error}
+                    />
+                  </div>
+                )
+            }
+          </Dialog>
         </form>
       </div>
     )

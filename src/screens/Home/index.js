@@ -226,7 +226,7 @@ class Home extends Component {
         isSelected={this.props.isSelected}
         style={{ background: 'rgb(239, 239, 239)' }}
         wrapperStyle={{ padding: 0 }}
-      > 
+      >
         <div
           style={style}
         >

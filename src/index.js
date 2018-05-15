@@ -33,7 +33,7 @@ if (tokens.token) axios.defaults.headers['Authorization'] = tokens.token
 @observer
 class App extends Component {
   render() {
-    console.log(tokens.rawToken)
+    // console.log(tokens.rawToken)
     if (!tokens.rawToken)
       return (
         <div
