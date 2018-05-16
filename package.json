@@ -87,7 +87,7 @@
     "dev-server": "NODE_ENV=development nodemon server/index.js --exec babel-node --watch server",
     "build-server": "babel server -d build-server",
     "test": "node scripts/test.js --env=jsdom",
-    "postinstall": "npm build",
+    "postinstall": "npm run build",
     "toolbox": "react-toolbox-themr"
   },
   "jest": {
@@ -152,6 +152,7 @@
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
     "react-toolbox-themr": "^1.0.2",
+    "replace-in-file-webpack-plugin": "^1.0.5",
     "sass-loader": "^6.0.6"
   }
 }

@@ -12,6 +12,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
 const paths = require('./paths')
 const getClientEnvironment = require('./env')
+const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -198,6 +199,14 @@ module.exports = {
     ],
   },
   plugins: [
+    new ReplaceInFileWebpackPlugin([{
+      dir: 'build',
+      files: ['sw.js'],
+      rules: [{
+        search: 'build_cache_name',
+        replace: Date.now() + '-'
+      }]
+    }]),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
