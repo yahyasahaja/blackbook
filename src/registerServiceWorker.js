@@ -73,7 +73,7 @@ function registerValidSW(swUrl) {
               // It's the perfect time to display a "New content is
               // available please refresh." message in your web app.
               console.log('there is an update, we are reloading')
-              window.location.reload()
+              setTimeout(() => window.location.reload(), 5000)
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
