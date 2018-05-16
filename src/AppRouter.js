@@ -70,6 +70,8 @@ let BOTTOM_TAB_BAR_DATA = [
         }
       }
     }
+
+    console.log('TEST UPDATE V1')
   }
 
   closeSnackbar = () => {
