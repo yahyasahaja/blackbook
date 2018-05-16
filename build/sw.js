@@ -4,7 +4,7 @@ var doCache = self.location.hostname.indexOf('localhost') === -1
 importScripts('/service-worker.js')
 
 // Name our cache
-var CACHE_NAME = '1526461283377-' + 'buyer-pwa-' + cn.substring(cn.indexOf(':')+1,cn.indexOf(';'))
+var CACHE_NAME = '1526461950861-' + 'buyer-pwa-' + cn.substring(cn.indexOf(':')+1,cn.indexOf(';'))
 console.log(CACHE_NAME)
 // // Delete old caches that are not our current one!
 // self.addEventListener('activate', event => {
