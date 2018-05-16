@@ -5,7 +5,7 @@ importScripts('/service-worker.js')
 
 // Name our cache
 var cn = cacheName
-var CACHE_NAME = 'hash-pwa-22' + cn.substring(cn.indexOf(':')+1,cn.indexOf(';'))
+var CACHE_NAME = 'buyer-pwa-' + cn.substring(cn.indexOf(':')+1,cn.indexOf(';'))
 console.log(CACHE_NAME)
 // // Delete old caches that are not our current one!
 // self.addEventListener('activate', event => {
