@@ -55,19 +55,24 @@ export default function register() {
 }
 
 function registerValidSW(swUrl) {
+  console.log('registering service worker')
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
+      console.log('successful registration')
       registration.onupdatefound = () => {
+        console.log('update found')
         const installingWorker = registration.installing
         installingWorker.onstatechange = () => {
+          console.log('state changed')
           if (installingWorker.state === 'installed') {
-            // console.log(installingWorker.state)
+            console.log(navigator.serviceWorker.controller)
             if (navigator.serviceWorker.controller) {
               // At this point, the old content will have been purged and
               // the fresh content will have been added to the cache.
               // It's the perfect time to display a "New content is
               // available please refresh." message in your web app.
+              console.log('there is an update, we are reloading')
               window.location.reload()
             } else {
               // At this point, everything has been precached.
