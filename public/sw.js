@@ -7,23 +7,23 @@ importScripts('/service-worker.js')
 var CACHE_NAME = 'build_cache_name' + 'buyer-pwa'
 console.log(CACHE_NAME)
 // // Delete old caches that are not our current one!
-self.addEventListener('activate', event => {
-  if (doCache)
-    event.waitUntil(checkAndDeleteOlderCaches())
-})
+// self.addEventListener('activate', event => {
+//   if (doCache)
+//     event.waitUntil(checkAndDeleteOlderCaches())
+// })
 
-function checkAndDeleteOlderCaches() {
-  const cacheWhitelist = [CACHE_NAME, cacheName]
-  caches.keys()
-    .then(keyList =>
-      Promise.all(keyList.map(key => {
-        if (!cacheWhitelist.includes(key)) {
-          console.log('Deleting cache: ' + key)
-          return caches.delete(key)
-        }
-      }))
-    )
-}
+// function checkAndDeleteOlderCaches() {
+//   const cacheWhitelist = [CACHE_NAME, cacheName]
+//   caches.keys()
+//     .then(keyList =>
+//       Promise.all(keyList.map(key => {
+//         if (!cacheWhitelist.includes(key)) {
+//           console.log('Deleting cache: ' + key)
+//           return caches.delete(key)
+//         }
+//       }))
+//     )
+// }
 
 //The first time the user starts up the PWA, 'install' is triggered.
 self.addEventListener('install', function (event) {
