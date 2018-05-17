@@ -27,7 +27,7 @@ console.log(CACHE_NAME)
 
 //The first time the user starts up the PWA, 'install' is triggered.
 self.addEventListener('install', function (event) {
-  if (doCache) event.waitUntil(registerCaches())
+  if (doCache) return event.waitUntil(registerCaches())
 })
 
 function registerCaches() {
@@ -113,6 +113,7 @@ function isPublicPath(path) {
 function fetchData(event) {
   let url = event.request.url
   let path = new URL(url).pathname
+  return fetch(event.request)
   // if (path.indexOf('/sw.js') === 0 || path.indexOf('/service-worker.js') === 0) return fetch(event.request)
 
   if (!isAPI(url) && !isPublicPath(path))
@@ -141,7 +142,7 @@ function fetchData(event) {
 }
 
 self.addEventListener('fetch', function (event) {
-  if (doCache) event.respondWith(fetchData(event))
+  if (doCache) return event.respondWith(fetchData(event))
 })
 
 // self.addEventListener('push', function(event) {
