@@ -1,7 +1,7 @@
 // Set this to true for production
 var doCache = self.location.hostname.indexOf('localhost') === -1
 
-importScripts('/service-worker.js')
+// importScripts('/service-worker.js')
 
 // Name our cache
 var CACHE_NAME = 'build_cache_name' + 'buyer-pwa'
@@ -113,7 +113,7 @@ function isPublicPath(path) {
 function fetchData(event) {
   let url = event.request.url
   let path = new URL(url).pathname
-  return fetch(event.request)
+  
   // if (path.indexOf('/sw.js') === 0 || path.indexOf('/service-worker.js') === 0) return fetch(event.request)
 
   if (!isAPI(url) && !isPublicPath(path))
