@@ -45,7 +45,24 @@ function registerCaches() {
     })
 }
 
-let routers = ['/home', '/promo', '/favorite', '/chat', '/account']
+var urlConfig = {
+  prod: {
+    iam : 'https://api.blanja.tw/iam',
+    productql : 'https://api.blanja.tw/productql',
+    orderql : 'https://api.blanja.tw/orderql',
+    chatql : 'https://api.blanja.tw/chatql',
+    userql : 'https://api.blanja.tw/userql',
+  },
+  dev: {
+    productql: 'https://product-hub-testing.azurewebsites.net/graphql',
+    orderql : 'https://ordering-service-testing.azurewebsites.net/graphql',
+    iam : 'https://iam-message-testing.azurewebsites.net',
+    chatql : 'https://iam-message-testing.azurewebsites.net/chatql',
+    userql :' https://iam-message-testing.azurewebsites.net/userql',
+  }
+}
+
+let routers = ['/category', '/product', '/home', '/promo', '/favorite', '/chat', '/account']
 
 // When the webpage goes to fetch files, we intercept that request and serve up the matching files
 // if we have them
@@ -59,18 +76,44 @@ else
 
 //console.log(htmlLocation, hashedHTMLLocation)
 
+var publicPath = [
+  '/static',
+  '/favicon.ico',
+  '/manifest.json',
+  '/sw.js',
+  '/web.config',
+  '/service-worker.js',
+  '/asset-manifest.json',
+]
+
 function checkRoute(path, router) {
   if (path.indexOf(router) !== 0) return false
 
   if (path.length > router.length)
     return path[router.length] === '/'
 
+  
   return true
 }
 
+function isAPI(url) {
+  for (var i in urlConfig) for (var j in urlConfig[i]) if (url === urlConfig[i][j]) {
+    console.log(url, ' is public path')
+    return true
+  }
+}
+
+function isPublicPath(path) {
+  for (var p of publicPath) if (path.indexOf(p) === 0) {
+    console.log(path, ' is public path')
+    return true
+  }
+}
+
 function fetchData(event) {
-  let path = new URL(event.request.url).pathname
-  if (path.indexOf('/api') !== 0)
+  let url = event.request.url
+  let path = new URL(url).pathname
+  if (!isAPI(url) && !isPublicPath(path))
     for (let i in routers) if (checkRoute(path, routers[i])) {
       //console.log('DI FETCH', hashedHTMLLocation)
       return caches.match(finalHTMLLocation)
