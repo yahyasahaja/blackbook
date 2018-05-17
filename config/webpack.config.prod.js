@@ -293,10 +293,18 @@ module.exports = {
       // Ignores URLs starting from /__ (useful for Firebase):
       // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
       navigateFallbackWhitelist: [/^(?!\/__).*/],
+      mergeStaticsConfig: true,
+      stripPrefix: 'build',
+      staticFileGlobs: [
+        'build/manifest.json',
+        'build/static/css/style.css',
+      ],
       // Don't precache sourcemaps (they're large) and build asset manifest:
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
       cacheId: `blanja-hash-cra:${Date.now()};`,
-
+      importScripts: [
+        '/sw.js',
+      ]
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
