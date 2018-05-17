@@ -12,12 +12,18 @@ import loadingTheme from './css/loading-submit.scss'
 
 @observer 
 class Threads extends Component {
+  componentWillMount() {
+    if(!user.isLoggedIn) {
+      return this.props.history.replace('/account')
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if(nextProps.isSelected && !user.isLoggedIn) {
       return this.props.history.replace('/account')
     }
 
-    if(onlineStatus.isOnline) this.props.data.refetch()
+    if(onlineStatus.isOnline && this.props.data.refetch) this.props.data.refetch()
   }
 
   componentDidMount() {
@@ -103,6 +109,7 @@ const getThreadsQuery = gql`
 `
 
 export default graphql(getThreadsQuery, {
+  skip: () => !user.isLoggedIn,
   options: {
     client,
   },
