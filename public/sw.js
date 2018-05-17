@@ -98,7 +98,7 @@ function checkRoute(path, router) {
 
 function isAPI(url) {
   for (var i in urlConfig) for (var j in urlConfig[i]) if (url === urlConfig[i][j]) {
-    console.log(url, ' is public path')
+    console.log(url, ' is public url')
     return true
   }
 }
