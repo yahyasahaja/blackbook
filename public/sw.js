@@ -113,12 +113,14 @@ function isPublicPath(path) {
 function fetchData(event) {
   let url = event.request.url
   let path = new URL(url).pathname
+  if (path.indexOf('/sw.js') === 0 || path.indexOf('/service-worker.js') === 0) return fetch(event.request)
+
   if (!isAPI(url) && !isPublicPath(path))
     for (let i in routers) if (checkRoute(path, routers[i])) {
       //console.log('DI FETCH', hashedHTMLLocation)
       return caches.match(finalHTMLLocation)
     }
-
+  
   return caches.match(event.request).then(function (response) {
     //response can be undefined if no cache found
     // if (response) {
