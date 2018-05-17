@@ -8,7 +8,8 @@ var CACHE_NAME = 'build_cache_name' + 'buyer-pwa'
 console.log(CACHE_NAME)
 // // Delete old caches that are not our current one!
 self.addEventListener('activate', event => {
-  event.waitUntil(checkAndDeleteOlderCaches())
+  if (doCache)
+    event.waitUntil(checkAndDeleteOlderCaches())
 })
 
 function checkAndDeleteOlderCaches() {
@@ -23,7 +24,7 @@ function checkAndDeleteOlderCaches() {
       }))
     )
 }
- 
+
 //The first time the user starts up the PWA, 'install' is triggered.
 self.addEventListener('install', function (event) {
   if (doCache) event.waitUntil(registerCaches())
@@ -51,9 +52,9 @@ let routers = ['/home', '/promo', '/favorite', '/chat', '/account']
 let htmlLocation = new URL('index.html', self.location).toString()
 var finalHTMLLocation
 
-if (doCache) 
+if (doCache)
   finalHTMLLocation = urlsToCacheKeys.get(htmlLocation)
-else 
+else
   finalHTMLLocation = htmlLocation
 
 //console.log(htmlLocation, hashedHTMLLocation)
@@ -61,7 +62,7 @@ else
 function checkRoute(path, router) {
   if (path.indexOf(router) !== 0) return false
 
-  if (path.length > router.length) 
+  if (path.length > router.length)
     return path[router.length] === '/'
 
   return true
@@ -127,10 +128,10 @@ self.addEventListener('push', function (event) {
   //     },
   //   ]
   // }
-  
+
   //console.log(event)
   let context = {}
-  
+
   if (event.data) {
     try {
       context = JSON.parse(event.data.text())
