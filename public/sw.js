@@ -1,10 +1,8 @@
 // Set this to true for production
 var doCache = self.location.hostname.indexOf('localhost') === -1
 
-importScripts('/service-worker.js')
-
 // Name our cache
-var CACHE_NAME = 'build_cache_name' + 'buyer-pwa-'
+var CACHE_NAME = 'build_cache_name' + 'buyer-pwa'
 console.log(CACHE_NAME)
 // // Delete old caches that are not our current one!
 // self.addEventListener('activate', event => {
@@ -46,6 +44,7 @@ function registerCaches() {
 
 let routers = ['/home', '/promo', '/favorite', '/chat', '/account']
 
+importScripts('/service-worker.js')
 // When the webpage goes to fetch files, we intercept that request and serve up the matching files
 // if we have them
 let htmlLocation = new URL('index.html', self.location).toString()
