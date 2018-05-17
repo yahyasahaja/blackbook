@@ -113,7 +113,7 @@ function isPublicPath(path) {
 function fetchData(event) {
   let url = event.request.url
   let path = new URL(url).pathname
-  if (path.indexOf('/sw.js') === 0 || path.indexOf('/service-worker.js') === 0) return fetch(event.request)
+  // if (path.indexOf('/sw.js') === 0 || path.indexOf('/service-worker.js') === 0) return fetch(event.request)
 
   if (!isAPI(url) && !isPublicPath(path))
     for (let i in routers) if (checkRoute(path, routers[i])) {
