@@ -15,6 +15,7 @@ pipelines:
           - npm run build
           - cd build
           - zip -r ../zipfile.zip .
+          - cd ..
           - curl -X POST -u $AzureCredUser:$AzureCredPass --data-binary @"zipfile.zip" https://buyer-ui-testing.scm.azurewebsites.net/api/zipdeploy
           - curl -X POST -u $AzureCredUser:$AzureCredPass --data-binary @"zipfile.zip" https://buyer-ui-staging.scm.azurewebsites.net/api/zipdeploy
           - curl -X POST -u $AzureCredUser:$AzureCredPass --data-binary @"zipfile.zip" https://buyer-ui-deploy.scm.azurewebsites.net/api/zipdeploy
