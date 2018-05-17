@@ -14,12 +14,12 @@ export const IAM_ENDPOINT_URL = isProd ? prodSetup.iam : 'https://iam-message-te
 export const CHAT_ENDPOINT_URL = isProd ? prodSetup.chatql : 'https://iam-message-testing.azurewebsites.net/chatql'
 export const USER_ENDPOINT_URL = isProd ? prodSetup.userql :' https://iam-message-testing.azurewebsites.net/userql'
 
-let getIAMEndpoint = params => `${IAM_ENDPOINT_URL}${params || ''}`
+export const getIAMEndpoint = params => `${IAM_ENDPOINT_URL}${params || ''}`
 
-let API_TOKEN_STORAGE_URI = 'hashAPIToken'
-let AUTHORIZATION_TOKEN_STORAGE_URI = 'hashAuthToken'
+export const API_TOKEN_STORAGE_URI = 'hashAPIToken'
+export const AUTHORIZATION_TOKEN_STORAGE_URI = 'hashAuthToken'
 
-let CART_STORAGE_URI = 'cart'
+export const CART_STORAGE_URI = 'cart'
 
 export default {
   PRODUCTS_ENDPOINT_URL,
