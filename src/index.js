@@ -21,9 +21,9 @@ import client from './services/graphql/productClient'
 import { onlineStatus, snackbar, tokens } from './services/stores'
 
 //SERVICE_WORKER
-import registerServiceWorker from './registerServiceWorker'
+// import registerServiceWorker from './registerServiceWorker'
 
-registerServiceWorker()
+// registerServiceWorker()
 
 const contextTheme = theme
 
