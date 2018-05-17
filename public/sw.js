@@ -1,26 +1,28 @@
 // Set this to true for production
 var doCache = self.location.hostname.indexOf('localhost') === -1
 
+importScripts('/service-worker.js')
+
 // Name our cache
 var CACHE_NAME = 'build_cache_name' + 'buyer-pwa'
 console.log(CACHE_NAME)
 // // Delete old caches that are not our current one!
-// self.addEventListener('activate', event => {
-//   event.waitUntil(checkAndDeleteOlderCaches())
-// })
+self.addEventListener('activate', event => {
+  event.waitUntil(checkAndDeleteOlderCaches())
+})
 
-// function checkAndDeleteOlderCaches() {
-//   const cacheWhitelist = [CACHE_NAME]
-//   caches.keys()
-//     .then(keyList =>
-//       Promise.all(keyList.map(key => {
-//         if (!cacheWhitelist.includes(key)) {
-//           console.log('Deleting cache: ' + key)
-//           return caches.delete(key)
-//         }
-//       }))
-//     )
-// }
+function checkAndDeleteOlderCaches() {
+  const cacheWhitelist = [CACHE_NAME, cacheName]
+  caches.keys()
+    .then(keyList =>
+      Promise.all(keyList.map(key => {
+        if (!cacheWhitelist.includes(key)) {
+          console.log('Deleting cache: ' + key)
+          return caches.delete(key)
+        }
+      }))
+    )
+}
  
 //The first time the user starts up the PWA, 'install' is triggered.
 self.addEventListener('install', function (event) {
@@ -44,7 +46,6 @@ function registerCaches() {
 
 let routers = ['/home', '/promo', '/favorite', '/chat', '/account']
 
-importScripts('/service-worker.js')
 // When the webpage goes to fetch files, we intercept that request and serve up the matching files
 // if we have them
 let htmlLocation = new URL('index.html', self.location).toString()
