@@ -91,6 +91,7 @@ class Process extends Component {
     return (
       <div className={styles.section}>
         <Dropdown
+          className="address-dropdown"
           label="ALAMAT"
           onChange={value => {
             cart.address = value
@@ -103,6 +104,7 @@ class Process extends Component {
         {cart.address === 'new' && (
           <Fragment>
             <Input
+              name="new-address"
               theme={{ ...theme, ...inputTheme }}
               type="text"
               hint="Alamat Pengiriman"
@@ -114,6 +116,7 @@ class Process extends Component {
               }}
             />
             <Input
+              name="new-city"
               theme={{ ...theme, ...inputTheme }}
               type="text"
               hint="Kota Pengiriman"
@@ -124,6 +127,7 @@ class Process extends Component {
               }}
             />
             <Input
+              name="new-zipcode"
               theme={{ ...theme, ...inputTheme }}
               type="text"
               hint="Kode Pos Pengiriman"
@@ -134,6 +138,7 @@ class Process extends Component {
               }}
             />
             <Input
+              name="new-country"
               theme={{ ...theme, ...inputTheme }}
               type="text"
               hint="Negara Pengiriman"
@@ -142,7 +147,7 @@ class Process extends Component {
               disabled
             />
             <Checkbox
-              className={styles.check}
+              className={`${styles.check} new-save-checkbox`}
               theme={checkBoxTheme}
               checked={cart.saveNewAddress}
               label="Simpan alamat baru"
@@ -156,6 +161,7 @@ class Process extends Component {
         {cart.address === 'newfoto' && (
           <Fragment>
             <input
+              name="address-file"
               type="file"
               ref={el => {
                 this.fotoRef = el
@@ -174,6 +180,7 @@ class Process extends Component {
               onClick={() => this.fotoRef.click()}
             />
             <Input
+              name="information"
               theme={{ ...theme, ...inputTheme }}
               type="text"
               hint={
@@ -191,7 +198,7 @@ class Process extends Component {
         )}
 
         {['none', 'new', 'newfoto'].indexOf(cart.address) === -1 && (
-          <p>
+          <p data-testid="address-detail">
             {cart.addressList[cart.address].address}
             <br />
             {cart.addressList[cart.address].city}
@@ -227,6 +234,7 @@ class Process extends Component {
     return (
       <div className={styles.section}>
         <Dropdown
+          className="channel-dropdown"
           label="CHANNEL PEMBAYARAN"
           onChange={value => {
             cart.channelIndex = value
@@ -238,7 +246,7 @@ class Process extends Component {
           theme={dropdownTheme}
         />
         {cart.channel !== 'none' && (
-          <img src={logo[cart.channel]} />
+          <img data-testid="channel-logo" data-channel={cart.channel} src={logo[cart.channel]} />
         )}
         {cart.channel !== 'none' && (
           <p>Tunjukan barcode pembayaran yang akan anda terima kepada kasir</p>

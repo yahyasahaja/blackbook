@@ -55,7 +55,7 @@ class Process extends Component {
       <div className={styles.section}>
         <p className={styles.title}>ALAMAT</p>
         {type !== 'foto' && (
-          <p>
+          <p data-testid="address-detail">
             {address.address}
             <br />
             {address.city}
@@ -65,8 +65,8 @@ class Process extends Component {
         )}
         {type === 'foto' && (
           <Fragment>
-            <img className={styles.foto} src={address.img} />
-            <p>{address.information}</p>
+            <img data-testid="address-image" className={styles.foto} src={address.img} />
+            <p data-testid="address-information">{address.information}</p>
           </Fragment>
         )}
       </div>
@@ -86,7 +86,7 @@ class Process extends Component {
       <div className={styles.section}>
         <p className={styles.title}>CHANNEL PEMBAYARAN</p>
         <div>
-          <img src={logo[channel]} />
+          <img data-testid="channel-logo" data-channel={channel} src={logo[channel]} />
         </div>
         <p>Tunjukan barcode pembayaran yang akan anda terima kepada kasir</p>
       </div>
@@ -130,7 +130,7 @@ class Process extends Component {
         </div>
         <div className={`${styles.price} ${styles.total}`}>
           <span>Total</span>
-          <span>
+          <span data-testid="confirmation-total">
             {convertToMoneyFormat(
               cart.totalPrice + this.props.location.state.shippingCost,
               'NTD',
