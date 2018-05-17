@@ -1,7 +1,8 @@
 export const AUTHORIZATION_TOKEN_STORAGE_URI = 'hashAuthToken'
 
-describe('Authentication', () => {
+describe('Authentication', () => {  
   it('Visits the login page', () => {
+    localStorage.clear()
     cy.visit('/')
 
     cy.url().should('include', '/home')
@@ -14,7 +15,7 @@ describe('Authentication', () => {
   })
 
   it('Wrong credentials', () => {
-    cy.get('input[name=phone_number]').type('83333333333')
+    cy.get('input[name=phone_number]').type('3')
     cy.get('input[name=password]').type('wrongpassword')
     cy.get('[type=submit]').click()
     cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
@@ -23,8 +24,8 @@ describe('Authentication', () => {
   it('Login, Set local storage token and redirect to /account after login', () => {
     cy.reload()
     cy.get('.country_code').click()
-    cy.get('.country_code > ul > li').contains('+62').click()
-    cy.get('input[name=phone_number]').type('83333333333')
+    cy.get('.country_code > ul > li').contains('+886').click()
+    cy.get('input[name=phone_number]').type('3')
     cy.get('input[name=password]').type('12qwaszx')
     cy.get('[type=submit]').click().should(() => {
       expect(localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)).to.not.be.null

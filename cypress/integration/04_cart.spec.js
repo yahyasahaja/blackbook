@@ -1,27 +1,22 @@
-const clear = Cypress.LocalStorage.clear
-
-Cypress.LocalStorage.clear = (keys) => {
-  if (keys) {
-    return clear.apply(this, arguments)
-  }
-}
-
-// clear local storage because we want to start fresh
-localStorage.clear()
+let temp = ''
 
 describe('Cart', () => {
-  it('Can visit cart page', () => {
+  beforeEach(() => {
+    localStorage.setItem('cart', temp)
     cy.visit('/')
+  })
+
+  it('Can visit cart page', () => {
     cy.get('a[href="/cart"]').eq(1).click()
     cy.url().should('include', '/cart')
   })
 
   it('Show empty cart message', () => {
+    cy.get('a[href="/cart"]').eq(1).click()
     cy.get('p[data-testid="cart-message"]').should('be.visible')
   })
 
   it('Can add item to cart', () => {
-    cy.visit('/')
     cy.get('div[data-testid="product-card"]').eq(0).find('div[data-testid="product-card-action"] > div').as('productCardAction1')
     cy.get('@productCardAction1').eq(1).find('button').click() // click the buy button
     cy.get('@productCardAction1').eq(0).find('button').click() // click buy button after detail pop out
@@ -53,6 +48,7 @@ describe('Cart', () => {
       // check localStorage
       const cartData = localStorage.getItem('cart')
       const data = JSON.parse(cartData)
+      temp = cartData
       expect(data).to.have.length(4)
     }) 
   })
@@ -64,6 +60,8 @@ describe('Cart', () => {
   })
 
   it('Can remove an item', () => {
+    cy.get('a[href="/cart"]').eq(1).click()
+
     cy.get('span[data-testid="remove-cart-item"]').eq(3).click()
     cy.get('div[data-testid="cart-list"] > div[data-testid="cart-item"]').should('have.length', 3).then(() => {
       const cartData = localStorage.getItem('cart')
@@ -73,23 +71,45 @@ describe('Cart', () => {
   })
 
   it('Has correct total price', () => {
+    cy.get('a[href="/cart"]').eq(1).click()
+
+    cy.server()
+    cy.route('POST', 'https://ordering-service-testing.azurewebsites.net/graphql').as('orderingRequest')
+
+    cy.visit('/cart', {
+      onBeforeLoad: (win) => {
+        win.fetch = null
+      }
+    })
+
     const cartData = localStorage.getItem('cart')
     const data = JSON.parse(cartData)
     const total = data.reduce((prev, val) => {
       return prev + val.amount * val.product.price.value
     }, 0)
 
-    cy.get('[data-testid="cart-total"]').then(el => {
-      const totalCart = el.data('total')
-
-      cy.get('[data-testid="cart-shipping-cost"]').then(el => {
-        const shippingCost = el.data('shipping-cost')
-
-        // console.log(total, shippingCost)
-        const sum = total + Number(shippingCost)
-        expect(sum).to.be.equals(Number(totalCart))
+    cy.wait('@orderingRequest').then(() => {
+      cy.wait(500)
+      cy.get('[data-testid=cart-shipping-cost]').then(shippingCostElement => {
+        cy.get('[data-testid="cart-total"]').then(totalElement => {
+          const totalCart = totalElement.text().replace('.', '').split(' ')[1]
+          const shippingCost = shippingCostElement.text().replace('.', '').split(' ')[1]
+          const sum = total + Number(shippingCost)
+          expect(sum).to.be.equals(Number(totalCart))
+        })
       })
     })
+  })
+
+  it('Refetch shipping cost when item removed', () => {
+    cy.visit('/cart', {
+      onBeforeLoad: (win) => {
+        cy.spy(win, 'fetch')
+      }
+    })
+
+    cy.get('span[data-testid="remove-cart-item"]').eq(2).click()
+    cy.window().its('fetch').should('be.calledWith', 'https://ordering-service-testing.azurewebsites.net/graphql')
   })
 
   // TODO: coupon test

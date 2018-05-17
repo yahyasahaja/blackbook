@@ -13,6 +13,7 @@ export default class PrimaryButton extends Component {
     if (to)
       return (
         <Link
+          data-testid="primary-button"
           to={to}
           onClick={onClick}
           className={`${styles.container} ${className || ''}`}
@@ -24,6 +25,7 @@ export default class PrimaryButton extends Component {
 
     return (
       <button
+        data-testid="primary-button"
         type={type}
         className={`${styles.container} ${disabled ? styles.disabled : ''} ${className || ''}`}
         onClick={disabled ? () => {} : onClick}

@@ -102,8 +102,8 @@
     "build": "node scripts/build.js",
     "dev-server": "NODE_ENV=development nodemon server/index.js --exec babel-node --watch server",
     "build-server": "babel server -d build-server",
-    "test": "node scripts/test.js --env=jsdom",
     "postinstall": "npm run build",
+    "test": "cypress run",
     "toolbox": "react-toolbox-themr"
   },
   "jest": {
