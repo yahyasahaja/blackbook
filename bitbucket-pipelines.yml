@@ -13,8 +13,9 @@ pipelines:
         script: # Modify the commands below to build your repository.
           - npm install
           - npm run build
-          - zip -r zipfile build
-    - step:
-        name: "deploy"
-        script: 
-        - echo "OK"
+          - cd build
+          - zip -r ../zipfile.zip
+          - curl -X POST -u $AzureCredUser:$AzureCredPass --data-binary @"zipfile.zip" https://buyer-ui-testing.scm.azurewebsites.net/api/zipdeploy
+          - curl -X POST -u $AzureCredUser:$AzureCredPass --data-binary @"zipfile.zip" https://buyer-ui-staging.scm.azurewebsites.net/api/zipdeploy
+          - curl -X POST -u $AzureCredUser:$AzureCredPass --data-binary @"zipfile.zip" https://buyer-ui-deploy.scm.azurewebsites.net/api/zipdeploy
+
