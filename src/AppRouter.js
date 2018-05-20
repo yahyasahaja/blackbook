@@ -33,7 +33,7 @@ import styles from './assets/css/app-router.scss'
 import BottomTabBar from './components/BottomTabBar'
 
 //STORE
-import { appStack, badges, dialog } from './services/stores'
+import { appStack, badges, dialog, serviceWorkerUpdate as swu } from './services/stores'
 
 //INNER_CONFIG
 let BOTTOM_TAB_BAR_DATA = [
@@ -146,6 +146,21 @@ let BOTTOM_TAB_BAR_DATA = [
               title={dialog.title}
             >
               {dialog.content}
+            </Dialog>
+          </section>
+
+          <section>
+            <Dialog
+              actions={[
+                {
+                  label: `Reload ${swu.countDown}`,
+                  onClick: swu.refreshPage
+                }
+              ]}
+              active={swu.shouldUpdate}
+              title="Pembaruan Aplikasi Telah Tersedia!"
+            >
+              Klik reload untuk memperbarui aplikasi
             </Dialog>
           </section>
         </div>

@@ -8,7 +8,7 @@
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
 
-import { user } from './services/stores'
+import { user, serviceWorkerUpdate as swu } from './services/stores'
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -73,7 +73,7 @@ function registerValidSW(swUrl) {
               // It's the perfect time to display a "New content is
               // available please refresh." message in your web app.
               console.log('there is an update, we are reloading')
-              setTimeout(() => window.location.reload(), 5000)
+              swu.update()
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a

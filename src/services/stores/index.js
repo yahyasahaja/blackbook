@@ -9,6 +9,7 @@ import tokens from './Tokens'
 import user from './User'
 import cart from './Cart'
 import dialog from './Dialog'
+import serviceWorkerUpdate from './ServiceWorkerUpdate'
 
 export { 
   categories,
@@ -22,6 +23,7 @@ export {
   user,
   cart,
   dialog,
+  serviceWorkerUpdate,
 }
 
 export default { 
@@ -36,4 +38,5 @@ export default {
   user,
   cart,
   dialog,
+  serviceWorkerUpdate,
 }
