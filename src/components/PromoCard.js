@@ -20,7 +20,7 @@ class ProductCard extends Component {
     let { image, begin, end, title, to } = this.props
     
     return (
-      <Link className={styles.container} to={to}>
+      <Link className={styles.container} data-testid="promo-card" to={to}>
         <div className={styles.picture}>
           <ImageLoader src={image} alt="Product Image" />
         </div>
