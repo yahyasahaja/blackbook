@@ -12,7 +12,6 @@ pipelines:
           - node
         script: # Modify the commands below to build your repository.
           - yarn
-          - yarn build
           - cd build
           - zip -r ../zipfile.zip .
           - cd ..
