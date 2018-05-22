@@ -286,13 +286,15 @@ class User {
       }
     })
       .then(({ data: { is_ok, data: user } }) => {
-        this.isLoading = false
         if (is_ok) {
           tokens.setAuthToken(raw)
-          return this.setData(user)
+          const res = this.setData(user)
+          this.isLoading = false
+          return res
         }
 
         localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
+        this.isLoading = false
         return false
       }).catch(res => {
         console.log('ERROR ON FETCHING USER DATA', res)

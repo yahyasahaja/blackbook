@@ -1,7 +1,8 @@
 //MODULES
 import React, { Component } from 'react'
-// import { Route, Switch } from 'react-router-dom'
+import { observer } from 'mobx-react'
 import Threads from './Threads'
+import { user } from '../../services/stores'
 
 //STYLES
 // import styles from './css/index.scss'
@@ -10,6 +11,7 @@ import Threads from './Threads'
 import TopBar, { HIDE } from '../../components/TopBar'
 
 //COMPONENT
+@observer
 export default class Chat extends Component {
   render() {
     return (
@@ -23,7 +25,7 @@ export default class Chat extends Component {
         style={{ background: 'rgb(239, 239, 239)' }}
         wrapperStyle={{ padding: 0 }}
       >
-        <Threads {...this.props} isSelected={this.props.isSelected} />
+        {!user.isLoading && <Threads {...this.props} isSelected={this.props.isSelected} />}
       </TopBar>
     )
   }
