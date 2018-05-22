@@ -15,6 +15,7 @@ import { tokens } from '../stores'
 let httpLink = new HttpLink({ 
   uri: CHAT_ENDPOINT_URL
 })
+console.log('production', CHAT_ENDPOINT_URL)
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
