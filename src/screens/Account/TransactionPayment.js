@@ -16,7 +16,7 @@ import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import PrimaryButton from '../../components/PrimaryButton'
 
 //UTILS
-import { convertStatus, convertCountryCurrency } from '../../utils'
+import { convertPaymentStatus, convertCountryCurrency } from '../../utils'
 
 //STORE
 import { appStack, snackbar } from '../../services/stores'
@@ -84,7 +84,7 @@ class TransactionPayment extends Component {
         onClick={this.openPopup.bind(this, payment)}
       >
         <div className={styles.left} >
-          {renewLoading === payment.id ? 'Loading ... ' : convertStatus(payment.status)}
+          {renewLoading === payment.id ? 'Loading ... ' : convertPaymentStatus(payment.status)}
           {
             Date.now() > new Date(payment.expDate)
               ? <PrimaryButton className={styles.renew} >Renew</PrimaryButton>
