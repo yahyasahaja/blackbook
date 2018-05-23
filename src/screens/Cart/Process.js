@@ -57,14 +57,17 @@ class Process extends Component {
     if (!nextProps.user || !nextProps.user.getUser) return
 
     const { getUser: userData } = nextProps.user
-    let address = [
-      {
+    let address = []
+
+    if(userData.address != null && userData.city != null && userData.zip_code != null){
+      // push to array if userData not null
+      address.push({
         address: userData.address,
         city: userData.city,
         zip_code: userData.zip_code,
         country: userData.country,
-      },
-    ]
+      })
+    }
 
     address = address.concat(userData.otherAddress)
     cart.addressList = address
