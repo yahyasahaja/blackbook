@@ -469,7 +469,6 @@ export default compose(
   graphql(getThreadId, {
     name: 'threadId',
     skip: props => {
-      console.log(props.match.params.id)
       return props.match.params.id !== 'new'
     },
     options: props => ({
