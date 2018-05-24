@@ -86,6 +86,7 @@ class PromoDetail extends Component {
             <div className={styles['form-promo']} >
               <input
                 className={styles['code-promo']}
+                data-testid="code-promo"
                 type="text"
                 value={code || 'Loading Code Promo..'}
                 ref={el => this.inputCode = el}

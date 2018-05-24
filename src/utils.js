@@ -42,6 +42,16 @@ export const convertStatus = (status) => {
         : 'DALAM PROSES'
 }
 
+export const convertPaymentStatus = (status) => {
+  return status === 'COMPLETE'
+    ? 'SELESAI'
+    : status === 'UNPAID'
+      ? 'BELUM LUNAS'
+      : status === 'PAID'
+        ? 'SUDAH LUNAS'
+        : 'KADALUARSA'
+}
+
 export const convertCountryCurrency = country => {
   return country === 'TWN'
     ? 'NTD'

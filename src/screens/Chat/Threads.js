@@ -12,12 +12,6 @@ import loadingTheme from './css/loading-submit.scss'
 
 @observer 
 class Threads extends Component {
-  componentWillMount() {
-    if(!user.isLoggedIn) {
-      return this.props.history.replace('/account')
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     if(nextProps.isSelected && !user.isLoggedIn) {
       return this.props.history.replace('/account')
@@ -27,6 +21,9 @@ class Threads extends Component {
   }
 
   componentDidMount() {
+    if(this.props.isSelected && !user.isLoggedIn) {
+      return this.props.history.replace('/account')
+    }
     // refetch when there is a new notification
     navigator.serviceWorker.onmessage = (e) => {
       if(e.type === 'message') {

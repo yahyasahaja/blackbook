@@ -69,7 +69,7 @@ class EditableList extends Component {
         <div className={`${styles.section} ${styles.section1}`} >
           <div className={styles.left} >
             <div className={styles.id} >{id}</div>
-            <div>{moment(time).format('DD MM YYYY')}</div>
+            <div>{moment(time).format('DD MMM YYYY')}</div>
           </div>
 
           <div className={styles.right} >

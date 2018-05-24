@@ -466,6 +466,19 @@ export default compose(
       }
     },
   }),
+  graphql(getThreadId, {
+    name: 'threadId',
+    skip: props => {
+      console.log(props.match.params.id)
+      return props.match.params.id !== 'new'
+    },
+    options: props => ({
+      client,
+      variables: {
+        productId: props.location.state.productId,
+      },
+    }),
+  }),
   graphql(getProductQuery, {
     name: 'product',
     skip: props => {
@@ -489,14 +502,4 @@ export default compose(
       }
     },
   }),
-  graphql(getThreadId, {
-    name: 'threadId',
-    skip: props => props.match.params.id !== 'new',
-    options: props => ({
-      client,
-      variables: {
-        productId: props.location.state.productId,
-      },
-    }),
-  })
 )(Conversation)
