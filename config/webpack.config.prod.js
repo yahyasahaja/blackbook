@@ -58,9 +58,11 @@ module.exports = new Promise(function(resolve) {
     let commitMessage = 'no commit message'
 
     if (commit) {
-      let { body } = commit
-      if (body) commitMessage = body
+      let { subject } = commit
+      if (subject) commitMessage = subject
     }
+
+    // console.log(commit, commitMessage)
     
     let webpackConfig = {
       // Don't attempt to continue if there are any errors.
