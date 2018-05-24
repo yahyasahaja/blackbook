@@ -14,6 +14,14 @@ import loadingTheme from './css/loading-submit.scss'
 class Threads extends Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.isSelected && !user.isLoggedIn) {
+      // refetch when there is a new notification
+      navigator.serviceWorker.onmessage = (e) => {
+        if(e.type === 'message') {
+          this.props.data.refetch()
+          badges.inc(badges.CHAT)
+        }
+      }
+
       return this.props.history.replace('/account')
     }
 
@@ -23,13 +31,6 @@ class Threads extends Component {
   componentDidMount() {
     if(this.props.isSelected && !user.isLoggedIn) {
       return this.props.history.replace('/account')
-    }
-    // refetch when there is a new notification
-    navigator.serviceWorker.onmessage = (e) => {
-      if(e.type === 'message') {
-        this.props.data.refetch()
-        badges.inc(badges.CHAT)
-      }
     }
   }
 
