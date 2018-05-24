@@ -67,8 +67,9 @@ class Home extends Component {
       let products = activePromoteds.promoteds.map(({product}) => {
         if (product.images.length > 0)
           return { ...product, image: product.images[0].url }
+        return { ...product, image: '' }
       })
-
+      
       this.setState({
         products: [...this.state.products, ...products],
         offset: offset + MAX_FETCH_LENGTH,
@@ -120,7 +121,10 @@ class Home extends Component {
   renderCards() {
     let { products } = this.state
 
-    return products.map((data, i) => <Card favorites={favorites} {...data} key={i} data={data} />)
+    return products.map((data, i) => {
+      console.log(i, data)
+      return <Card favorites={favorites} {...data} key={i} data={data} />
+    })
   }
 
   renderCategories() {

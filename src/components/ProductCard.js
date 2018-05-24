@@ -109,11 +109,11 @@ class ProductCard extends Component {
         this.liked = true
         break
       }
-
+      
     if (!price)
       price = {
         value: 0,
-        currency: 0,
+        currency: 'NTD',
       }
       
     return (

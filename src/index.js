@@ -8,7 +8,6 @@ import { observer } from 'mobx-react'
 // import * as OfflinePluginRuntime from 'offline-plugin/runtime'
 // OfflinePluginRuntime.install()
 import axios from 'axios'
-import moment from 'moment'
 
 //CSS
 import theme from './assets/theme/theme.js'
