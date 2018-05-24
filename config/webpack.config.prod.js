@@ -203,8 +203,8 @@ module.exports = {
       dir: 'build',
       files: ['sw.js'],
       rules: [{
-        search: 'build_cache_name',
-        replace: Date.now() + '-'
+        search: 'BUILD_DATE',
+        replace: Date.now()
       }]
     }]),
     // Makes some environment variables available in index.html.

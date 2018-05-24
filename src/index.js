@@ -8,6 +8,7 @@ import { observer } from 'mobx-react'
 // import * as OfflinePluginRuntime from 'offline-plugin/runtime'
 // OfflinePluginRuntime.install()
 import axios from 'axios'
+import moment from 'moment'
 
 //CSS
 import theme from './assets/theme/theme.js'
@@ -64,3 +65,7 @@ class App extends Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('app'))
+
+let buildDate = moment(Number('BUILD_DATE'))
+if (buildDate.isValid())
+  console.log(`BUILD ${buildDate.format('DD MMM YYYY. HH:mm')}`)
