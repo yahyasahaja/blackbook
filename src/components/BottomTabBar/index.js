@@ -25,6 +25,8 @@ class BottomTabBar extends Component {
     let { routers, /*raw*/ } = this.state
     let { data } = this.props
 
+    console.log('UPDATE ROUTE', nextProps)
+
     let currentPath = match.url
     
     for (let i in routers) {

@@ -121,10 +121,7 @@ class Home extends Component {
   renderCards() {
     let { products } = this.state
 
-    return products.map((data, i) => {
-      console.log(i, data)
-      return <Card favorites={favorites} {...data} key={i} data={data} />
-    })
+    return products.map((data, i) => <Card favorites={favorites} {...data} key={i} data={data} />)
   }
 
   renderCategories() {
