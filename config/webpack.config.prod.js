@@ -14,6 +14,7 @@ const paths = require('./paths')
 const getClientEnvironment = require('./env')
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin')
 var git = require('git-last-commit')
+const moment = require('moment')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -61,6 +62,10 @@ module.exports = new Promise(function(resolve) {
       let { subject } = commit
       if (subject) commitMessage = subject
     }
+
+    let buildDateRaw = Date.now()
+    let buildDate = moment(buildDateRaw)
+    let buildDateFormatted = buildDate.format('DDMMMYYYY-HHmm')
 
     // console.log(commit, commitMessage)
     
@@ -218,8 +223,12 @@ module.exports = new Promise(function(resolve) {
           test: [/\.js$/, /\.json$/],
           rules: [
             {
-              search: 'PROJECT_BUILD_TIME',
-              replace: () => Date.now()
+              search: 'BUILD_DATE_RAW',
+              replace: () => buildDateRaw
+            },
+            {
+              search: 'BUILD_DATE_FORMATTED',
+              replace: () => buildDateFormatted
             },
             {
               search: 'GIT_COMMIT_MESSAGE',

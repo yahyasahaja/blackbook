@@ -66,6 +66,6 @@ class App extends Component {
 
 ReactDOM.render(<App />, document.getElementById('app'))
 
-let buildDate = moment(Number('PROJECT_BUILD_TIME'))
+let buildDate = 'PROJECT_BUILD_TIME_FORMATTED'
 if (buildDate.isValid())
-  console.log(`BUILD-${buildDate.format('DDMMMYYYY-HHmm')}`)
+  console.log(`BUILD-${buildDate}`)

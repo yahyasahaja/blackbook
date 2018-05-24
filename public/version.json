@@ -1,4 +1,5 @@
 {
-  "build_time": "PROJECT_BUILD_TIME",
+  "build_time": "BUILD_DATE_RAW",
+  "build_time_formatted": "BUILD_DATE_FORMATTED",
   "git_commit_message": "GIT_COMMIT_MESSAGE"
 }
