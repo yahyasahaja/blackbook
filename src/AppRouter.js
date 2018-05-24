@@ -70,6 +70,9 @@ let BOTTOM_TAB_BAR_DATA = [
         }
       }
     }
+    
+    let buildDate = 'BUILD_DATE_FORMATTED'
+    console.log(`BUILD-${buildDate}`)
   }
 
   closeSnackbar = () => {
