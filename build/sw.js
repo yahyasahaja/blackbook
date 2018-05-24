@@ -4,7 +4,7 @@
 // importScripts('/service-worker.js')
 
 // // Name our cache
-// var CACHE_NAME = '1526985273527-' + 'buyer-pwa'
+// var CACHE_NAME = 'build_cache_name' + 'buyer-pwa'
 // console.log(CACHE_NAME)
 // // // Delete old caches that are not our current one!
 // // self.addEventListener('activate', event => {

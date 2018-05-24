@@ -1,0 +1,4 @@
+{
+  "build_time": "PROJECT_BUILD_TIME",
+  "git_version": "GIT_COMMIT_MESSAGE"
+}
