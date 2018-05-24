@@ -32,6 +32,13 @@ class Threads extends Component {
     if(this.props.isSelected && !user.isLoggedIn) {
       return this.props.history.replace('/account')
     }
+
+    navigator.serviceWorker.onmessage = (e) => {
+      if(e.type === 'message') {
+        this.props.data.refetch()
+        badges.inc(badges.CHAT)
+      }
+    }
   }
 
   componentWillUnmount() {
