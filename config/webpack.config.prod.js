@@ -220,7 +220,7 @@ module.exports = new Promise(function(resolve) {
       plugins: [
         new ReplaceInFileWebpackPlugin([{
           dir: 'build',
-          test: [/\.js$/, /\.json$/],
+          test: [/\.js$/, /\.json$/, /\.map$/],
           rules: [
             {
               search: 'BUILD_DATE_RAW',
