@@ -30,11 +30,19 @@ const convertToMoneyFormat = (num, currency) => {
 //COMPONENT
 @observer
 class ProductCard extends Component {
-  state = {
-    isVariantOpen: false,
-    variant: this.props.variants[0].name,
-    amount: 1,
-    isShareActive: false
+  constructor(props) {
+    super(props)
+
+    let { variants } = this.props
+    let variant = ''
+    if (variants) variant = variants[0].name
+
+    this.state = {
+      isVariantOpen: false,
+      variant,
+      amount: 1,
+      isShareActive: false
+    }
   }
 
   onLike = () => {
