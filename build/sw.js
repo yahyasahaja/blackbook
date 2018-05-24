@@ -176,6 +176,7 @@ self.addEventListener('push', function (event) {
   // }
 
   //console.log(event)
+  console.log('NEW PUSH EXIST')
   let context = {}
 
   if (event.data) {
