@@ -6,8 +6,8 @@ import moment from 'moment'
 import styles from './css/thread-item.scss'
 import avatarTheme from './css/avatar.scss'
 
-const ThreadItem = ({ id, sender, productName, message, time }) => (
-  <Link to={{pathname: `/chat/${id}`, state: {sender: sender.displayName}}} className={styles.container}>
+const ThreadItem = ({ index, id, sender, isRead, productName, message, time }) => (
+  <Link to={{pathname: `/chat/${id}`, state: {sender: sender.displayName, index}}} className={styles.container}>
     <Avatar
       title={sender.displayName.toUpperCase()}
       image={sender.profilePicture}
@@ -15,7 +15,7 @@ const ThreadItem = ({ id, sender, productName, message, time }) => (
     />
     <div className={styles.text}>
       <p className={styles.name}>{`${productName} (${sender.displayName})`}</p>
-      <p className={styles.message}>{message}</p>
+      <p className={`${styles.message} ${isRead ? '' : styles.unread}`}>{message}</p>
     </div>
     <span className={styles.time}>
       {moment(time).calendar(null, {

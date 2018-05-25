@@ -13,7 +13,7 @@ import styles from './css/conversation.scss'
 import loadingTheme from './css/loading.scss'
 import loadingSubmitTheme from './css/loading-submit.scss'
 
-import { appStack, onlineStatus, badges } from '../../services/stores'
+import { appStack, onlineStatus, badges, chat } from '../../services/stores'
 
 @observer
 class Conversation extends Component {
@@ -64,6 +64,7 @@ class Conversation extends Component {
   }
 
   async componentDidMount() {
+    chat.threads[this.props.location.state.index].isRead = true
     window.addEventListener('scroll', this.checkScroll)
     window.addEventListener('gesturechange', this.checkScroll)
 
@@ -83,13 +84,6 @@ class Conversation extends Component {
     appStack.pop()
     window.removeEventListener('scroll', this.checkScroll)
     window.removeEventListener('gesturechange', this.checkScroll)
-    navigator.serviceWorker.onmessage = null
-
-    navigator.serviceWorker.onmessage = (e) => {
-      if(e.type === 'message') {
-        badges.inc(badges.CHAT)
-      }
-    }
   }
 
   componentDidUpdate() {
