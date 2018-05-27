@@ -32,18 +32,25 @@ export default class Cart extends Component {
     shippingCost: null,
     useVoucher: false,
     voucherCode: '',
+    discount: 0,
+    error: '',
   }
 
   componentDidMount() {
     this.calculateShippingCost()
     this.disposer = observe(cart.data, () => {
       this.calculateShippingCost()
+      this.calculateTotalCost()
     })
   }
 
   componentWillUnmount() {
     this.disposer()
     appStack.pop()
+  }
+
+  get totalPrice() {
+    return cart.totalPrice + (this.state.shippingCost || 0) - (this.state.useVoucher ? this.state.discount : 0)
   }
 
   async calculateShippingCost() {
@@ -70,12 +77,48 @@ export default class Cart extends Component {
     }
   }
 
+  async calculateTotalCost() {
+    this.setState({ error: '' })
+    const { useVoucher, voucherCode } = this.state
+
+    const input = cart.data.slice().map(item => ({
+      productId: item.product.id,
+      quantity: item.amount,
+    }))
+
+    try {
+      const { data: { calcTotalCost: { shippingCost, discount } }} = await client.mutate({
+        mutation: calculateCost,
+        variables: {
+          input: {
+            country: 'TWN',
+            items: input,
+            promotionCode: useVoucher ? voucherCode : '',
+          },
+        },
+      })
+
+      this.setState({ 
+        shippingCost: shippingCost,
+        discount: discount,
+      })
+    } catch (err) {
+      this.setState({ 
+        discount: 0, 
+        error: 'Silahkan cek kembali kode voucher anda!' 
+      })
+      console.log(err)
+    }
+  }
+
   renderProducts() {
     return (
       <div
         data-testid="cart-list"
-        className={`${styles.products} ${this.state.useVoucher &&
-          styles.padded}`}
+        className={`${styles.products} 
+        ${this.state.useVoucher && styles.padded}
+        ${this.state.error && styles.error}
+        ${this.state.useVoucher && this.state.discount > 0 && styles.discount}`}
       >
         {cart.data
           .slice()
@@ -101,6 +144,8 @@ export default class Cart extends Component {
     // continue if logged in
     this.props.history.push('/cart/process', {
       shippingCost: this.state.shippingCost,
+      discount: this.state.discount,
+      voucherCode: this.state.error ? '' : this.state.voucherCode,
     })
   }
 
@@ -115,13 +160,16 @@ export default class Cart extends Component {
               : 'Menghitung ongkos kirim...'}
           </span>
         </div>
+        {this.state.useVoucher && this.state.discount > 0 && <div className={styles.row}>
+          <span className={styles.info}>Potongan</span>
+          <span data-testid="discount" data-discount={this.state.discount} className={styles.amount}>
+            {'- ' + convertToMoneyFormat(this.state.discount, 'NTD',)}
+          </span>
+        </div>}
         <div className={styles.row}>
           <span className={styles.info}>Total Pembayaran</span>
-          <span data-testid="cart-total" data-total={cart.totalPrice + (this.state.shippingCost || 0)} className={styles.amount}>
-            {convertToMoneyFormat(
-              cart.totalPrice + (this.state.shippingCost || 0),
-              'NTD',
-            )}
+          <span data-testid="cart-total" data-total={this.totalPrice} className={styles.amount}>
+            {convertToMoneyFormat(this.totalPrice, 'NTD',)}
           </span>
         </div>
         <div className={`${styles.row} ${styles.voucher}`}>
@@ -134,20 +182,23 @@ export default class Cart extends Component {
             }
           />
           {this.state.useVoucher && (
-            <div className={styles.voucherInput}>
-              <Input
-                theme={{ ...theme, ...inputTheme }}
-                type="text"
-                hint="Kode Voucher"
-                value={this.state.voucherCode}
-                onChange={val => this.setState({ voucherCode: val })}
-              />
-              <SecondaryButton
-                onClick={() => {}}
-                className={styles.voucherButton}
-              >
+            <div>
+              <div className={styles.voucherInput}>
+                <Input
+                  theme={{ ...theme, ...inputTheme }}
+                  type="text"
+                  hint="Kode Voucher"
+                  value={this.state.voucherCode}
+                  onChange={val => this.setState({ voucherCode: val })}
+                />
+                <SecondaryButton
+                  onClick={() => this.calculateTotalCost()}
+                  className={styles.voucherButton}
+                >
                 GUNAKAN
-              </SecondaryButton>
+                </SecondaryButton>
+              </div>
+              { this.state.error && <p className={styles.error}>{this.state.error}</p> }
             </div>
           )}
         </div>
@@ -215,5 +266,16 @@ export default class Cart extends Component {
 const calculateShippingCostTaiwan = gql`
   mutation CalcShippingCost($input: CalcShippingCostInput!) {
     calcShippingCostTwn(input: $input)
+  }
+`
+
+const calculateCost = gql`
+  mutation calculateCost($input: CalcTotalCostInput!) {
+  	calcTotalCost(input: $input) {
+      productCost
+      shippingCost
+      discount
+      total
+    }
   }
 `

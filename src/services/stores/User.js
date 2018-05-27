@@ -14,6 +14,7 @@ import tokens from './Tokens'
 //UTILS
 import {
   getSubscription,
+  getQueryString,
 } from '../../utils'
 
 //STORE
@@ -37,6 +38,28 @@ class User {
   @action
   setData = data => {
     return this.data = observable(data)
+  }
+
+  @action
+  async checkSecretKeyLogin() {
+    if (this.isLoadingLogin) return
+
+    let secretstring = getQueryString('key')
+    if (!secretstring) return
+    
+    this.isLoadingLogin = true
+    let { data: { is_ok, data: token} } = await axios.post(
+      getIAMEndpoint(`/loginkey?key=${secretstring}`), 
+      {}
+    )
+    
+    if (!is_ok) return 
+    
+    this.isLoadingLogin = false
+    tokens.setAuthToken(token)
+    await this.fetchData(token)
+    await this.registerPushSubscription()
+    return token
   }
 
   async uploadProfilePicture(files) {

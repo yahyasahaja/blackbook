@@ -55,7 +55,7 @@ class Tokens {
       let token = data.toString()
       localStorage.setItem(API_TOKEN_STORAGE_URI, token)
       this.apiToken = observable(token)
-      this.setAuthToken()
+      axios.defaults.headers['Authorization'] = `Bearer ${this.token}`
       return data
     }
 

@@ -9,6 +9,9 @@ import styles from './css/index.scss'
 //COMPONENTS
 import TabBar from './TabBar'
 
+//STORE
+import { user } from '../../services/stores'
+
 //COMPONENT
 @observer
 class BottomTabBar extends Component {
@@ -25,7 +28,9 @@ class BottomTabBar extends Component {
     let { routers, /*raw*/ } = this.state
     let { data } = this.props
 
-    console.log('UPDATE ROUTE', nextProps)
+    if (!user.isLoggedIn) {
+      user.checkSecretKeyLogin()
+    }
 
     let currentPath = match.url
     
