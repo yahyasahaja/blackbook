@@ -8,6 +8,7 @@ import badges from './Badges'
 import tokens from './Tokens'
 import user from './User'
 import cart from './Cart'
+import chat from './Chat'
 import dialog from './Dialog'
 import serviceWorkerUpdate from './ServiceWorkerUpdate'
 
@@ -23,6 +24,7 @@ export {
   user,
   cart,
   dialog,
+  chat,
   serviceWorkerUpdate,
 }
 
@@ -38,5 +40,6 @@ export default {
   user,
   cart,
   dialog,
+  chat,
   serviceWorkerUpdate,
 }

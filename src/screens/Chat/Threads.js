@@ -5,15 +5,36 @@ import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import ThreadItem from '../../components/Chat/ThreadItem'
 import client from '../../services/graphql/chatClient'
-import { user, onlineStatus, badges } from '../../services/stores'
+import { user, onlineStatus, badges, chat } from '../../services/stores'
 
 import styles from './css/index.scss'
 import loadingTheme from './css/loading-submit.scss'
+import { observable } from 'mobx'
 
 @observer 
 class Threads extends Component {
   componentWillReceiveProps(nextProps) {
-    if(nextProps.isSelected && !user.isLoggedIn) {
+    console.log(nextProps.location.pathname)
+
+    if(nextProps.data.threads && nextProps.location.pathname === '/chat') {
+      const threads = nextProps.data.threads.data.map((x, index) => {
+        const thread = Object.assign({}, x)
+        const currentThread = chat.threads.length > 0 ? chat.threads[index] : null
+
+        if(currentThread && !thread.messages.data[0].createdBy.isMe) {
+          thread.isRead = currentThread.isRead && thread.messages.data[0].id <= currentThread.messages.data[0].id
+        } else {
+          thread.isRead = true
+        }
+
+        return thread
+      })
+      
+      console.log('update threads')
+      chat.threads = observable(threads)
+    }
+
+    if(nextProps.isSelected && nextProps.location.pathname === '/chat') {
       // refetch when there is a new notification
       navigator.serviceWorker.onmessage = (e) => {
         if(e.type === 'message') {
@@ -21,23 +42,20 @@ class Threads extends Component {
           badges.inc(badges.CHAT)
         }
       }
-
-      return this.props.history.replace('/account')
     }
 
-    if(onlineStatus.isOnline && this.props.data.refetch) this.props.data.refetch()
+    if(this.props.isSelected && onlineStatus.isOnline && this.props.location.pathname !== '/chat') {
+      this.props.data.refetch()
+    }
+
+    if(this.props.isSelected && !user.isLoggedIn) {
+      return this.props.history.replace('/account')
+    }
   }
 
   componentDidMount() {
     if(this.props.isSelected && !user.isLoggedIn) {
       return this.props.history.replace('/account')
-    }
-
-    navigator.serviceWorker.onmessage = (e) => {
-      if(e.type === 'message') {
-        this.props.data.refetch()
-        badges.inc(badges.CHAT)
-      }
     }
   }
 
@@ -62,15 +80,17 @@ class Threads extends Component {
           </div>
         )}
         {threads &&
-          threads.data.map(thread => {
+          chat.threads.slice().map((thread, index) => {
             const sender = thread.participants[0].isMe
               ? thread.participants[1]
               : thread.participants[0]
             return (
               <ThreadItem
                 id={thread.id}
+                index={index}
                 key={thread.id}
                 sender={sender}
+                isRead={thread.isRead}
                 productName={thread.productName}
                 message={thread.messages.data[0].text}
                 time={thread.messages.data[0].createdAt}
@@ -104,8 +124,13 @@ const getThreadsQuery = gql`
         }
         messages(limit: 1) {
           data {
+            id
             text
             createdAt
+            createdBy {
+              id
+              isMe
+            }
           }
         }
       }

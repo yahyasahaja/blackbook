@@ -35,6 +35,10 @@
     font-size: 14px;
     line-height: 21px;
     height: 42px;
+
+    &.unread {
+      font-weight: 700;
+    }
   }
 
   span.time {
