@@ -9,6 +9,18 @@
   &.padded {
     padding-bottom: 254px;
   }
+
+  &.padded {
+    padding-bottom: 254px;
+
+    &.error {
+      padding-bottom: 286px;
+    }
+
+    &.discount {
+      padding-bottom: 296px;
+    }
+  }
 }
 
 .detail {
@@ -38,6 +50,11 @@
     
     &.voucher {
       flex-direction: column;
+    }
+
+    p.error {
+      color: $primary_color;
+      margin-bottom: 0;
     }
 
     .voucherInput {

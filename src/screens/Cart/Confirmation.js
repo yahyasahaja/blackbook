@@ -128,11 +128,20 @@ class Process extends Component {
             )}
           </span>
         </div>
+        {this.props.location.state.discount > 0 && <div className={styles.price}>
+          <span>Potongan</span>
+          <span>
+            {'- ' + convertToMoneyFormat(
+              this.props.location.state.discount,
+              'NTD',
+            )}
+          </span>
+        </div>}
         <div className={`${styles.price} ${styles.total}`}>
           <span>Total</span>
           <span data-testid="confirmation-total">
             {convertToMoneyFormat(
-              cart.totalPrice + this.props.location.state.shippingCost,
+              cart.totalPrice + this.props.location.state.shippingCost - this.props.location.state.discount,
               'NTD',
             )}
           </span>
@@ -205,7 +214,7 @@ class Process extends Component {
   }
 
   async createOrder() {
-    const { type, address } = this.props.location.state
+    const { type, address, voucherCode } = this.props.location.state
 
     try {
       // create cart
@@ -219,6 +228,7 @@ class Process extends Component {
         mutation: CreateCart,
         variables: {
           input: {
+            promotionCode: voucherCode,
             items,
           },
         },
