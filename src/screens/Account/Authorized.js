@@ -69,7 +69,6 @@ class Account extends Component {
           <List selectable ripple>
             <ListSubHeader caption='Akun' />
             <ListItem
-              className='data-cy-profile-account'
               caption='Profil Saya' leftIcon='account_circle'
               onClick={() => {
                 this.props.history.push('/account/profile')
