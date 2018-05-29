@@ -7,6 +7,7 @@ const prodSetup = {
 }
 
 const isProd = window.location.host.match(/^(?:www.)?blanja\.(?:tw|hk)/gi)
+const COUNTRY_CODE = isProd ? (window.location.host.substr(-2) === 'tw' ? 'TWN' : 'HKG') : 'TWN'
 
 export const PRODUCTS_ENDPOINT_URL = isProd ? prodSetup.productql : 'https://product-hub-testing.azurewebsites.net/graphql'
 export const ORDERING_ENDPOINT_URL = isProd ? prodSetup.orderql : 'https://ordering-service-testing.azurewebsites.net/graphql'
@@ -36,4 +37,6 @@ export default {
   FAVORITES_STORAGE_URI,
 
   CART_STORAGE_URI,
+
+  COUNTRY_CODE,
 }

@@ -15,6 +15,8 @@ import { convertToMoneyFormat } from '../../utils'
 
 import client from '../../services/graphql/orderingClient'
 
+import config from '../../config'
+
 import styles from './css/index.scss'
 import theme from '../../assets/css/theme.scss'
 import checkBoxTheme from './css/checkbox.scss'
@@ -32,14 +34,14 @@ export default class Cart extends Component {
     shippingCost: null,
     useVoucher: false,
     voucherCode: '',
+    productCost: null,
     discount: 0,
     error: '',
   }
 
   componentDidMount() {
-    this.calculateShippingCost()
+    this.calculateTotalCost()
     this.disposer = observe(cart.data, () => {
-      this.calculateShippingCost()
       this.calculateTotalCost()
     })
   }
@@ -50,35 +52,13 @@ export default class Cart extends Component {
   }
 
   get totalPrice() {
-    return cart.totalPrice + (this.state.shippingCost || 0) - (this.state.useVoucher ? this.state.discount : 0)
-  }
-
-  async calculateShippingCost() {
-    this.setState({ shippingCost: null })
-
-    // CalcShippingCostTwnInput form
-    const input = cart.data.slice().map(item => ({
-      productId: item.product.id,
-      quantity: item.amount,
-    }))
-
-    try {
-      const { data: { calcShippingCostTwn } } = await client.mutate({
-        mutation: calculateShippingCostTaiwan,
-        variables: {
-          input: {
-            items: input,
-          },
-        },
-      })
-      this.setState({ shippingCost: calcShippingCostTwn })
-    } catch (err) {
-      console.log(err)
-    }
+    return (this.state.productCost || cart.totalPrice) 
+      + (this.state.shippingCost || 0) 
+      - (this.state.useVoucher ? this.state.discount : 0)
   }
 
   async calculateTotalCost() {
-    this.setState({ error: '' })
+    this.setState({ shippingCost: null, discount: 0, error: '' })
     const { useVoucher, voucherCode } = this.state
 
     const input = cart.data.slice().map(item => ({
@@ -87,11 +67,11 @@ export default class Cart extends Component {
     }))
 
     try {
-      const { data: { calcTotalCost: { shippingCost, discount } }} = await client.mutate({
+      const { data: { calcTotalCost: { productCost, shippingCost, discount } }} = await client.mutate({
         mutation: calculateCost,
         variables: {
           input: {
-            country: 'TWN',
+            country: config.COUNTRY_CODE,
             items: input,
             promotionCode: useVoucher ? voucherCode : '',
           },
@@ -99,8 +79,10 @@ export default class Cart extends Component {
       })
 
       this.setState({ 
-        shippingCost: shippingCost,
-        discount: discount,
+        shippingCost,
+        productCost,
+        discount: discount === null ? 0 : discount,
+        error: discount === null ? 'Silahkan cek kembali kode voucher anda!' : '',
       })
     } catch (err) {
       this.setState({ 
@@ -262,12 +244,6 @@ export default class Cart extends Component {
     )
   }
 }
-
-const calculateShippingCostTaiwan = gql`
-  mutation CalcShippingCost($input: CalcShippingCostInput!) {
-    calcShippingCostTwn(input: $input)
-  }
-`
 
 const calculateCost = gql`
   mutation calculateCost($input: CalcTotalCostInput!) {
