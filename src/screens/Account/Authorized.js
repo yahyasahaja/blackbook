@@ -60,8 +60,9 @@ class Account extends Component {
     let {
       name,
       msisdn,
+      country
     } = user.data
-
+    
     let { getUser, loading } = this.props.user
 
     let as2in1Wallet = ''
@@ -77,13 +78,21 @@ class Account extends Component {
 
         <div className={styles.card} >
           <List selectable ripple>
-            <ListSubHeader className={styles['e-wallet']} caption='eWallet' />
-            <HorizontalList 
-              dataKey="As 2in1 Wallet"
-              value={loading ? 'Loading...' : as2in1Wallet ? convertToMoneyFormat(as2in1Wallet) : 0}
-              valueClassName={styles['e-wallet-value']}
-              keyClassName={styles['e-wallet-key']}
-            />
+            {
+              country === 'HKG'
+                ? (
+                  <React.Fragment>
+                    <ListSubHeader className={styles['e-wallet']} caption='eWallet' />
+                    <HorizontalList 
+                      dataKey="As 2in1 Wallet"
+                      value={loading ? 'Loading...' : as2in1Wallet ? convertToMoneyFormat(as2in1Wallet) : 0}
+                      valueClassName={styles['e-wallet-value']}
+                      keyClassName={styles['e-wallet-key']}
+                    />
+                  </React.Fragment>
+                ) 
+                : <div></div>
+            }
             <ListSubHeader caption='Akun' />
             <ListItem
               caption='Profil Saya' leftIcon='account_circle'

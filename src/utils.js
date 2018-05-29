@@ -21,15 +21,22 @@ export const getSubscription = async () => {
 }
 
 export const convertToMoneyFormat = (num, currency) => {
+  let precision = null
+
+  let loc1 = (num + '').split('.')
+  if (loc1.length === 2) {
+    precision = loc1[1]
+  }
+
+  num = loc1[0]
   let res = num
-    .toString()
     .split('')
     .reverse()
     .reduce(function (acc, num, i) {
       return num == '-' ? acc : num + (i && !(i % 3) ? '.' : '') + acc
     }, '')
 
-  return `${currency ? currency : ''} ${res}`
+  return `${currency ? currency : ''} ${res}${precision !== null ? `,${precision}` : ''}`
 }
 
 export const convertStatus = (status) => {

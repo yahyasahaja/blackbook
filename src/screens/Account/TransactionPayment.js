@@ -16,7 +16,7 @@ import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import PrimaryButton from '../../components/PrimaryButton'
 
 //UTILS
-import { convertPaymentStatus, convertCountryCurrency } from '../../utils'
+import { convertPaymentStatus, convertCountryCurrency, convertToMoneyFormat } from '../../utils'
 
 //STORE
 import { appStack, snackbar } from '../../services/stores'
@@ -95,7 +95,7 @@ class TransactionPayment extends Component {
         <div className={styles.right} >
           <div>{payment.code}</div>
           <div className={styles.amount} >
-            {`${convertCountryCurrency(order.country)} ${payment.amount}`}
+            {convertToMoneyFormat(payment.amount, convertCountryCurrency(order.country))}
           </div>
         </div>
       </div>

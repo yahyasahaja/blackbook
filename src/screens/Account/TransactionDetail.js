@@ -23,7 +23,7 @@ import PrimaryButton from '../../components/PrimaryButton'
 import { appStack } from '../../services/stores'
 
 //UTILS
-import { convertCountryCurrency, convertStatus } from '../../utils'
+import { convertCountryCurrency, convertToMoneyFormat, convertStatus } from '../../utils'
 
 //COMPONENT
 @observer
@@ -78,9 +78,7 @@ class TransactionDetail extends Component {
         order
       }
     } = this.props
-
-    let { order: orderState } = this.state
-
+    
     if (!order) return (
       <div className={styles.loading} >
         <div>
@@ -92,9 +90,7 @@ class TransactionDetail extends Component {
         </div>
       </div>
     )
-
-    if (orderState) order = orderState
-
+    
     let {
       id,
       status,
@@ -138,9 +134,7 @@ class TransactionDetail extends Component {
         </div>
       ) },
       {
-        key: 'Total Pembayaran', value: `${convertCountryCurrency(country)} ${
-          total
-        }`
+        key: 'Total Pembayaran', value: convertToMoneyFormat(total, convertCountryCurrency(country))
       },
       {
         key: 'Daftar Barang', value: sellers.map(

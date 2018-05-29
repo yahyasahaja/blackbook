@@ -8,6 +8,9 @@ import styles from './css/transaction-list.scss'
 //COMPONENTS
 import PrimaryButton from './PrimaryButton'
 
+//UTILS
+import { convertCountryCurrency, convertToMoneyFormat } from '../utils'
+
 //COMPONENT
 class EditableList extends Component {
   renderImages(sellers) {
@@ -74,13 +77,7 @@ class EditableList extends Component {
           </div>
 
           <div className={styles.right} >
-            <span>{`${
-              country === 'TWN'
-                ? 'NTD'
-                : country === 'HKG'
-                  ? 'HKD'
-                  : 'Rp'
-            } ${total}`}</span>
+            <span>{convertToMoneyFormat(total, convertCountryCurrency(country))}</span>
           </div>
         </div>
         <div className={styles.devider} />
