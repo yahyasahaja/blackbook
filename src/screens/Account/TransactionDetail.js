@@ -103,7 +103,8 @@ class TransactionDetail extends Component {
       shippingZipCode,
       shippingInfo,
       sellers,
-      country
+      country,
+      total
     } = order
 
     let list = [
@@ -138,11 +139,7 @@ class TransactionDetail extends Component {
       ) },
       {
         key: 'Total Pembayaran', value: `${convertCountryCurrency(country)} ${
-          sellers.reduce((prev, cur) => {
-            return prev + cur.items.reduce((prev, cur) => {
-              return prev + cur.price * cur.quantity
-            }, 0)
-          }, 0)
+          total
         }`
       },
       {
@@ -207,6 +204,7 @@ query getOrder($orderId: ID!) {
     discount
     status
     country
+    total
     payments {
       status
     }

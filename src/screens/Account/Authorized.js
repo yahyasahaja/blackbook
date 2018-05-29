@@ -2,12 +2,17 @@
 import React, { Component } from 'react'
 import { List, ListItem, ListSubHeader } from 'react-toolbox/lib/list'
 import { observer } from 'mobx-react'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
 //STYLES
 import styles from './css/authorized.scss'
+import userClient from '../../services/graphql/userClient'
 
 //STORE
 import { user, dialog } from '../../services/stores'
+import HorizontalList from '../../components/HorizontalList'
+import { convertToMoneyFormat } from '../../utils'
 
 //COMPONENT
 @observer
@@ -57,6 +62,11 @@ class Account extends Component {
       msisdn,
     } = user.data
 
+    let { getUser, loading } = this.props.user
+
+    let as2in1Wallet = ''
+    if (getUser) as2in1Wallet = getUser.as2in1Wallet
+    
     return (
       <div className={styles.container} >
         <div className={styles.profile} >
@@ -67,6 +77,13 @@ class Account extends Component {
 
         <div className={styles.card} >
           <List selectable ripple>
+            <ListSubHeader className={styles['e-wallet']} caption='eWallet' />
+            <HorizontalList 
+              dataKey="As 2in1 Wallet"
+              value={loading ? 'Loading...' : as2in1Wallet ? convertToMoneyFormat(as2in1Wallet) : 0}
+              valueClassName={styles['e-wallet-value']}
+              keyClassName={styles['e-wallet-key']}
+            />
             <ListSubHeader caption='Akun' />
             <ListItem
               caption='Profil Saya' leftIcon='account_circle'
@@ -127,4 +144,17 @@ class Account extends Component {
   }
 }
 
-export default Account
+const getUserDataQuery = gql`
+  query UserData {
+    getUser {
+      as2in1Wallet
+    }
+  }
+`
+
+export default graphql(getUserDataQuery, {
+  name: 'user',
+  options: {
+    client: userClient,
+  },
+})(Account)

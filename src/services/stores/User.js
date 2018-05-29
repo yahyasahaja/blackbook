@@ -10,6 +10,8 @@ import {
 
 //TOKENS
 import tokens from './Tokens'
+import favorites from './Favorites'
+import cart from './Cart'
 
 //UTILS
 import {
@@ -47,19 +49,31 @@ class User {
     let secretstring = getQueryString('key')
     if (!secretstring) return
     
+    return await this.loginUsingSecretString(secretstring)
+  }
+
+  @action
+  async loginUsingSecretString(secretstring) {
     this.isLoadingLogin = true
-    let { data: { is_ok, data: token} } = await axios.post(
-      getIAMEndpoint(`/loginkey?key=${secretstring}`), 
-      {}
-    )
-    
-    if (!is_ok) return 
-    
-    this.isLoadingLogin = false
-    tokens.setAuthToken(token)
-    await this.fetchData(token)
-    await this.registerPushSubscription()
-    return token
+
+    try {
+      let { data: { is_ok, data: token} } = await axios.post(
+        getIAMEndpoint(`/loginkey?key=${secretstring}`), 
+        {}
+      )
+      
+      if (!is_ok) return 
+      
+      this.isLoadingLogin = false
+      favorites.clear()
+      cart.clear()
+      tokens.setAuthToken(token)
+      await this.fetchData(token)
+      await this.registerPushSubscription()
+      return token
+    } catch (e) {
+      console.log('ERROR WHILE LOGIN WITH SECRET STRING', e)
+    }
   }
 
   async uploadProfilePicture(files) {
@@ -140,6 +154,8 @@ class User {
 
       this.isLoadingLogin = false
       if (is_ok) {
+        favorites.clear()
+        cart.clear()
         tokens.setAuthToken(token)
         await this.fetchData(token)
         await this.registerPushSubscription()
@@ -158,6 +174,8 @@ class User {
   logout = () => {
     this.data = null
     tokens.removeAuthToken()
+    favorites.clear()
+    cart.clear()
   }
 
   @action

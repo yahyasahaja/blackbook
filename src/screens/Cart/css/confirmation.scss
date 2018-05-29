@@ -70,6 +70,13 @@
     cursor: pointer;
   }
 
+  .as2in1 {
+    background: #eb2025;
+    border-radius: 10px;
+    padding-right: 5px;
+    margin: 10px 0;
+  }
+
   p {
     color: #333;
     margin: 5px 0;
@@ -77,6 +84,17 @@
 
     &.title {
       font-weight: 500;
+    }
+  }
+
+  .e-wallet-channel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .balance {
+      font-weight: 300;
+      font-size: 18pt;
     }
   }
 

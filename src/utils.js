@@ -29,7 +29,7 @@ export const convertToMoneyFormat = (num, currency) => {
       return num == '-' ? acc : num + (i && !(i % 3) ? '.' : '') + acc
     }, '')
 
-  return `${currency} ${res}`
+  return `${currency ? currency : ''} ${res}`
 }
 
 export const convertStatus = (status) => {

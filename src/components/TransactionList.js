@@ -53,6 +53,7 @@ class EditableList extends Component {
       style,
       disabled,
       order: {
+        total,
         id,
         status,
         time,
@@ -79,12 +80,7 @@ class EditableList extends Component {
                 : country === 'HKG'
                   ? 'HKD'
                   : 'Rp'
-            } ${
-              sellers.reduce((prev, cur) => {
-                return prev + cur.items.reduce((prev, cur) => {
-                  return prev + cur.price + cur.quantity
-                }, 0)
-              }, 0)}`}</span>
+            } ${total}`}</span>
           </div>
         </div>
         <div className={styles.devider} />

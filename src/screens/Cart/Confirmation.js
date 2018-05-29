@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import gql from 'graphql-tag'
 import axios from 'axios'
+import { graphql } from 'react-apollo'
 
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
@@ -73,21 +74,53 @@ class Process extends Component {
     )
   }
 
-  // channel section
-  renderChannel() {
+  renderChannelDetail() {
     const { channel } = this.props.location.state
 
     const logo = {
       HILIFETW: 'https://paygw.azureedge.net/images/hilifelogo.png',
       FAMILYTW: 'https://paygw.azureedge.net/images/familogo.png',
+      AS2IN1WAL: 'http://as2in1mobile.com/images/As2in1-Mobile-logo.png',
     }
 
+
+    let { getUser, loading } = this.props.user
+
+    let as2in1Wallet = ''
+    if (getUser) as2in1Wallet = getUser.as2in1Wallet
+
+    if (channel === 'AS2IN1WAL') return (
+      <div className={styles['e-wallet-channel']}>
+        <img 
+          className={cart.channel === 'AS2IN1WAL' ? styles.as2in1 : ''}
+          data-testid="channel-logo" 
+          data-channel={channel} 
+          src={logo[channel]}
+        />
+
+        <span className={styles.balance} >
+          {loading ? 'Loading...' : !as2in1Wallet ? convertToMoneyFormat(10000, 'HKD') : 0}
+        </span>
+      </div>
+    )
+
+    return (
+      <div className >
+        <img 
+          data-testid="channel-logo" 
+          data-channel={channel} 
+          src={logo[channel]}
+        />
+      </div>
+    )
+  }
+
+  // channel section
+  renderChannel() {
     return (
       <div className={styles.section}>
         <p className={styles.title}>CHANNEL PEMBAYARAN</p>
-        <div>
-          <img data-testid="channel-logo" data-channel={channel} src={logo[channel]} />
-        </div>
+        {this.renderChannelDetail()}
         <p>Tunjukan barcode pembayaran yang akan anda terima kepada kasir</p>
       </div>
     )
@@ -422,4 +455,17 @@ const SaveUserAddress = gql`
   }
 `
 
-export default Process
+const getUserDataQuery = gql`
+  query UserData {
+    getUser {
+      as2in1Wallet
+    }
+  }
+`
+
+export default graphql(getUserDataQuery, {
+  name: 'user',
+  options: {
+    client: userClient,
+  },
+})(Process)

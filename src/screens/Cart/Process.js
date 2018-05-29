@@ -236,6 +236,7 @@ class Process extends Component {
     const logo = {
       HILIFETW: 'https://paygw.azureedge.net/images/hilifelogo.png',
       FAMILYTW: 'https://paygw.azureedge.net/images/familogo.png',
+      AS2IN1WAL: 'http://as2in1mobile.com/images/As2in1-Mobile-logo.png'
     }
 
     return (
@@ -253,7 +254,12 @@ class Process extends Component {
           theme={dropdownTheme}
         />
         {cart.channel !== 'none' && (
-          <img data-testid="channel-logo" data-channel={cart.channel} src={logo[cart.channel]} />
+          <img 
+            className={cart.channel === 'AS2IN1WAL' ? styles.as2in1 : ''}
+            data-testid="channel-logo" 
+            data-channel={cart.channel} 
+            src={logo[cart.channel]} 
+          />
         )}
         {cart.channel !== 'none' && (
           <p>Tunjukan barcode pembayaran yang akan anda terima kepada kasir</p>

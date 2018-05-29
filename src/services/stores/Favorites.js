@@ -2,6 +2,9 @@
 import { observable, action } from 'mobx'
 import badges from './Badges'
 
+//CONFIG
+import { FAVORITES_STORAGE_URI } from '../../config'
+
 //STORE
 class Favorites {
   constructor() {
@@ -42,6 +45,13 @@ class Favorites {
     this.data.replace(state)
     badges.set(badges.LIKED, this.data.length)
     window.localStorage.setItem('favorites', JSON.stringify(state))
+  }
+
+  @action
+  clear() {
+    this.data = []
+    badges.set(badges.LIKED, 0)
+    localStorage.removeItem(FAVORITES_STORAGE_URI)
   }
 }
 

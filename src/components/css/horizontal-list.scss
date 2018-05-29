@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .key {
+    display: block;
+    color: #787878;
+    padding: 10px;
+  }
+
+  .value {
+    display: block;
+    color: inherit;
+    padding: 10px;
+    font-weight: bold;
+  }
+}

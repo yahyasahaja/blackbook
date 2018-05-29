@@ -74,7 +74,7 @@ class Cart {
   clear() {
     this.data.clear()
     badges.set(badges.CART, 0)
-    localStorage.setItem(CART_STORAGE_URI, JSON.stringify([]))
+    localStorage.removeItem(CART_STORAGE_URI)
   }
 
   @computed
