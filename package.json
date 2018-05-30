@@ -106,8 +106,8 @@
     "postinstall": "npm run build",
     "test": "cypress run",
     "toolbox": "react-toolbox-themr",
-    "git" : "git add . && git commit -m",
-    "postgit" : "git push"
+    "git": "git add . && git commit -m",
+    "postgit": "git push"
   },
   "jest": {
     "collectCoverageFrom": [
