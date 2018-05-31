@@ -244,7 +244,7 @@ class PromoDetail extends Component {
   renderCards() {
     let { products } = this.state
 
-    console.log(products)
+    // console.log(products)
 
     return products.map((data, i) => <Card favorites={favorites} {...data} key={i} data={data} />)
   }
