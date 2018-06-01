@@ -146,6 +146,7 @@ class Process extends Component {
 
   // total section
   renderTotal() {
+    console.log(user.data)
     return (
       <div className={styles.section}>
         <div className={styles.price}>
@@ -180,10 +181,10 @@ class Process extends Component {
           </span>
         </div>
 
-        {cart.totalPrice > 20000 && (
+        {cart.totalPrice > 20000 && (user.data && user.data.country) !== 'HKG' && (
           <p>
             Anda akan mendapatkan lebih dari satu barkode pembayaran (nominal
-            diatas NTD 20000)
+            diatas NTD 20.000)
           </p>
         )}
       </div>

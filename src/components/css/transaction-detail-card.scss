@@ -45,8 +45,18 @@
     font-weight: bold;
     color: $secondary-color;
 
-    .btn {
-      width: auto;
+    .button-wrapper {
+      display: flex;
+
+      .btn {
+        width: auto;
+        margin-left: 10px;
+
+        span {
+          margin-right: 5px;
+        }
+      }
     }
+
   }
 }

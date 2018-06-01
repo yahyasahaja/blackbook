@@ -19,7 +19,7 @@ export default class TransactionDetailCard extends Component {
     else return 'SELESAI'
   }
 
-  onClick() {
+  state = {
 
   }
 
@@ -29,6 +29,7 @@ export default class TransactionDetailCard extends Component {
         status,
         seller,
         items,
+        trackingUrl
       }
     } = this.props
 
@@ -51,7 +52,7 @@ export default class TransactionDetailCard extends Component {
             return (
               <div key={i} className={styles.item} >
                 <div className={styles.left} >
-                  {item.product.images.length > 0 ? <img src={item.product.images[0].url} alt="" /> : '' }
+                  {item.product.images.length > 0 ? <img src={item.product.images[0].url} alt="" /> : ''}
                 </div>
                 <div className={styles.right} >
                   <div>{item.product.name}</div>
@@ -61,22 +62,30 @@ export default class TransactionDetailCard extends Component {
             )
           })
         }
-        
+
         <div className={styles.confirmation} >
-          <div 
-            className={styles.status} 
-            style={{color: statusColor}}
+          <div
+            className={styles.status}
+            style={{ color: statusColor }}
           >{status}</div>
           {
             status === 'DALAM PENGIRIMAN'
-              ? <PrimaryButton 
-                onClick={this.props.onConfirm}
-                className={styles.btn}
-              >Konfirmasi</PrimaryButton>
+              ? (
+                <div className={styles['button-wrapper']} >
+                  <PrimaryButton
+                    onClick={() => this.props.trackOrder(trackingUrl)}
+                    className={styles.btn}
+                  ><span className="mdi mdi-map-marker" /> Lacak</PrimaryButton>
+
+                  <PrimaryButton
+                    onClick={this.props.onConfirm}
+                    className={styles.btn}
+                  >Konfirmasi</PrimaryButton>
+                </div>
+              )
               : ''
           }
         </div>
-
       </div>
     )
   }
