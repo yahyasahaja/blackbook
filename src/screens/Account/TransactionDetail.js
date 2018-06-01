@@ -69,7 +69,12 @@ class TransactionDetail extends Component {
   state = {
     active: false,
     currentConfirmSeller: {},
-    order: null
+    order: null,
+    trackingUrl: null
+  }
+
+  trackOrder = trackingUrl => {
+    this.setState({trackingUrl})
   }
 
   renderContent() {
@@ -141,6 +146,7 @@ class TransactionDetail extends Component {
           (s, i) => <TransactionDetailCard
             onConfirm={() => this.confirm(s)}
             key={i} seller={s}
+            trackOrder={this.trackOrder}
           />
         )
       }
@@ -158,6 +164,7 @@ class TransactionDetail extends Component {
   }
 
   render() {
+    console.log(!this.state.trackingUrl)
     return (
       <React.Fragment>
         <PopupBar
@@ -165,6 +172,7 @@ class TransactionDetail extends Component {
           renderContent={this.renderContent.bind(this)}
           backLink="/account/transaction"
           anim={ANIMATE_HORIZONTAL}
+          onTop={!this.state.trackingUrl}
         />
         {
           this.state.currentConfirmSeller.seller
@@ -180,6 +188,23 @@ class TransactionDetail extends Component {
               }
               </p>
             </Dialog>
+            : ''
+        }
+
+        {
+          this.state.trackingUrl
+            ? <div className={styles.popup} >
+              <div className={styles.close} onClick={() => this.setState({ trackingUrl: null })} >&times;</div>
+              <iframe
+                ref={el => this.iframe = el}
+                // onLoad={e => {
+                //   console.log('TRIGGERED', e.target.innerHTML)
+                //   clearTimeout(this.timerToError)
+                // }}
+                src={this.state.trackingUrl}
+                frameBorder={0}
+              />
+            </div>
             : ''
         }
       </React.Fragment>
@@ -205,6 +230,7 @@ query getOrder($orderId: ID!) {
     sellers {
       id
       status
+      trackingUrl
       seller {
         id
         name

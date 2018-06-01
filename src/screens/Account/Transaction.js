@@ -125,7 +125,7 @@ class Transaction extends Component {
 
 const retreiveTransactionData = gql`
 query RetrieveTransactionData($offset: Int, $status: [OrderStatusEnum!]) {
-  myOrders(status: $status, order: DESC, limit: 10, offset: $offset) {
+  myOrders(status: $status, order: DESC, limit: 20, offset: $offset) {
     orders {
       id
       status
