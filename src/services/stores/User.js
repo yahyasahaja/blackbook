@@ -1,6 +1,7 @@
 //MODULES
 import { observable, action, computed } from 'mobx'
 import axios from 'axios'
+import Raven from 'raven-js'
 
 //CONFIG
 import {
@@ -68,11 +69,13 @@ class User {
       favorites.clear()
       cart.clear()
       tokens.setAuthToken(token)
+      Raven.setUserContext({token})
       await this.fetchData(token)
       await this.registerPushSubscription()
       return token
     } catch (e) {
       console.log('ERROR WHILE LOGIN WITH SECRET STRING', e)
+      Raven.captureException(e)
     }
   }
 
@@ -116,6 +119,7 @@ class User {
       this.getProfilePictureURL()
     } catch (e) {
       console.log(e)
+      Raven.captureException(e)
     }
 
     this.isLoadingUploadProfilePic = false
@@ -157,6 +161,10 @@ class User {
         favorites.clear()
         cart.clear()
         tokens.setAuthToken(token)
+        Raven.setUserContext({
+          msisdn,
+          token
+        })
         await this.fetchData(token)
         await this.registerPushSubscription()
         return token
@@ -176,6 +184,7 @@ class User {
     tokens.removeAuthToken()
     favorites.clear()
     cart.clear()
+    Raven.setUserContext()
   }
 
   @action

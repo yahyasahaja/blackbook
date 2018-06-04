@@ -22,6 +22,20 @@ describe('Promo page', () => {
     })
   })
 
+  it('Order with wrong promo code', () => {
+    cy.clearLocalStorage()
+
+    cy.visit('/')
+    cy.get('[class^="product-card"]').eq(0).as('card-wrapper')
+    cy.get('@card-wrapper').find('button').contains('BELI').click()
+    cy.get('@card-wrapper').find('[data-testid="primary-button"]').click()
+    cy.visit('/cart')
+    cy.get('[data-react-toolbox="checkbox"] > input[type="checkbox"]').click({force:true})
+    cy.get('input[type="text"]').type('promo-promoan')
+    cy.get('button').contains('GUNAKAN').click()
+    cy.get('p[class*="error"').contains('Silahkan cek kembali kode voucher anda!').should('be.visible')
+  })
+
   it('Order with Promo', () => {
     cy.clearLocalStorage()
     let total, ongkir
@@ -29,7 +43,6 @@ describe('Promo page', () => {
     const randDisc = disc[Math.floor(Math.random()*disc.length)]
 
     cy.visit('/')
-    cy.login()
     cy.get('[class^="product-card"]').eq(0).as('card-wrapper')
     cy.get('@card-wrapper').find('button').contains('BELI').click()
     cy.get('@card-wrapper').find('[data-testid="primary-button"]').click()
@@ -50,4 +63,5 @@ describe('Promo page', () => {
       })
     })
   })
+
 })
