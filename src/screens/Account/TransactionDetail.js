@@ -272,15 +272,4 @@ mutation ConfirmReceviedGoods($orderSellerId: ID!, $input: OrderSellerStatusInpu
 }
 `
 
-export default compose(
-  graphql(getOrderQuery, {
-    name: 'getOrderQuery',
-    options: props => ({
-      client,
-      variables: {
-        orderId: props.match.params.transaction_id
-      },
-      fetchPolicy: 'cache-and-network'
-    }),
-  }),
-)(TransactionDetail)
+export default TransactionDetail
