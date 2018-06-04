@@ -14,8 +14,6 @@ import { observable } from 'mobx'
 @observer 
 class Threads extends Component {
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.location.pathname)
-
     if(nextProps.data.threads && nextProps.location.pathname === '/chat') {
       const threads = nextProps.data.threads.data.map((x, index) => {
         const thread = Object.assign({}, x)
