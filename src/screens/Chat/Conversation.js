@@ -64,7 +64,9 @@ class Conversation extends Component {
   }
 
   async componentDidMount() {
-    chat.threads[this.props.location.state.index].isRead = true
+    if(this.props.location.state.index) {
+      chat.threads[this.props.location.state.index].isRead = true
+    }
     window.addEventListener('scroll', this.checkScroll)
     window.addEventListener('gesturechange', this.checkScroll)
 
