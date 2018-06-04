@@ -7,7 +7,8 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import moment from 'moment'
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import ChatBubble from '../../components/Chat/ChatBubble'
-import client from '../../services/graphql/chatClient'
+import chatClient from '../../services/graphql/chatClient'
+import productClient from '../../services/graphql/productClient'
 
 import styles from './css/conversation.scss'
 import loadingTheme from './css/loading.scss'
@@ -154,7 +155,7 @@ class Conversation extends Component {
 
     const { data } = this.props
     // const { data: res } = await submit(message)
-    const { data: res } = await client.mutate({
+    const { data: res } = await chatClient.mutate({
       mutation: sendMessageMutation,
       variables: {
         id:
@@ -419,7 +420,7 @@ export default compose(
   graphql(getMessagesQuery, {
     skip: props => props.match.params.id === 'new',
     options: props => ({
-      client,
+      client: chatClient,
       variables: {
         id: props.match.params.id,
       },
@@ -468,7 +469,7 @@ export default compose(
       return props.match.params.id !== 'new'
     },
     options: props => ({
-      client,
+      client: chatClient,
       variables: {
         productId: props.location.state.productId,
       },
@@ -491,6 +492,7 @@ export default compose(
           ? props.location.state.productId
           : props.data.thread.productId
       return {
+        client: productClient,
         variables: {
           id,
         },
