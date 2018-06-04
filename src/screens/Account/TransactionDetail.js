@@ -33,6 +33,30 @@ class TransactionDetail extends Component {
     this.id = appStack.push()
   }
 
+  state = {
+    active: false,
+    currentConfirmSeller: {},
+    order: null,
+    trackingUrl: null
+  }
+
+  async getOrderDetail() {
+    const res = await client.query({
+      query: getOrderQuery,
+      variables: {
+        orderId: this.props.match.params.transaction_id
+      },
+    })
+
+    this.setState({
+      order: res.data.order,
+    })
+  }
+
+  componentWillMount() {
+    this.getOrderDetail()
+  }
+
   componentWillUnmount() {
     appStack.pop()
   }
@@ -52,7 +76,7 @@ class TransactionDetail extends Component {
           status: 'RECEIVED'
         }
       }
-    }).then(() => this.props.getOrderQuery.refetch())
+    }).then(() => this.getOrderDetail())
 
     this.setState({ active: false })
   }
@@ -66,23 +90,12 @@ class TransactionDetail extends Component {
     this.setState({ active: true, currentConfirmSeller: seller })
   }
 
-  state = {
-    active: false,
-    currentConfirmSeller: {},
-    order: null,
-    trackingUrl: null
-  }
-
   trackOrder = trackingUrl => {
     this.setState({trackingUrl})
   }
 
   renderContent() {
-    let {
-      getOrderQuery: {
-        order
-      }
-    } = this.props
+    let { order } = this.state
     
     if (!order) return (
       <div className={styles.loading} >
