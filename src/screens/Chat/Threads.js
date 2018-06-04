@@ -43,7 +43,7 @@ class Threads extends Component {
     }
 
     if(this.props.isSelected && onlineStatus.isOnline && this.props.location.pathname !== '/chat') {
-      this.props.data.refetch()
+      if (this.props.data.refetch) this.props.data.refetch()
     }
 
     if(this.props.isSelected && !user.isLoggedIn) {

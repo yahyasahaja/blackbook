@@ -13,7 +13,7 @@ import styles from './css/conversation.scss'
 import loadingTheme from './css/loading.scss'
 import loadingSubmitTheme from './css/loading-submit.scss'
 
-import { appStack, onlineStatus, badges, chat } from '../../services/stores'
+import { appStack, onlineStatus, badges, chat, user } from '../../services/stores'
 
 @observer
 class Conversation extends Component {
@@ -37,6 +37,10 @@ class Conversation extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if(!user.isLoggedIn) {
+      return this.props.history.replace('/account')
+    }
+
     if (nextProps.data && !nextProps.data.loading) {
       this.setState({ showed: true })
     }
@@ -61,6 +65,7 @@ class Conversation extends Component {
         nextProps.history.replace(`/chat/${nextProps.threadId.thread.id}`)  
       }
     }
+    
   }
 
   async componentDidMount() {
@@ -472,6 +477,7 @@ export default compose(
       variables: {
         productId: props.location.state.productId,
       },
+      fetchPolicy: 'cache-and-network',
     }),
   }),
   graphql(getProductQuery, {
