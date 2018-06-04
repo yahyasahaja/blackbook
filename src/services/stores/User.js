@@ -20,6 +20,7 @@ import {
   getQueryString,
 } from '../../utils'
 
+const isNotLocal = () => !(location.href.includes('localhost') || /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href))
 //STORE
 class User {
   constructor() {
@@ -69,13 +70,13 @@ class User {
       favorites.clear()
       cart.clear()
       tokens.setAuthToken(token)
-      Raven.setUserContext({token})
+      if(isNotLocal()) Raven.setUserContext({token})
       await this.fetchData(token)
       await this.registerPushSubscription()
       return token
     } catch (e) {
       console.log('ERROR WHILE LOGIN WITH SECRET STRING', e)
-      Raven.captureException(e)
+      if(isNotLocal()) Raven.captureException(e)
     }
   }
 
@@ -119,7 +120,7 @@ class User {
       this.getProfilePictureURL()
     } catch (e) {
       console.log(e)
-      Raven.captureException(e)
+      if(isNotLocal()) Raven.captureException(e)
     }
 
     this.isLoadingUploadProfilePic = false
@@ -161,7 +162,7 @@ class User {
         favorites.clear()
         cart.clear()
         tokens.setAuthToken(token)
-        Raven.setUserContext({
+        if(isNotLocal()) Raven.setUserContext({
           msisdn,
           token
         })
@@ -184,7 +185,7 @@ class User {
     tokens.removeAuthToken()
     favorites.clear()
     cart.clear()
-    Raven.setUserContext()
+    if(isNotLocal()) Raven.setUserContext()
   }
 
   @action
