@@ -103,7 +103,7 @@
     "build": "node scripts/build.js",
     "dev-server": "NODE_ENV=development nodemon server/index.js --exec babel-node --watch server",
     "build-server": "babel server -d build-server",
-    "postinstall": "npm run build",
+    "postinstall": "yarn build",
     "test": "cypress run",
     "toolbox": "react-toolbox-themr",
     "git": "git add . && git commit -m",
