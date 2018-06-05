@@ -36,7 +36,10 @@ class Conversation extends Component {
         ? this.props.location.state.sender
         : 'Penjual',
     message: '',
-    messages: [],
+    messages: {
+      total: 0,
+      data: [],
+    },
     product: null,
     loadingProduct: true,
     loadingMessage: true,
@@ -58,7 +61,7 @@ class Conversation extends Component {
   }
 
   async componentDidMount() {
-    if (this.props.location.state.index) {
+    if (this.props.location.state && this.props.location.state.index) {
       if (chat.threads[this.props.location.state.index]) {
         chat.threads[this.props.location.state.index].isRead = true
       }
@@ -76,6 +79,13 @@ class Conversation extends Component {
     }
 
     badges.set(badges.CHAT, 0)
+  }
+
+  componentDidUpdate(props) {
+    if(props.match.params.id === 'new' && this.props.match.params.id !== 'new') {
+      console.log('existing chat', props.match.params.id, this.props.match.params.id)
+      this.getMessages()
+    }
   }
 
   componentWillUnmount() {
@@ -124,19 +134,27 @@ class Conversation extends Component {
     } else {
       // fetch thread id if new
       if (this.props.match.params.id === 'new') {
+        console.log('checking existing chat')
         const {
           data: { thread },
         } = await chatClient.query({
           query: getThreadId,
+          fetchPolicy: 'network-only',
           variables: {
             productId: this.props.location.state.productId,
           },
         })
 
+        console.log('thread is', thread)
         if (thread !== null) {
           return this.props.history.replace(`/chat/${thread.id}`)
         } else {
-          this.getProduct(this.props.location.state.productId)
+          console.log('not an existing chat')
+          this.setState({
+            loadingMessage: false,
+            loadingIncomingMessage: false,
+          })
+          return this.getProduct(this.props.location.state.productId)
         }
       }
 
