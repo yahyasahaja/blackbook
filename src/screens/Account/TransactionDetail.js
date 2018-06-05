@@ -1,10 +1,10 @@
 //MODULES
 import React, { Component } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import Dialog from 'react-toolbox/lib/dialog'
 import { observer } from 'mobx-react'
+import { observable } from 'mobx'
 
 //GRAPHQL
 import client from '../../services/graphql/orderingClient'
@@ -20,7 +20,7 @@ import TransactionDetailCard from '../../components/TransactionDetailCard'
 import PrimaryButton from '../../components/PrimaryButton'
 
 //STORE
-import { appStack } from '../../services/stores'
+import { appStack, snackbar, dialog, user, overlayLoading } from '../../services/stores'
 
 //UTILS
 import { convertCountryCurrency, convertToMoneyFormat, convertStatus } from '../../utils'
@@ -61,6 +61,29 @@ class TransactionDetail extends Component {
     appStack.pop()
   }
 
+  componentDidMount() {
+    this.fetchOrder()
+  }
+
+  async fetchOrder() {
+    try {
+      this.loadingOrders = true
+      const {
+        data: { order },
+      } = await client.query({
+        query: getOrderQuery,
+        variables: {
+          orderId: this.props.match.params.transaction_id
+        },
+      })
+
+      this.order = order
+      this.loadingOrder = false
+    } catch (err) {
+      console.log('Error while fetching order', err)
+    }
+  }
+
   handleToggle = () => {
     this.setState({ active: !this.state.active })
   }
@@ -97,7 +120,7 @@ class TransactionDetail extends Component {
   renderContent() {
     let { order } = this.state
     
-    if (!order) return (
+    if (this.loadingOrder) return (
       <div className={styles.loading} >
         <div>
           <ProgressBar
@@ -118,8 +141,11 @@ class TransactionDetail extends Component {
       shippingInfo,
       sellers,
       country,
-      total
+      total,
+      payments
     } = order
+
+    let channel = (payments[0] && payments[0].channel) || ''
 
     let list = [
       { key: 'Nomor Transaksi', value: id },
@@ -129,7 +155,20 @@ class TransactionDetail extends Component {
             {convertStatus(status)}
             <PrimaryButton 
               className={styles.pay}
-              to={`/account/transaction/payment/${id}`} 
+              onClick={channel === 'AS2IN1WAL' 
+                ? () => dialog.show(
+                  'Konfirmasi Pembayaran', 
+                  'Anda akan melakukan pembayaran menggunakan e-wallet',
+                  [
+                    { label: 'Batal', onClick: dialog.toggleActive },
+                    { label: 'Bayar', onClick: () => {
+                      this.createPayment(id)
+                      dialog.toggleActive()
+                    }},
+                  ]
+                )
+                : () => this.props.location.push(`/account/transaction/payment/${id}`)
+              }
             >Bayar</PrimaryButton>
           </div>
         )
@@ -177,7 +216,6 @@ class TransactionDetail extends Component {
   }
 
   render() {
-    console.log(!this.state.trackingUrl)
     return (
       <React.Fragment>
         <PopupBar
@@ -239,6 +277,7 @@ query getOrder($orderId: ID!) {
     total
     payments {
       status
+      channel
     }
     sellers {
       id

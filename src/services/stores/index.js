@@ -11,6 +11,7 @@ import cart from './Cart'
 import chat from './Chat'
 import dialog from './Dialog'
 import serviceWorkerUpdate from './ServiceWorkerUpdate'
+import overlayLoading from './OverlayLoading'
 
 export { 
   categories,
@@ -26,6 +27,7 @@ export {
   dialog,
   chat,
   serviceWorkerUpdate,
+  overlayLoading,
 }
 
 export default { 
@@ -42,4 +44,5 @@ export default {
   dialog,
   chat,
   serviceWorkerUpdate,
+  overlayLoading,
 }

@@ -24,13 +24,9 @@ export default class ScopeBar extends Component {
   componentDidMount() {
     let { data } = this.props
 
-    for (let i in data) if (data[i].default) {
-      this.onClick(i, data[i])
-      return data[i].onClick()
-    }
+    for (let i in data) if (data[i].default) return this.onClick(i, data[i])
 
     this.onClick(data[0], 0)
-    this.props.data[0].onClick()
   }
 
   state = {
