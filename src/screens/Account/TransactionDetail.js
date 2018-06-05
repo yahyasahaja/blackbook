@@ -33,29 +33,8 @@ class TransactionDetail extends Component {
     this.id = appStack.push()
   }
 
-  state = {
-    active: false,
-    currentConfirmSeller: {},
-    order: null,
-    trackingUrl: null
-  }
-
-  async getOrderDetail() {
-    const res = await client.query({
-      query: getOrderQuery,
-      variables: {
-        orderId: this.props.match.params.transaction_id
-      },
-    })
-
-    this.setState({
-      order: res.data.order,
-    })
-  }
-
-  componentWillMount() {
-    this.getOrderDetail()
-  }
+  @observable order = {}
+  @observable loadingOrder = true
 
   componentWillUnmount() {
     appStack.pop()
@@ -99,7 +78,7 @@ class TransactionDetail extends Component {
           status: 'RECEIVED'
         }
       }
-    }).then(() => this.getOrderDetail())
+    }).then(() => this.props.getOrderQuery.refetch())
 
     this.setState({ active: false })
   }
@@ -113,12 +92,61 @@ class TransactionDetail extends Component {
     this.setState({ active: true, currentConfirmSeller: seller })
   }
 
+  state = {
+    active: false,
+    currentConfirmSeller: {},
+    order: null,
+    trackingUrl: null
+  }
+
   trackOrder = trackingUrl => {
     this.setState({trackingUrl})
   }
 
+  async createPayment(orderId) {
+    let channel = this.order.payments[0].channel
+
+    try {
+      overlayLoading.show()
+
+      const {
+        data: { addOrderPayment: paymentDetail },
+      } = await client.mutate({
+        mutation: AddOrderPayment,
+        variables: {
+          orderId: orderId,
+          input: {
+            channel,
+          },
+        },
+      })
+
+      overlayLoading.hide()
+
+      // create payment sukses
+      if (paymentDetail.payments.length > 0) {
+        snackbar.show(
+          `Pembayaran sejumlah ${convertToMoneyFormat(
+            paymentDetail.total,
+            convertCountryCurrency(paymentDetail.country),
+          )} telah berhasil`,
+          null,
+          null,
+          7000,
+        )
+      }
+    } catch (err) {
+      console.log(err)
+      if (user.data && user.data.country === 'HKG')
+        snackbar.show('Balance e-wallet tidak cukup')
+
+      overlayLoading.hide()
+      return null
+    }
+  }
+
   renderContent() {
-    let { order } = this.state
+    let order = this.order
     
     if (this.loadingOrder) return (
       <div className={styles.loading} >
@@ -309,6 +337,20 @@ mutation ConfirmReceviedGoods($orderSellerId: ID!, $input: OrderSellerStatusInpu
     id
   }
 }
+`
+
+export const AddOrderPayment = gql`
+  mutation AddOrderPayment($orderId: ID!, $input: OrderPaymentInput!) {
+    addOrderPayment(orderId: $orderId, input: $input) {
+      id
+      country
+      total
+      payments {
+        url
+        code
+      }
+    }
+  }
 `
 
 export default TransactionDetail
