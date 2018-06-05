@@ -176,6 +176,7 @@ class Conversation extends Component {
       this.setState({
         loadingProduct: false,
         product,
+        title: product.seller.name,
       })
     } catch (err) {
       this.setState({
