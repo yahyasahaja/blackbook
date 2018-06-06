@@ -11,10 +11,14 @@ import { List, ListItem } from 'react-toolbox/lib/list'
 //STYLES
 import styles from './css/index.scss'
 import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
+import Slider from 'react-slick'
+
+
 
 //COMPONENTS
 import TopBar, { APPEAR } from '../../components/TopBar'
 import Card from '../../components/ProductCard'
+
 // import Pills from '../../components/Pills'
 // import Separator from '../../components/Separator'
 
@@ -59,17 +63,17 @@ class Home extends Component {
     let { activePromotedsQuery: { loading: curLoading } } = this.props
 
     // console.log('TRIGGERED', nextProps)
-    
+
     if (curLoading !== newLoading && !newLoading && !newError) {
       let activePromoteds = nextProps.activePromotedsQuery.activePromoteds
       let { offset } = this.state
 
-      let products = activePromoteds.promoteds.map(({product}) => {
+      let products = activePromoteds.promoteds.map(({ product }) => {
         if (product.images.length > 0)
           return { ...product, image: product.images[0].url }
         return { ...product, image: '' }
       })
-      
+
       this.setState({
         products: [...this.state.products, ...products],
         offset: offset + MAX_FETCH_LENGTH,
@@ -87,6 +91,7 @@ class Home extends Component {
     this.addScrollListener(this.props.isSelected)
     this.checkScroll()
   }
+
 
   addScrollListener(isSelected) {
     if (isSelected) {
@@ -152,14 +157,14 @@ class Home extends Component {
 
     return data.map((data, i) => {
       return (
-        <Link 
+        <Link
           to={`/category/${data.id}`}
-          key={i} 
-          className={styles.category} 
+          key={i}
+          className={styles.category}
           onClick={e => {
             if (data.id === 'categories') {
               e.preventDefault()
-              this.setState({areAllCategoriesPoppedUp: true})
+              this.setState({ areAllCategoriesPoppedUp: true })
             }
           }}
         >
@@ -175,14 +180,14 @@ class Home extends Component {
   renderAllCategories() {
     let { allCategoriesQuery: { allCategories } } = this.props
     let { areAllCategoriesPoppedUp } = this.state
-    
+
     if (!areAllCategoriesPoppedUp || !allCategories) return
-    
+
     return (
       <div className={styles['all-categories']} >
         <div className={styles.header} >
           <span onClick={
-            () => this.setState({areAllCategoriesPoppedUp: false})
+            () => this.setState({ areAllCategoriesPoppedUp: false })
           } className={`mdi mdi-arrow-left ${styles.back}`} />
           <span className={styles.title} >Semua Kategori</span>
         </div>
@@ -193,7 +198,7 @@ class Home extends Component {
                 key={i}
                 caption={data.name}
                 onClick={() => {
-                  this.setState({areAllCategoriesPoppedUp: false})
+                  this.setState({ areAllCategoriesPoppedUp: false })
                   this.props.history.push(`/category/${data.name}`)
                 }}
               />
@@ -204,7 +209,47 @@ class Home extends Component {
     )
   }
 
+  renderAdsPanel = () => {
+    const images = [
+      {
+        id: '2d3a2c7a-7bba-438a-8c60-b079d6dd4b04',
+        imageUrl: '/static/img/placeimg_640_480_tech1.jpg',
+      },
+      {
+        id: 'edd8bdf0-f89c-436a-a6f7-7e9749c7d020',
+        imageUrl: '/static/img/placeimg_640_480_tech2.jpg',
+
+      },
+      {
+        id: 'e4b5d98f-0e0c-483d-ae46-6eed890b402d',
+        imageUrl: '/static/img/placeimg_640_480_tech3.jpg',
+
+      }
+    ]
+
+    return images.map((image, i) => {
+      return (
+        <Link key={i} to={`/promo/${image.id}`} >
+          <img className={styles.ads} src={image.imageUrl} />
+        </Link>
+      )
+    }
+    )
+  }
+
   render() {
+    let settings = {
+      autoplay: true,
+      dots: true,
+      dotsClass: "slick-dots",
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false,
+      
+    }
+
     let { activePromotedsQuery: { loading } } = this.props
     let { areAllCategoriesPoppedUp } = this.state
     let style = {}
@@ -219,7 +264,7 @@ class Home extends Component {
         relative={{
           title: { cart: true },
           search: { cart: false },
-        }} 
+        }}
 
         fly={{
           search: { cart: true },
@@ -230,18 +275,21 @@ class Home extends Component {
         style={{ background: 'rgb(239, 239, 239)' }}
         wrapperStyle={{ padding: 0 }}
       >
+      <Slider {...settings}>
+        {this.renderAdsPanel()}
+      </Slider>
         <div
           style={style}
         >
           <div className={styles.categories} >
             {this.renderCategories()}
           </div>
-          
+
           {this.renderCards()}
           {
             loading
               ? <ProgressBar
-                className={styles.loading} 
+                className={styles.loading}
                 type='circular' theme={ProgressBarTheme}
                 mode='indeterminate'
               />
