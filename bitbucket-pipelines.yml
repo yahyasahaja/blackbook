@@ -7,11 +7,23 @@ image: rytara/docker-node-zip
 
 pipelines:
   branches:
+    # build for dev-1
+    dev-1:
+      - step:
+          caches:
+            - node
+          script: 
+            - yarn
+            - cd build
+            - zip -r ../zipfile.zip .
+            - cd ..
+            - curl -X POST -u $AzureCredUser:$AzureCredPass --data-binary @"zipfile.zip" https://buyer-ui-dev1.scm.azurewebsites.net/api/zipdeploy
+    # build for master branch
     master:
       - step:
           caches:
             - node
-          script: # Modify the commands below to build your repository.
+          script: 
             - yarn
             - cd build
             - zip -r ../zipfile.zip .
