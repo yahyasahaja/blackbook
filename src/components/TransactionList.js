@@ -1,6 +1,7 @@
 //MODULES
 import React, { Component } from 'react'
 import moment from 'moment'
+import gql from 'graphql-tag'
 
 //STYLES
 import styles from './css/transaction-list.scss'
@@ -10,6 +11,10 @@ import PrimaryButton from './PrimaryButton'
 
 //UTILS
 import { convertCountryCurrency, convertToMoneyFormat } from '../utils'
+
+//STORE
+import { user, snackbar, dialog, overlayLoading } from '../services/stores'
+import orderingClient from '../services/graphql/orderingClient'
 
 //COMPONENT
 class EditableList extends Component {
@@ -38,10 +43,57 @@ class EditableList extends Component {
     })
   }
 
+  async createPayment(orderId) {
+    let {
+      order: {
+        payments
+      }
+    } = this.props
+
+    let channel = payments.length > 0 ? payments[0].channel : ''
+
+    try {
+      overlayLoading.show()
+
+      const {
+        data: { addOrderPayment: paymentDetail },
+      } = await orderingClient.mutate({
+        mutation: AddOrderPayment,
+        variables: {
+          orderId: orderId,
+          input: {
+            channel,
+          },
+        },
+      })
+
+      overlayLoading.hide()
+      // create payment sukses
+      if (paymentDetail.payments.length > 0) {
+        snackbar.show(
+          `Pembayaran sejumlah ${convertToMoneyFormat(
+            paymentDetail.total,
+            convertCountryCurrency(paymentDetail.country),
+          )} telah berhasil`,
+          null,
+          null,
+          7000,
+        )
+      }
+    } catch (err) {
+      console.log(err)
+      if (user.data && user.data.country === 'HKG')
+        snackbar.show('Balance e-wallet tidak cukup')
+
+      overlayLoading.hide()
+      return null
+    }
+  }
+
   onButtonClick(btn, e) {
     e.preventDefault()
     e.stopPropagation()
-    
+
     let { order: { id } } = this.props
 
     let detailLink = `/account/transaction/detail/${id}`
@@ -61,9 +113,12 @@ class EditableList extends Component {
         status,
         time,
         sellers,
-        country
+        country,
+        payments
       }
     } = this.props
+
+    let channel = payments.length > 0 ? payments[0].channel : ''
 
     return (
       <div
@@ -111,7 +166,20 @@ class EditableList extends Component {
               ? (
                 <PrimaryButton 
                   className={styles.pay} 
-                  onClick={this.onButtonClick.bind(this, 'pay')}
+                  onClick={channel === 'AS2IN1WAL' 
+                    ? () => dialog.show(
+                      'Konfirmasi Pembayaran', 
+                      'Anda akan melakukan pembayaran menggunakan e-wallet',
+                      [
+                        { label: 'Batal', onClick: dialog.toggleActive },
+                        { label: 'Bayar', onClick: () => {
+                          this.createPayment(id)
+                          dialog.toggleActive()
+                        }},
+                      ]
+                    )
+                    : this.onButtonClick.bind(this, 'pay')
+                  }
                 >Bayar</PrimaryButton>
               )
               : ''
@@ -121,5 +189,19 @@ class EditableList extends Component {
     )
   }
 }
+
+export const AddOrderPayment = gql`
+  mutation AddOrderPayment($orderId: ID!, $input: OrderPaymentInput!) {
+    addOrderPayment(orderId: $orderId, input: $input) {
+      id
+      country
+      total
+      payments {
+        url
+        code
+      }
+    }
+  }
+`
 
 export default EditableList

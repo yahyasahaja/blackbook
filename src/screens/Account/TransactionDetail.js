@@ -1,10 +1,10 @@
 //MODULES
 import React, { Component } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import Dialog from 'react-toolbox/lib/dialog'
 import { observer } from 'mobx-react'
+import { observable } from 'mobx'
 
 //GRAPHQL
 import client from '../../services/graphql/orderingClient'
@@ -20,7 +20,7 @@ import TransactionDetailCard from '../../components/TransactionDetailCard'
 import PrimaryButton from '../../components/PrimaryButton'
 
 //STORE
-import { appStack } from '../../services/stores'
+import { appStack, snackbar, dialog, user, overlayLoading } from '../../services/stores'
 
 //UTILS
 import { convertCountryCurrency, convertToMoneyFormat, convertStatus } from '../../utils'
@@ -33,8 +33,34 @@ class TransactionDetail extends Component {
     this.id = appStack.push()
   }
 
+  @observable order = {}
+  @observable loadingOrder = true
+
   componentWillUnmount() {
     appStack.pop()
+  }
+
+  componentDidMount() {
+    this.fetchOrder()
+  }
+
+  async fetchOrder() {
+    try {
+      this.loadingOrders = true
+      const {
+        data: { order },
+      } = await client.query({
+        query: getOrderQuery,
+        variables: {
+          orderId: this.props.match.params.transaction_id
+        },
+      })
+
+      this.order = order
+      this.loadingOrder = false
+    } catch (err) {
+      console.log('Error while fetching order', err)
+    }
   }
 
   handleToggle = () => {
@@ -69,17 +95,60 @@ class TransactionDetail extends Component {
   state = {
     active: false,
     currentConfirmSeller: {},
-    order: null
+    order: null,
+    trackingUrl: null
+  }
+
+  trackOrder = trackingUrl => {
+    this.setState({trackingUrl})
+  }
+
+  async createPayment(orderId) {
+    let channel = this.order.payments[0].channel
+
+    try {
+      overlayLoading.show()
+
+      const {
+        data: { addOrderPayment: paymentDetail },
+      } = await client.mutate({
+        mutation: AddOrderPayment,
+        variables: {
+          orderId: orderId,
+          input: {
+            channel,
+          },
+        },
+      })
+
+      overlayLoading.hide()
+
+      // create payment sukses
+      if (paymentDetail.payments.length > 0) {
+        snackbar.show(
+          `Pembayaran sejumlah ${convertToMoneyFormat(
+            paymentDetail.total,
+            convertCountryCurrency(paymentDetail.country),
+          )} telah berhasil`,
+          null,
+          null,
+          7000,
+        )
+      }
+    } catch (err) {
+      console.log(err)
+      if (user.data && user.data.country === 'HKG')
+        snackbar.show('Balance e-wallet tidak cukup')
+
+      overlayLoading.hide()
+      return null
+    }
   }
 
   renderContent() {
-    let {
-      getOrderQuery: {
-        order
-      }
-    } = this.props
+    let order = this.order
     
-    if (!order) return (
+    if (this.loadingOrder) return (
       <div className={styles.loading} >
         <div>
           <ProgressBar
@@ -100,8 +169,11 @@ class TransactionDetail extends Component {
       shippingInfo,
       sellers,
       country,
-      total
+      total,
+      payments
     } = order
+
+    let channel = (payments[0] && payments[0].channel) || ''
 
     let list = [
       { key: 'Nomor Transaksi', value: id },
@@ -111,7 +183,20 @@ class TransactionDetail extends Component {
             {convertStatus(status)}
             <PrimaryButton 
               className={styles.pay}
-              to={`/account/transaction/payment/${id}`} 
+              onClick={channel === 'AS2IN1WAL' 
+                ? () => dialog.show(
+                  'Konfirmasi Pembayaran', 
+                  'Anda akan melakukan pembayaran menggunakan e-wallet',
+                  [
+                    { label: 'Batal', onClick: dialog.toggleActive },
+                    { label: 'Bayar', onClick: () => {
+                      this.createPayment(id)
+                      dialog.toggleActive()
+                    }},
+                  ]
+                )
+                : () => this.props.location.push(`/account/transaction/payment/${id}`)
+              }
             >Bayar</PrimaryButton>
           </div>
         )
@@ -141,6 +226,7 @@ class TransactionDetail extends Component {
           (s, i) => <TransactionDetailCard
             onConfirm={() => this.confirm(s)}
             key={i} seller={s}
+            trackOrder={this.trackOrder}
           />
         )
       }
@@ -165,6 +251,7 @@ class TransactionDetail extends Component {
           renderContent={this.renderContent.bind(this)}
           backLink="/account/transaction"
           anim={ANIMATE_HORIZONTAL}
+          onTop={!this.state.trackingUrl}
         />
         {
           this.state.currentConfirmSeller.seller
@@ -180,6 +267,23 @@ class TransactionDetail extends Component {
               }
               </p>
             </Dialog>
+            : ''
+        }
+
+        {
+          this.state.trackingUrl
+            ? <div className={styles.popup} >
+              <div className={styles.close} onClick={() => this.setState({ trackingUrl: null })} >&times;</div>
+              <iframe
+                ref={el => this.iframe = el}
+                // onLoad={e => {
+                //   console.log('TRIGGERED', e.target.innerHTML)
+                //   clearTimeout(this.timerToError)
+                // }}
+                src={this.state.trackingUrl}
+                frameBorder={0}
+              />
+            </div>
             : ''
         }
       </React.Fragment>
@@ -201,10 +305,12 @@ query getOrder($orderId: ID!) {
     total
     payments {
       status
+      channel
     }
     sellers {
       id
       status
+      trackingUrl
       seller {
         id
         name
@@ -233,15 +339,18 @@ mutation ConfirmReceviedGoods($orderSellerId: ID!, $input: OrderSellerStatusInpu
 }
 `
 
-export default compose(
-  graphql(getOrderQuery, {
-    name: 'getOrderQuery',
-    options: props => ({
-      client,
-      variables: {
-        orderId: props.match.params.transaction_id
-      },
-      fetchPolicy: 'cache-and-network'
-    }),
-  }),
-)(TransactionDetail)
+export const AddOrderPayment = gql`
+  mutation AddOrderPayment($orderId: ID!, $input: OrderPaymentInput!) {
+    addOrderPayment(orderId: $orderId, input: $input) {
+      id
+      country
+      total
+      payments {
+        url
+        code
+      }
+    }
+  }
+`
+
+export default TransactionDetail

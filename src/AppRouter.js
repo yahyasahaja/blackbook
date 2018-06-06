@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Snackbar from 'react-toolbox/lib/snackbar'
 import { observer } from 'mobx-react'
 import Dialog from 'react-toolbox/lib/dialog'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 //SCREENS
 import asyncComponent from './components/AsyncComponent'
@@ -28,12 +29,19 @@ const Transaction = asyncComponent(() => import('./screens/Account/Transaction')
 
 //STYLES
 import styles from './assets/css/app-router.scss'
+import ProgressBarTheme from './assets/css/theme-progress-bar-white.scss'
 
 //COMPONENT
 import BottomTabBar from './components/BottomTabBar'
 
 //STORE
-import { appStack, badges, dialog, serviceWorkerUpdate as swu } from './services/stores'
+import { 
+  appStack, 
+  badges, 
+  dialog, 
+  serviceWorkerUpdate as swu,
+  overlayLoading,
+} from './services/stores'
 
 //INNER_CONFIG
 let BOTTOM_TAB_BAR_DATA = [
@@ -96,9 +104,24 @@ let BOTTOM_TAB_BAR_DATA = [
   //   </div>
   // }
 
+  renderOverlayLoading() {
+    if (overlayLoading.isActive) return (
+      <section>
+        <div className={styles.loading} >
+          <div>
+            <ProgressBar
+              type='circular'
+              mode='indeterminate' theme={ProgressBarTheme}
+            />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   render() {
     let { onlineStatus: { isOnline }, snackbar: { data: snackbar } } = this.props
-
+    
     return (
       <BrowserRouter>
         <div className={`${styles.container} ${isOnline ? '' : styles.offline}`}>
@@ -164,6 +187,8 @@ let BOTTOM_TAB_BAR_DATA = [
               Klik reload untuk memperbarui aplikasi
             </Dialog>
           </section>
+
+          {this.renderOverlayLoading()}
         </div>
       </BrowserRouter>
     )

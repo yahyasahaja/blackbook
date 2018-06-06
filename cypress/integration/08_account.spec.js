@@ -33,15 +33,6 @@ describe('Account Page', () => {
     cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
   })
 
-  it('Check Transaction', () => {
-    cy.stub()
-    cy.get('@list-item').eq(1).click()
-    cy.url().should('include','/account/transaction')
-    cy.get('div[class^="transaction--list"] > div[class^="transaction-list--container"]', {timeout:5000}).should((item) => expect(item).to.have.length(10))
-    cy.get('button').contains('Selesai').click()
-    cy.get('div[class^="transaction--list"] > div[class^="transaction-list--container"]').should((item) => expect(item).to.have.length(10))
-  })
-
   it('Change Password the wrong way', () => {
     cy.get('@list-item').eq(2).click()
     cy.url().should('include','/account/password')

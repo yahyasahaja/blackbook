@@ -49,7 +49,8 @@ class Tokens {
 
   @action
   async refetchAPIToken() {
-    let { data } = await axios.get(getIAMEndpoint('/token'))
+    let hkg = location.host.indexOf('hktest') !== -1 || location.host.indexOf('.hk') !== -1
+    let { data } = await axios.get(getIAMEndpoint(`/token${hkg ? '/hk' : ''}`))
 
     if (data) {
       let token = data.toString()

@@ -14,8 +14,6 @@ import { observable } from 'mobx'
 @observer 
 class Threads extends Component {
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.location.pathname)
-
     if(nextProps.data.threads && nextProps.location.pathname === '/chat') {
       const threads = nextProps.data.threads.data.map((x, index) => {
         const thread = Object.assign({}, x)
@@ -45,7 +43,7 @@ class Threads extends Component {
     }
 
     if(this.props.isSelected && onlineStatus.isOnline && this.props.location.pathname !== '/chat') {
-      this.props.data.refetch()
+      if (this.props.data.refetch) this.props.data.refetch()
     }
 
     if(this.props.isSelected && !user.isLoggedIn) {

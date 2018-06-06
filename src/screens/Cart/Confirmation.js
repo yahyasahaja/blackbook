@@ -99,7 +99,7 @@ class Process extends Component {
         />
 
         <span className={styles.balance} >
-          {loading ? 'Loading...' : !as2in1Wallet ? convertToMoneyFormat(10000, 'HKD') : 0}
+          {loading ? 'Loading...' : as2in1Wallet ? convertToMoneyFormat(as2in1Wallet, 'HKD') : 0}
         </span>
       </div>
     )
@@ -146,6 +146,7 @@ class Process extends Component {
 
   // total section
   renderTotal() {
+    console.log(user.data)
     return (
       <div className={styles.section}>
         <div className={styles.price}>
@@ -180,10 +181,10 @@ class Process extends Component {
           </span>
         </div>
 
-        {cart.totalPrice > 20000 && (
+        {cart.totalPrice > 20000 && (user.data && user.data.country) !== 'HKG' && (
           <p>
             Anda akan mendapatkan lebih dari satu barkode pembayaran (nominal
-            diatas NTD 20000)
+            diatas NTD 20.000)
           </p>
         )}
       </div>
@@ -329,7 +330,8 @@ class Process extends Component {
       }
     } catch (err) {
       console.log(err)
-      snackbar.show('Order berhasil, silahkan melakukan pembayaran.')
+      if (user.data && user.data.country === 'HKG')
+        snackbar.show('Order berhasil, silahkan melakukan pembayaran.')
       return null
     }
   }
