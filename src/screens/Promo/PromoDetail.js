@@ -122,7 +122,6 @@ class PromoDetail extends Component {
       <PopupBar
         title="Detail Promo" {...this.props}
         renderContent={this.renderContent}
-        backLink="/promo"
         anim={ANIMATE_HORIZONTAL}
         cart
       />

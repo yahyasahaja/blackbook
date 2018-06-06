@@ -334,7 +334,7 @@ query activePromoteds($limit: Int, $offset: Int) {
         shareUrl
       }
     }
-    totalCount
+    totalCount  
   }
 }
 `
