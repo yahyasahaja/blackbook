@@ -3,6 +3,7 @@ import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
+import onError from './errorHandler'
 
 //CONFIG
 import {
@@ -29,6 +30,6 @@ const authLink = setContext((_, { headers }) => {
 })
 
 export default new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: authLink.concat(onError).concat(httpLink),
   cache: new InMemoryCache()
 })

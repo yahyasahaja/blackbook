@@ -30,25 +30,30 @@ registerServiceWorker();
 
 const contextTheme = theme;
 
-const isNotLocal = () => !(location.href.includes('localhost') || /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href))
+const isNotLocal = () =>
+  !(
+    location.href.includes("localhost") ||
+    /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href)
+  );
+if (isNotLocal())
+  Raven.config(
+    "https://c63c8415e02b4f8f8052e6e8b7f2bada@sentry.io/1212575"
+  ).install();
 
 axios.defaults.headers["Content-Type"] = "application/json";
 axios.interceptors.response.use(
   res => res,
   err => {
-    if(isNotLocal()) Raven.captureException(err);
+    if (isNotLocal()) Raven.captureException(err);
     return Promise.reject(err);
   }
 );
 if (tokens.token) axios.defaults.headers["Authorization"] = tokens.token;
 
-Raven.config("https://c63c8415e02b4f8f8052e6e8b7f2bada@sentry.io/1212575").install();
-
 @observer
 class App extends Component {
   componentDidCatch(err) {
-    if(isNotLocal())
-      Raven.captureException(err);
+    if (isNotLocal()) Raven.captureException(err);
   }
   render() {
     // console.log(tokens.rawToken)
