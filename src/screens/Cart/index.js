@@ -65,13 +65,13 @@ export default class Cart extends Component {
       productId: item.product.id,
       quantity: item.amount,
     }))
-
+    
     try {
       const { data: { calcTotalCost: { productCost, shippingCost, discount } }} = await client.mutate({
         mutation: calculateCost,
         variables: {
           input: {
-            country: config.COUNTRY_CODE,
+            country: user.data ? user.data.country : config.COUNTRY_CODE,
             items: input,
             promotionCode: useVoucher ? voucherCode : '',
           },
