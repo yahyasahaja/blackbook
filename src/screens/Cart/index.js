@@ -11,7 +11,7 @@ import { appStack, cart, user } from '../../services/stores'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 import CartItem from '../../components/Cart/CartItem'
-import { convertToMoneyFormat } from '../../utils'
+import { convertToMoneyFormat, convertCountryCurrency } from '../../utils'
 
 import client from '../../services/graphql/orderingClient'
 
@@ -132,26 +132,27 @@ export default class Cart extends Component {
   }
 
   renderDetail() {
+    let currency = user.data ? convertCountryCurrency(user.data.country) : ''
     return (
       <div data-testid="cart-detail" className={styles.detail}>
         <div className={styles.row}>
           <span className={styles.info}>Ongkos Kirim</span>
           <span data-testid="cart-shipping-cost" data-shipping-cost={this.state.shippingCost} className={styles.amount}>
             {this.state.shippingCost
-              ? convertToMoneyFormat(this.state.shippingCost, 'NTD')
+              ? convertToMoneyFormat(this.state.shippingCost, currency)
               : 'Menghitung ongkos kirim...'}
           </span>
         </div>
         {this.state.useVoucher && this.state.discount > 0 && <div className={styles.row}>
           <span className={styles.info}>Potongan</span>
           <span data-testid="discount" data-discount={this.state.discount} className={styles.amount}>
-            {'- ' + convertToMoneyFormat(this.state.discount, 'NTD',)}
+            {'- ' + convertToMoneyFormat(this.state.discount, currency)}
           </span>
         </div>}
         <div className={styles.row}>
           <span className={styles.info}>Total Pembayaran</span>
           <span data-testid="cart-total" data-total={this.totalPrice} className={styles.amount}>
-            {convertToMoneyFormat(this.totalPrice, 'NTD',)}
+            {convertToMoneyFormat(this.totalPrice, currency)}
           </span>
         </div>
         <div className={`${styles.row} ${styles.voucher}`}>

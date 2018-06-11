@@ -54,6 +54,7 @@ class TransactionDetail extends Component {
         variables: {
           orderId: this.props.match.params.transaction_id
         },
+        fetchPolicy: 'network-only'
       })
 
       this.order = order
@@ -189,13 +190,17 @@ class TransactionDetail extends Component {
                   'Anda akan melakukan pembayaran menggunakan e-wallet',
                   [
                     { label: 'Batal', onClick: dialog.toggleActive },
-                    { label: 'Bayar', onClick: () => {
-                      this.createPayment(id)
+                    { label: 'Bayar', onClick: async () => {
                       dialog.toggleActive()
+                      await this.createPayment(id)
+                      await this.fetchOrder()
                     }},
                   ]
                 )
-                : () => this.props.location.push(`/account/transaction/payment/${id}`)
+                : () => {
+                  console.log('CHECK', this)
+                  this.props.history.push(`/account/transaction/payment/${id}`)
+                }
               }
             >Bayar</PrimaryButton>
           </div>

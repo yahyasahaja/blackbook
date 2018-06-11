@@ -172,9 +172,10 @@ class EditableList extends Component {
                       'Anda akan melakukan pembayaran menggunakan e-wallet',
                       [
                         { label: 'Batal', onClick: dialog.toggleActive },
-                        { label: 'Bayar', onClick: () => {
-                          this.createPayment(id)
+                        { label: 'Bayar', onClick: async () => {
                           dialog.toggleActive()
+                          await this.createPayment(id)
+                          await this.props.resetAndFetch()
                         }},
                       ]
                     )

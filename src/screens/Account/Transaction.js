@@ -109,6 +109,7 @@ class Transaction extends Component {
           status,
           limit: this.FETCH_LIMIT
         },
+        fetchPolicy: 'network-only'
       })
 
       this.offset += this.FETCH_LIMIT
@@ -125,6 +126,11 @@ class Transaction extends Component {
     this.fetchMyOrders(this.status = status)
   }
 
+  resetAndFetch = status => {
+    this.reset()
+    this.fetchMyOrders(status ? (this.status = status) : this.status)
+  }
+
   scopeBarData = [
     {
       label: 'Proses',
@@ -139,7 +145,10 @@ class Transaction extends Component {
   renderList() {
     if (this.myOrders.length > 0)
       return this.myOrders.slice().map((order, i) => {
-        return <TransactionList history={this.props.history} key={i} order={order} />
+        return <TransactionList 
+          history={this.props.history} key={i} order={order} 
+          resetAndFetch={this.resetAndFetch}
+        />
       })
   }
 

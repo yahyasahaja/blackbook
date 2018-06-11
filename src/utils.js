@@ -64,7 +64,7 @@ export const convertCountryCurrency = country => {
     ? 'NTD'
     : country === 'HKG'
       ? 'HKD'
-      : 'Rp'
+      : 'RP'
 }
 
 export const getQueryString =  variable => {
