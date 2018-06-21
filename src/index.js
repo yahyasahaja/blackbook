@@ -26,14 +26,18 @@ import registerServiceWorker from './registerServiceWorker'
 //SENTRY INTEGRATION
 import Raven from 'raven-js'
 
+//GOOGLE ANALYTICS
+import ga from './google-analytics'
+
 registerServiceWorker()
+ga()
 
 const contextTheme = theme
 
 const isNotLocal = () =>
   !(
     location.href.includes('localhost') ||
-		/127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href)
+    /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href)
   )
 if (isNotLocal())
   Raven.config(

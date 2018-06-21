@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ReactGA from 'react-ga'
 
 export default () => {
+  console.log('initializing google analytics')
   ReactGA.initialize('UA-119141916-1', {
     debug: true,
     titleCase: false,
