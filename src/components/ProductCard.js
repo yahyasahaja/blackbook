@@ -101,7 +101,7 @@ class ProductCard extends Component {
   }
 
   render() {
-    let { image, name, price, variants, /*link,*/ id } = this.props
+    let { images, image, name, price, variants, /*link,*/ id } = this.props
     this.liked = false
     let fav = favorites.data.slice()
     for (let i in fav)
@@ -109,6 +109,9 @@ class ProductCard extends Component {
         this.liked = true
         break
       }
+    
+    if (images && !image) 
+      if (images.length > 0) image = images[0].url
       
     if (!price)
       price = {
