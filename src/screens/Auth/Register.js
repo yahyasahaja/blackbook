@@ -7,6 +7,7 @@ import { observer } from 'mobx-react'
 import { observable, computed, action } from 'mobx'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import Dialog from 'react-toolbox/lib/dialog'
+import axios from 'axios'
 
 //STYLES 
 import styles from './css/register.scss'
@@ -26,7 +27,8 @@ let countryCodes = [
 ]
 
 //STORE
-import { user, appStack, snackbar } from '../../services/stores'
+import { user, appStack, snackbar, overlayLoading } from '../../services/stores'
+import { getIAMEndpoint } from '../../config'
 
 //COMPONENT
 @observer
@@ -46,7 +48,7 @@ class Register extends Component {
   }
 
   isUnmounted = false
-  DEFAULT_COUNT = 5
+  DEFAULT_COUNT = 120
 
   state = {
     countryCode: '886',
@@ -154,10 +156,27 @@ class Register extends Component {
     this.setState({ [name]: value, [`${name}_error`]: '' })
   }
 
+  isUserExist = async () => {
+    overlayLoading.show()
+    try {
+      let { data: { is_ok } } = await axios.post(getIAMEndpoint(`/quick/${this.msisdn}`))
+      overlayLoading.hide()
+      snackbar.show('Nomor telah terdaftar. Silahkan gunakan fitur lupa password')
+      return is_ok
+    } catch(e) {
+      overlayLoading.hide()
+      snackbar.show('Telah terjadi kesalahan koneksi, coba lagi nanti')
+      throw e
+    }
+  }
+
   onSubmit = async e => {
     e.preventDefault()
     e.stopPropagation()
 
+    let isUserExist = await this.isUserExist()
+    if (isUserExist) return
+    
     await this.sendOtp()
     this.showConfirmationModal()
   }

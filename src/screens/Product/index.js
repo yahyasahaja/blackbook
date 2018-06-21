@@ -73,6 +73,7 @@ class PromoDetail extends Component {
       this.updateAndFetchMoreProductRelations(nextProps)
     } else if (newError) {
       //tokens.refetchAPIToken().then(() => window.location.reload())
+
     }
   }
 
@@ -235,7 +236,7 @@ class PromoDetail extends Component {
         ? `https://twitter.com/share?url=${link}`
         : id === 'facebook'
           ? `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=Blanja`
-          : `https://social-plugins.line.me/lineit/share?url=${link}`, 
+          : `https://social-plugins.line.me/lineit/share?url=${link}`,
       '',
       'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
     )
@@ -269,6 +270,11 @@ class PromoDetail extends Component {
         this.liked = true
         break
       }
+
+    let { productRelations, error } = this.props.productRelationsQuery
+
+    let shouldShowProductRelations = !error
+    if (productRelations) if (productRelations.length > 0) shouldShowProductRelations = true
 
     return (
       <div className={styles.container}>
@@ -363,8 +369,8 @@ class PromoDetail extends Component {
                             className={`mdi mdi-twitter ${styles.icon} ${styles.twitter}`}
                           />
                           <img
-                            src="/static/icon/line.png" 
-                            onClick={this.share.bind(this, 'line')} 
+                            src="/static/icon/line.png"
+                            onClick={this.share.bind(this, 'line')}
                             className={`mdi mdi-pinterest ${styles.icon}`}
                           />
                         </div>
@@ -398,16 +404,23 @@ class PromoDetail extends Component {
           </div>
         </div>
 
-        <Separator className={styles.separator} >Produk Menarik Lainnya</Separator>
+        {
+          shouldShowProductRelations
+            ? <Separator className={styles.separator} >Produk Menarik Lainnya</Separator>
+            : ''
+        }
+
         {this.renderCards()}
         {
-          this.props.productRelationsQuery.loading
-            ? <ProgressBar
-              className={styles.loading}
-              type='circular' theme={ProgressBarTheme}
-              mode='indeterminate'
-            />
-            : ''
+          shouldShowProductRelations
+            ? ''
+            : this.props.productRelationsQuery.loading
+              ? <ProgressBar
+                className={styles.loading}
+                type='circular' theme={ProgressBarTheme}
+                mode='indeterminate'
+              />
+              : ''
         }
       </div>
     )

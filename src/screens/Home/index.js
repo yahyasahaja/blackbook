@@ -76,8 +76,8 @@ class Home extends Component {
         isFetchDisabled: this.state.products.length === activePromoteds.totalCount
       })
     } else if (newError) {
-      // return console.log(newError)
-      tokens.refetchAPIToken().then(() => window.location.reload())
+      return console.log(newError)
+      // tokens.refetchAPIToken().then(() => window.location.reload())
     }
   }
 
