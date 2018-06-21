@@ -271,6 +271,11 @@ class PromoDetail extends Component {
         break
       }
 
+    let { productRelations, error } = this.props.productRelationsQuery
+
+    let shouldShowProductRelations = !error
+    if (productRelations) if (productRelations.length > 0) shouldShowProductRelations = true
+
     return (
       <div className={styles.container}>
         <div className={styles.card} >
@@ -399,10 +404,15 @@ class PromoDetail extends Component {
           </div>
         </div>
 
-        <Separator className={styles.separator} >Produk Menarik Lainnya</Separator>
+        {
+          shouldShowProductRelations
+            ? <Separator className={styles.separator} >Produk Menarik Lainnya</Separator>
+            : ''
+        }
+
         {this.renderCards()}
         {
-          this.props.productRelationsQuery.newError 
+          shouldShowProductRelations
             ? ''
             : this.props.productRelationsQuery.loading
               ? <ProgressBar
