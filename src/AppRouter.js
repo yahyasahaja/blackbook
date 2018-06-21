@@ -26,6 +26,8 @@ const CartConfirm = asyncComponent(() => import('./screens/Cart/Confirmation'))
 const PromoDetail = asyncComponent(() => import('./screens/Promo/PromoDetail'))
 const Product = asyncComponent(() => import('./screens/Product'))
 const Transaction = asyncComponent(() => import('./screens/Account/Transaction'))
+const ForgotPassword = asyncComponent(() => import('./screens/Auth/ForgotPassword'))
+const InputNewPassword = asyncComponent(() => import('./screens/Auth/InputNewPassword'))
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -134,6 +136,8 @@ let BOTTOM_TAB_BAR_DATA = [
           <Switch>
             <Route path="/search" component={Search} />
             <Route path="/auth" component={Auth} />
+            <Route path="/auth/forgot" component ={ForgotPassword}/>
+            <Route path="/auth/forgot/new" component={InputNewPassword}/>
             <Route path="/category/:category_name" component={Category} />
             <Route path="/chat/:id" component={Conversation} />
             <Route path="/cart/process" component={CartProcess} />
