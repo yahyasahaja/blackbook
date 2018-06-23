@@ -83,7 +83,7 @@ class AppRouter extends Component {
     }
     window.onoffline = () => {
       goOffline()
-      show("You're offline!")
+      show('You\'re offline!')
     }
 
     if (window.navigator.onLine) goOnline()
@@ -228,6 +228,22 @@ class AppRouter extends Component {
               title="Pembaruan Aplikasi Telah Tersedia!"
             >
               Klik reload untuk memperbarui aplikasi
+            </Dialog>
+            <Dialog
+              actions={[
+                {
+                  label: 'Install',
+                  onClick: swu.installPrompt()
+                },
+                {
+                  label: 'Batal',
+                  onClick: swu.setShowPrompt(false)
+                }
+              ]}
+              active={swu.shouldShowPrompt}
+              title="Tambahkan Aplikasi ke Home Screen"
+            >
+              Lebih cepat dan praktis untuk membuka aplikasi.
             </Dialog>
           </section>
 
