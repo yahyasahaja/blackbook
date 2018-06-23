@@ -37,8 +37,8 @@ class ForgotPassword extends Component{
     }
 
     componentDidMount(){
-        let {title} = this.props
-        title = 'Forgot Password'
+        let {setTitle} = this.props
+        setTitle('Lupa Password')
     }
 
     countryCodes = [
@@ -59,7 +59,7 @@ class ForgotPassword extends Component{
     onSubmit = (e) =>{
         e.preventDefault()
         e.stopPropagation()
-
+        
         
     }
     
@@ -75,23 +75,26 @@ class ForgotPassword extends Component{
                     </div>
                 </div>
                 <form className={styles.form} onSubmit={this.onSubmit}>
-                    <Dropdown
-                        auto={false}
-                        source={this.countryCodes}
-                        onChange={this.handleChange.bind(this,'countryCode')}
-                        label="Kode Negara"
-                        required
-                        value={this.state.countryCode}
-                    />
-                    <Input 
-                        type="tel" 
-                        label="Nomor Telepon"
-                        required
-                        value={this.state.telp}
-                        onChange={this.handleChange.bind(this, 'telp')}
-                    />
+                    <div className={styles.tel}>
+                        <Dropdown
+                            auto={false}
+                            source={this.countryCodes}
+                            onChange={this.handleChange.bind(this,'countryCode')}
+                            label="Kode Negara"
+                            required
+                            value={this.state.countryCode}
+                            className={styles.country_code}
+                        />
+                        <Input 
+                            type="tel" 
+                            label="Nomor Telepon"
+                            required
+                            value={this.state.telp}
+                            onChange={this.handleChange.bind(this, 'telp')}
+                        />
+                    </div>
+                    <PrimaryButton type="submit">Lanjut</PrimaryButton>                    
                 </form>
-                
             </div>
 
 
