@@ -29,7 +29,10 @@ import Raven from 'raven-js'
 //GOOGLE ANALYTICS
 import ga from './google-analytics'
 
+//sw
 registerServiceWorker()
+
+//google-analytics
 ga()
 
 const contextTheme = theme
