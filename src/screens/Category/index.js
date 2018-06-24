@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
+import ReactGA from 'react-ga'
 
 //STYLES
 import styles from './css/index-category.scss'
@@ -28,7 +29,7 @@ const filters = [
   { value: 'termurah', label: 'Termurah' },
   { value: 'termahal', label: 'Termahal' },
   { value: 'terlama', label: 'Terlama' },
-  { value: 'terbaru', label: 'Terbaru' },
+  { value: 'terbaru', label: 'Terbaru' }
 ]
 
 //COMPONENT
@@ -38,7 +39,7 @@ class Category extends Component {
     super(props)
     this.id = appStack.push()
   }
-  
+
   componentWillUnmount() {
     appStack.pop()
     this.removeScrollListener()
@@ -59,16 +60,27 @@ class Category extends Component {
   }
 
   checkAllCategoriesChanges(nextProps) {
-    let { allCategoriesQuery: { loading: newAllCategoriesLoading } } = nextProps
-    let { allCategoriesQuery: { loading: curAllCategoriesLoading } } = this.props
+    let {
+      allCategoriesQuery: { loading: newAllCategoriesLoading }
+    } = nextProps
+    let {
+      allCategoriesQuery: { loading: curAllCategoriesLoading }
+    } = this.props
 
-    if (curAllCategoriesLoading !== newAllCategoriesLoading && !newAllCategoriesLoading)
+    if (
+      curAllCategoriesLoading !== newAllCategoriesLoading &&
+      !newAllCategoriesLoading
+    )
       categoriesStore.setCategories(nextProps.allCategoriesQuery.allCategories)
   }
 
   checkAllProductsChanges(nextProps) {
-    let { allProductsQuery: { loading: newLoading, error: newError } } = nextProps
-    let { allProductsQuery: { loading: curLoading } } = this.props
+    let {
+      allProductsQuery: { loading: newLoading, error: newError }
+    } = nextProps
+    let {
+      allProductsQuery: { loading: curLoading }
+    } = this.props
 
     if (curLoading !== newLoading && !newLoading && !newError) {
       this.updateProductsState(nextProps)
@@ -80,8 +92,7 @@ class Category extends Component {
     let { offset } = this.state
 
     let products = allProducts.products.map(data => {
-      if (data.images.length > 0)
-        return { ...data, image: data.images[0].url }
+      if (data.images.length > 0) return { ...data, image: data.images[0].url }
     })
 
     this.setState({
@@ -115,14 +126,19 @@ class Category extends Component {
   }
 
   checkScroll = () => {
-    let scrollPosition = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+    let scrollPosition = Math.max(
+      document.documentElement.scrollTop,
+      document.body.scrollTop
+    )
     let pageHeight = document.body.scrollHeight
     let screenHeight = document.body.offsetHeight
-    let { allProductsQuery: { loading } } = this.props
+    let {
+      allProductsQuery: { loading }
+    } = this.props
 
     //CHECKING FOR FETCHING ACCEPTANCE
     if (loading) return
-    if (scrollPosition < pageHeight - screenHeight - screenHeight * .1) return
+    if (scrollPosition < pageHeight - screenHeight - screenHeight * 0.1) return
     if (this.state.isFetchDisabled) return
 
     //BE ABLE TO FETCH
@@ -131,11 +147,15 @@ class Category extends Component {
 
   fetchProducts = () => {
     let { offset, filter, category, search } = this.state
-    let sort = filter === 'termurah' || filter === 'termahal' ? 'price' : 'created'
+    let sort =
+      filter === 'termurah' || filter === 'termahal' ? 'price' : 'created'
     let order = filter === 'termurah' || filter === 'terlama' ? 'ASC' : 'DESC'
     this.props.allProductsQuery.refetch({
       limit: MAX_FETCH_LENGTH,
-      offset, search, sort, order,
+      offset,
+      search,
+      sort,
+      order,
       category: category === 'all' ? this.category_name : category
     })
   }
@@ -144,19 +164,28 @@ class Category extends Component {
     products: [],
     offset: 0,
     isFetchDisabled: false,
-    filter: 'terbaru', category: 'all', search: '',
+    filter: 'terbaru',
+    category: 'all',
+    search: ''
   }
 
   handleChange(name, event) {
-    this.setState({
-      [name]: event.target.value,
-      products: [],
-      offset: 0,
-      isFetchDisabled: false,
-    }, () => {
-      if (this.timeoutDelay !== null) clearTimeout(this.timeoutDelay)
-      this.timeoutDelay = setTimeout(this.fetchProducts, 1000)
+    ReactGA.event({
+      category: `Select ${name === 'category' ? `Sub ${name}` : `${name}`}`,
+      action: event.target.value
     })
+    this.setState(
+      {
+        [name]: event.target.value,
+        products: [],
+        offset: 0,
+        isFetchDisabled: false
+      },
+      () => {
+        if (this.timeoutDelay !== null) clearTimeout(this.timeoutDelay)
+        this.timeoutDelay = setTimeout(this.fetchProducts, 1000)
+      }
+    )
   }
 
   timeoutDelay = null
@@ -170,40 +199,53 @@ class Category extends Component {
   }
 
   renderBar() {
-    //if (window.navigator.userAgent.indexOf("Mac") == -1) 
+    //if (window.navigator.userAgent.indexOf("Mac") == -1)
     let { filter, category } = this.state
     let categories = categoriesStore.getConverted(this.category_name)
 
-    return <div className={styles.bar} key={0} >
-      <div className={styles['filters-wrapper']} >
+    return (
+      <div className={styles.bar} key={0}>
+        <div className={styles['filters-wrapper']}>
+          <select
+            name="filters"
+            className={styles.filters}
+            id="filters"
+            value={filter}
+            autoCapitalize="true"
+            onChange={this.handleChange.bind(this, 'filter')}
+          >
+            {filters.map((data, i) => {
+              return (
+                <option key={i} value={data.value}>
+                  {data.label}
+                </option>
+              )
+            })}
+          </select>
+          <span className={`mdi mdi-chevron-down ${styles.icon}`} />
+        </div>
 
-        <select
-          name="filters" className={styles.filters}
-          id="filters"
-          value={filter}
-          autoCapitalize="true" onChange={this.handleChange.bind(this, 'filter')}
-        >
-          {filters.map((data, i) => {
-            return <option key={i} value={data.value}>{data.label}</option>
-          })}
-        </select>
-        <span className={`mdi mdi-chevron-down ${styles.icon}`} />
+        <div className={styles['categories-wrapper']}>
+          <select
+            name="categories"
+            className={styles.categories}
+            id="categories"
+            value={category}
+            autoCapitalize="true"
+            onChange={this.handleChange.bind(this, 'category')}
+          >
+            {categories.map((data, i) => {
+              return (
+                <option key={i} value={data.value}>
+                  {data.label}
+                </option>
+              )
+            })}
+          </select>
+          <span className={`mdi mdi-chevron-down ${styles.icon}`} />
+        </div>
       </div>
-
-      <div className={styles['categories-wrapper']} >
-        <select
-          name="categories" className={styles.categories}
-          id="categories"
-          value={category}
-          autoCapitalize="true" onChange={this.handleChange.bind(this, 'category')}
-        >
-          {categories.map((data, i) => {
-            return <option key={i} value={data.value}>{data.label}</option>
-          })}
-        </select>
-        <span className={`mdi mdi-chevron-down ${styles.icon}`} />
-      </div>
-    </div>
+    )
   }
 
   renderCards() {
@@ -214,31 +256,35 @@ class Category extends Component {
 
   renderContent = () => {
     let { products } = this.state
-    let { match, allProductsQuery: { loading } } = this.props
+    let {
+      match,
+      allProductsQuery: { loading }
+    } = this.props
 
     if (!match) return
-    return <div className={styles.content} >
-      <div className={styles.title} >
-        {match.params.category_name}
-      </div>
-      {this.renderBar()}
-      <div className={styles.wrapper} >
-        {this.renderCards()}
-        {
-          loading
-            ? <ProgressBar
+    return (
+      <div className={styles.content}>
+        <div className={styles.title}>{match.params.category_name}</div>
+        {this.renderBar()}
+        <div className={styles.wrapper}>
+          {this.renderCards()}
+          {loading ? (
+            <ProgressBar
               className={styles.loading}
-              type='circular'
-              mode='indeterminate' theme={ProgressBarTheme}
+              type="circular"
+              mode="indeterminate"
+              theme={ProgressBarTheme}
             />
-            : products.length === 0
-              ? <div className={styles['not-found']}>
-                <span>Tidak ada produk yang ditemukan</span>
-              </div> 
-              : ''
-        }
+          ) : products.length === 0 ? (
+            <div className={styles['not-found']}>
+              <span>Tidak ada produk yang ditemukan</span>
+            </div>
+          ) : (
+            ''
+          )}
+        </div>
       </div>
-    </div>
+    )
   }
 
   render() {
@@ -250,30 +296,35 @@ class Category extends Component {
 
     return (
       <PopupBar
-        title="Search" {...this.props}
+        title="Search"
+        {...this.props}
         anim={ANIMATE_HORIZONTAL}
         backLink="/home"
-        component={(
-          <div className={styles.search} >
+        component={
+          <div className={styles.search}>
             <div className={styles.input}>
               <span className={`mdi mdi-magnify ${styles.icon}`} />
               <input
-                type="text" placeholder={placeholder}
-                ref={el => this.searchBar = el}
+                type="text"
+                placeholder={placeholder}
+                ref={el => (this.searchBar = el)}
                 onChange={this.handleChange.bind(this, 'search')}
                 value={this.state.search}
               />
 
-              {
-                this.state.search !== '' ?
-                  <button className={styles.close} onClick={this.onClearClicked}>
-                    <span>&times;</span></button>
-                  : ''
-              }
+              {this.state.search !== '' ? (
+                <button className={styles.close} onClick={this.onClearClicked}>
+                  <span>&times;</span>
+                </button>
+              ) : (
+                ''
+              )}
             </div>
-            <Link to="/cart" className={styles.cart}><Badge badge={badges.CART} icon="cart" /></Link>
+            <Link to="/cart" className={styles.cart}>
+              <Badge badge={badges.CART} icon="cart" />
+            </Link>
           </div>
-        )}
+        }
         renderContent={this.renderContent}
       />
     )
@@ -281,51 +332,51 @@ class Category extends Component {
 }
 
 const allCategoriesQuery = gql`
-query {
-  allCategories {
-    name
-    children {
+  query {
+    allCategories {
       name
+      children {
+        name
+      }
     }
   }
-}
 `
 
 const allProductsQuery = gql`
-query allProducts(
-  $limit: Int, 
-  $offset: Int, 
-  $category: String, 
-  $sort: String, 
-  $order: PaginationOrderEnum,
-  $search: String,
-) {
-  allProducts(
-    limit: $limit, 
-    offset: $offset, 
-    category: $category,
-    sort: $sort,
-    order: $order,
-    search: $search,
+  query allProducts(
+    $limit: Int
+    $offset: Int
+    $category: String
+    $sort: String
+    $order: PaginationOrderEnum
+    $search: String
   ) {
-    products {
-      id,
-      name,
-      variants {
+    allProducts(
+      limit: $limit
+      offset: $offset
+      category: $category
+      sort: $sort
+      order: $order
+      search: $search
+    ) {
+      products {
+        id
         name
+        variants {
+          name
+        }
+        price {
+          value
+          currency
+        }
+        images {
+          url
+        }
+        shareUrl
       }
-      price {
-        value,
-        currency
-      },
-      images {
-        url
-      }
-      shareUrl
+      totalCount
     }
-    totalCount
   }
-}
 `
 
 export default compose(
@@ -336,15 +387,17 @@ export default compose(
   graphql(allProductsQuery, {
     name: 'allProductsQuery',
     options: ({ match }) => {
-      let { params: { category_name } } = match
+      let {
+        params: { category_name }
+      } = match
 
       return {
         variables: {
           limit: MAX_FETCH_LENGTH,
           offset: 0,
-          category: category_name,
+          category: category_name
         }
       }
     }
-  }),
+  })
 )(Category)

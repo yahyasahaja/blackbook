@@ -33,13 +33,19 @@ export default function register() {
       return
     }
 
-    //SAVE INSTALL PROMPT EVENT
-    window.addEventListener('beforeinstallprompt', e => {
-      swu.setPrompt(e)
-      e.preventDefault()
-    })
-
     window.addEventListener('load', () => {
+      //SAVE INSTALL PROMPT EVENT
+      window.addEventListener('beforeinstallprompt', e => {
+        e.preventDefault()
+        // console.log(e)
+        // const save = e
+        // alert('a2hs default install prevented!')
+        swu.setPrompt(e)
+        // setTimeout(() => {
+        //   save.prompt()
+        // }, 3000)
+      })
+
       const swUrl =
         process.env.NODE_ENV === 'production'
           ? `${process.env.PUBLIC_URL}/service-worker.js`

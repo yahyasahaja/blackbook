@@ -17,13 +17,13 @@ class ProductCard extends Component {
     amount: 1
   }
   componentDidMount() {
-    window.addEventListener('scroll', () => {
+    window.onscroll = () => {
       ReactGA.event({
         category: 'Promo',
         action: 'Looking and Scrolling Promo'
       })
-      window.removeEventListener('scroll')
-    })
+      window.onscroll = null
+    }
   }
 
   render() {
