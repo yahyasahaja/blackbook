@@ -26,9 +26,7 @@ class ServiceWorkerUpdate {
   @action
   setPrompt(value) {
     this.promptInstall = value
-    setTimeout(() => {
-      this.showPrompt = true
-    }, 10000)
+    this.showPrompt = true
     console.log(value, this.showPrompt)
   }
 

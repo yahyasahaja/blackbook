@@ -32,19 +32,19 @@ export default function register() {
       // serve assets see https://github.com/facebookincubator/create-react-app/issues/2374
       return
     }
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault()
+      // console.log(e)
+      // const save = e
+      alert('a2hs default install prevented!')
+      swu.setPrompt(e)
+      // setTimeout(() => {
+      //   save.prompt()
+      // }, 3000)
+    })
 
     window.addEventListener('load', () => {
       //SAVE INSTALL PROMPT EVENT
-      window.addEventListener('beforeinstallprompt', e => {
-        e.preventDefault()
-        // console.log(e)
-        // const save = e
-        // alert('a2hs default install prevented!')
-        swu.setPrompt(e)
-        // setTimeout(() => {
-        //   save.prompt()
-        // }, 3000)
-      })
 
       const swUrl =
         process.env.NODE_ENV === 'production'
