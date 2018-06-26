@@ -20,6 +20,7 @@ export function withTracker(WrappedComponent, options = {}) {
       page,
       ...options
     })
+    console.log('GOOGLE ANALYTICS PAGE VIEW', page)
     ReactGA.pageview(page)
   }
 

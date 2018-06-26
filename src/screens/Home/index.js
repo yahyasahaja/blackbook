@@ -7,7 +7,9 @@ import gql from 'graphql-tag'
 import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import { List, ListItem } from 'react-toolbox/lib/list'
+import ReactGA from 'react-ga'
 import Slider from 'react-slick'
+
 
 //STYLES
 import styles from './css/index.scss'
@@ -25,7 +27,11 @@ import Dress from '../../assets/img/dress-white.svg'
 import TShirt from '../../assets/img/t-shirt-white.svg'
 
 //STORE
-import { categories as categoriesStore, appStack, favorites, tokens } from '../../services/stores'
+import {
+  categories as categoriesStore,
+  appStack,
+  favorites,
+} from '../../services/stores'
 
 //INNER_CONFIG
 const MAX_FETCH_LENGTH = 5
@@ -48,33 +54,45 @@ class Home extends Component {
   }
 
   checkAllCategoriesChanges(nextProps) {
-    let { allCategoriesQuery: { loading: newAllCategoriesLoading } } = nextProps
-    let { allCategoriesQuery: { loading: curAllCategoriesLoading } } = this.props
+    let {
+      allCategoriesQuery: { loading: newAllCategoriesLoading }
+    } = nextProps
+    let {
+      allCategoriesQuery: { loading: curAllCategoriesLoading }
+    } = this.props
 
-    if (curAllCategoriesLoading !== newAllCategoriesLoading && !newAllCategoriesLoading)
+    if (
+      curAllCategoriesLoading !== newAllCategoriesLoading &&
+      !newAllCategoriesLoading
+    )
       categoriesStore.setCategories(nextProps.allCategoriesQuery.allCategories)
   }
 
   checkAllProductsChanges(nextProps) {
-    let { activePromotedsQuery: { loading: newLoading, error: newError } } = nextProps
-    let { activePromotedsQuery: { loading: curLoading } } = this.props
+    let {
+      activePromotedsQuery: { loading: newLoading, error: newError }
+    } = nextProps
+    let {
+      activePromotedsQuery: { loading: curLoading }
+    } = this.props
 
     // console.log('TRIGGERED', nextProps)
-    
+
     if (curLoading !== newLoading && !newLoading && !newError) {
       let activePromoteds = nextProps.activePromotedsQuery.activePromoteds
       let { offset } = this.state
 
-      let products = activePromoteds.promoteds.map(({product}) => {
+      let products = activePromoteds.promoteds.map(({ product }) => {
         if (product.images.length > 0)
           return { ...product, image: product.images[0].url }
         return { ...product, image: '' }
       })
-      
+
       this.setState({
         products: [...this.state.products, ...products],
         offset: offset + MAX_FETCH_LENGTH,
-        isFetchDisabled: this.state.products.length === activePromoteds.totalCount
+        isFetchDisabled:
+          this.state.products.length === activePromoteds.totalCount
       })
     } else if (newError) {
       return console.log(newError)
@@ -100,14 +118,19 @@ class Home extends Component {
   }
 
   checkScroll = () => {
-    let scrollPosition = Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+    let scrollPosition = Math.max(
+      document.documentElement.scrollTop,
+      document.body.scrollTop
+    )
     let pageHeight = document.body.scrollHeight
     let screenHeight = document.body.offsetHeight
-    let { activePromotedsQuery: { loading, refetch } } = this.props
+    let {
+      activePromotedsQuery: { loading, refetch }
+    } = this.props
     let { offset } = this.state
 
     if (loading) return
-    if (scrollPosition < pageHeight - screenHeight - screenHeight * .1) return
+    if (scrollPosition < pageHeight - screenHeight - screenHeight * 0.1) return
     if (this.state.isFetchDisabled) return
     if (appStack.isPopupActive) return
     refetch({ limit: MAX_FETCH_LENGTH, offset })
@@ -117,14 +140,16 @@ class Home extends Component {
     products: [],
     offset: 0,
     isFetchDisabled: false,
-    areAllCategoriesPoppedUp: false,
+    areAllCategoriesPoppedUp: false
   }
 
   renderCards() {
     let { products } = this.state
     // console.log(products)
 
-    return products.map((data, i) => <Card favorites={favorites} {...data} key={i} data={data} />)
+    return products.map((data, i) => (
+      <Card favorites={favorites} {...data} key={i} data={data} />
+    ))
   }
 
   renderCategories() {
@@ -136,38 +161,52 @@ class Home extends Component {
       },
       {
         img: <img src={Dress} />,
-        name: <span>Fashion<br /> Wanita</span>,
+        name: (
+          <span>
+            Fashion<br /> Wanita
+          </span>
+        ),
         id: 'Fashion Wanita'
       },
       {
         img: <img src={TShirt} />,
-        name: <span>Fashion<br /> Pria</span>,
+        name: (
+          <span>
+            Fashion<br /> Pria
+          </span>
+        ),
         id: 'Fashion Pria'
       },
       {
         img: <span className="mdi mdi-format-list-bulleted" />,
         name: 'Kategori',
         id: 'categories'
-      },
+      }
     ]
 
     return data.map((data, i) => {
       return (
-        <Link 
+        <Link
           to={`/category/${data.id}`}
-          key={i} 
-          className={styles.category} 
+          key={i}
+          className={styles.category}
           onClick={e => {
+            ReactGA.event({
+              category: 'Select Category',
+              action: `Select ${
+                data.id === 'categories'
+                  ? 'All Category'
+                  : `${data.id} category`
+              }`
+            })
             if (data.id === 'categories') {
               e.preventDefault()
-              this.setState({areAllCategoriesPoppedUp: true})
+              this.setState({ areAllCategoriesPoppedUp: true })
             }
           }}
         >
-          <div className={styles.img} >
-            {data.img}
-          </div>
-          <span className={styles['category-name']} >{data.name}</span>
+          <div className={styles.img}>{data.img}</div>
+          <span className={styles['category-name']}>{data.name}</span>
         </Link>
       )
     })
@@ -202,18 +241,21 @@ class Home extends Component {
   }
 
   renderAllCategories() {
-    let { allCategoriesQuery: { allCategories } } = this.props
+    let {
+      allCategoriesQuery: { allCategories }
+    } = this.props
     let { areAllCategoriesPoppedUp } = this.state
-    
+
     if (!areAllCategoriesPoppedUp || !allCategories) return
-    
+
     return (
-      <div className={styles['all-categories']} >
-        <div className={styles.header} >
-          <span onClick={
-            () => this.setState({areAllCategoriesPoppedUp: false})
-          } className={`mdi mdi-arrow-left ${styles.back}`} />
-          <span className={styles.title} >Semua Kategori</span>
+      <div className={styles['all-categories']}>
+        <div className={styles.header}>
+          <span
+            onClick={() => this.setState({ areAllCategoriesPoppedUp: false })}
+            className={`mdi mdi-arrow-left ${styles.back}`}
+          />
+          <span className={styles.title}>Semua Kategori</span>
         </div>
         <List selectable ripple>
           {allCategories.map((data, i) => {
@@ -222,7 +264,7 @@ class Home extends Component {
                 key={i}
                 caption={data.name}
                 onClick={() => {
-                  this.setState({areAllCategoriesPoppedUp: false})
+                  this.setState({ areAllCategoriesPoppedUp: false })
                   this.props.history.push(`/category/${data.name}`)
                 }}
               />
@@ -234,38 +276,28 @@ class Home extends Component {
   }
 
   render() {
-    let settings = {
-      autoplay: true,
-      dots: true,
-      dotsClass: "slick-dots",
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: false,
-      
-    }
-    let { activePromotedsQuery: { loading } } = this.props
+    let {
+      activePromotedsQuery: { loading }
+    } = this.props
     let { areAllCategoriesPoppedUp } = this.state
     let style = {}
 
-    if (areAllCategoriesPoppedUp) style = {
-      maxHeight: '100vh',
-      overflow: 'hidden',
-    }
+    if (areAllCategoriesPoppedUp)
+      style = {
+        maxHeight: '100vh',
+        overflow: 'hidden'
+      }
 
     return (
       <TopBar
         relative={{
           title: { cart: true },
-          search: { cart: false },
-        }} 
-
+          search: { cart: false }
+        }}
         fly={{
           search: { cart: true },
           mode: APPEAR
         }}
-
         isSelected={this.props.isSelected}
         style={{ background: 'rgb(239, 239, 239)' }}
         wrapperStyle={{ padding: 0 }}
@@ -273,23 +305,20 @@ class Home extends Component {
       <Slider {...settings}>
         {this.renderAdsPanel()}
       </Slider>
-        <div
-          style={style}
-        >
-          <div className={styles.categories} >
-            {this.renderCategories()}
-          </div>
-          
+        <div style={style}>
+          <div className={styles.categories}>{this.renderCategories()}</div>
+
           {this.renderCards()}
-          {
-            loading
-              ? <ProgressBar
-                className={styles.loading} 
-                type='circular' theme={ProgressBarTheme}
-                mode='indeterminate'
-              />
-              : ''
-          }
+          {loading ? (
+            <ProgressBar
+              className={styles.loading}
+              type="circular"
+              theme={ProgressBarTheme}
+              mode="indeterminate"
+            />
+          ) : (
+            ''
+          )}
         </div>
 
         {this.renderAllCategories()}
@@ -299,39 +328,39 @@ class Home extends Component {
 }
 
 const allCategoriesQuery = gql`
-query {
-  allCategories {
-    name
-    children {
+  query {
+    allCategories {
       name
+      children {
+        name
+      }
     }
   }
-}
 `
 
 const activePromotedsQuery = gql`
-query activePromoteds($limit: Int, $offset: Int) {
-  activePromoteds(limit: $limit, offset: $offset) {
-    promoteds {
-      product {
-        id,
-        name,
-        price {
-          value,
-          currency
-        },
-        variants {
+  query activePromoteds($limit: Int, $offset: Int) {
+    activePromoteds(limit: $limit, offset: $offset) {
+      promoteds {
+        product {
+          id
           name
+          price {
+            value
+            currency
+          }
+          variants {
+            name
+          }
+          images {
+            url
+          }
+          shareUrl
         }
-        images {
-          url
-        }
-        shareUrl
       }
+      totalCount
     }
-    totalCount
   }
-}
 `
 
 export default compose(
@@ -346,5 +375,5 @@ export default compose(
         variables: { limit: MAX_FETCH_LENGTH, offset: 0 }
       }
     }
-  }),
+  })
 )(Home)

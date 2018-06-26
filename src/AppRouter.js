@@ -228,21 +228,52 @@ class AppRouter extends Component {
             >
               Klik reload untuk memperbarui aplikasi
             </Dialog>
+          </section>
+
+          <section>
             <Dialog
               actions={[
                 {
-                  label: 'Install',
-                  onClick: swu.installPrompt()
+                  label: 'Batal',
+                  onClick: () => swu.setCancellable(true)
                 },
                 {
-                  label: 'Batal',
-                  onClick: swu.setShowPrompt(false)
+                  label: 'Install',
+                  onClick: () => {
+                    swu.installPrompt()
+                    swu.setShowPrompt(false)
+                  }
                 }
               ]}
-              active={swu.shouldShowPrompt}
-              title="Tambahkan Aplikasi ke Home Screen"
+              active={swu.showPrompt}
+              title="Tambahkan Aplikasi ke Layar Utama"
             >
               Lebih cepat dan praktis untuk membuka aplikasi.
+            </Dialog>
+          </section>
+
+          <section>
+            <Dialog
+              actions={[
+                {
+                  label: 'Tidak',
+                  onClick: () => {
+                    swu.setCancellable(false)
+                  }
+                },
+                {
+                  label: 'Ya',
+                  onClick: () => {
+                    swu.setCancellable(false)
+                    swu.setShowPrompt(false)
+                  }
+                }
+              ]}
+              active={swu.cancellable}
+              title="Apakah Anda yakin?"
+            >
+              Anda harus menginstall aplikasi secara manual pada sesi
+              berikutnya.
             </Dialog>
           </section>
 

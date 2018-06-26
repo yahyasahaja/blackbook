@@ -52,13 +52,13 @@ class ProductCard extends Component {
       favorites.add(data)
       ReactGA.event({
         category: 'Product',
-        action: 'Like Product'
+        action: 'Likes Product'
       })
     } else {
       favorites.remove(id)
       ReactGA.event({
         category: 'Product',
-        action: 'Dislike Product'
+        action: 'Dislikes Product'
       })
     }
   }

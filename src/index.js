@@ -26,6 +26,8 @@ import registerServiceWorker from './registerServiceWorker'
 //SENTRY INTEGRATION
 import Raven from 'raven-js'
 
+registerServiceWorker()
+
 //GOOGLE ANALYTICS
 import ga from './google-analytics'
 
@@ -55,13 +57,14 @@ axios.interceptors.response.use(
     return Promise.reject(err)
   }
 )
-if (tokens.token) axios.defaults.headers['Authorization'] = tokens.token
+// if (tokens.token) axios.defaults.headers['Authorization'] = tokens.token
 
 @observer
 class App extends Component {
   componentDidCatch(err) {
     if (isNotLocal()) Raven.captureException(err)
   }
+
   render() {
     // console.log(tokens.rawToken)
     if (!tokens.rawToken)
@@ -77,8 +80,8 @@ class App extends Component {
         >
           <ProgressBar
             theme={ProgressbarTheme}
-            type="circular"
-            mode="indeterminate"
+            type='circular'
+            mode='indeterminate'
           />
         </div>
       )

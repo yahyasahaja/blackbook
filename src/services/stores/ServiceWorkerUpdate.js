@@ -1,6 +1,5 @@
 //MODULES
 import { observable, action, computed } from 'mobx'
-import { asyncComponent } from '../../components/AsyncComponent'
 
 //STORE
 class ServiceWorkerUpdate {
@@ -9,6 +8,7 @@ class ServiceWorkerUpdate {
   @observable intervalId = null
   @observable promptInstall = null
   @observable showPrompt = false
+  @observable cancellable = false
 
   @action
   update() {
@@ -26,21 +26,33 @@ class ServiceWorkerUpdate {
   @action
   setPrompt(value) {
     this.promptInstall = value
-    if (value) {
-      setTimeout(() => {
-        this.showPrompt = true
-      }, 10000)
-    }
+    this.showPrompt = true
+    console.log(value, this.showPrompt)
   }
 
   @action
   installPrompt() {
-    if (this.promptInstall) this.promptInstall.prompt()
+    console.log('install prompt triggerred')
+    if (this.promptInstall) {
+      console.log(this.promptInstall)
+      this.promptInstall.prompt()
+      this.promptInstall.userChoice.then(choice => {
+        if (choice.outcome === 'accepted') console.log('INSTALLING APP')
+        else console.log('INSTALLING APP REJECTED')
+        this.promptInstall = null
+      })
+    }
   }
 
   @action
   setShowPrompt(value) {
+    console.log(value)
     this.showPrompt = value
+  }
+
+  @action
+  setCancellable(value) {
+    this.cancellable = value
   }
 
   @computed
