@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import Checkbox from 'react-toolbox/lib/checkbox'
 import Input from 'react-toolbox/lib/input/Input'
 import Dialog from 'react-toolbox/lib/dialog'
+import { withTracker } from '../../google-analytics'
 
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import { appStack, cart, user } from '../../services/stores'
@@ -23,7 +24,7 @@ import checkBoxTheme from './css/checkbox.scss'
 import inputTheme from './css/inputVoucher.scss'
 
 @observer
-export default class Cart extends Component {
+class Cart extends Component {
   constructor(props) {
     super(props)
     this.id = appStack.push()
@@ -256,3 +257,5 @@ const calculateCost = gql`
     }
   }
 `
+
+export default withTracker(Cart)

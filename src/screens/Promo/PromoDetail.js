@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import moment from 'moment'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/promo-detail.scss'
@@ -145,7 +146,7 @@ query promotionQuery ($id: ID!) {
 }
 `
 
-export default graphql(
+export default withTracker(graphql(
   promotionQuery, {
     name: 'promotionQuery',
     options: props => {
@@ -154,4 +155,4 @@ export default graphql(
       }
     }
   }
-)(PromoDetail)
+)(PromoDetail))

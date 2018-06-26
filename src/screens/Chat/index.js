@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import Threads from './Threads'
 import { user } from '../../services/stores'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 // import styles from './css/index.scss'
@@ -12,7 +13,7 @@ import TopBar, { HIDE } from '../../components/TopBar'
 
 //COMPONENT
 @observer
-export default class Chat extends Component {
+class Chat extends Component {
   render() {
     return (
       <TopBar
@@ -30,3 +31,5 @@ export default class Chat extends Component {
     )
   }
 }
+
+export default withTracker(Chat)

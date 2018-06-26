@@ -1,6 +1,7 @@
 //MODULES
 import React, { Component }  from 'react'
 import { observer } from 'mobx-react'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/index.scss'
@@ -49,4 +50,4 @@ class Favorite extends Component {
   }
 }
 
-export default Favorite
+export default withTracker(Favorite)

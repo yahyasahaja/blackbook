@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import ReactGA from 'react-ga'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/index-category.scss'
@@ -380,6 +381,7 @@ const allProductsQuery = gql`
 `
 
 export default compose(
+  withTracker,
   graphql(allCategoriesQuery, {
     name: 'allCategoriesQuery',
     skip: () => categoriesStore.data === null

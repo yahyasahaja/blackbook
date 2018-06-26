@@ -4,6 +4,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/index.scss'
@@ -167,7 +168,7 @@ query activePromotions($limit: Int, $offset: Int) {
 }
 `
 
-export default compose(
+export default withTracker(compose(
   graphql(allCategoriesQuery, {
     name: 'allCategoriesQuery',
     skip: () => categoriesStore.data === null
@@ -180,4 +181,4 @@ export default compose(
       }
     }
   }),
-)(Promo)
+)(Promo))

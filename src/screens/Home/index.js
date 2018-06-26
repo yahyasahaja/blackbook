@@ -8,6 +8,7 @@ import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import { List, ListItem } from 'react-toolbox/lib/list'
 import ReactGA from 'react-ga'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/index.scss'
@@ -331,6 +332,7 @@ const activePromotedsQuery = gql`
 `
 
 export default compose(
+  withTracker,
   graphql(allCategoriesQuery, {
     name: 'allCategoriesQuery',
     skip: () => categoriesStore.data === null

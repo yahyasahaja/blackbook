@@ -3,6 +3,7 @@ import { observer } from 'mobx-react'
 import gql from 'graphql-tag'
 import axios from 'axios'
 import { graphql } from 'react-apollo'
+import { withTracker } from '../../google-analytics'
 
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
@@ -465,9 +466,9 @@ const getUserDataQuery = gql`
   }
 `
 
-export default graphql(getUserDataQuery, {
+export default withTracker(graphql(getUserDataQuery, {
   name: 'user',
   options: {
     client: userClient,
   },
-})(Process)
+})(Process))

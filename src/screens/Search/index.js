@@ -5,6 +5,7 @@ import { observer } from 'mobx-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import _ from 'lodash'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/index-search.scss'
@@ -313,7 +314,7 @@ query allProducts(
 }
 `
 
-export default compose(
+export default withTracker(compose(
   graphql(allCategoriesQuery, {
     name: 'allCategoriesQuery',
     skip: () => categoriesStore.data === null
@@ -334,4 +335,4 @@ export default compose(
       }
     }
   }),
-)(Search)
+)(Search))

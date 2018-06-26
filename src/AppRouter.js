@@ -5,7 +5,6 @@ import Snackbar from 'react-toolbox/lib/snackbar'
 import { observer } from 'mobx-react'
 import Dialog from 'react-toolbox/lib/dialog'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import { withTracker } from './google-analytics'
 
 //SCREENS
 import asyncComponent from './components/AsyncComponent'
@@ -111,12 +110,12 @@ class AppRouter extends Component {
   //   return <div className={styles.page}>
   //   <div className={styles.content} >
   //   <Switch>
-  //     <Route path="/home" component={withTracker(Home)} />
-  //     <Route path="/favorite" component={withTracker(Favorite)} />
-  //     <Route path="/promo" component={withTracker(Promo)} />
-  //     <Route path="/chat" component={withTracker(Chat)} />
-  //     <Route path="/account" component={withTracker(Account)} />
-  //     <Route path="*" component={withTracker(PageNotFound)} />
+  //     <Route path="/home" component={Home)} />
+  //     <Route path="/favorite" component={Favorite)} />
+  //     <Route path="/promo" component={Promo)} />
+  //     <Route path="/chat" component={Chat)} />
+  //     <Route path="/account" component={Account)} />
+  //     <Route path="*" component={PageNotFound)} />
   //   </Switch>
   //   </div>
 
@@ -168,38 +167,38 @@ class AppRouter extends Component {
               />
             </Switch>
             <Switch>
-              <Route path="/search" component={withTracker(Search)} />
-              <Route path="/auth" component={withTracker(Auth)} />
+              <Route path="/search" component={Search} />
+              <Route path="/auth" component={Auth} />
               <Route
                 path="/category/:category_name"
-                component={withTracker(Category)}
+                component={Category}
               />
-              <Route path="/chat/:id" component={withTracker(Conversation)} />
+              <Route path="/chat/:id" component={Conversation} />
               <Route
                 path="/cart/process"
-                component={withTracker(CartProcess)}
+                component={CartProcess}
               />
               <Route
                 path="/cart/confirm"
-                component={withTracker(CartConfirm)}
+                component={CartConfirm}
               />
-              <Route path="/cart" component={withTracker(Cart)} />
-              <Route path="/account/profile" component={withTracker(Profile)} />
+              <Route path="/cart" component={Cart} />
+              <Route path="/account/profile" component={Profile} />
               <Route
                 path="/account/password"
-                component={withTracker(Password)}
+                component={Password}
               />
               <Route
                 path="/account/transaction"
-                component={withTracker(Transaction)}
+                component={Transaction}
               />
               <Route
                 path="/promo/:promotion_id"
-                component={withTracker(PromoDetail)}
+                component={PromoDetail}
               />
               <Route
                 path="/product/:product_id"
-                component={withTracker(Product)}
+                component={Product}
               />
             </Switch>
           </div>
