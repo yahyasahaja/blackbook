@@ -8,12 +8,8 @@ import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import { List, ListItem } from 'react-toolbox/lib/list'
 import ReactGA from 'react-ga'
-<<<<<<< HEAD
 import Slider from 'react-slick'
-
-=======
 import { withTracker } from '../../google-analytics'
->>>>>>> c7b73ed6b0d6dd3ad7e4e2e179ae612abf8aae74
 
 //STYLES
 import styles from './css/index.scss'
