@@ -80,6 +80,14 @@ class Tokens {
     
     localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
   }
+
+  @action
+  removeAPIToken() {
+    this.apiToken = null
+    delete axios.defaults.headers['Authorization']
+    
+    localStorage.removeItem(API_TOKEN_STORAGE_URI)
+  }
 }
 
 // autorun(() => console.log('DARI AUTORUN', window.badges.data))

@@ -29,7 +29,6 @@ import {
   categories as categoriesStore,
   appStack,
   favorites,
-  tokens
 } from '../../services/stores'
 
 //INNER_CONFIG

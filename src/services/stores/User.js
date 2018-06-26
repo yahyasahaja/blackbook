@@ -182,8 +182,9 @@ class User {
   }
 
   @action
-  logout = () => {
+  logout = async () => {
     this.data = null
+    await tokens.refetchAPIToken()
     tokens.removeAuthToken()
     favorites.clear()
     cart.clear()

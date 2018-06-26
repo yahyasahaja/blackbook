@@ -1,7 +1,8 @@
 import {onError} from 'apollo-link-error'
 import Raven from 'raven-js'
+import { user } from '../stores'
 
-export default onError(({ graphQLErrors, networkError }) => {
+export default onError( async ({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.map(({ message, locations, path }) => {
       console.log(
@@ -10,5 +11,12 @@ export default onError(({ graphQLErrors, networkError }) => {
       Raven.captureMessage(`GRAPHQL Request Error : ${message} | User : ${window.user.data?window.user.data.name:'Not Login User'} | Client : ${navigator.userAgent}`)
       console.log(locations)
     })
-  if (networkError) console.log(`[Network error]: ${networkError}`)
+  if (networkError) {
+    console.log(`[Network error]: ${networkError}`)
+
+    if (networkError.statusCode === 401) {
+      await user.logout()
+      location.reload()
+    }
+  }
 })
