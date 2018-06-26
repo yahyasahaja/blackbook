@@ -4,6 +4,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { Redirect, Route, Switch } from 'react-router-dom'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/index-auth.scss'
@@ -13,10 +14,9 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import Login from './Login'
 import Register from './Register'
-import ForgotPassword from './ForgotPassword';
 
 //STORE
-
+import { user, appStack } from '../../services/stores'
 
 //COMPONENT
 @observer
@@ -52,12 +52,6 @@ class Auth extends Component {
         <Route path="/auth/login" render={props => {
           return <Login {...props} setTitle={this.setTitle} />
         }} />
-        <Route path="/auth/forgot" render={props => {
-          return <ForgotPassword {...props} setTitle={this.setTitle}/>
-        }}/>
-        {/* <Route path="/auth/forgot/new" render={props => {
-          return <NewPassword {...props} setTitle={this.setTitle}/>
-        }}/> */}
         <Route path="/auth/register" render={props => {
           return <Register {...props} setTitle={this.setTitle} />
         }} />
@@ -86,4 +80,4 @@ class Auth extends Component {
   }
 }
 
-export default Auth
+export default withTracker(Auth)

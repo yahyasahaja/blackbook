@@ -5,8 +5,6 @@ import { ThemeProvider } from 'react-css-themr'
 import { ApolloProvider } from 'react-apollo'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { observer } from 'mobx-react'
-// import * as OfflinePluginRuntime from 'offline-plugin/runtime'
-// OfflinePluginRuntime.install()
 import axios from 'axios'
 
 //CSS
@@ -39,12 +37,12 @@ ga()
 
 const contextTheme = theme
 
-const isNotLocal = () =>
+if (
   !(
     location.href.includes('localhost') ||
     /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href)
   )
-if (isNotLocal())
+)
   Raven.config(
     'https://c63c8415e02b4f8f8052e6e8b7f2bada@sentry.io/1212575'
   ).install()
@@ -53,7 +51,7 @@ axios.defaults.headers['Content-Type'] = 'application/json'
 axios.interceptors.response.use(
   res => res,
   err => {
-    if (isNotLocal()) Raven.captureException(err)
+    Raven.captureException(err)
     return Promise.reject(err)
   }
 )
@@ -62,7 +60,7 @@ axios.interceptors.response.use(
 @observer
 class App extends Component {
   componentDidCatch(err) {
-    if (isNotLocal()) Raven.captureException(err)
+    Raven.captureException(err)
   }
 
   render() {

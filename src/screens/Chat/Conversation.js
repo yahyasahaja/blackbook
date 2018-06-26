@@ -10,6 +10,7 @@ import ChatBubble from '../../components/Chat/ChatBubble'
 import productClient from '../../services/graphql/productClient'
 import chatClient from '../../services/graphql/chatClient'
 import { convertToMoneyFormat } from '../../utils'
+import { withTracker } from '../../google-analytics'
 
 import styles from './css/conversation.scss'
 import loadingTheme from './css/loading.scss'
@@ -491,4 +492,4 @@ const sendMessageMutation = gql`
   }
 `
 
-export default Conversation
+export default withTracker(Conversation)
