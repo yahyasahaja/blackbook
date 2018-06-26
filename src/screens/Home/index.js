@@ -24,7 +24,7 @@ import Dress from '../../assets/img/dress-white.svg'
 import TShirt from '../../assets/img/t-shirt-white.svg'
 
 //STORE
-import { categories as categoriesStore, appStack, favorites, tokens } from '../../services/stores'
+import { categories as categoriesStore, appStack, favorites } from '../../services/stores'
 
 //INNER_CONFIG
 const MAX_FETCH_LENGTH = 5
