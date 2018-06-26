@@ -276,6 +276,17 @@ class Home extends Component {
   }
 
   render() {
+    let settings = {
+      autoplay: true,
+      dots: true,
+      dotsClass: "slick-dots",
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false,
+      
+    }
     let {
       activePromotedsQuery: { loading }
     } = this.props

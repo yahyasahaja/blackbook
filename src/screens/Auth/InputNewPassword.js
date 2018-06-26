@@ -26,7 +26,7 @@ import { getIAMEndpoint } from '../../config';
 import { observable } from 'mobx';
 
 @observer
-class ForgotPassword extends Component{
+class NewPassword extends Component{
     constructor(){
         super()
         this.id = appStack.push()
@@ -52,15 +52,15 @@ class ForgotPassword extends Component{
         this.setState(...this.state, { [name] : value })
     }
 
-    onSubmit = async (e) =>{
-        e.preventDefault()
-        e.stopPropagation()
+    // onSubmit = async (e) =>{
+    //     e.preventDefault()
+    //     e.stopPropagation()
         
-        let numberExist = await this.isNumberExist
-        if(!numberExist) return
+    //     let numberExist = await this.isNumberExist
+    //     if(!numberExist) return
 
         
-    }
+    // }
     
     @computed
     get mssidn(){

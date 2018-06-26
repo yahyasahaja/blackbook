@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import axios from 'axios'
+import { Dialog } from 'react-toolbox/lib/dialog';
+import { action, observable, computed } from 'mobx';
 
 //STYLES
 import styles from './css/forgot-password.scss'
@@ -19,11 +21,17 @@ import PrimaryButton from '../../components/PrimaryButton'
 
 //STORE
 import { user, snackbar, appStack, overlayLoading } from '../../services/stores'
-import { action } from 'mobx';
+
 
 //CONFIG
 import { getIAMEndpoint } from '../../config';
-import { observable } from 'mobx';
+
+//INNER CONFIG
+let countryCodes = [
+    {value: '886', label: '+886' },
+    {value: '852', label: '+852' },
+    {value: '62', label: '+62'}
+]
 
 @observer
 class ForgotPassword extends Component{
@@ -33,33 +41,75 @@ class ForgotPassword extends Component{
         this.state = {
             countryCode : '886',
             telp: '',
-            otp: ''
+            otp: '',
+            otp_error: '',
+            modalActive : false
         }
     }
-
-    DEFAULT_COUNT = 120
-
-    @observable count = this.DEFAULT_COUNT
-    @observable secret = ''
-
 
     componentWillUnmount(){
         appStack.pop()
         this.isUnmounted = true
     }
 
-    isUnmounted = false
 
     componentDidMount(){
         let {setTitle} = this.props
         setTitle('Lupa Password')
     }
 
-    countryCodes = [
-        {label: '+886', value: '886' },
-        {label: '+852', value: '852' },
-        {label: '+62', value: '62'}
+    isUnmounted = false
+    DEFAULT_COUNT = 120
+
+    @observable count = this.DEFAULT_COUNT
+    @observable secret = ''
+
+    
+
+    @observable otpModalActive = false
+    @observable otpConfirmationActions = [
+        {
+        label: 'Kirim Ulang', onClick: () => {
+                this.toggleActive()
+            },
+        disabled: false
+        },
+        {
+        label: 'Konfirmasi', onClick: () => {
+                this.toggleActive()
+            }
+        },
     ]
+
+    @computed
+    get mssidn(){
+        let { countryCode, telp } = this.state
+        return `${countryCode}${telp}`
+    }
+
+    showConfirmationModal = () =>{
+        this.otpModalActive = true
+    }
+
+    toggleConfirmationModal = () =>{
+        this.otpModalActive = !this.otpModalActive
+    }
+
+    onResendClicked = () => {
+        this.sendOTP()
+    }
+
+    
+
+    onConfirmClicked = async () => {
+        let is_ok = await user.confirmOTP(this.mssidn, this.state.otp, this.secret)
+        if(!is_ok){
+            this.setState({otp_error: 'Kode konfirmasi OTP tidak valid'})
+            snackbar.show('Kode konfirmasi OTP tidak valid')
+        }
+        
+        this.props.history.push('/auth/forgot/new')
+    }
 
     handleChange(name, value){
         if(name === 'telp'){
@@ -67,54 +117,105 @@ class ForgotPassword extends Component{
                 value = value.split('').slice(1).join('')
             }
         }
-        this.setState(...this.state, {[name] : value})
+        this.setState(...this.state, {[name] : value, [`${name}_error`]: ''})
+    }
+
+    @action
+    resetCount = () =>{
+        this.count = this.DEFAULT_COUNT
     }
 
     onSubmit = async (e) =>{
         e.preventDefault()
         e.stopPropagation()
         
-        let numberExist = await this.isNumberExist
-        if(!numberExist) return
-
+        let numberExist = await this.isNumberExist()
+        if(!numberExist) snackbar.show('Nomor tidak ditemukan pada Database. Silakan ulangi kembali')
         
+        await this.sendOTP()
+        this.showConfirmationModal()
     }
     
-    @computed
-    get mssidn(){
-        let { countryCode, telp } = this.state
-        return `${countryCode}${telp}`
-    }
-
-    @action
     isNumberExist = async () =>{
         overlayLoading.show()
         try{
-            let {data: {is_ok}} = await axios.post(getIAMEndpoint(`/iam/quick/${this.mssidn}`))
+            let { data: { is_ok } } = await axios.post(getIAMEndpoint(`/quick/${this.mssidn}`))
             overlayLoading.hide()
-            this.sendOTP()
+            return is_ok
         } catch(e){
             overlayLoading.hide()
-            await snackbar.show('Nomor yang dimasukkan tidak terdapat dalam Database. Silahkan ulangi kembali')
-            this.props.history.push('/auth/forgot')
+            snackbar.show('Terjadi kesalahan koneksi. Silakan ulangi kembali nanti')
             throw e
         }
     }
 
+    intervalId = null
+
+    
+
     @action
     sendOTP = async () =>{
+        this.resetCount()
         let {data} = await user.sendOTP(this.mssidn)
         
         let {is_ok, data: secret } = data
         if(!is_ok) return snackbar.show('Gagal mengirimkan Kode OTP')
 
         this.secret = secret
+        //invoke decreaseCount method every 1 second
+        this.intervalId = setInterval( () => {
+            if(!this.isUnmounted){
+                this.decreaseCount()
+            }
+        }, 1000 )
+    }
 
+    @computed
+    get canResend(){
+        return this.count <= 0
     }
 
     @action
-    decreaseCount(){
+    decreaseCount = () =>{
+        if(this.canResend){
+            this.otpConfirmationActions = observable([
+                {
+                    label: 'Kirim Ulang', onClick: this.onResendClicked,
+                    disabled: false
+                },
+                {
+                    label: 'Konfirmasi', onClick: this.onConfirmClicked
+                }
+            ])
 
+            if (this.intervalId !== null) clearInterval(this.intervalId)
+            this.intervalId = null
+
+            return
+        }
+
+        this.otpConfirmationActions = observable([
+            {
+                label: `Kirim Ulang (${--this.count})`, onClick: this.onResendClicked,
+                disabled: true
+            },
+            {
+                label: 'Konfirmasi', onClick: this.onConfirmClicked
+            }
+        ])
+    }
+
+    renderButton = () => {
+        if (user.isLoadingUpdateProfile || user.isLoadingSendingOTP) return (
+            <div className={styles['loading-wrapper']} >
+              <ProgressBar
+                className={styles.loading}
+                type='circular'
+                mode='indeterminate' theme={ProgressBarTheme}
+              />
+            </div>
+          )
+          return <PrimaryButton type="submit">Lanjut</PrimaryButton>
     }
 
     render(){
@@ -132,22 +233,60 @@ class ForgotPassword extends Component{
                     <div className={styles.tel}>
                         <Dropdown
                             auto={false}
-                            source={this.countryCodes}
+                            source={countryCodes}
                             onChange={this.handleChange.bind(this,'countryCode')}
                             label="Kode Negara"
-                            required
                             value={this.state.countryCode}
                             className={styles.country_code}
+                            required
                         />
                         <Input 
                             type="tel" 
                             label="Nomor Telepon"
                             required
+                            onChange={this.handleChange.bind(this, 'telp')}                            
                             value={this.state.telp}
-                            onChange={this.handleChange.bind(this, 'telp')}
+                            required
                         />
                     </div>
-                    <PrimaryButton type="submit">Lanjut</PrimaryButton>                    
+
+                    {this.renderButton()}
+
+                    <Dialog
+                        actions={ !user.isLoadingSendingOTP ? this.otpConfirmationActions.slice() : [] }
+                        active ={this.otpModalActive}
+                        onEscKeyDown={this.state.modalActive}
+                        title='Konfirmasi OTP'
+                    >
+
+                    {
+                        user.isLoadingSendingOTP ?
+                        (
+                            <div className={styles['loading-wrapper']} >
+                                <ProgressBar
+                                    className={styles.loading}
+                                    type='circular'
+                                    mode='indeterminate' theme={ProgressBarTheme}
+                                />
+                            </div>
+                        ) :
+                        (
+                            <div className={styles.modal} >
+                                <Input
+                                    name="otp"
+                                    type="text"
+                                    label="Nomor OTP"
+                                    onChange={this.handleChange.bind(this, 'otp')}
+                                    value={this.state.otp}
+                                    theme={theme}
+                                    error={this.state.otp_error}
+                                />
+                            </div>
+                        )
+                    }
+
+                    </Dialog>
+
                 </form>
             </div>
 
