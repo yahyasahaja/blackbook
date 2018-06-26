@@ -5,6 +5,7 @@ import Dropdown from 'react-toolbox/lib/dropdown'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
+import axios from 'axios'
 
 //STYLES
 import styles from './css/forgot-password.scss'
@@ -17,7 +18,12 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 import PrimaryButton from '../../components/PrimaryButton'
 
 //STORE
-import { user, snackbar, appStack } from '../../services/stores'
+import { user, snackbar, appStack, overlayLoading } from '../../services/stores'
+import { action } from 'mobx';
+
+//CONFIG
+import { getIAMEndpoint } from '../../config';
+import { observable } from 'mobx';
 
 @observer
 class ForgotPassword extends Component{
@@ -26,15 +32,23 @@ class ForgotPassword extends Component{
         this.id = appStack.push()
         this.state = {
             countryCode : '886',
-            password: '',
-            confirmPassword: '',
-            telp: ''
+            telp: '',
+            otp: ''
         }
     }
 
+    DEFAULT_COUNT = 120
+
+    @observable count = this.DEFAULT_COUNT
+    @observable secret = ''
+
+
     componentWillUnmount(){
         appStack.pop()
+        this.isUnmounted = true
     }
+
+    isUnmounted = false
 
     componentDidMount(){
         let {setTitle} = this.props
@@ -56,13 +70,53 @@ class ForgotPassword extends Component{
         this.setState(...this.state, {[name] : value})
     }
 
-    onSubmit = (e) =>{
+    onSubmit = async (e) =>{
         e.preventDefault()
         e.stopPropagation()
         
+        let numberExist = await this.isNumberExist
+        if(!numberExist) return
+
         
     }
     
+    @computed
+    get mssidn(){
+        let { countryCode, telp } = this.state
+        return `${countryCode}${telp}`
+    }
+
+    @action
+    isNumberExist = async () =>{
+        overlayLoading.show()
+        try{
+            let {data: {is_ok}} = await axios.post(getIAMEndpoint(`/iam/quick/${this.mssidn}`))
+            overlayLoading.hide()
+            this.sendOTP()
+        } catch(e){
+            overlayLoading.hide()
+            await snackbar.show('Nomor yang dimasukkan tidak terdapat dalam Database. Silahkan ulangi kembali')
+            this.props.history.push('/auth/forgot')
+            throw e
+        }
+    }
+
+    @action
+    sendOTP = async () =>{
+        let {data} = await user.sendOTP(this.mssidn)
+        
+        let {is_ok, data: secret } = data
+        if(!is_ok) return snackbar.show('Gagal mengirimkan Kode OTP')
+
+        this.secret = secret
+
+    }
+
+    @action
+    decreaseCount(){
+
+    }
+
     render(){
         return(
             <div className ={styles['container']}>
