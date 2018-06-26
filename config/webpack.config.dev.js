@@ -51,7 +51,7 @@ module.exports = {
     // require.resolve('webpack/hot/dev-server'),
     require.resolve('react-dev-utils/webpackHotDevClient'),
     // Finally, this is your app's code:
-    paths.appIndexJs,
+    paths.appIndexJs
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
@@ -69,7 +69,7 @@ module.exports = {
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
-      path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+      path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -88,10 +88,10 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      'react-native': 'react-native-web',
+      'react-native': 'react-native-web'
+      //'blanja-analytics' : path.resolve('src/google-analytics.js')
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -99,8 +99,8 @@ module.exports = {
       // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
-      new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
-    ],
+      new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson])
+    ]
   },
   module: {
     strictExportPresence: true,
@@ -124,8 +124,8 @@ module.exports = {
             loader: require.resolve('url-loader'),
             options: {
               limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]',
-            },
+              name: 'static/media/[name].[hash:8].[ext]'
+            }
           },
           // Process JS with Babel.
           {
@@ -133,14 +133,13 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
               cacheDirectory: true,
               plugins: ['transform-decorators-legacy'],
-              presets: ['react', 'env', 'stage-0'],
-            },
+              presets: ['react', 'env', 'stage-0']
+            }
           },
           {
             test: /(\.css|\.scss)$/,
@@ -171,17 +170,22 @@ module.exports = {
             // its runtime that would otherwise processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/, /(\.scss|\.css)$/],
+            exclude: [
+              /\.(js|jsx|mjs)$/,
+              /\.html$/,
+              /\.json$/,
+              /(\.scss|\.css)$/
+            ],
             loader: require.resolve('file-loader'),
             options: {
-              name: 'static/media/[name].[hash:8].[ext]',
-            },
-          },
-        ],
-      },
+              name: 'static/media/[name].[hash:8].[ext]'
+            }
+          }
+        ]
+      }
       // ** STOP ** Are you adding a new loader?
       // Make sure to add the new loader(s) before the "file" loader.
-    ],
+    ]
   },
   plugins: [
     // Makes some environment variables available in index.html.
@@ -195,7 +199,7 @@ module.exports = {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml,
+      template: paths.appHtml
     }),
     // Add module names to factory functions so they appear in browser profiler.
     new webpack.NamedModulesPlugin(),
@@ -239,23 +243,18 @@ module.exports = {
       navigateFallbackWhitelist: [/^(?!\/__).*/],
       mergeStaticsConfig: true,
       stripPrefix: 'build',
-      staticFileGlobs: [
-        'build/manifest.json',
-        'build/static/css/style.css',
-      ],
+      staticFileGlobs: ['build/manifest.json', 'build/static/css/style.css'],
       // Don't precache sourcemaps (they're large) and build asset manifest:
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
       cacheId: 'blanja-hash-cra',
-      importScripts: [
-        '/sw.js',
-      ]
+      importScripts: ['/sw.js']
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
     // solution that requires the user to opt into importing specific locales.
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
@@ -264,12 +263,12 @@ module.exports = {
     fs: 'empty',
     net: 'empty',
     tls: 'empty',
-    child_process: 'empty',
+    child_process: 'empty'
   },
   // Turn off performance hints during development because we don't do any
   // splitting or minification in interest of speed. These warnings become
   // cumbersome.
   performance: {
-    hints: false,
-  },
+    hints: false
+  }
 }

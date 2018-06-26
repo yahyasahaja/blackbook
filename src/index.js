@@ -28,6 +28,15 @@ import Raven from 'raven-js'
 
 registerServiceWorker()
 
+//GOOGLE ANALYTICS
+import ga from './google-analytics'
+
+//sw
+registerServiceWorker()
+
+//google-analytics
+ga()
+
 const contextTheme = theme
 
 const isNotLocal = () =>
@@ -48,6 +57,7 @@ axios.interceptors.response.use(
     return Promise.reject(err)
   }
 )
+// if (tokens.token) axios.defaults.headers['Authorization'] = tokens.token
 
 @observer
 class App extends Component {

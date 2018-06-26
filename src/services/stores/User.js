@@ -2,6 +2,7 @@
 import { observable, action, computed } from 'mobx'
 import axios from 'axios'
 import Raven from 'raven-js'
+import ReactGA from 'react-ga'
 
 //CONFIG
 import {
@@ -41,6 +42,7 @@ class User {
 
   @action
   setData = data => {
+    ReactGA.set({userId:data.id})
     return this.data = observable(data)
   }
 

@@ -12,16 +12,18 @@ import { user, serviceWorkerUpdate as swu } from './services/stores'
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
-  // [::1] is the IPv6 localhost address.
-  window.location.hostname === '[::1]' ||
-  // 127.0.0.1/8 is considered localhost for IPv4.
-  window.location.hostname.match(
-    /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-  )
+    // [::1] is the IPv6 localhost address.
+    window.location.hostname === '[::1]' ||
+    // 127.0.0.1/8 is considered localhost for IPv4.
+    window.location.hostname.match(
+      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+    )
 )
 
 export default function register() {
-  if (/*process.env.NODE_ENV === 'production' && */ 'serviceWorker' in navigator) {
+  if (
+    /*process.env.NODE_ENV === 'production' && */ 'serviceWorker' in navigator
+  ) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location)
     if (publicUrl.origin !== window.location.origin) {
@@ -30,9 +32,24 @@ export default function register() {
       // serve assets see https://github.com/facebookincubator/create-react-app/issues/2374
       return
     }
-    
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault()
+      // console.log(e)
+      // const save = e
+      alert('a2hs default install prevented!')
+      swu.setPrompt(e)
+      // setTimeout(() => {
+      //   save.prompt()
+      // }, 3000)
+    })
+
     window.addEventListener('load', () => {
-      const swUrl = process.env.NODE_ENV === 'production' ? `${process.env.PUBLIC_URL}/service-worker.js` : '/sw.js'
+      //SAVE INSTALL PROMPT EVENT
+
+      const swUrl =
+        process.env.NODE_ENV === 'production'
+          ? `${process.env.PUBLIC_URL}/service-worker.js`
+          : '/sw.js'
       console.log(swUrl)
 
       if (isLocalhost) {
@@ -44,7 +61,7 @@ export default function register() {
         navigator.serviceWorker.ready.then(() => {
           console.log(
             'This web app is being served cache-first by a service ' +
-            'worker. To learn more, visit https://goo.gl/SC7cgQ'
+              'worker. To learn more, visit https://goo.gl/SC7cgQ'
           )
         })
       } else {
@@ -84,7 +101,6 @@ function registerValidSW(swUrl) {
           }
         }
       }
-
     })
     .catch(error => {
       console.error('Error during service worker registration:', error)
@@ -96,12 +112,13 @@ function registerValidSW(swUrl) {
 
     if (activatingWorker.state === 'activated') {
       subscribeRegistration(registration)
-    } else activatingWorker.onstatechange = () => {
-      console.log(activatingWorker.state)
-      if (activatingWorker.state === 'activated') {
-        subscribeRegistration(registration)
+    } else
+      activatingWorker.onstatechange = () => {
+        console.log(activatingWorker.state)
+        if (activatingWorker.state === 'activated') {
+          subscribeRegistration(registration)
+        }
       }
-    }
   })
 }
 
@@ -110,7 +127,9 @@ function subscribeRegistration(registration) {
   registration.pushManager.getSubscription().then(async subscription => {
     try {
       if (!subscription)
-        subscription = await registration.pushManager.subscribe({ userVisibleOnly: true })
+        subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true
+        })
 
       console.log('FROM SERVICE WORKER REGISTRATION', subscription)
       await user.registerPushSubscription(subscription)

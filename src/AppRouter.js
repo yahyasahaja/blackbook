@@ -5,6 +5,7 @@ import Snackbar from 'react-toolbox/lib/snackbar'
 import { observer } from 'mobx-react'
 import Dialog from 'react-toolbox/lib/dialog'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
+import { withTracker } from './google-analytics'
 
 //SCREENS
 import asyncComponent from './components/AsyncComponent'
@@ -25,7 +26,9 @@ const CartProcess = asyncComponent(() => import('./screens/Cart/Process'))
 const CartConfirm = asyncComponent(() => import('./screens/Cart/Confirmation'))
 const PromoDetail = asyncComponent(() => import('./screens/Promo/PromoDetail'))
 const Product = asyncComponent(() => import('./screens/Product'))
-const Transaction = asyncComponent(() => import('./screens/Account/Transaction'))
+const Transaction = asyncComponent(() =>
+  import('./screens/Account/Transaction')
+)
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -35,29 +38,45 @@ import ProgressBarTheme from './assets/css/theme-progress-bar-white.scss'
 import BottomTabBar from './components/BottomTabBar'
 
 //STORE
-import { 
-  appStack, 
-  badges, 
-  dialog, 
+import {
+  appStack,
+  badges,
+  dialog,
   serviceWorkerUpdate as swu,
-  overlayLoading,
+  overlayLoading
 } from './services/stores'
 
 //INNER_CONFIG
 let BOTTOM_TAB_BAR_DATA = [
   { label: 'Home', icon: 'home', url: '/home', Component: Home },
-  { label: 'Disukai', icon: 'heart', url: '/favorite', Component: Favorite, badge: badges.LIKED },
+  {
+    label: 'Disukai',
+    icon: 'heart',
+    url: '/favorite',
+    Component: Favorite,
+    badge: badges.LIKED
+  },
   { label: 'Promo', icon: 'tag', url: '/promo', Component: Promo },
-  { label: 'Chat', icon: 'forum', url: '/chat', Component: Chat, badge: badges.CHAT },
-  { label: 'Akun', icon: 'account', url: '/account', Component: Account },
+  {
+    label: 'Chat',
+    icon: 'forum',
+    url: '/chat',
+    Component: Chat,
+    badge: badges.CHAT
+  },
+  { label: 'Akun', icon: 'account', url: '/account', Component: Account }
 ]
 
 // let bottomTabBarRouters = BOTTOM_TAB_BAR_DATA.map(data => data.url)
 
 //COMPONENT
-@observer class AppRouter extends Component {
+@observer
+class AppRouter extends Component {
   componentDidMount() {
-    let { onlineStatus: { goOffline, goOnline }, snackbar: { show } } = this.props
+    let {
+      onlineStatus: { goOffline, goOnline },
+      snackbar: { show }
+    } = this.props
     window.ononline = () => {
       goOnline()
       // window.location.reload()
@@ -72,13 +91,13 @@ let BOTTOM_TAB_BAR_DATA = [
 
     // new message badge
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.onmessage = (e) => {
-        if(e.type === 'message') {
+      navigator.serviceWorker.onmessage = e => {
+        if (e.type === 'message') {
           badges.inc(badges.CHAT)
         }
       }
     }
-    
+
     let buildDate = 'BUILD_DATE_FORMATTED'
     console.log(`BUILD-${buildDate}`)
   }
@@ -91,12 +110,12 @@ let BOTTOM_TAB_BAR_DATA = [
   //   return <div className={styles.page}>
   //   <div className={styles.content} >
   //   <Switch>
-  //     <Route path="/home" component={Home} />
-  //     <Route path="/favorite" component={Favorite} />
-  //     <Route path="/promo" component={Promo} />
-  //     <Route path="/chat" component={Chat} />
-  //     <Route path="/account" component={Account} />
-  //     <Route path="*" component={PageNotFound} />
+  //     <Route path="/home" component={withTracker(Home)} />
+  //     <Route path="/favorite" component={withTracker(Favorite)} />
+  //     <Route path="/promo" component={withTracker(Promo)} />
+  //     <Route path="/chat" component={withTracker(Chat)} />
+  //     <Route path="/account" component={withTracker(Account)} />
+  //     <Route path="*" component={withTracker(PageNotFound)} />
   //   </Switch>
   //   </div>
 
@@ -105,49 +124,73 @@ let BOTTOM_TAB_BAR_DATA = [
   // }
 
   renderOverlayLoading() {
-    if (overlayLoading.isActive) return (
-      <section>
-        <div className={styles.loading} >
-          <div>
-            <ProgressBar
-              type='circular'
-              mode='indeterminate' theme={ProgressBarTheme}
-            />
+    if (overlayLoading.isActive)
+      return (
+        <section>
+          <div className={styles.loading}>
+            <div>
+              <ProgressBar
+                type="circular"
+                mode="indeterminate"
+                theme={ProgressBarTheme}
+              />
+            </div>
           </div>
-        </div>
-      </section>
-    )
+        </section>
+      )
   }
 
   render() {
-    let { onlineStatus: { isOnline }, snackbar: { data: snackbar } } = this.props
-    
+    let {
+      onlineStatus: { isOnline },
+      snackbar: { data: snackbar }
+    } = this.props
+
     return (
       <BrowserRouter>
-        <div className={`${styles.container} ${isOnline ? '' : styles.offline}`}>
+        <div
+          className={`${styles.container} ${isOnline ? '' : styles.offline}`}
+        >
           <Switch>
             <Redirect from="/" exact to="/home" />
-            <Route path="*" render={props =>
-              <BottomTabBar {...props} data={BOTTOM_TAB_BAR_DATA} appStack={appStack} />}
+            <Route
+              path="*"
+              render={props => (
+                <BottomTabBar
+                  {...props}
+                  data={BOTTOM_TAB_BAR_DATA}
+                  appStack={appStack}
+                />
+              )}
             />
           </Switch>
           <Switch>
-            <Route path="/search" component={Search} />
-            <Route path="/auth" component={Auth} />
-            <Route path="/category/:category_name" component={Category} />
-            <Route path="/chat/:id" component={Conversation} />
-            <Route path="/cart/process" component={CartProcess} />
-            <Route path="/cart/confirm" component={CartConfirm} />
-            <Route path="/cart" component={Cart} />
-            <Route path="/account/profile" component={Profile} />
-            <Route path="/account/password" component={Password} />
-            <Route path="/account/transaction" component={Transaction} />
-            <Route path="/promo/:promotion_id" component={PromoDetail} />
-            <Route path="/product/:product_id" component={Product} />
+            <Route path="/search" component={withTracker(Search)} />
+            <Route path="/auth" component={withTracker(Auth)} />
+            <Route
+              path="/category/:category_name"
+              component={withTracker(Category)}
+            />
+            <Route path="/chat/:id" component={withTracker(Conversation)} />
+            <Route path="/cart/process" component={withTracker(CartProcess)} />
+            <Route path="/cart/confirm" component={withTracker(CartConfirm)} />
+            <Route path="/cart" component={withTracker(Cart)} />
+            <Route path="/account/profile" component={withTracker(Profile)} />
+            <Route path="/account/password" component={withTracker(Password)} />
+            <Route
+              path="/account/transaction"
+              component={withTracker(Transaction)}
+            />
+            <Route
+              path="/promo/:promotion_id"
+              component={withTracker(PromoDetail)}
+            />
+            <Route
+              path="/product/:product_id"
+              component={withTracker(Product)}
+            />
           </Switch>
-          <Switch>
-
-          </Switch>
+          <Switch />
 
           <section>
             <Snackbar
@@ -185,6 +228,53 @@ let BOTTOM_TAB_BAR_DATA = [
               title="Pembaruan Aplikasi Telah Tersedia!"
             >
               Klik reload untuk memperbarui aplikasi
+            </Dialog>
+          </section>
+
+          <section>
+            <Dialog
+              actions={[
+                {
+                  label: 'Batal',
+                  onClick: () => swu.setCancellable(true)
+                },
+                {
+                  label: 'Install',
+                  onClick: () => {
+                    swu.installPrompt()
+                    swu.setShowPrompt(false)
+                  }
+                }
+              ]}
+              active={swu.showPrompt}
+              title="Tambahkan Aplikasi ke Layar Utama"
+            >
+              Lebih cepat dan praktis untuk membuka aplikasi.
+            </Dialog>
+          </section>
+
+          <section>
+            <Dialog
+              actions={[
+                {
+                  label: 'Tidak',
+                  onClick: () => {
+                    swu.setCancellable(false)
+                  }
+                },
+                {
+                  label: 'Ya',
+                  onClick: () => {
+                    swu.setCancellable(false)
+                    swu.setShowPrompt(false)
+                  }
+                }
+              ]}
+              active={swu.cancellable}
+              title="Apakah Anda yakin?"
+            >
+              Anda harus menginstall aplikasi secara manual pada sesi
+              berikutnya.
             </Dialog>
           </section>
 

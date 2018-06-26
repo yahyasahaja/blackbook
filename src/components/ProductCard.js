@@ -2,6 +2,7 @@
 import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import { Link, withRouter } from 'react-router-dom'
+import ReactGA from 'react-ga'
 
 //STYLES
 import styles from './css/product-card.scss'
@@ -20,7 +21,7 @@ const convertToMoneyFormat = (num, currency) => {
     .toString()
     .split('')
     .reverse()
-    .reduce(function (acc, num, i) {
+    .reduce(function(acc, num, i) {
       return num == '-' ? acc : num + (i && !(i % 3) ? '.' : '') + acc
     }, '')
 
@@ -47,8 +48,19 @@ class ProductCard extends Component {
 
   onLike = () => {
     let { data, id } = this.props
-    if (!this.liked) favorites.add(data)
-    else favorites.remove(id)
+    if (!this.liked) {
+      favorites.add(data)
+      ReactGA.event({
+        category: 'Product',
+        action: 'Likes Product'
+      })
+    } else {
+      favorites.remove(id)
+      ReactGA.event({
+        category: 'Product',
+        action: 'Dislikes Product'
+      })
+    }
   }
 
   liked = false
@@ -67,7 +79,7 @@ class ProductCard extends Component {
     cart.add({
       product: data,
       variant,
-      amount,
+      amount
     })
 
     snackbar.show('Barang ditambahkan ke keranjang')
@@ -83,21 +95,32 @@ class ProductCard extends Component {
   }
 
   toggleShare = () => {
-    this.setState({isShareActive: !this.state.isShareActive})
+    this.setState({ isShareActive: !this.state.isShareActive })
   }
 
   share = id => {
     let link = this.props.shareUrl
-
+    ReactGA.event({
+      category: 'Share',
+      action: `Share to ${id}`
+    })
     window.open(
       id === 'twitter'
         ? `https://twitter.com/share?url=${link}`
         : id === 'facebook'
           ? `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=Blanja`
-          : `https://social-plugins.line.me/lineit/share?url=${link}`, 
-      '', 
+          : `https://social-plugins.line.me/lineit/share?url=${link}`,
+      '',
       'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
     )
+  }
+
+  clickBuy = () => {
+    this.addToCart()
+    ReactGA.event({
+      category: 'Order',
+      action: 'Add to Cart'
+    })
   }
 
   render() {
@@ -109,19 +132,18 @@ class ProductCard extends Component {
         this.liked = true
         break
       }
-    
-    if (images && !image) 
-      if (images.length > 0) image = images[0].url
-      
+
+    if (images && !image) if (images.length > 0) image = images[0].url
+
     if (!price)
       price = {
         value: 0,
-        currency: 'NTD',
+        currency: 'NTD'
       }
-      
+
     return (
-      <div 
-        className={styles.container} 
+      <div
+        className={styles.container}
         data-testid="product-card"
         onClick={() => this.props.history.push(`/product/${id}`)}
       >
@@ -137,10 +159,10 @@ class ProductCard extends Component {
             </span>
           </div>
 
-          <div 
+          <div
             data-testid="product-card-action"
             className={styles.actions}
-            onClick={e => e.stopPropagation()} 
+            onClick={e => e.stopPropagation()}
           >
             {this.state.isVariantOpen ? (
               <div className={styles.variantContent}>
@@ -155,8 +177,14 @@ class ProductCard extends Component {
                   <div className={styles.row}>
                     <label>Varian</label>
                     <div className={styles.select}>
-                      <span className={styles.selectText}>{this.state.variant}</span>
-                      <select onChange={event => this.setState({ variant: event.target.value })}>
+                      <span className={styles.selectText}>
+                        {this.state.variant}
+                      </span>
+                      <select
+                        onChange={event =>
+                          this.setState({ variant: event.target.value })
+                        }
+                      >
                         {variants.map(variant => (
                           <option key={variant.name}>{variant.name}</option>
                         ))}
@@ -166,14 +194,24 @@ class ProductCard extends Component {
                   <div className={styles.row}>
                     <label>Jumlah</label>
                     <div className={styles.select}>
-                      <span className={styles.selectText}>{this.state.amount}</span>
-                      <select onChange={event => this.setState({ amount: event.target.value })}>
+                      <span className={styles.selectText}>
+                        {this.state.amount}
+                      </span>
+                      <select
+                        onChange={event =>
+                          this.setState({ amount: event.target.value })
+                        }
+                      >
                         {this.renderAmountOption()}
                       </select>
                     </div>
                   </div>
                 </div>
-                <PrimaryButton onClick={() => this.addToCart()} icon="cart" className={styles.buy}>
+                <PrimaryButton
+                  onClick={() => this.clickBuy()}
+                  icon="cart"
+                  className={styles.buy}
+                >
                   BELI
                 </PrimaryButton>
               </div>
@@ -187,29 +225,37 @@ class ProductCard extends Component {
                   >
                     Suka
                   </FlatButton>
-                  <Link to={{ pathname: '/chat/new', state: { productId: id } }}>
+                  <Link
+                    to={{ pathname: '/chat/new', state: { productId: id } }}
+                  >
                     <FlatButton icon="forum">Chat</FlatButton>
                   </Link>
-                  <FlatButton onMouseOver={this.toggleShare} icon="share">Bagikan</FlatButton>
-                  <div 
-                    className={
-                      `${this.state.isShareActive ? styles.active : ''} ${styles.share}`
-                    } 
+                  <FlatButton onMouseOver={this.toggleShare} icon="share">
+                    Bagikan
+                  </FlatButton>
+                  <div
+                    className={`${
+                      this.state.isShareActive ? styles.active : ''
+                    } ${styles.share}`}
                   >
-                    <a 
-                      onClick={this.share.bind(this, 'facebook')} 
-                      href="javascript:void(0)" 
-                      className={`mdi mdi-facebook ${styles.icon} ${styles.facebook}`}
+                    <a
+                      onClick={this.share.bind(this, 'facebook')}
+                      href="javascript:void(0)"
+                      className={`mdi mdi-facebook ${styles.icon} ${
+                        styles.facebook
+                      }`}
                     />
-                    <a 
-                      onClick={this.share.bind(this, 'twitter')} 
-                      href="javascript:void(0)" 
-                      className={`mdi mdi-twitter ${styles.icon} ${styles.twitter}`}
+                    <a
+                      onClick={this.share.bind(this, 'twitter')}
+                      href="javascript:void(0)"
+                      className={`mdi mdi-twitter ${styles.icon} ${
+                        styles.twitter
+                      }`}
                     />
                     <img
-                      src="/static/icon/line.png" 
-                      onClick={this.share.bind(this, 'line')} 
-                      href="javascript:void(0)" 
+                      src="/static/icon/line.png"
+                      onClick={this.share.bind(this, 'line')}
+                      href="javascript:void(0)"
                       className={`mdi mdi-pinterest ${styles.icon}`}
                     />
                   </div>
