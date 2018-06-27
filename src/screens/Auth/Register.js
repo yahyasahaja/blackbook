@@ -161,7 +161,8 @@ class Register extends Component {
     try {
       let { data: { is_ok } } = await axios.post(getIAMEndpoint(`/quick/${this.msisdn}`))
       overlayLoading.hide()
-      snackbar.show('Nomor telah terdaftar. Silahkan gunakan fitur lupa password')
+      if (is_ok)
+        snackbar.show('Nomor telah terdaftar. Silahkan gunakan fitur lupa password')
       return is_ok
     } catch(e) {
       overlayLoading.hide()
