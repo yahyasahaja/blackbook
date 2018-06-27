@@ -9,6 +9,7 @@
 // This link also includes instructions on opting out of this behavior.
 
 import { user, serviceWorkerUpdate as swu } from './services/stores'
+import moment from 'moment'
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -39,18 +40,31 @@ export default function register() {
       window.addEventListener('beforeinstallprompt', e => {
         e.preventDefault()
         swu.setPrompt(e)
+        e.userChoice.then(choice => {
+          if (choice.outcome === 'acepted')
+            localStorage.setItem('blanja-hash-appinstalled', true)
+          else localStorage.setItem('blanja-hash-appinstalled', false)
+        })
       })
     }
 
     //check for first time visit
     if (
-      !/blanja\.hk/gi.test(window.location.href) &&
-      window.outerWidth <= 768
+      !/blanja\.hk/gi.test(window.location.href)
+      /* && window.outerWidth <= 768 */
     ) {
-      if (!localStorage.getItem('blanja-hash-firstvisit'))
-        localStorage.setItem('blanja-hash-firstvisit', true)
-      else {
-        if (!localStorage.getItem('blanja-hash-appinstalled')) {
+      if (!localStorage.getItem('blanja-hash-firstvisit')) {
+        localStorage.setItem(
+          'blanja-hash-firstvisit',
+          moment()
+            .add(10, 'minutes')
+            .unix()
+        )
+      } else {
+        const now = moment().unix()
+        const first = localStorage.getItem('blanja-hash-firstvisit')
+        const show = first <= now
+        if (!localStorage.getItem('blanja-hash-appinstalled') && show) {
           setTimeout(() => {
             swu.setManualGuide(true)
           }, 10000)
@@ -60,7 +74,7 @@ export default function register() {
 
     window.addEventListener('appinstalled', () => {
       localStorage.removeItem('blanja-hash-firstvisit')
-      localStorage.addItem('blanja-hash-appinstalled', true)
+      localStorage.setItem('blanja-hash-appinstalled', true)
     })
 
     window.addEventListener('load', () => {
