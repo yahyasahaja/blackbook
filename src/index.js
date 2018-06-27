@@ -24,8 +24,6 @@ import registerServiceWorker from './registerServiceWorker'
 //SENTRY INTEGRATION
 import Raven from 'raven-js'
 
-registerServiceWorker()
-
 //GOOGLE ANALYTICS
 import ga from './google-analytics'
 
@@ -78,8 +76,8 @@ class App extends Component {
         >
           <ProgressBar
             theme={ProgressbarTheme}
-            type='circular'
-            mode='indeterminate'
+            type="circular"
+            mode="indeterminate"
           />
         </div>
       )
