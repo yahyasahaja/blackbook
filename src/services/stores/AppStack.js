@@ -27,7 +27,7 @@ class AppStack {
 
   @computed
   get isPopupActive() {
-    return this.stack.length !== 0
+    return this.stack.length > 0
   }
 
   @action
