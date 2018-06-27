@@ -63,6 +63,9 @@ export default class OverlayInstall extends Component {
             <PrimaryButton onClick={this.handler}>OK</PrimaryButton>
           </div>
         </div>
+        <div className={styles.close} onClick={this.handler}>
+          &times;
+        </div>
       </div>
     )
   }
