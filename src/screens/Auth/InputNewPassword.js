@@ -32,7 +32,8 @@ class NewPassword extends Component{
         this.id = appStack.push()
         this.state = {
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            error_password: ''
         }
     }
 
@@ -49,6 +50,11 @@ class NewPassword extends Component{
     }
 
     handleChange(name, value){
+        if(name === 'confirmPassword'){
+            if(this.state.password !== this.state.confirmPassword){
+                this.setState({error_password: 'Password belum sama!'})
+            }
+        }
         this.setState(...this.state, { [name] : value })
     }
 
@@ -85,8 +91,8 @@ class NewPassword extends Component{
                             type="password" 
                             label="Password Baru"
                             required
-                            value={this.state.password}
                             onChange={this.handleChange.bind(this, 'password')}
+                            value={this.state.password}
                         />
                         <Input 
                             type="password" 
@@ -94,6 +100,7 @@ class NewPassword extends Component{
                             required
                             value={this.state.confirmPassword}
                             onChange={this.handleChange.bind(this, 'confirmPassword')}
+                            error={this.state.error_password}
                         />
                         {this.state.password !== this.state.confirmPassword ? <span className={styles.checkPassword}>Password harus sama</span>: ''}
                     </div>

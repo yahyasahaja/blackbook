@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
+import { withTracker } from '../../google-analytics'
 
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import Dropdown from 'react-toolbox/lib/dropdown'
@@ -441,6 +442,7 @@ const getUserDataQuery = gql`
 `
 
 export default compose(
+  withTracker,
   graphql(getAllChannelsQuery, {
     name: 'channels',
     options: {

@@ -4,6 +4,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
 import Dialog from 'react-toolbox/lib/dialog'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/profile.scss'
@@ -20,7 +21,7 @@ import { user, snackbar, appStack } from '../../services/stores'
 
 //COMPONENT
 @observer
-class Auth extends Component {
+class Profile extends Component {
   constructor(props) {
     super(props)
     this.id = appStack.push()
@@ -231,4 +232,4 @@ class Auth extends Component {
   }
 }
 
-export default Auth
+export default withTracker(Profile)

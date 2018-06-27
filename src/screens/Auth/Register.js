@@ -176,7 +176,7 @@ class Register extends Component {
 
     let isUserExist = await this.isUserExist()
     if (isUserExist) return
-    
+    console.log('sending otp')
     await this.sendOtp()
     this.showConfirmationModal()
   }

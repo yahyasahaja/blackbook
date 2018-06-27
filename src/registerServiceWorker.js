@@ -32,20 +32,38 @@ export default function register() {
       // serve assets see https://github.com/facebookincubator/create-react-app/issues/2374
       return
     }
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault()
-      // console.log(e)
-      // const save = e
-      alert('a2hs default install prevented!')
-      swu.setPrompt(e)
-      // setTimeout(() => {
-      //   save.prompt()
-      // }, 3000)
+    if (
+      window.onbeforeinstallprompt === null &&
+      window.navigator.userAgent.toLowerCase().includes('chrome')
+    ) {
+      window.addEventListener('beforeinstallprompt', e => {
+        e.preventDefault()
+        swu.setPrompt(e)
+      })
+    }
+
+    //check for first time visit
+    if (
+      !/blanja\.hk/gi.test(window.location.href) &&
+      window.outerWidth <= 768
+    ) {
+      if (!localStorage.getItem('blanja-hash-firstvisit'))
+        localStorage.setItem('blanja-hash-firstvisit', true)
+      else {
+        if (!localStorage.getItem('blanja-hash-appinstalled')) {
+          setTimeout(() => {
+            swu.setManualGuide(true)
+          }, 10000)
+        }
+      }
+    }
+
+    window.addEventListener('appinstalled', () => {
+      localStorage.removeItem('blanja-hash-firstvisit')
+      localStorage.addItem('blanja-hash-appinstalled', true)
     })
 
     window.addEventListener('load', () => {
-      //SAVE INSTALL PROMPT EVENT
-
       const swUrl =
         process.env.NODE_ENV === 'production'
           ? `${process.env.PUBLIC_URL}/service-worker.js`

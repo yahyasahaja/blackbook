@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Link } from 'react-router-dom'
+import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/index-product.scss'
@@ -524,7 +525,7 @@ query productRelationsQuery ($productId: ID!, $limit: Int) {
 }
 `
 
-export default compose(
+export default withTracker(compose(
   graphql(
     productQuery, {
       name: 'productQuery',
@@ -545,4 +546,4 @@ export default compose(
       }
     }
   ),
-)(PromoDetail)
+)(PromoDetail))

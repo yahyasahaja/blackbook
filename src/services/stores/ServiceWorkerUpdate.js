@@ -9,6 +9,7 @@ class ServiceWorkerUpdate {
   @observable promptInstall = null
   @observable showPrompt = false
   @observable cancellable = false
+  @observable showManualGuide = false
 
   @action
   update() {
@@ -55,9 +56,9 @@ class ServiceWorkerUpdate {
     this.cancellable = value
   }
 
-  @computed
-  get shouldShowPrompt() {
-    return this.showPrompt
+  @action
+  setManualGuide(value) {
+    this.showManualGuide = value
   }
 }
 

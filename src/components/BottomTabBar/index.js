@@ -1,5 +1,5 @@
 //MODULES
-import React, { Component }  from 'react'
+import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import { observer } from 'mobx-react'
 
@@ -25,7 +25,7 @@ class BottomTabBar extends Component {
 
   updateRoutes(nextProps) {
     let { match } = nextProps
-    let { routers, /*raw*/ } = this.state
+    let { routers /*raw*/ } = this.state
     let { data } = this.props
 
     if (!user.isLoggedIn) {
@@ -33,10 +33,10 @@ class BottomTabBar extends Component {
     }
 
     let currentPath = match.url
-    
+
     for (let i in routers) {
       if (currentPath.indexOf(routers[i].url) === 0) {
-        this.setState({currentPage: i})
+        this.setState({ currentPage: i })
         return
       }
     }
@@ -49,7 +49,7 @@ class BottomTabBar extends Component {
 
           return {
             routers: loc,
-            currentPage: routers.length,
+            currentPage: routers.length
           }
         })
         return
@@ -59,37 +59,43 @@ class BottomTabBar extends Component {
 
   state = {
     routers: [],
-    currentPage: 0,
+    currentPage: 0
   }
 
   renderData() {
     let { routers, currentPage } = this.state
-    
+
     return routers.map((data, i) => (
-      <div key={i} style={{
-        display: currentPage == i ? 'block' : 'none'
-      }} className={styles.container} >
+      <div
+        key={i}
+        style={{
+          display: currentPage == i ? 'block' : 'none'
+        }}
+        className={styles.container}
+      >
         <data.Component {...this.props} isSelected={currentPage == i} />
       </div>
     ))
   }
 
   render() {
-    let { data, appStack: { isPopupActive } } = this.props
+    let {
+      data,
+      appStack: { isPopupActive }
+    } = this.props
     return (
-      <div className={styles.container} 
+      <div
+        className={styles.container}
         style={{
           overflow: isPopupActive ? 'hidden' : 'unset'
-        }} 
+        }}
       >
-        <div className={styles.content}>
-          {this.renderData()}
-        </div>
+        <div className={styles.content}>{this.renderData()}</div>
 
         <Route path="*" render={props => <TabBar {...props} icons={data} />} />
       </div>
     )
-  } 
-} 
+  }
+}
 
 export default BottomTabBar

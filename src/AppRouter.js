@@ -5,7 +5,6 @@ import Snackbar from 'react-toolbox/lib/snackbar'
 import { observer } from 'mobx-react'
 import Dialog from 'react-toolbox/lib/dialog'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import { withTracker } from './google-analytics'
 
 //SCREENS
 import asyncComponent from './components/AsyncComponent'
@@ -26,6 +25,7 @@ const CartProcess = asyncComponent(() => import('./screens/Cart/Process'))
 const CartConfirm = asyncComponent(() => import('./screens/Cart/Confirmation'))
 const PromoDetail = asyncComponent(() => import('./screens/Promo/PromoDetail'))
 const Product = asyncComponent(() => import('./screens/Product'))
+const Overlay = asyncComponent(() => import('./components/OverlayInstall'))
 const Transaction = asyncComponent(() =>
   import('./screens/Account/Transaction')
 )
@@ -109,12 +109,12 @@ class AppRouter extends Component {
   //   return <div className={styles.page}>
   //   <div className={styles.content} >
   //   <Switch>
-  //     <Route path="/home" component={withTracker(Home)} />
-  //     <Route path="/favorite" component={withTracker(Favorite)} />
-  //     <Route path="/promo" component={withTracker(Promo)} />
-  //     <Route path="/chat" component={withTracker(Chat)} />
-  //     <Route path="/account" component={withTracker(Account)} />
-  //     <Route path="*" component={withTracker(PageNotFound)} />
+  //     <Route path="/home" component={Home)} />
+  //     <Route path="/favorite" component={Favorite)} />
+  //     <Route path="/promo" component={Promo)} />
+  //     <Route path="/chat" component={Chat)} />
+  //     <Route path="/account" component={Account)} />
+  //     <Route path="*" component={PageNotFound)} />
   //   </Switch>
   //   </div>
 
@@ -150,46 +150,57 @@ class AppRouter extends Component {
         <div
           className={`${styles.container} ${isOnline ? '' : styles.offline}`}
         >
-          <Switch>
-            <Redirect from="/" exact to="/home" />
-            <Route
-              path="*"
-              render={props => (
-                <BottomTabBar
-                  {...props}
-                  data={BOTTOM_TAB_BAR_DATA}
-                  appStack={appStack}
-                />
-              )}
-            />
-          </Switch>
-          <Switch>
-            <Route path="/search" component={withTracker(Search)} />
-            <Route path="/auth" component={withTracker(Auth)} />
-            <Route
-              path="/category/:category_name"
-              component={withTracker(Category)}
-            />
-            <Route path="/chat/:id" component={withTracker(Conversation)} />
-            <Route path="/cart/process" component={withTracker(CartProcess)} />
-            <Route path="/cart/confirm" component={withTracker(CartConfirm)} />
-            <Route path="/cart" component={withTracker(Cart)} />
-            <Route path="/account/profile" component={withTracker(Profile)} />
-            <Route path="/account/password" component={withTracker(Password)} />
-            <Route
-              path="/account/transaction"
-              component={withTracker(Transaction)}
-            />
-            <Route
-              path="/promo/:promotion_id"
-              component={withTracker(PromoDetail)}
-            />
-            <Route
-              path="/product/:product_id"
-              component={withTracker(Product)}
-            />
-          </Switch>
-          <Switch />
+          {swu.showManualGuide && <Overlay />}
+          <div className={swu.showManualGuide ? styles.nonOverlay : ''}>
+            <Switch>
+              <Redirect from="/" exact to="/home" />
+              <Route
+                path="*"
+                render={props => (
+                  <BottomTabBar
+                    {...props}
+                    data={BOTTOM_TAB_BAR_DATA}
+                    appStack={appStack}
+                  />
+                )}
+              />
+            </Switch>
+            <Switch>
+              <Route path="/search" component={Search} />
+              <Route path="/auth" component={Auth} />
+              <Route
+                path="/category/:category_name"
+                component={Category}
+              />
+              <Route path="/chat/:id" component={Conversation} />
+              <Route
+                path="/cart/process"
+                component={CartProcess}
+              />
+              <Route
+                path="/cart/confirm"
+                component={CartConfirm}
+              />
+              <Route path="/cart" component={Cart} />
+              <Route path="/account/profile" component={Profile} />
+              <Route
+                path="/account/password"
+                component={Password}
+              />
+              <Route
+                path="/account/transaction"
+                component={Transaction}
+              />
+              <Route
+                path="/promo/:promotion_id"
+                component={PromoDetail}
+              />
+              <Route
+                path="/product/:product_id"
+                component={Product}
+              />
+            </Switch>
+          </div>
 
           <section>
             <Snackbar
@@ -202,7 +213,6 @@ class AppRouter extends Component {
               type={snackbar.type}
             />
           </section>
-
           <section>
             <Dialog
               actions={dialog.actions}
@@ -214,7 +224,6 @@ class AppRouter extends Component {
               {dialog.content}
             </Dialog>
           </section>
-
           <section>
             <Dialog
               actions={[
@@ -229,7 +238,6 @@ class AppRouter extends Component {
               Klik reload untuk memperbarui aplikasi
             </Dialog>
           </section>
-
           <section>
             <Dialog
               actions={[
@@ -238,7 +246,7 @@ class AppRouter extends Component {
                   onClick: () => swu.setCancellable(true)
                 },
                 {
-                  label: 'Install',
+                  label: 'Tambahkan Ke Layar Utama',
                   onClick: () => {
                     swu.installPrompt()
                     swu.setShowPrompt(false)
@@ -251,7 +259,6 @@ class AppRouter extends Component {
               Lebih cepat dan praktis untuk membuka aplikasi.
             </Dialog>
           </section>
-
           <section>
             <Dialog
               actions={[
@@ -272,11 +279,10 @@ class AppRouter extends Component {
               active={swu.cancellable}
               title="Apakah Anda yakin?"
             >
-              Anda harus menginstall aplikasi secara manual pada sesi
+              Anda harus menambahkan aplikasi secara manual pada sesi
               berikutnya.
             </Dialog>
           </section>
-
           {this.renderOverlayLoading()}
         </div>
       </BrowserRouter>
