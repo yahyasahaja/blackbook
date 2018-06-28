@@ -39,19 +39,21 @@ export default function register() {
     ) {
       window.addEventListener('beforeinstallprompt', e => {
         e.preventDefault()
-        swu.setPrompt(e)
-        e.userChoice.then(choice => {
-          if (choice.outcome === 'acepted')
-            localStorage.setItem('blanja-hash-appinstalled', true)
-          else localStorage.setItem('blanja-hash-appinstalled', false)
-        })
+        if (!localStorage.getItem('blanja-hash-appinstalled')) {
+          swu.setPrompt(e)
+          e.userChoice.then(choice => {
+            if (choice.outcome === 'acepted')
+              localStorage.setItem('blanja-hash-appinstalled', true)
+            else localStorage.setItem('blanja-hash-appinstalled', false)
+          })
+        }
       })
     }
 
     //check for first time visit
     if (
-      !/blanja\.hk/gi.test(window.location.href)
-      && window.outerWidth <= 768
+      !/blanja\.hk/gi.test(window.location.href) &&
+      window.outerWidth <= 768
     ) {
       if (!localStorage.getItem('blanja-hash-firstvisit')) {
         localStorage.setItem(
@@ -73,7 +75,6 @@ export default function register() {
     }
 
     window.addEventListener('appinstalled', () => {
-      localStorage.removeItem('blanja-hash-firstvisit')
       localStorage.setItem('blanja-hash-appinstalled', true)
     })
 

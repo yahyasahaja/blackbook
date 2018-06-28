@@ -255,6 +255,7 @@ class AppRouter extends Component {
                 {
                   label: 'Ya',
                   onClick: () => {
+                    localStorage.setItem('blanja-hash-appinstalled', false)
                     swu.setCancellable(false)
                     swu.setShowPrompt(false)
                   }
