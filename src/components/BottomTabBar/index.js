@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom'
 import { observer } from 'mobx-react'
 
 //STYLES
-import styles from './css/index.scss'
+import styles from './css/index-bottom-tab-bar.scss'
 
 //COMPONENTS
 import TabBar from './TabBar'
@@ -83,6 +83,7 @@ class BottomTabBar extends Component {
       data,
       appStack: { isPopupActive }
     } = this.props
+
     return (
       <div
         className={styles.container}

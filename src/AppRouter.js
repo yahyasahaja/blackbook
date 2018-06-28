@@ -151,7 +151,7 @@ class AppRouter extends Component {
           className={`${styles.container} ${isOnline ? '' : styles.offline}`}
         >
           {swu.showManualGuide && <Overlay />}
-          <div className={swu.showManualGuide ? styles.nonOverlay : ''}>
+          <div className={swu.showManualGuide ? styles.nonOverlay : styles.content}>
             <Switch>
               <Redirect from="/" exact to="/home" />
               <Route

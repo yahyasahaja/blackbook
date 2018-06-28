@@ -43,6 +43,8 @@ class NewPassword extends Component {
     if (name === 'confirmPassword') {
       if (this.state.password !== this.state.confirmPassword) {
         this.setState({ error_password: 'Password belum sama!' })
+      } else {
+        this.setState({ error_password: 'Password sudah sama!'})
       }
     }
     this.setState(...this.state, { [name]: value })
@@ -88,17 +90,14 @@ class NewPassword extends Component {
               type="password"
               label="Konfirmasi Password"
               required
-              value={this.state.confirmPassword}
               onChange={this.handleChange.bind(this, 'confirmPassword')}
-              error={this.state.error_password}
+              value={this.state.confirmPassword}
             />
             {this.state.password !== this.state.confirmPassword ? <span className={styles.checkPassword}>Password harus sama</span> : ''}
           </div>
           <PrimaryButton type="submit">Ganti Password</PrimaryButton>
         </form>
       </div>
-
-
     )
   }
 }
