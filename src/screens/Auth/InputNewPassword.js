@@ -40,13 +40,6 @@ class NewPassword extends Component {
   }
 
   handleChange(name, value) {
-    if (name === 'confirmPassword') {
-      if (this.state.password !== this.state.confirmPassword) {
-        this.setState({ error_password: 'Password belum sama!' })
-      } else {
-        this.setState({ error_password: 'Password sudah sama!'})
-      }
-    }
     this.setState(...this.state, { [name]: value })
   }
 
