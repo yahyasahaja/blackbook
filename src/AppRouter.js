@@ -148,11 +148,15 @@ class AppRouter extends Component {
 
     return (
       <BrowserRouter>
-        <div
-          className={`${styles.container} ${isOnline ? '' : styles.offline}`}
-        >
+        <div>
           {swu.showManualGuide && <Overlay />}
-          <div className={swu.showManualGuide ? styles.nonOverlay : styles.content}>
+          <div
+            className={
+              swu.showManualGuide
+                ? styles.nonOverlay
+                : `${styles.container} ${isOnline ? '' : styles.offline}`
+            }
+          >
             <Switch>
               <Redirect from="/" exact to="/home" />
               <Route
@@ -169,37 +173,16 @@ class AppRouter extends Component {
             <Switch>
               <Route path="/search" component={Search} />
               <Route path="/auth" component={Auth} />
-              <Route
-                path="/category/:category_name"
-                component={Category}
-              />
+              <Route path="/category/:category_name" component={Category} />
               <Route path="/chat/:id" component={Conversation} />
-              <Route
-                path="/cart/process"
-                component={CartProcess}
-              />
-              <Route
-                path="/cart/confirm"
-                component={CartConfirm}
-              />
+              <Route path="/cart/process" component={CartProcess} />
+              <Route path="/cart/confirm" component={CartConfirm} />
               <Route path="/cart" component={Cart} />
               <Route path="/account/profile" component={Profile} />
-              <Route
-                path="/account/password"
-                component={Password}
-              />
-              <Route
-                path="/account/transaction"
-                component={Transaction}
-              />
-              <Route
-                path="/promo/:promotion_id"
-                component={PromoDetail}
-              />
-              <Route
-                path="/product/:product_id"
-                component={Product}
-              />
+              <Route path="/account/password" component={Password} />
+              <Route path="/account/transaction" component={Transaction} />
+              <Route path="/promo/:promotion_id" component={PromoDetail} />
+              <Route path="/product/:product_id" component={Product} />
             </Switch>
           </div>
 

@@ -51,7 +51,7 @@ export default function register() {
     //check for first time visit
     if (
       !/blanja\.hk/gi.test(window.location.href)
-      /* && window.outerWidth <= 768 */
+      && window.outerWidth <= 768
     ) {
       if (!localStorage.getItem('blanja-hash-firstvisit')) {
         localStorage.setItem(
