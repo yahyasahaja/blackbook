@@ -39,6 +39,13 @@ class User {
   @observable isLoadingLogin
   @observable isLoadingUploadProfilePic
   @observable isLoadingSendingOTP
+  @observable isLoadingChangePassword
+  @observable msisdn
+
+  @action
+  setMsisdn = msisdn => {
+    return this.msisdn = msisdn
+  }
 
   @action
   setData = data => {
@@ -206,6 +213,19 @@ class User {
   }
 
   @action
+  forgotPassword = (confirmPassword, mssidn, validToken) => {
+    this.isLoadingChangePassword = true
+
+    return axios.post(getIAMEndpoint(`/forgot/${msisdn}`, {
+      validToken: validToken,
+      password: btoa(confirmPassword)
+    })).then(({data: { is_ok } }) => {
+      this.isLoadingChangePassword = false
+      return is_ok
+    })
+  }
+
+  @action
   updateProfile = ({
     name,
     msisdn,
@@ -258,12 +278,12 @@ class User {
   confirmOTP = async (msisdn, otp, secret) => {
     try {
       this.isLoadingSendingOTP = true
-      let { data: { is_ok }} = await axios.post(getIAMEndpoint(`/otp-sms/${msisdn}`), {
+      let data = await axios.post(getIAMEndpoint(`/otp-sms/${msisdn}`), {
         secret, otp
       })
       this.isLoadingSendingOTP = false
 
-      return is_ok
+      return data
     } catch (e) {
       console.log(e)
     }

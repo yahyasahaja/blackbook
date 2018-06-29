@@ -10,7 +10,7 @@ import styles from './css/new-passowrd.scss'
 import PrimaryButton from '../../components/PrimaryButton'
 
 //STORE
-import { appStack, snackbar } from '../../services/stores'
+import { user, snackbar, appStack, overlayLoading, countdownTimer, tokens } from '../../services/stores'
 
 //CONFIG
 import { observable, computed, action } from 'mobx'
@@ -23,12 +23,10 @@ class NewPassword extends Component {
     this.state = {
       password: '',
       confirmPassword: '',
-      error_password: ''
     }
   }
 
-  @observable secret = ''
-
+  @observable validToken
 
   componentWillUnmount() {
     appStack.pop()
@@ -40,7 +38,8 @@ class NewPassword extends Component {
   componentDidMount() {
     let { setTitle } = this.props
     setTitle('Lupa Password')
-    this.setCountdownTimer()
+    countdownTimer.setCountdownTimer()
+    console.log(user.msisdn)
   }
 
   handleChange(name, value) {
@@ -48,45 +47,28 @@ class NewPassword extends Component {
   }
 
   // onSubmit = async (e) =>{
-  //     e.preventDefault()
-  //     e.stopPropagation()
+  //   e.preventDefault()
+  //   e.stopPropagation()
 
-  //     let numberExist = await this.isNumberExist
-  //     if(!numberExist) return
+  //   if(this.state.confirmPassword !== this.state.password){
+  //     snackbar.show('Password Baru dan Konfirmasi Password yang dimasukkan harus sama')
+  //     this.setState(...this.state, { confirmPassword: '', password: '' })
+  //   } else{
+      
+  //   }
+  // }
 
-
+  // forgotPassword = async () =>{
+  //   overlayLoading.show()
+  //   try{
+  //     let res = await user.forgotPassword(this.state.confirmPassword)
+  //   } catch(e){
+  //     overlayLoading.hide()
+  //     snackbar.show('Terjadi kesalahan koneksi. Silahkan coba kembali')
+  //     throw e
+  //   }
   // }
   
-  MINUTES_COUNTDOWN = 2
-  SECONDS_COUNTDOWN = 0
-  @observable min_countdown = this.MINUTES_COUNTDOWN
-  @observable sec_countdown = this.SECONDS_COUNTDOWN
-  @observable countdownIntervalId = null
-
-  @action
-  setCountdownTimer = () =>{
-    if(!this.isUnmounted){
-      if(this.min_countdown >= 0){
-        this.countdownIntervalId = setInterval( () => this.decreaseCount(), 1000 )
-      }
-    }
-  }
-
-  @action
-  decreaseCount = () => {
-    if(this.min_countdown === 0 && this.sec_countdown === 0){
-      clearInterval(this.countdownIntervalId)
-      snackbar.show("Waktu untuk penggantian password telah habis! Silakan ulangi kembali")
-      this.props.history.push("/auth/forgot")
-    } else if(this.sec_countdown === 0){
-      this.sec_countdown = 59      
-      return --this.min_countdown
-    } else{
-      return --this.sec_countdown
-    }
-    
-  }
-
   render() {
     return (
       <div className={styles['container']}>
@@ -99,7 +81,7 @@ class NewPassword extends Component {
           </div>
         </div>
         <div className={styles.timer}>
-          {this.min_countdown + ' : ' + (this.sec_countdown < 10 ? '0' : '') + this.sec_countdown}
+          {countdownTimer.min_countdown + ' : ' + (countdownTimer.sec_countdown < 10 ? '0' : '') + countdownTimer.sec_countdown}
         </div>
         <form className={styles.form} onSubmit={this.onSubmit}>
           <div className={styles.password}>

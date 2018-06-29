@@ -20,7 +20,7 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 import PrimaryButton from '../../components/PrimaryButton'
 
 //STORE
-import { user, snackbar, appStack, overlayLoading } from '../../services/stores'
+import { user, snackbar, appStack, overlayLoading, countdownTimer, tokens } from '../../services/stores'
 
 
 //CONFIG
@@ -46,6 +46,10 @@ class ForgotPassword extends Component {
       modalActive: false
     }
   }
+  MINUTES_COUNTDOWN = 2
+  SECONDS_COUNTDOWN = 0
+  
+  
 
   componentWillUnmount() {
     appStack.pop()
@@ -56,10 +60,11 @@ class ForgotPassword extends Component {
   componentDidMount() {
     let { setTitle } = this.props
     setTitle('Lupa Password')
+    
   }
 
   isUnmounted = false
-  DEFAULT_COUNT = 120
+  DEFAULT_COUNT = 60
 
   @observable count = this.DEFAULT_COUNT
   @observable secret = ''
@@ -102,12 +107,13 @@ class ForgotPassword extends Component {
 
 
   onConfirmClicked = async () => {
-    let is_ok = await user.confirmOTP(this.mssidn, this.state.otp, this.secret)
-    if (!is_ok) {
+    let data = await user.confirmOTP(this.mssidn, this.state.otp, this.secret)
+    if (!data.is_ok) {
       this.setState({ otp_error: 'Kode konfirmasi OTP tidak valid' })
       snackbar.show('Kode konfirmasi OTP tidak valid')
     }
-
+    await user.setMsisdn(this.mssidn)
+    await tokens.setForgotPasswordToken(data.validToken)
     this.props.history.push('/auth/forgot/new')
   }
 
@@ -128,12 +134,21 @@ class ForgotPassword extends Component {
   onSubmit = async (e) => {
     e.preventDefault()
     e.stopPropagation()
-
+    console.log(countdownTimer.min_countdown)
+    console.log(countdownTimer.sec_countdown)    
+    countdownTimer.min_countdown = this.MINUTES_COUNTDOWN
+    countdownTimer.sec_countdown = this.SECONDS_COUNTDOWN
+    console.log(countdownTimer)
+    console.log(countdownTimer.sec_countdown)
+    console.log(countdownTimer.min_countdown)
     let numberExist = await this.isNumberExist()
     if (!numberExist) 
-      return snackbar.show('Nomor tidak ditemukan pada Database. Silakan ulangi kembali')
-
+    return snackbar.show('Nomor tidak ditemukan pada Database. Silakan ulangi kembali')
+    
     await this.sendOTP()
+    
+    //set countdown
+    countdownTimer.setCountdownTimer
     this.showConfirmationModal()
   }
 
@@ -270,6 +285,9 @@ class ForgotPassword extends Component {
                 ) :
                 (
                   <div className={styles.modal} >
+                    <p className={styles.time}>
+                      {countdownTimer.min_countdown + ':' + (countdownTimer.sec_countdown < 10 ? '0' : '') + countdownTimer.sec_countdown}
+                    </p>
                     <Input
                       name="otp"
                       type="text"

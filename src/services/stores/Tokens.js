@@ -28,6 +28,7 @@ class Tokens {
   //THIS MUST BE RAW TOKEN, NO BEARER!
   @observable apiToken = null
   @observable authToken = null
+  @observable forgotPasswordToken = null
 
   //USE THIS FOR AUTHORIZATION
   @computed
@@ -71,6 +72,18 @@ class Tokens {
     axios.defaults.headers['Authorization'] = `Bearer ${this.authToken}`
     return this.authToken
   }
+
+  @action
+  setForgotPasswordToken(token){
+    this.forgotPasswordToken = token
+    return this.forgotPasswordToken
+  }
+
+  @action
+  removeForgotPasswordToken(token){
+    this.forgotPasswordToken = null
+  }
+  
 
   @action
   removeAuthToken() {
