@@ -148,7 +148,7 @@ class ForgotPassword extends Component {
     await this.sendOTP()
     
     //set countdown
-    countdownTimer.setCountdownTimer
+    countdownTimer.setCountdownTimer()
     this.showConfirmationModal()
   }
 
