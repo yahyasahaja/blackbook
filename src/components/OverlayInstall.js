@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PrimaryButton from './PrimaryButton'
 import styles from './css/overlay-install.scss'
 import { serviceWorkerUpdate as swu } from '../services/stores'
@@ -49,15 +49,19 @@ export default class OverlayInstall extends Component {
         </ul>
         <div className={`${styles.flexWrap} ${styles.spaceBetween}`}>
           <div className={`${styles.left} ${styles.flexWrap}`}>
-            <input
-              type="checkbox"
-              id="know"
-              checked={this.state.checked}
-              onChange={() => {
-                this.setState(prev => ({ checked: !prev.checked }))
-              }}
-            />
-            <label htmlFor="know">Jangan tampilkan lagi</label>
+            {swu.showCheckbox && (
+              <Fragment>
+                <input
+                  type="checkbox"
+                  id="know"
+                  checked={this.state.checked}
+                  onChange={() => {
+                    this.setState(prev => ({ checked: !prev.checked }))
+                  }}
+                />
+                <label htmlFor="know">Jangan tampilkan lagi</label>
+              </Fragment>
+            )}
           </div>
           <div className={styles.right}>
             <PrimaryButton onClick={this.handler}>OK</PrimaryButton>

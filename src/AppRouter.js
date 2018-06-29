@@ -148,7 +148,7 @@ class AppRouter extends Component {
 
     return (
       <BrowserRouter>
-        <div>
+        <div className={styles.rootContainer}>
           {swu.showManualGuide && <Overlay />}
           <div
             className={
