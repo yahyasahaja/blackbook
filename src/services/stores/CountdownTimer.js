@@ -19,7 +19,6 @@ import {
   getQueryString,
 } from '../../utils'
 
-@observer
 class Countdown{
   
   

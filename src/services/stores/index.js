@@ -13,6 +13,7 @@ import dialog from './Dialog'
 import serviceWorkerUpdate from './ServiceWorkerUpdate'
 import overlayLoading from './OverlayLoading'
 import countdownTimer from './CountdownTimer'
+console.log(countdownTimer, tokens)
 
 export { 
   categories,
