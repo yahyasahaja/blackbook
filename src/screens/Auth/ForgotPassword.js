@@ -107,13 +107,13 @@ class ForgotPassword extends Component {
 
 
   onConfirmClicked = async () => {
-    let data = await user.confirmOTP(this.mssidn, this.state.otp, this.secret)
-    if (!data.is_ok) {
+    let response = await user.confirmOTP(this.mssidn, this.state.otp, this.secret)
+    if (!response.data.is_ok) {
       this.setState({ otp_error: 'Kode konfirmasi OTP tidak valid' })
       snackbar.show('Kode konfirmasi OTP tidak valid')
     }
     await user.setMsisdn(this.mssidn)
-    await tokens.setForgotPasswordToken(data.validToken)
+    await tokens.setForgotPasswordToken(response.data.validToken)
     this.props.history.push('/auth/forgot/new')
   }
 
