@@ -10,6 +10,7 @@ class ServiceWorkerUpdate {
   @observable showPrompt = false
   @observable cancellable = false
   @observable showManualGuide = false
+  @observable showCheckbox = true
 
   @action
   update() {
@@ -57,8 +58,9 @@ class ServiceWorkerUpdate {
   }
 
   @action
-  setManualGuide(value) {
+  setManualGuide(value, hidden = null) {
     this.showManualGuide = value
+    if (hidden) this.showCheckbox = false
   }
 }
 
