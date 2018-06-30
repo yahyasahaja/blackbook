@@ -19,7 +19,7 @@ import client from './services/graphql/productClient'
 import { onlineStatus, snackbar, tokens } from './services/stores'
 
 //SERVICE_WORKER
-import registerServiceWorker from './registerServiceWorker'
+// import registerServiceWorker from './registerServiceWorker'
 
 //SENTRY INTEGRATION
 import Raven from 'raven-js'
@@ -28,7 +28,7 @@ import Raven from 'raven-js'
 import ga from './google-analytics'
 
 //sw
-registerServiceWorker()
+// registerServiceWorker()
 
 //google-analytics
 ga()

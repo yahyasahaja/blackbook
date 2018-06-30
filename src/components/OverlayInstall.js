@@ -28,10 +28,6 @@ export default class OverlayInstall extends Component {
       localStorage.setItem('blanja-hash-appinstalled', false)
     swu.setManualGuide(false)
   }
-
-  componentDidMount() {
-    console.log(styles)
-  }
   render() {
     return (
       <div className={styles.overlay}>
