@@ -12,6 +12,8 @@ import Dialog from 'react-toolbox/lib/dialog'
 
 import { appStack, user, cart } from '../../services/stores'
 
+import { convertCountryCodeToText } from '../../utils'
+
 import PopupBar from '../../components/PopupBar'
 import PrimaryButton from '../../components/PrimaryButton'
 
@@ -151,7 +153,7 @@ class Process extends Component {
               type="text"
               hint="Negara Pengiriman"
               label="Negara"
-              value="Taiwan"
+              value={convertCountryCodeToText(user.data.country)}
               disabled
             />
             <Checkbox

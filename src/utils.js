@@ -70,6 +70,14 @@ export const convertCountryCurrency = country => {
       : 'RP'
 }
 
+export const convertCountryCodeToText = code => {
+  return code === 'TWN'
+    ? 'Taiwan'
+    : code === 'HKG'
+      ? 'Hong Kong'
+      : 'Indonesia' 
+}
+
 export const getQueryString =  variable => {
   var query = window.location.search.substring(1)
   var vars = query.split('&')
