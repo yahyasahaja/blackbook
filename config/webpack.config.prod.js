@@ -76,7 +76,21 @@ module.exports = new Promise(function(resolve) {
       // You can exclude the *.map files from the build during deployment.
       devtool: shouldUseSourceMap ? 'source-map' : false,
       // In production, we only want to load the polyfills and the app code.
-      entry: ['babel-polyfill', require.resolve('./polyfills'), paths.appIndexJs],
+      entry: {
+        main: [
+          'babel-polyfill', 
+          require.resolve('./polyfills'), 
+          paths.appIndexJs,
+        ],
+        vendor: [
+          'react',
+          'react-dom',
+          'react-router-dom',
+          'mobx',
+          'mobx-react',
+          'lodash',
+        ]
+      },
       output: {
         // The build folder.
         path: paths.appBuild,
