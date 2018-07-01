@@ -21,6 +21,9 @@ export const getSubscription = async () => {
 }
 
 export const convertToMoneyFormat = (num, currency) => {
+  // max 2 decimal point
+  num = Math.round(num * 100) / 100
+
   let precision = null
 
   let loc1 = (num + '').split('.')
@@ -33,10 +36,10 @@ export const convertToMoneyFormat = (num, currency) => {
     .split('')
     .reverse()
     .reduce(function (acc, num, i) {
-      return num == '-' ? acc : num + (i && !(i % 3) ? '.' : '') + acc
+      return num == '-' ? acc : num + (i && !(i % 3) ? ',' : '') + acc
     }, '')
 
-  return `${currency ? currency : ''} ${res}${precision !== null ? `,${precision}` : ''}`
+  return `${currency ? currency : ''} ${res}${precision !== null ? `.${precision}` : ''}`
 }
 
 export const convertStatus = (status) => {
