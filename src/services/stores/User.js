@@ -77,7 +77,7 @@ class User {
       
       this.isLoadingLogin = false
       favorites.clear()
-      cart.clear()
+      // cart.clear()
       tokens.setAuthToken(token)
       if(isNotLocal()) Raven.setUserContext({token})
       await this.fetchData(token)
