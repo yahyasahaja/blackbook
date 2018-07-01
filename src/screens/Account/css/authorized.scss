@@ -15,7 +15,8 @@
       border: 3px solid #595959;
     }
 
-    .pic, .picture-default {
+    .pic,
+    .picture-default {
       display: flex;
       width: 100px;
       height: 100px;
@@ -50,11 +51,14 @@
     }
   }
 
+  [data-react-toolbox='list'] {
+    white-space: pre-wrap !important;
+  }
   .card {
     width: 100%;
     margin-top: 20px;
-    padding: 20px;
     background: white;
+    padding: 20px;
     border-radius: 5px;
     box-shadow: 1px 2px 5px #dedede;
 
@@ -72,8 +76,8 @@
       font-size: 14pt;
     }
 
-    .logout, .list {
-
+    .logout,
+    .list {
       span {
         color: #e74c3c !important;
       }
@@ -83,8 +87,9 @@
 
 .berjualan {
   display: block;
-  
-  .link, .link:visited {
+
+  .link,
+  .link:visited {
     color: $secondary-color;
     font-weight: bold;
 
@@ -107,5 +112,10 @@
       width: 140px;
       padding: 8px;
     }
+  }
+
+  .manuala2hs {
+    white-space: pre-wrap;
+    background-color: red;
   }
 }
