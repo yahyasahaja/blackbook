@@ -29,7 +29,6 @@ const Overlay = asyncComponent(() => import(/*webpackChunkName: Overlay*/'./comp
 const Transaction = asyncComponent(() =>
   import(/*webpackChunkName: Transaction*/'./screens/Account/Transaction')
 )
-
 //STYLES
 import styles from './assets/css/app-router.scss'
 import ProgressBarTheme from './assets/css/theme-progress-bar-white.scss'

@@ -8,6 +8,7 @@ import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import { List, ListItem } from 'react-toolbox/lib/list'
 import ReactGA from 'react-ga'
+import Slider from 'react-slick'
 import { withTracker } from '../../google-analytics'
 
 //STYLES
@@ -211,6 +212,34 @@ class Home extends Component {
     })
   }
 
+  renderAdsPanel = () => {
+    const images = [
+      {
+        id: '2d3a2c7a-7bba-438a-8c60-b079d6dd4b04',
+        imageUrl: '/static/img/placeimg_640_480_tech1.jpg',
+      },
+      {
+        id: 'edd8bdf0-f89c-436a-a6f7-7e9749c7d020',
+        imageUrl: '/static/img/placeimg_640_480_tech2.jpg',
+
+      },
+      {
+        id: 'e4b5d98f-0e0c-483d-ae46-6eed890b402d',
+        imageUrl: '/static/img/placeimg_640_480_tech3.jpg',
+
+      }
+    ]
+
+    return images.map((image, i) => {
+      return (
+        <Link key={i} to={`/promo/${image.id}`} >
+          <img className={styles.ads} src={image.imageUrl} />
+        </Link>
+      )
+    }
+    )
+  }
+
   renderAllCategories() {
     let {
       allCategoriesQuery: { allCategories }
@@ -247,6 +276,17 @@ class Home extends Component {
   }
 
   render() {
+    let settings = {
+      autoplay: true,
+      dots: true,
+      dotsClass: "slick-dots",
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false,
+      
+    }
     let {
       activePromotedsQuery: { loading }
     } = this.props
@@ -273,6 +313,9 @@ class Home extends Component {
         style={{ background: 'rgb(239, 239, 239)' }}
         wrapperStyle={{ padding: 0 }}
       >
+      <Slider {...settings}>
+        {this.renderAdsPanel()}
+      </Slider>
         <div style={style}>
           <div className={styles.categories}>{this.renderCategories()}</div>
 

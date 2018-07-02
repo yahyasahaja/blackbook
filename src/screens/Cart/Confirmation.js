@@ -11,6 +11,8 @@ import { convertToMoneyFormat, convertCountryCurrency } from '../../utils'
 
 import { appStack, user, cart, snackbar } from '../../services/stores'
 
+import config from '../../config'
+
 import PopupBar from '../../components/PopupBar'
 import PrimaryButton from '../../components/PrimaryButton'
 import ConfirmationItem from '../../components/Cart/ConfirmationItem'
@@ -147,19 +149,21 @@ class Process extends Component {
 
   // total section
   renderTotal() {
+    let currency = user.data ? convertCountryCurrency(user.data.country) : config.COUNTRY_CODE
+
     console.log(user.data)
     return (
       <div className={styles.section}>
         <div className={styles.price}>
           <span>Total Harga Barang</span>
-          <span>{convertToMoneyFormat(cart.totalPrice, 'NTD')}</span>
+          <span>{convertToMoneyFormat(cart.totalPrice, currency)}</span>
         </div>
         <div className={styles.price}>
           <span>Ongkos Kirim</span>
           <span>
             {convertToMoneyFormat(
               this.props.location.state.shippingCost,
-              'NTD',
+              currency,
             )}
           </span>
         </div>
@@ -168,7 +172,7 @@ class Process extends Component {
           <span>
             {'- ' + convertToMoneyFormat(
               this.props.location.state.discount,
-              'NTD',
+              currency,
             )}
           </span>
         </div>}
@@ -177,7 +181,7 @@ class Process extends Component {
           <span data-testid="confirmation-total">
             {convertToMoneyFormat(
               cart.totalPrice + this.props.location.state.shippingCost - this.props.location.state.discount,
-              'NTD',
+              currency,
             )}
           </span>
         </div>

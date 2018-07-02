@@ -1,0 +1,59 @@
+@import '../../../assets/css/config.scss';
+
+.container{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    padding-left: 30px;
+    padding-right: 30px;
+
+    .top{
+        display: block;
+        text-align: center;
+        max-width: $max-width/2;
+        
+        .pageTitle{
+            color: $secondary-color;
+            font-weight: 700;
+            font-size: 30pt;
+            width: 100%;
+            cursor: default;
+        }
+
+        .desc{
+            max-width: $max-width;
+            font-size: 13pt;
+        }
+    }
+
+    .timer{
+        margin-top: 30px;
+        font-size: 15pt;
+    }
+
+    .form{
+        width: 100%;
+        background: white;
+        box-shadow: 1px 2px 5px #dedede;
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 5px;
+
+        .password{
+            display: block;
+
+            .checkPassword{
+                color: $secondary-color;
+            }
+        }
+
+        button{
+            width: 100%;
+            margin-top: 40px;
+        }
+    }
+
+}

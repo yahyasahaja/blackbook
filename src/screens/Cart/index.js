@@ -41,10 +41,18 @@ class Cart extends Component {
   }
 
   componentDidMount() {
-    this.calculateTotalCost()
+    // this.calculateTotalCost()
     this.disposer = observe(cart.data, () => {
       this.calculateTotalCost()
     })
+
+    // wait until user data loaded
+    this.userDisposer = observe(user, 'isLoading', () => {
+      console.log('creating listener')
+      if (!user.isLoading) {
+        this.calculateTotalCost()
+      }
+    }, true)
   }
 
   componentWillUnmount() {
@@ -66,13 +74,15 @@ class Cart extends Component {
       productId: item.product.id,
       quantity: item.amount,
     }))
+
+    const country = user.data ? user.data.country : config.COUNTRY_CODE
     
     try {
       const { data: { calcTotalCost: { productCost, shippingCost, discount } }} = await client.mutate({
         mutation: calculateCost,
         variables: {
           input: {
-            country: user.data ? user.data.country : config.COUNTRY_CODE,
+            country,
             items: input,
             promotionCode: useVoucher ? voucherCode : '',
           },
@@ -92,6 +102,8 @@ class Cart extends Component {
       })
       console.log(err)
     }
+
+    this.userDisposer()
   }
 
   renderProducts() {
@@ -133,7 +145,7 @@ class Cart extends Component {
   }
 
   renderDetail() {
-    let currency = user.data ? convertCountryCurrency(user.data.country) : ''
+    let currency = user.data ? convertCountryCurrency(user.data.country) : config.COUNTRY_CODE
     return (
       <div data-testid="cart-detail" className={styles.detail}>
         <div className={styles.row}>

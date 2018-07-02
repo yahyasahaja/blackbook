@@ -131,6 +131,9 @@ class Login extends Component {
           <span className={styles.ref} >
             Belum punya akun? <Link to="/auth/register" >Daftar disini</Link>
           </span>
+          <div className={styles.ref}>
+            <Link to="/auth/forgot">Lupa password?</Link> 
+          </div>
         </form>
       </div>
     )
