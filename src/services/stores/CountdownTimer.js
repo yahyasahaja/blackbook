@@ -41,7 +41,7 @@ class Countdown{
     if(this.min_countdown === 0 && this.sec_countdown === 0){
       clearInterval(this.countdownIntervalId)
       snackbar.show("Waktu untuk penggantian password telah habis! Silakan ulangi kembali")
-      history.push("/auth/forgot")
+      this.history.push("/auth/forgot")
     } else if(this.sec_countdown === 0){
       this.sec_countdown = 59      
       return --this.min_countdown
