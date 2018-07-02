@@ -169,7 +169,7 @@ class User {
       this.isLoadingLogin = false
       if (is_ok) {
         favorites.clear()
-        cart.clear()
+        // cart.clear()
         tokens.setAuthToken(token)
         if(isNotLocal()) Raven.setUserContext({
           msisdn,
