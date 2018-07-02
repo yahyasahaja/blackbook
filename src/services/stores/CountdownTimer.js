@@ -5,6 +5,7 @@ import Raven from 'raven-js'
 import ReactGA from 'react-ga'
 import { snackbar } from '../../services/stores'
 
+
 //CONFIG
 import {
   getIAMEndpoint,
@@ -25,7 +26,7 @@ class Countdown{
   @observable min_countdown
   @observable sec_countdown
   @observable countdownIntervalId = null
-
+  @observable history
   
   setCountdownTimer = () =>{
     console.log(this.min_countdown)
@@ -36,10 +37,11 @@ class Countdown{
 
   @action
   decreaseCount = () => {
+    console.log(this.min_countdown)
     if(this.min_countdown === 0 && this.sec_countdown === 0){
       clearInterval(this.countdownIntervalId)
       snackbar.show("Waktu untuk penggantian password telah habis! Silakan ulangi kembali")
-      this.props.history.push("/auth/forgot")
+      history.push("/auth/forgot")
     } else if(this.sec_countdown === 0){
       this.sec_countdown = 59      
       return --this.min_countdown

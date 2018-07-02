@@ -213,7 +213,7 @@ class User {
   }
 
   @action
-  forgotPassword = (confirmPassword, mssidn, validToken) => {
+  forgotPassword = (confirmPassword, msisdn, validToken) => {
     this.isLoadingChangePassword = true
 
     return axios.post(getIAMEndpoint(`/forgot/${msisdn}`, {
@@ -278,7 +278,7 @@ class User {
   confirmOTP = async (msisdn, otp, secret) => {
     try {
       this.isLoadingSendingOTP = true
-      let data = await axios.post(getIAMEndpoint(`/otp-sms/${msisdn}`), {
+      let { data } = await axios.post(getIAMEndpoint(`/otp-sms/${msisdn}`), {
         secret, otp
       })
       this.isLoadingSendingOTP = false

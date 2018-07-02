@@ -124,9 +124,9 @@ class Register extends Component {
   }
 
   onConfirmClicked = async () => {
-    let is_ok = await user.confirmOTP(this.msisdn, this.state.otp, this.secret)
+    let res = await user.confirmOTP(this.msisdn, this.state.otp, this.secret)
 
-    if (!is_ok) {
+    if (!res.is_ok) {
       this.setState({otp_error: 'Kode konfirmasi tidak valid'})
       return snackbar.show('Kode konfirmasi tidak valid')
     }

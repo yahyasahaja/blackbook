@@ -2,9 +2,16 @@
 import React, { Component } from 'react'
 import Input from 'react-toolbox/lib/input/Input'
 import { observer } from 'mobx-react'
+import { Link } from 'react-router-dom'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
+
+
 
 //STYLES
 import styles from './css/new-passowrd.scss'
+
+//THEME
+import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import PrimaryButton from '../../components/PrimaryButton'
@@ -31,6 +38,7 @@ class NewPassword extends Component {
   componentWillUnmount() {
     appStack.pop()
     this.isUnmounted = true
+    clearInterval(countdownTimer.countdownIntervalId)
   }
 
   isUnmounted = false
@@ -38,36 +46,80 @@ class NewPassword extends Component {
   componentDidMount() {
     let { setTitle } = this.props
     setTitle('Lupa Password')
-    countdownTimer.setCountdownTimer()
     console.log(user.msisdn)
+    console.log(tokens.forgotPasswordToken)
+    countdownTimer.history = this.props.history
   }
 
   handleChange(name, value) {
     this.setState(...this.state, { [name]: value })
   }
 
-  // onSubmit = async (e) =>{
-  //   e.preventDefault()
-  //   e.stopPropagation()
+  onSubmit = async (e) =>{
+    e.preventDefault()
+    e.stopPropagation()
 
-  //   if(this.state.confirmPassword !== this.state.password){
-  //     snackbar.show('Password Baru dan Konfirmasi Password yang dimasukkan harus sama')
-  //     this.setState(...this.state, { confirmPassword: '', password: '' })
-  //   } else{
-      
-  //   }
-  // }
+    if(this.state.confirmPassword !== this.state.password){
+      snackbar.show('Password Baru dan Konfirmasi Password yang dimasukkan harus sama')
+      this.setState(...this.state, { confirmPassword: '', password: '' })
+    } else {
+      console.log("success reach else conditional")
+      let is_ok = await this.forgotPassword()
+      console.log('has been succeeded from forgotPassword')
+      if(is_ok) {
+        console.log('gonna out from here')
+        this.props.history.push('/auth/login')
+      } else{
+        console.log('failed to go out')
+      }
+        
+    }
+  }
 
-  // forgotPassword = async () =>{
-  //   overlayLoading.show()
-  //   try{
-  //     let res = await user.forgotPassword(this.state.confirmPassword)
-  //   } catch(e){
-  //     overlayLoading.hide()
-  //     snackbar.show('Terjadi kesalahan koneksi. Silahkan coba kembali')
-  //     throw e
-  //   }
-  // }
+  forgotPassword = async () =>{
+    console.log('success invoke forgotPassword')
+    overlayLoading.show()
+    try{
+      console.log('success reach try')
+      console.log(this.state.confirmPassword)
+      console.log(typeof this.state.confirmPassword)
+      console.log(user.msisdn)
+      console.log(typeof user.msisdn)
+      console.log(tokens.forgotPasswordToken)
+      console.log(typeof tokens.forgotPasswordToken)
+      let is_ok = await user.forgotPassword(
+        this.state.confirmPassword, 
+        user.msisdn, 
+        tokens.forgotPasswordToken)
+      overlayLoading.hide()
+      console.log('success called forgotPassword api')
+      if(is_ok){
+        console.log('response is_ok')
+        snackbar.show('Password anda berhasil diganti')
+      } else{
+        console.log('response is failed')
+      }
+      return is_ok
+    } catch(e){
+      overlayLoading.hide()
+      snackbar.show('Terjadi kesalahan koneksi. Silahkan coba kembali')
+      throw e
+    }
+  }
+
+  renderButton = () => {
+    if(user.isLoadingChangePassword)
+      return (
+        <div className={styles['loading-wrapper']} >
+          <ProgressBar
+            className={styles.loading}
+            type='circular'
+            mode='indeterminate' theme={ProgressBarTheme}
+          />
+        </div>
+      )
+    return <PrimaryButton type="submit">Ganti Password</PrimaryButton>
+  }
   
   render() {
     return (
@@ -81,7 +133,28 @@ class NewPassword extends Component {
           </div>
         </div>
         <div className={styles.timer}>
-          {countdownTimer.min_countdown + ' : ' + (countdownTimer.sec_countdown < 10 ? '0' : '') + countdownTimer.sec_countdown}
+          {(countdownTimer.min_countdown === undefined 
+            ? 
+              '' 
+            : 
+              countdownTimer.min_countdown) 
+          + 
+            (countdownTimer.min_countdown === undefined && 
+            countdownTimer.sec_countdown === undefined 
+            ? 
+              '' 
+            : 
+              ':')
+          + (countdownTimer.sec_countdown === undefined 
+            ? 
+              '' 
+            : 
+              countdownTimer.sec_countdown < 10 ? '0' : '') 
+          + (countdownTimer.sec_countdown === undefined
+            ?
+              ''
+            :
+              countdownTimer.sec_countdown)}
         </div>
         <form className={styles.form} onSubmit={this.onSubmit}>
           <div className={styles.password}>
@@ -101,7 +174,7 @@ class NewPassword extends Component {
             />
             {this.state.password !== this.state.confirmPassword ? <span className={styles.checkPassword}>Password harus sama</span> : ''}
           </div>
-          <PrimaryButton type="submit">Ganti Password</PrimaryButton>
+          {this.renderButton()}
         </form>
       </div>
     )

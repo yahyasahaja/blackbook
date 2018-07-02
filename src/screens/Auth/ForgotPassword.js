@@ -46,25 +46,26 @@ class ForgotPassword extends Component {
       modalActive: false
     }
   }
-  MINUTES_COUNTDOWN = 2
-  SECONDS_COUNTDOWN = 0
+  MINUTES_COUNTDOWN = 3
+  SECONDS_COUNTDOWN = 30
   
   
 
   componentWillUnmount() {
     appStack.pop()
     this.isUnmounted = true
+    
   }
 
 
   componentDidMount() {
     let { setTitle } = this.props
     setTitle('Lupa Password')
-    
+    countdownTimer.history = this.props.history
   }
 
   isUnmounted = false
-  DEFAULT_COUNT = 60
+  DEFAULT_COUNT = 120
 
   @observable count = this.DEFAULT_COUNT
   @observable secret = ''
@@ -108,12 +109,12 @@ class ForgotPassword extends Component {
 
   onConfirmClicked = async () => {
     let response = await user.confirmOTP(this.mssidn, this.state.otp, this.secret)
-    if (!response.data.is_ok) {
+    if (!response.is_ok) {
       this.setState({ otp_error: 'Kode konfirmasi OTP tidak valid' })
       snackbar.show('Kode konfirmasi OTP tidak valid')
     }
     await user.setMsisdn(this.mssidn)
-    await tokens.setForgotPasswordToken(response.data.validToken)
+    await tokens.setForgotPasswordToken(response.validToken)
     this.props.history.push('/auth/forgot/new')
   }
 
@@ -133,14 +134,9 @@ class ForgotPassword extends Component {
 
   onSubmit = async (e) => {
     e.preventDefault()
-    e.stopPropagation()
-    console.log(countdownTimer.min_countdown)
-    console.log(countdownTimer.sec_countdown)    
+    e.stopPropagation()  
     countdownTimer.min_countdown = this.MINUTES_COUNTDOWN
     countdownTimer.sec_countdown = this.SECONDS_COUNTDOWN
-    console.log(countdownTimer)
-    console.log(countdownTimer.sec_countdown)
-    console.log(countdownTimer.min_countdown)
     let numberExist = await this.isNumberExist()
     if (!numberExist) 
     return snackbar.show('Nomor tidak ditemukan pada Database. Silakan ulangi kembali')
