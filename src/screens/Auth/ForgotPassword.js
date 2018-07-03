@@ -111,7 +111,7 @@ class ForgotPassword extends Component {
     let response = await user.confirmOTP(this.mssidn, this.state.otp, this.secret)
     if (!response.is_ok) {
       this.setState({ otp_error: 'Kode konfirmasi OTP tidak valid' })
-      snackbar.show('Kode konfirmasi OTP tidak valid')
+      return snackbar.show('Kode konfirmasi OTP tidak valid')
     }
     await user.setMsisdn(this.mssidn)
     await tokens.setForgotPasswordToken(response.validToken)
