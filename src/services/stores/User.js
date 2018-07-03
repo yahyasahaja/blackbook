@@ -215,13 +215,13 @@ class User {
   @action
   forgotPassword = (confirmPassword, msisdn, validToken) => {
     this.isLoadingChangePassword = true
-
-    return axios.post(getIAMEndpoint(`/forgot/${msisdn}`, {
+    console.log(confirmPassword , msisdn, validToken)
+    return axios.post(getIAMEndpoint(`/forgot/${msisdn}`), {
       validToken: validToken,
       password: btoa(confirmPassword)
-    })).then(({data: { is_ok } }) => {
+    }).then(({ data }) => {
       this.isLoadingChangePassword = false
-      return is_ok
+      return data
     })
   }
 

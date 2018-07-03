@@ -64,9 +64,9 @@ class NewPassword extends Component {
       this.setState(...this.state, { confirmPassword: '', password: '' })
     } else {
       console.log("success reach else conditional")
-      let is_ok = await this.forgotPassword()
+      let data = await this.forgotPassword()
       console.log('has been succeeded from forgotPassword')
-      if(is_ok) {
+      if(data.is_ok) {
         console.log('gonna out from here')
         this.props.history.push('/auth/login')
       } else{
@@ -87,19 +87,19 @@ class NewPassword extends Component {
       console.log(typeof user.msisdn)
       console.log(tokens.forgotPasswordToken)
       console.log(typeof tokens.forgotPasswordToken)
-      let is_ok = await user.forgotPassword(
+      let data = await user.forgotPassword(
         this.state.confirmPassword, 
         user.msisdn, 
         tokens.forgotPasswordToken)
       overlayLoading.hide()
       console.log('success called forgotPassword api')
-      if(is_ok){
+      if(data.is_ok){
         console.log('response is_ok')
         snackbar.show('Password anda berhasil diganti')
       } else{
-        console.log('response is failed')
+        console.log('response is failed ' + data.error)
       }
-      return is_ok
+      return data
     } catch(e){
       overlayLoading.hide()
       snackbar.show('Terjadi kesalahan koneksi. Silahkan coba kembali')
