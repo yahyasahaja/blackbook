@@ -1,24 +1,10 @@
-import { observer } from 'mobx-react';
-import { observable, action, computed } from 'mobx'
-import axios from 'axios'
-import Raven from 'raven-js'
-import ReactGA from 'react-ga'
+import { observable, action } from 'mobx'
 import { snackbar } from '../../services/stores'
 
 
 //CONFIG
 import {
-  getIAMEndpoint,
 } from '../../config'
-
-//TOKENS
-import tokens from './Tokens'
-
-//UTILS
-import {
-  getSubscription,
-  getQueryString,
-} from '../../utils'
 
 class Countdown{
   
@@ -40,8 +26,8 @@ class Countdown{
     console.log(this.min_countdown)
     if(this.min_countdown === 0 && this.sec_countdown === 0){
       clearInterval(this.countdownIntervalId)
-      snackbar.show("Waktu untuk penggantian password telah habis! Silakan ulangi kembali")
-      this.history.push("/auth/forgot")
+      snackbar.show('Waktu untuk penggantian password telah habis! Silakan ulangi kembali')
+      this.history.push('/auth/forgot')
     } else if(this.sec_countdown === 0){
       this.sec_countdown = 59      
       return --this.min_countdown
