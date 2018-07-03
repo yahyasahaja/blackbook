@@ -247,16 +247,18 @@ class Home extends Component {
   }
 
   renderAdsPanel = () => {
-
-
     return this.state.advertisements.map((data, i) => {
       return (
-        <Link target="_blank" key={i} to={data.targetUrl} >
+        <Link target="_system" key={i} to={data.targetUrl} >
           <img className={styles.ads} src={data.imageUrl} />
         </Link>
       )
     }
     )
+  }
+
+  openNewTab = (url) =>{
+    window.open(url, '_system')
   }
 
   renderAllCategories() {
