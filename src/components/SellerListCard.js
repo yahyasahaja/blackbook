@@ -15,15 +15,23 @@ import { limitString } from '../utils'
 export default class SellerListCard extends Component {
   render() {
     let { className, imageUrl, url, name, allSellersButton, large } = this.props
-    
+    let style = {}
+
     if (allSellersButton) {
       url = '/sellers'
+    }
+
+    if (allSellersButton || !imageUrl) {
+      style = {
+        width: 40,
+        height: 40,
+      }
     }
 
     return (
       <Link to={url} className={`${className} ${styles.container} ${large ? styles.large : ''}`} >
         <div className={styles.wrapper} >
-          <div className={styles['image-wrapper']} >
+          <div style={style} className={styles['image-wrapper']} >
             <img className={styles.img} src={imageUrl || StoreIcon} alt="seller image" />
           </div>
 
