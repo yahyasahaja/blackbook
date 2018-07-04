@@ -6,7 +6,7 @@ import { ApolloProvider } from 'react-apollo'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { observer } from 'mobx-react'
 import axios from 'axios'
-console.log('check for update 8. Hope this is the last :(')
+console.log('check for update 9. Hope this is the last :(')
 //CSS
 import theme from './assets/theme/theme.js'
 import ProgressbarTheme from './assets/css/theme-progress-bar.scss'
