@@ -15,18 +15,7 @@ import ImageLoader from './ImageLoader'
 //STORE
 import { favorites, cart, snackbar } from '../services/stores'
 
-//INNER_CONFIG
-const convertToMoneyFormat = (num, currency) => {
-  let res = num
-    .toString()
-    .split('')
-    .reverse()
-    .reduce(function(acc, num, i) {
-      return num == '-' ? acc : num + (i && !(i % 3) ? '.' : '') + acc
-    }, '')
-
-  return `${currency} ${res}`
-}
+import { convertToMoneyFormat } from '../utils'
 
 //COMPONENT
 @observer
