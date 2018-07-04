@@ -88,7 +88,8 @@ class BottomTabBar extends Component {
       <div
         className={styles.container}
         style={{
-          overflow: isPopupActive ? 'hidden' : 'unset'
+          overflow: isPopupActive ? 'hidden' : 'unset',
+          height: '100%'
         }}
       >
         <div className={styles.content}>{this.renderData()}</div>

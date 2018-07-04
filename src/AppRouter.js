@@ -147,13 +147,13 @@ class AppRouter extends Component {
 
     return (
       <BrowserRouter>
-        <div className={styles.rootContainer}>
+        <div className={styles.container}>
           {swu.showManualGuide && <Overlay />}
           <div
             className={
-              swu.showManualGuide
-                ? styles.nonOverlay
-                : `${styles.container} ${isOnline ? '' : styles.offline}`
+              `${isOnline ? '' : styles.offline} ${styles.wrapper} ${
+                swu.showManualGuide ? styles.nonOverlay : ''
+              }`
             }
           >
             <Switch>

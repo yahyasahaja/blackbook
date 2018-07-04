@@ -6,6 +6,10 @@
   max-width: 480px;
   margin: auto;
 
+  .wrapper {
+    height: 100%;
+  }
+
   .popup {
     display: block;
     height: 100%;
@@ -57,9 +61,4 @@
 .nonOverlay {
   max-height: 100vh;
   overflow: hidden;
-}
-.rootContainer {
-  position: relative;
-  max-width: 480px;
-  margin: auto;
 }
