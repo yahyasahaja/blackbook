@@ -213,6 +213,32 @@ class PromoDetail extends Component {
     )
   }
 
+  renderDate = () =>{
+    const arrayMonth= [
+      'Januari', 'Februari', 'Maret',
+      'April', 'Mei', 'Juni', 'Juli',
+      'Agustus', 'September', 'Oktober',
+      'November', 'Desember'
+    ]
+
+    let { product } = this.props.productQuery
+    if(!product) return
+
+    let { updated } = product
+    let dateUpdate = new Date(updated)
+    let date = dateUpdate.getDate()
+    let month = dateUpdate.getMonth()
+    let year = dateUpdate.getFullYear()
+
+    if(updated){
+      return (
+        <div style={{ marginTop: '20px', color: 'gray' }}>
+          Terakhir diupdate: {date + ' ' + arrayMonth[month] + ' ' + year }
+        </div>        
+      )
+    }
+  }
+
   toggleShare = () => {
     this.setState({ isShareActive: !this.state.isShareActive })
   }
@@ -252,7 +278,7 @@ class PromoDetail extends Component {
         </div>
       )
 
-    let { name, images, id, price, variants, description, seller } = this.props.productQuery.product
+    let { name, images, id, price, variants, description, seller, updated } = this.props.productQuery.product
     this.liked = false
     let fav = favorites.data.slice()
     for (let i in fav)
@@ -289,6 +315,7 @@ class PromoDetail extends Component {
               </span>
               <span className={styles.desc}>{description}</span>
               {this.renderStock()}
+              {this.renderDate()}
             </div>
 
             <div className={styles.actions}>

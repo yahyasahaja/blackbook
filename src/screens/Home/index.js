@@ -256,11 +256,7 @@ class Home extends Component {
     }
     )
   }
-
-  openNewTab = (url) =>{
-    window.open(url, '_system')
-  }
-
+  
   renderAllCategories() {
     let {
       allCategoriesQuery: { allCategories }
