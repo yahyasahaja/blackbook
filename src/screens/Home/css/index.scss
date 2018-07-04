@@ -26,6 +26,30 @@
   height: 200px;
 }
 
+.sellers {
+  overflow-y: hidden;
+  overflow-x: auto;
+  white-space: nowrap;
+  border-right: none;
+  border-left: none;
+  background: white;
+  padding: 10px;
+  margin: 10px auto;
+  width: 95%;
+  border-radius: 5px;
+  border: 1px solid #e1e1e1;
+
+  .title {
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+
+  .wrapper {
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
 .categories {
   overflow-y: hidden;
   overflow-x: auto;

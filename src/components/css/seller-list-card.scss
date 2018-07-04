@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  width: 80px;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border: solid #b8c4cc 1px;
+  transition: .3s;
+  border-radius: 8px;
+
+  &:active {
+    transition: 0s;
+    opacity: .3;
+  }
+
+  .wrapper {
+    display: flex;
+    max-width: 30px;
+    color: #5a5a5a;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 100%;
+      object-fit: contain;
+    }
+
+    .name {
+      text-align: center;
+    }
+
+    .all {
+      font-size: 10px;
+    }
+  }
+
+}
+
+.large {
+  width: 100px;
+  height: 100px;
+
+  .wrapper {
+    max-width: 40px;
+  }
+}
