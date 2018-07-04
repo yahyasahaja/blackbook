@@ -91,5 +91,5 @@ class App extends Component {
     )
   }
 }
-
+console.log('check for update')
 ReactDOM.render(<App />, document.getElementById('app'))
