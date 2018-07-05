@@ -251,6 +251,7 @@ const allProductsQuery = gql`
           weight
         },
         seller {
+          id,
           name,
           profilePicture,
           country
