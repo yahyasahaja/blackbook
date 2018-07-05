@@ -278,7 +278,7 @@ class PromoDetail extends Component {
         </div>
       )
 
-    let { name, images, id, price, variants, description, seller, updated } = this.props.productQuery.product
+    let { name, images, id, price, variants, description, seller } = this.props.productQuery.product
     this.liked = false
     let fav = favorites.data.slice()
     for (let i in fav)
@@ -406,19 +406,21 @@ class PromoDetail extends Component {
         </div>
 
         <div className={styles.card} >
-          <div className={styles.seller} >
-            {
-              seller.profilePicture
-                ? <img src={seller.profilePicture} />
-                : <div className={styles.pic}>{
-                  seller.name.split(' ').slice(0, 2).map(d => d[0]).join('')
-                }</div>
-            }
-            <span>
-              <div>{seller.name}</div>
-              <div>{seller.country}</div>
-            </span>
-          </div>
+          <Link to={`/seller/${seller.id}`}>
+            <div className={styles.seller} >
+              {
+                seller.profilePicture
+                  ? <img src={seller.profilePicture} />
+                  : <div className={styles.pic}>{
+                    seller.name.split(' ').slice(0, 2).map(d => d[0]).join('')
+                  }</div>
+              }
+              <span>
+                <div>{seller.name}</div>
+                <div>{seller.country}</div>
+              </span>
+            </div>
+          </Link>
         </div>
 
         {
@@ -479,6 +481,7 @@ query productQuery ($id: ID!) {
       weight
     },
     seller {
+      id,
       name,
       profilePicture,
       country,

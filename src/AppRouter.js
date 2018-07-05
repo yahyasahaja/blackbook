@@ -29,6 +29,7 @@ const Overlay = asyncComponent(() => import(/*webpackChunkName: Overlay*/'./comp
 const Transaction = asyncComponent(() =>
   import(/*webpackChunkName: Transaction*/'./screens/Account/Transaction')
 )
+const Seller = asyncComponent(() => import('./screens/Seller'))
 //STYLES
 import styles from './assets/css/app-router.scss'
 import ProgressBarTheme from './assets/css/theme-progress-bar-white.scss'
@@ -182,6 +183,7 @@ class AppRouter extends Component {
               <Route path="/account/transaction" component={Transaction} />
               <Route path="/promo/:promotion_id" component={PromoDetail} />
               <Route path="/product/:product_id" component={Product} />
+              <Route path="/seller/:seller_id" component={Seller}/>
             </Switch>
           </div>
 

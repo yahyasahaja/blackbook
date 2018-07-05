@@ -139,7 +139,7 @@ class ForgotPassword extends Component {
     countdownTimer.sec_countdown = this.SECONDS_COUNTDOWN
     let numberExist = await this.isNumberExist()
     if (!numberExist) 
-    return snackbar.show('Nomor tidak ditemukan pada Database. Silakan ulangi kembali')
+      return snackbar.show('Nomor tidak ditemukan pada Database. Silakan ulangi kembali')
     
     await this.sendOTP()
     

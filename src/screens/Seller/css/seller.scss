@@ -1,0 +1,29 @@
+
+.container{
+  padding-top: 55px;
+  display: block;
+  background: #f2f2f2;
+  min-height: 100vh;
+
+  .wrapper{
+    background: white;
+    padding-top: 30px;
+    padding-bottom: 30px;    
+    text-align: center;
+    
+    .sellerName{
+      margin-top: 10px;
+      font-size: 14pt;
+    }
+  }
+  
+  .separator {
+    margin-top: 50px;
+  }
+  
+}
+
+.loading {
+  display: block;
+  margin: auto;
+}
