@@ -26,6 +26,7 @@ const CartConfirm = asyncComponent(() => import(/*webpackChunkName: CartConfirm*
 const PromoDetail = asyncComponent(() => import(/*webpackChunkName: PromoDetail*/'./screens/Promo/PromoDetail'))
 const Product = asyncComponent(() => import(/*webpackChunkName: Product*/'./screens/Product'))
 const Overlay = asyncComponent(() => import(/*webpackChunkName: Overlay*/'./components/OverlayInstall'))
+const Sellers = asyncComponent(() => import(/*webpackChunkName: Product*/'./screens/Sellers'))
 const Transaction = asyncComponent(() =>
   import(/*webpackChunkName: Transaction*/'./screens/Account/Transaction')
 )
@@ -148,13 +149,13 @@ class AppRouter extends Component {
 
     return (
       <BrowserRouter>
-        <div className={styles.rootContainer}>
+        <div className={styles.container}>
           {swu.showManualGuide && <Overlay />}
           <div
             className={
-              swu.showManualGuide
-                ? styles.nonOverlay
-                : `${styles.container} ${isOnline ? '' : styles.offline}`
+              `${isOnline ? '' : styles.offline} ${styles.wrapper} ${
+                swu.showManualGuide ? styles.nonOverlay : ''
+              }`
             }
           >
             <Switch>
@@ -184,6 +185,7 @@ class AppRouter extends Component {
               <Route path="/promo/:promotion_id" component={PromoDetail} />
               <Route path="/product/:product_id" component={Product} />
               <Route path="/seller/:seller_id" component={Seller}/>
+              <Route path="/sellers" component={Sellers} />
             </Switch>
           </div>
 

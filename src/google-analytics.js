@@ -4,13 +4,13 @@ import ReactGA from 'react-ga'
 export default () => {
   console.log('initializing google analytics')
   ReactGA.initialize('UA-119141916-1', {
-    debug: true,
+    // debug: true,
     titleCase: false,
     gaOptions: {
       userId: window.user.data
         ? window.user.data.id
         : `Not Login (${navigator.userAgent})`
-    }
+    },
   })
 }
 
@@ -20,7 +20,7 @@ export function withTracker(WrappedComponent, options = {}) {
       page,
       ...options
     })
-    console.log('GOOGLE ANALYTICS PAGE VIEW', page)
+    // console.log('GOOGLE ANALYTICS PAGE VIEW', page)
     ReactGA.pageview(page)
   }
 

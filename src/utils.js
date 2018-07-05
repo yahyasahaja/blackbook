@@ -89,6 +89,10 @@ export const getQueryString =  variable => {
   }
 }
 
+export const limitString = (str, limit) => {
+  return str.slice(0, limit) + (str.length < limit ? '' : '...')
+}
+
 export default {
   matchLoading,
   matchProps,
@@ -97,4 +101,5 @@ export default {
   convertStatus,
   convertCountryCurrency,
   getQueryString,
+  limitString,
 }

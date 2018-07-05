@@ -1,5 +1,5 @@
 //MODULES
-import { observable, action, computed } from 'mobx'
+import { observable, action } from 'mobx'
 
 //STORE
 class ServiceWorkerUpdate {

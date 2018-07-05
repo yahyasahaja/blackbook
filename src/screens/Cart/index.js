@@ -25,6 +25,8 @@ import inputTheme from './css/inputVoucher.scss'
 
 @observer
 class Cart extends Component {
+  isUnmounted = false
+
   constructor(props) {
     super(props)
     this.id = appStack.push()
@@ -56,6 +58,7 @@ class Cart extends Component {
   }
 
   componentWillUnmount() {
+    this.isUnmounted = true
     this.disposer()
     appStack.pop()
   }
@@ -89,17 +92,19 @@ class Cart extends Component {
         },
       })
 
-      this.setState({ 
-        shippingCost,
-        productCost,
-        discount: discount === null ? 0 : discount,
-        error: discount === null ? 'Silahkan cek kembali kode voucher anda!' : '',
-      })
+      if (!this.isUnmounted)
+        this.setState({ 
+          shippingCost,
+          productCost,
+          discount: discount === null ? 0 : discount,
+          error: discount === null ? 'Silahkan cek kembali kode voucher anda!' : '',
+        })
     } catch (err) {
-      this.setState({ 
-        discount: 0, 
-        error: 'Silahkan cek kembali kode voucher anda!' 
-      })
+      if (!this.isUnmounted)
+        this.setState({ 
+          discount: 0, 
+          error: 'Silahkan cek kembali kode voucher anda!' 
+        })
       console.log(err)
     }
 

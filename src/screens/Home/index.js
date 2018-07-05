@@ -5,6 +5,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react'
+import { observable } from 'mobx'
 import { Link } from 'react-router-dom'
 import { List, ListItem } from 'react-toolbox/lib/list'
 import ReactGA from 'react-ga'
@@ -18,6 +19,7 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 //COMPONENTS
 import TopBar, { APPEAR } from '../../components/TopBar'
 import Card from '../../components/ProductCard'
+import SellerListCard from '../../components/SellerListCard'
 // import Pills from '../../components/Pills'
 // import Separator from '../../components/Separator'
 
@@ -32,6 +34,7 @@ import {
   appStack,
   favorites,
 } from '../../services/stores'
+import client from '../../services/graphql/productClient'
 
 //INNER_CONFIG
 const MAX_FETCH_LENGTH = 5
@@ -39,6 +42,10 @@ const MAX_FETCH_LENGTH = 5
 //COMPONENT
 @observer
 class Home extends Component {
+  //PROPERTIES
+  @observable isFetchingSellers = false
+  @observable allSellers = []
+
   componentWillReceiveProps(nextProps) {
     this.checkSelectedChanges(nextProps)
     this.checkAllCategoriesChanges(nextProps)
@@ -138,6 +145,30 @@ class Home extends Component {
     window.scrollTo(0, 0)
     this.addScrollListener(this.props.isSelected)
     this.checkScroll()
+    this.fetchSellers()
+  }
+
+  async fetchSellers() {
+    try {
+      this.isFetchingSellers = true
+
+      const {
+        data: { allSellers },
+      } = await client.query({
+        query: allSellersQuery,
+        variables: {
+          offset: 0,
+          limit: 3
+        },
+        // fetchPolicy: 'network-only'
+      })
+
+      this.allSellers = allSellers.sellers
+    } catch (e) {
+      console.log(e)
+    }
+
+    this.isFetchingSellers = false
   }
 
   addScrollListener(isSelected) {
@@ -179,11 +210,69 @@ class Home extends Component {
 
   renderCards() {
     let { products } = this.state
+    let finalProducts = []
     // console.log(products)
 
-    return products.map((data, i) => (
-      <Card favorites={favorites} {...data} key={i} data={data} />
-    ))
+    for (let i in products) {
+      let product = products[i]
+
+      if (products.length > 15) {
+        if (i === 11) {
+          finalProducts.push({ allSellersSection: true })
+          continue
+        }
+      }
+
+      finalProducts.push(product)
+    }
+
+    if (products.length < 15) {
+      finalProducts.push({ allSellersSection: true })
+    }
+    
+    return finalProducts.map((data, i) => {
+      if (data.allSellersSection) {
+        return (
+          <div className={styles.sellers} key={i} >
+            <div className={styles.title} >Sellers</div>
+
+            <div className={styles.wrapper} >
+              {this.renderSellerList()}
+            </div>
+          </div>
+        )
+      }
+      
+      return <Card favorites={favorites} {...data} key={i} data={data} />
+    })
+  }
+
+  renderSellerList() {
+    if (this.isFetchingSellers) return (
+      <ProgressBar
+        className={styles.loading}
+        type="circular"
+        theme={ProgressBarTheme}
+        mode="indeterminate"
+      />
+    )
+
+    let finalSellers = this.allSellers.slice()
+
+    finalSellers.push({allSellersButton: true})
+
+    return finalSellers.map((data, i) => {
+      if (data.allSellersButton) return <SellerListCard key={i} {...data} />
+
+      return (
+        <SellerListCard 
+          imageUrl={data.profilePicture} 
+          url={`/seller/${data.id}`} 
+          key={i} 
+          name={data.name}
+        />
+      )
+    })
   }
 
   renderCategories() {
@@ -302,7 +391,7 @@ class Home extends Component {
       slidesToShow: 1,
       slidesToScroll: 1,
       arrows: false,
-      
+
     }
     let {
       activePromotedsQuery: { loading }
@@ -403,6 +492,18 @@ const activeAdvertisementsQuery = gql`
         country
       }
       totalCount
+    }
+  }
+`
+
+const allSellersQuery = gql`
+  query allSellers {
+    allSellers(limit: 4) {
+      sellers {
+        id
+        name
+        profilePicture
+      }
     }
   }
 `
