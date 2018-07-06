@@ -339,23 +339,14 @@ class Home extends Component {
   renderAdsPanel = () => {
     return this.state.advertisements.map((data, i) => {
       return (
-        <a key={i} ref={input => this.clickRef = input} target="_blank" href={data.targetUrl}>
-          <div onClick={this.click()}>
-            {/* <Link target="_top" key={i} to={data.targetUrl} > */}
-            <img className={styles.ads} src={data.imageUrl} />
-            {/* </Link> */}
-          </div>
+        <a key={i} target="_blank" href={data.targetUrl}>
+          {/* <Link target="_top" key={i} to={data.targetUrl} > */}
+          <img className={styles.ads} src={data.imageUrl} />
+          {/* </Link> */}
         </a>
       )
     }
     )
-  }
-
-  click(){
-    if(this.clickRef){
-      console.log(this.clickRef)
-      this.clickRef.click()
-    }
   }
 
   renderAllCategories() {
