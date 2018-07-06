@@ -338,7 +338,7 @@ class Home extends Component {
   renderAdsPanel = () => {
     return this.state.advertisements.map((data, i) => {
       return (
-        <Link target="_system" key={i} to={data.targetUrl} >
+        <Link target="_self" key={i} to={data.targetUrl} >
           <img className={styles.ads} src={data.imageUrl} />
         </Link>
       )

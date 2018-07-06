@@ -1,11 +1,10 @@
 //MODULES
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
 import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
-import { Link } from 'react-router-dom'
 import { withTracker } from '../../google-analytics'
 
 //STYLES
@@ -14,13 +13,11 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
-import FlatButton from '../../components/FlatButton'
-import PrimaryButton from '../../components/PrimaryButton'
 import Card from '../../components/ProductCard'
 import Separator from '../../components/Separator'
 
 //STORE
-import { appStack, favorites, cart, snackbar } from '../../services/stores'
+import { appStack, favorites } from '../../services/stores'
 
 const MAX_FETCH_LENGTH = 5
 
@@ -55,7 +52,7 @@ class Seller extends Component{
     if (newLoading !== currentLoading && !newLoading && !newError){
       this.updateAndFetchSellerProducts(nextProps)
     } else if(newError){
-      console.log('Error: ' + newError)
+      console.log(newError)
     }
   }
 
@@ -307,7 +304,3 @@ export default withTracker(compose(
     }
   )
 )(Seller))
-
-
-
-
