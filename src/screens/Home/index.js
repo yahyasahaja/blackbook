@@ -42,6 +42,7 @@ const MAX_FETCH_LENGTH = 5
 //COMPONENT
 @observer
 class Home extends Component {
+  
   //PROPERTIES
   @observable isFetchingSellers = false
   @observable allSellers = []
@@ -338,20 +339,25 @@ class Home extends Component {
   renderAdsPanel = () => {
     return this.state.advertisements.map((data, i) => {
       return (
-        <a key={i} target="_blank" href={data.targetUrl}>
-          {/* <Link target="_top" key={i} to={data.targetUrl} > */}
-          <img className={styles.ads} src={data.imageUrl} />
-          {/* </Link> */}
+        <a key={i} ref={input => this.clickRef = input} target="_blank" href={data.targetUrl}>
+          <div onClick={this.click()}>
+            {/* <Link target="_top" key={i} to={data.targetUrl} > */}
+            <img className={styles.ads} src={data.imageUrl} />
+            {/* </Link> */}
+          </div>
         </a>
       )
     }
     )
   }
 
-  // goTo(url){
-  //   window.open(url, '_blank', '', false)
-  // }
-  
+  click(){
+    if(this.clickRef){
+      console.log(this.clickRef)
+      this.clickRef.click()
+    }
+  }
+
   renderAllCategories() {
     let {
       allCategoriesQuery: { allCategories }
