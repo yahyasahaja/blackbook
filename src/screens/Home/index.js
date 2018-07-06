@@ -338,20 +338,19 @@ class Home extends Component {
   renderAdsPanel = () => {
     return this.state.advertisements.map((data, i) => {
       return (
-        <div key={i} onclick={this.goTo(data.targetUrl)}>
+        <a key={i} target="chrome" href={data.targetUrl}>
           {/* <Link target="_top" key={i} to={data.targetUrl} > */}
           <img className={styles.ads} src={data.imageUrl} />
           {/* </Link> */}
-        </div>
+        </a>
       )
     }
     )
   }
 
-  goTo(e, url){
-    e.preventDefault()
-    window.open(url, '_blank', '', false)
-  }
+  // goTo(url){
+  //   window.open(url, '_blank', '', false)
+  // }
   
   renderAllCategories() {
     let {
