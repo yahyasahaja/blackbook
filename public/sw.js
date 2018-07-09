@@ -223,7 +223,11 @@ self.addEventListener('notificationclick', function(event) {
   if(action === 'close'){
     notification.close()    
   } else{
-    clients.openWindow(location.hostname + '/chat')
-    self.location.reload()
+    if(window.navigator.userAgent.toLowerCase().includes('chrome')){
+      window.open(location.hostname + '/chat')
+    }else{
+      clients.openWindow(location.hostname + '/hone')
+    }
+    
   }
 })
