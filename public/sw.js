@@ -204,10 +204,6 @@ self.addEventListener('push', function (event) {
   const options = {
     body: context.body || 'Pesan baru dari Blanja',
     icon: '/static/img/icons/android-chrome-192x192.png',
-    actions: [
-      {action: 'explore', title: 'Cek pesan', icon: '/static/img/icons/android-chrome-192x192.png'},
-      {action: 'close', title: 'Nanti saja'}
-    ],
     vibrate: [100, 50, 100]
   }
 
@@ -223,11 +219,12 @@ self.addEventListener('notificationclick', function(event) {
   if(action === 'close'){
     notification.close()    
   } else{
-    if(window.navigator.userAgent.toLowerCase().includes('chrome')){
-      window.open(location.hostname + '/chat')
-    }else{
-      clients.openWindow(location.hostname + '/hone')
-    }
+    // if(window.navigator.userAgent.toLowerCase().includes('chrome')){
+    //   window.open(location.hostname + '/chat')
+    // }else{
+    //   clients.openWindow(location.hostname + '/home')
+    // }
+    window.open(window.location.href)
     
   }
 })
