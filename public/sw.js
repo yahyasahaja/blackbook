@@ -219,12 +219,6 @@ self.addEventListener('notificationclick', function(event) {
   if(action === 'close'){
     notification.close()    
   } else{
-    // if(window.navigator.userAgent.toLowerCase().includes('chrome')){
-    //   window.open(location.hostname + '/chat')
-    // }else{
-    //   clients.openWindow(location.hostname + '/home')
-    // }
-    window.open(window.location.href)
-    
+    clients.openWindow(location.hostname + '/home')
   }
 })
