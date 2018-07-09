@@ -204,8 +204,25 @@ self.addEventListener('push', function (event) {
   const options = {
     body: context.body || 'Pesan baru dari Blanja',
     icon: '/static/img/icons/android-chrome-192x192.png',
+    actions: [
+      {action: 'explore', title: 'Cek pesan', icon: '/static/img/icons/android-chrome-192x192.png'},
+      {action: 'close', title: 'Nanti saja'}
+    ],
     vibrate: [100, 50, 100]
   }
 
   event.waitUntil(self.registration.showNotification(title, options))
+})
+
+self.addEventListener('notificationclick', function(event) {
+  console.log(event.notification)
+  console.log(event.action)
+  
+  let notification = event.notification
+  let action = event.action
+  if(action === 'close'){
+    notification.close()    
+  } else{
+    clients.openWindow(location.hostname + '/chat')
+  }
 })
