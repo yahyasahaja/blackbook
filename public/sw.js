@@ -217,12 +217,13 @@ self.addEventListener('push', function (event) {
 self.addEventListener('notificationclick', function(event) {
   console.log(event.notification)
   console.log(event.action)
-  
   let notification = event.notification
+  notification.close()
   let action = event.action
   if(action === 'close'){
     notification.close()    
   } else{
     clients.openWindow(location.hostname + '/chat')
+    self.location.reload()
   }
 })
