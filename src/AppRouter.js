@@ -8,27 +8,63 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 //SCREENS
 import asyncComponent from './components/AsyncComponent'
-const Home = asyncComponent(() => import(/*webpackChunkName: Home*/ './screens/Home'))
-const Favorite = asyncComponent(() => import(/*webpackChunkName: Favorite*/'./screens/Favorite'))
-const Promo = asyncComponent(() => import(/*webpackChunkName: Promo*/'./screens/Promo'))
-const Chat = asyncComponent(() => import(/*webpackChunkName: Chat*/'./screens/Chat'))
-const Conversation = asyncComponent(() => import(/*webpackChunkName: Conversation*/'./screens/Chat/Conversation'))
-const Account = asyncComponent(() => import(/*webpackChunkName: Account*/'./screens/Account'))
-// const PageNotFound = asyncComponent(() => import(/*webpackChunkName: PageNotFound*/'./screens/PageNotFound'))
-const Search = asyncComponent(() => import(/*webpackChunkName: Search*/'./screens/Search'))
-const Category = asyncComponent(() => import(/*webpackChunkName: Category*/'./screens/Category'))
-const Auth = asyncComponent(() => import(/*webpackChunkName: Auth*/'./screens/Auth'))
-const Password = asyncComponent(() => import(/*webpackChunkName: Password*/'./screens/Account/Password'))
-const Profile = asyncComponent(() => import(/*webpackChunkName: Profile*/'./screens/Account/Profile'))
-const Cart = asyncComponent(() => import(/*webpackChunkName: Cart*/'./screens/Cart'))
-const CartProcess = asyncComponent(() => import(/*webpackChunkName: CartProcess*/'./screens/Cart/Process'))
-const CartConfirm = asyncComponent(() => import(/*webpackChunkName: CartConfirm*/'./screens/Cart/Confirmation'))
-const PromoDetail = asyncComponent(() => import(/*webpackChunkName: PromoDetail*/'./screens/Promo/PromoDetail'))
-const Product = asyncComponent(() => import(/*webpackChunkName: Product*/'./screens/Product'))
-const Overlay = asyncComponent(() => import(/*webpackChunkName: Overlay*/'./components/OverlayInstall'))
-const Sellers = asyncComponent(() => import(/*webpackChunkName: Product*/'./screens/Sellers'))
+const Home = asyncComponent(() =>
+  import(/*webpackChunkName: "Home"*/ './screens/Home')
+)
+const Favorite = asyncComponent(() =>
+  import(/*webpackChunkName: "Favorite"*/ './screens/Favorite')
+)
+const Promo = asyncComponent(() =>
+  import(/*webpackChunkName: "Promo"*/ './screens/Promo')
+)
+const Chat = asyncComponent(() =>
+  import(/*webpackChunkName: "Chat"*/ './screens/Chat')
+)
+const Conversation = asyncComponent(() =>
+  import(/*webpackChunkName: "Conversation"*/ './screens/Chat/Conversation')
+)
+const Account = asyncComponent(() =>
+  import(/*webpackChunkName: "Account"*/ './screens/Account')
+)
+// const PageNotFound = asyncComponent(() => import(/*webpackChunkName: "PageNotFound"*/'./screens/PageNotFound'))
+const Search = asyncComponent(() =>
+  import(/*webpackChunkName: "Search"*/ './screens/Search')
+)
+const Category = asyncComponent(() =>
+  import(/*webpackChunkName: "Category"*/ './screens/Category')
+)
+const Auth = asyncComponent(() =>
+  import(/*webpackChunkName: "Auth"*/ './screens/Auth')
+)
+const Password = asyncComponent(() =>
+  import(/*webpackChunkName: "Password"*/ './screens/Account/Password')
+)
+const Profile = asyncComponent(() =>
+  import(/*webpackChunkName: "Profile"*/ './screens/Account/Profile')
+)
+const Cart = asyncComponent(() =>
+  import(/*webpackChunkName: "Cart"*/ './screens/Cart')
+)
+const CartProcess = asyncComponent(() =>
+  import(/*webpackChunkName: "CartProcess"*/ './screens/Cart/Process')
+)
+const CartConfirm = asyncComponent(() =>
+  import(/*webpackChunkName: "CartConfirm"*/ './screens/Cart/Confirmation')
+)
+const PromoDetail = asyncComponent(() =>
+  import(/*webpackChunkName: "PromoDetail"*/ './screens/Promo/PromoDetail')
+)
+const Product = asyncComponent(() =>
+  import(/*webpackChunkName: "Product"*/ './screens/Product')
+)
+const Overlay = asyncComponent(() =>
+  import(/*webpackChunkName: "Overlay"*/ './components/OverlayInstall')
+)
+const Sellers = asyncComponent(() =>
+  import(/*webpackChunkName: "Product"*/ './screens/Sellers')
+)
 const Transaction = asyncComponent(() =>
-  import(/*webpackChunkName: Transaction*/'./screens/Account/Transaction')
+  import(/*webpackChunkName: "Transaction"*/ './screens/Account/Transaction')
 )
 const Seller = asyncComponent(() => import('./screens/Seller'))
 //STYLES
@@ -152,11 +188,9 @@ class AppRouter extends Component {
         <div className={styles.container}>
           {swu.showManualGuide && <Overlay />}
           <div
-            className={
-              `${isOnline ? '' : styles.offline} ${styles.wrapper} ${
-                swu.showManualGuide ? styles.nonOverlay : ''
-              }`
-            }
+            className={`${isOnline ? '' : styles.offline} ${styles.wrapper} ${
+              swu.showManualGuide ? styles.nonOverlay : ''
+            }`}
           >
             <Switch>
               <Redirect from="/" exact to="/home" />

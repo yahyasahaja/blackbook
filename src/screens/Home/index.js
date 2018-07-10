@@ -32,7 +32,7 @@ import TShirt from '../../assets/img/t-shirt-white.svg'
 import {
   categories as categoriesStore,
   appStack,
-  favorites,
+  favorites
 } from '../../services/stores'
 import client from '../../services/graphql/productClient'
 
@@ -46,6 +46,9 @@ class Home extends Component {
   //PROPERTIES
   @observable isFetchingSellers = false
   @observable allSellers = []
+
+  //FOR ANALYTICS PURPOSES
+  firstCard = null
 
   componentWillReceiveProps(nextProps) {
     this.checkSelectedChanges(nextProps)
@@ -109,39 +112,22 @@ class Home extends Component {
     }
   }
 
-  checkAllAdvertisementsChanges(nextProps){
-    let { 
-      activeAdvertisementsQuery:{
-        loading: newLoading, 
-        error: newError 
-      }
-    } = nextProps
-
-    let {
-      activeAdvertisementsQuery:{
-        loading: curLoading
-      }
-    } = this.props
-
-    if(newLoading !== curLoading && !newLoading && !newError){
-      let activeAdvertisements = nextProps.activeAdvertisementsQuery.activeAdvertisements
-      let advertisements = activeAdvertisements.advertisements.map((advertisement) =>{
-        return {...advertisement, imageUrl: advertisement.imageUrl}
-      })
-
-      this.setState({
-        advertisements: [...this.state.advertisements, ...advertisements],
-        isFetchDisabled:
-          this.state.advertisements.length === activeAdvertisements.totalCount
-      })
-    } else if(newError){
-      return console.log('Error: ' + newError)
-    }
-    
-
+  componentWillUnmount() {
+    window.document.body.onscroll = null
   }
 
   componentDidMount() {
+    //ANALYTICS
+    window.document.body.onscroll = () => {
+      if (this.firstCard.getBoundingClientRect().top >= 0) {
+        ReactGA.event({
+          category: 'Seeking featured Product',
+          action: 'Seeking featured Product'
+        })
+        window.document.body.onscroll = null
+      }
+    }
+
     this.before = this.current = document.documentElement.scrollTop
     window.scrollTo(0, 0)
     this.addScrollListener(this.props.isSelected)
@@ -154,13 +140,13 @@ class Home extends Component {
       this.isFetchingSellers = true
 
       const {
-        data: { allSellers },
+        data: { allSellers }
       } = await client.query({
         query: allSellersQuery,
         variables: {
           offset: 0,
           limit: 3
-        },
+        }
         // fetchPolicy: 'network-only'
       })
 
@@ -230,46 +216,54 @@ class Home extends Component {
     if (products.length < 15) {
       finalProducts.push({ allSellersSection: true })
     }
-    
+
     return finalProducts.map((data, i) => {
       if (data.allSellersSection) {
         return (
-          <div className={styles.sellers} key={i} >
-            <div className={styles.title} >Sellers</div>
+          <div className={styles.sellers} key={i}>
+            <div className={styles.title}>Sellers</div>
 
-            <div className={styles.wrapper} >
-              {this.renderSellerList()}
-            </div>
+            <div className={styles.wrapper}>{this.renderSellerList()}</div>
           </div>
         )
       }
-      
-      return <Card favorites={favorites} {...data} key={i} data={data} />
+
+      return (
+        <div
+          ref={el => {
+            if (i === 0) this.firstCard = el
+          }}
+          key={i}
+        >
+          <Card favorites={favorites} {...data} data={data} />
+        </div>
+      )
     })
   }
 
   renderSellerList() {
-    if (this.isFetchingSellers) return (
-      <ProgressBar
-        className={styles.loading}
-        type="circular"
-        theme={ProgressBarTheme}
-        mode="indeterminate"
-      />
-    )
+    if (this.isFetchingSellers)
+      return (
+        <ProgressBar
+          className={styles.loading}
+          type="circular"
+          theme={ProgressBarTheme}
+          mode="indeterminate"
+        />
+      )
 
     let finalSellers = this.allSellers.slice()
 
-    finalSellers.push({allSellersButton: true})
+    finalSellers.push({ allSellersButton: true })
 
     return finalSellers.map((data, i) => {
       if (data.allSellersButton) return <SellerListCard key={i} {...data} />
 
       return (
-        <SellerListCard 
-          imageUrl={data.profilePicture} 
-          url={`/seller/${data.id}`} 
-          key={i} 
+        <SellerListCard
+          imageUrl={data.profilePicture}
+          url={`/seller/${data.id}`}
+          key={i}
           name={data.name}
         />
       )
@@ -337,6 +331,7 @@ class Home extends Component {
   }
 
   renderAdsPanel = () => {
+<<<<<<< HEAD
     return this.state.advertisements.map((data, i) => {
       return (
         <a key={i} target="_blank" href={data.targetUrl}>
@@ -344,9 +339,30 @@ class Home extends Component {
           <img className={styles.ads} src={data.imageUrl} />
           {/* </Link> */}
         </a>
+=======
+    const images = [
+      {
+        id: '2d3a2c7a-7bba-438a-8c60-b079d6dd4b04',
+        imageUrl: '/static/img/placeimg_640_480_tech1.jpg'
+      },
+      {
+        id: 'edd8bdf0-f89c-436a-a6f7-7e9749c7d020',
+        imageUrl: '/static/img/placeimg_640_480_tech2.jpg'
+      },
+      {
+        id: 'e4b5d98f-0e0c-483d-ae46-6eed890b402d',
+        imageUrl: '/static/img/placeimg_640_480_tech3.jpg'
+      }
+    ]
+
+    return images.map((image, i) => {
+      return (
+        <Link key={i} to={`/promo/${image.id}`}>
+          <img className={styles.ads} src={image.imageUrl} />
+        </Link>
+>>>>>>> 763536a64ebe6198f9c850d9c6a750cb8f206f37
       )
-    }
-    )
+    })
   }
 
   renderAllCategories() {
@@ -393,8 +409,7 @@ class Home extends Component {
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: false,
-
+      arrows: false
     }
     let {
       activePromotedsQuery: { loading }
@@ -422,9 +437,7 @@ class Home extends Component {
         style={{ background: 'rgb(239, 239, 239)' }}
         wrapperStyle={{ padding: 0 }}
       >
-        <Slider {...settings}>
-          {this.renderAdsPanel()}
-        </Slider>
+        <Slider {...settings}>{this.renderAdsPanel()}</Slider>
         <div style={style}>
           <div className={styles.categories}>{this.renderCategories()}</div>
 
