@@ -54,7 +54,7 @@ class Home extends Component {
     this.checkSelectedChanges(nextProps)
     this.checkAllCategoriesChanges(nextProps)
     this.checkAllProductsChanges(nextProps)
-    this.checkAllAdvertisementsChanges(nextProps)
+    // this.checkAllAdvertisementsChanges(nextProps)
   }
 
   checkSelectedChanges(nextProps) {
