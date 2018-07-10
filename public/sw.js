@@ -211,14 +211,23 @@ self.addEventListener('push', function (event) {
 })
 
 self.addEventListener('notificationclick', function(event) {
+  let found = false
   console.log(event.notification)
   console.log(event.action)
   let notification = event.notification
   notification.close()
-  let action = event.action
-  if(action === 'close'){
-    notification.close()    
-  } else{
-    clients.openWindow(location.hostname + '/home')
+  clients.matchAll().then(function(clients) {
+    for (let i = 0; i < clients.length; i++) {
+      if (clients[i].url === event.data.url) {
+        // We already have a window to use, focus it.
+        found = true
+        clients[i].focus()
+        break
+      }
+    }
+    if (!found) {
+      // Create a new window.
+      clients.openWindow(event.data.url)
+    }
   }
-})
+  )})
