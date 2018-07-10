@@ -331,15 +331,6 @@ class Home extends Component {
   }
 
   renderAdsPanel = () => {
-<<<<<<< HEAD
-    return this.state.advertisements.map((data, i) => {
-      return (
-        <a key={i} target="_blank" href={data.targetUrl}>
-          {/* <Link target="_top" key={i} to={data.targetUrl} > */}
-          <img className={styles.ads} src={data.imageUrl} />
-          {/* </Link> */}
-        </a>
-=======
     const images = [
       {
         id: '2d3a2c7a-7bba-438a-8c60-b079d6dd4b04',
@@ -360,7 +351,6 @@ class Home extends Component {
         <Link key={i} to={`/promo/${image.id}`}>
           <img className={styles.ads} src={image.imageUrl} />
         </Link>
->>>>>>> 763536a64ebe6198f9c850d9c6a750cb8f206f37
       )
     })
   }
