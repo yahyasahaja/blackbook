@@ -224,6 +224,6 @@ self.addEventListener('notificationclick', function(event) {
         return client.focus()
     }
     if (clients.openWindow)
-      return clients.openWindow('/')
+      return clients.openWindow('/chat')
   }))
 })
