@@ -119,7 +119,7 @@ class Home extends Component {
   componentDidMount() {
     //ANALYTICS
     window.document.body.onscroll = () => {
-      if (this.firstCard.getBoundingClientRect().top >= 0) {
+      if (this.firstCard && this.firstCard.getBoundingClientRect().top >= 0) {
         ReactGA.event({
           category: 'Seeking featured Product',
           action: 'Seeking featured Product'
