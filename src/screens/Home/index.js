@@ -331,28 +331,18 @@ class Home extends Component {
   }
 
   renderAdsPanel = () => {
-    const images = [
-      {
-        id: '2d3a2c7a-7bba-438a-8c60-b079d6dd4b04',
-        imageUrl: '/static/img/placeimg_640_480_tech1.jpg'
-      },
-      {
-        id: 'edd8bdf0-f89c-436a-a6f7-7e9749c7d020',
-        imageUrl: '/static/img/placeimg_640_480_tech2.jpg'
-      },
-      {
-        id: 'e4b5d98f-0e0c-483d-ae46-6eed890b402d',
-        imageUrl: '/static/img/placeimg_640_480_tech3.jpg'
-      }
-    ]
-
-    return images.map((image, i) => {
-      return (
-        <Link key={i} to={`/promo/${image.id}`}>
-          <img className={styles.ads} src={image.imageUrl} />
-        </Link>
+    if(this.state.advertisements){
+      return this.state.advertisements.map((data, i) => {
+        return (
+          <a key={i} target="_blank" href={data.targetUrl}>
+            {/* <Link target="_top" key={i} to={data.targetUrl} > */}
+            <img className={styles.ads} src={data.imageUrl} />
+            {/* </Link> */}
+          </a>
+        )
+      }  
       )
-    })
+    }
   }
 
   renderAllCategories() {
