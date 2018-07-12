@@ -54,7 +54,39 @@ class Home extends Component {
     this.checkSelectedChanges(nextProps)
     this.checkAllCategoriesChanges(nextProps)
     this.checkAllProductsChanges(nextProps)
-    // this.checkAllAdvertisementsChanges(nextProps)
+    this.checkAllAdvertisementsChanges(nextProps)
+  }
+
+  checkAllAdvertisementsChanges(nextProps){
+    let { 
+      activeAdvertisementsQuery:{
+        loading: newLoading, 
+        error: newError 
+      }
+    } = nextProps
+
+    let {
+      activeAdvertisementsQuery:{
+        loading: curLoading
+      }
+    } = this.props
+
+    if(newLoading !== curLoading && !newLoading && !newError){
+      let activeAdvertisements = nextProps.activeAdvertisementsQuery.activeAdvertisements
+      let advertisements = activeAdvertisements.advertisements.map((advertisement) =>{
+        return {...advertisement, imageUrl: advertisement.imageUrl}
+      })
+
+      this.setState({
+        advertisements: [...this.state.advertisements, ...advertisements],
+        isFetchDisabled:
+          this.state.advertisements.length === activeAdvertisements.totalCount
+      })
+    } else if(newError){
+      return console.log('Error: ' + newError)
+    }
+    
+
   }
 
   checkSelectedChanges(nextProps) {
