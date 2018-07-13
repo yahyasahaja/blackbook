@@ -73,6 +73,7 @@ import ProgressBarTheme from './assets/css/theme-progress-bar-white.scss'
 
 //COMPONENT
 import BottomTabBar from './components/BottomTabBar'
+import Info from './components/Info'
 
 //STORE
 import {
@@ -80,7 +81,7 @@ import {
   badges,
   dialog,
   serviceWorkerUpdate as swu,
-  overlayLoading
+  overlayLoading,
 } from './services/stores'
 
 //INNER_CONFIG
@@ -306,6 +307,9 @@ class AppRouter extends Component {
             </Dialog>
           </section>
           {this.renderOverlayLoading()}
+          <section>
+            <Info />
+          </section>
         </div>
       </BrowserRouter>
     )

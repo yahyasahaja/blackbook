@@ -101,6 +101,7 @@ class Process extends Component {
     return (
       <div className={styles.section}>
         <Dropdown
+          auto
           className="address-dropdown"
           label="ALAMAT"
           onChange={value => {

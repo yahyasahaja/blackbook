@@ -9,7 +9,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 import { convertToMoneyFormat, convertCountryCurrency } from '../../utils'
 
-import { appStack, user, cart, snackbar } from '../../services/stores'
+import { appStack, user, cart, snackbar, info } from '../../services/stores'
 
 import config from '../../config'
 
@@ -334,9 +334,9 @@ class Process extends Component {
         )
       }
     } catch (err) {
-      console.log(err)
+      console.log('ERROR AT CREATING PAYMENT', err)
       if (user.data && user.data.country === 'HKG')
-        snackbar.show('Order berhasil, silahkan melakukan pembayaran.')
+        info.show('Order berhasil, silahkan melakukan pembayaran.')
       return null
     }
   }
