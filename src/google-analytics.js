@@ -10,8 +10,9 @@ export default () => {
       userId: window.user.data
         ? window.user.data.id
         : `Not Login (${navigator.userAgent})`
-    },
+    }
   })
+  ReactGA.plugin.require('ec')
 }
 
 export function withTracker(WrappedComponent, options = {}) {
