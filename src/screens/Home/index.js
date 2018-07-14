@@ -147,7 +147,7 @@ class Home extends Component {
     //ANALYTICS
     window.document.body.onscroll = () => {
       if (
-        this.firstCard !== 'null' &&
+        this.firstCard !== null &&
         this.firstCard.getBoundingClientRect().top >= 0
       ) {
         ReactGA.event({

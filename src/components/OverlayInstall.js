@@ -4,17 +4,18 @@ import styles from './css/overlay-install.scss'
 import { serviceWorkerUpdate as swu } from '../services/stores'
 
 export default class OverlayInstall extends Component {
+  isApple = window.navigator.userAgent.toLowerCase().includes('apple')
   overlayPhoto = [
     {
-      src: require('../assets/img/overlay/first.png'),
+      src: this.isApple?require('../assets/img/overlay/first-apple.png'):require('../assets/img/overlay/first.png'),
       desc: 'Tap Menu Bar Browser'
     },
     {
-      src: require('../assets/img/overlay/second.png'),
+      src: this.isApple?require('../assets/img/overlay/second-apple.png'):require('../assets/img/overlay/second.png'),
       desc: 'Pilih Tambah Ke Layar Utama'
     },
     {
-      src: require('../assets/img/overlay/third.png'),
+      src: this.isApple?require('../assets/img/overlay/third-apple.png'):require('../assets/img/overlay/third.png'),
       desc: 'Tap Tambah'
     }
   ]
