@@ -191,7 +191,7 @@ class Seller extends Component{
             {
               profilePicture 
                 ? 
-                <img src= {profilePicture}/> 
+                <img className={styles.profpic} src= {profilePicture}/> 
                 : 
                 <img style={{ width: '100px', height: '100px' }} src="https://openclipart.org/download/250353/icon_user_whiteongrey.svg" />
             }
@@ -199,8 +199,8 @@ class Seller extends Component{
           <div className={styles.sellerName}>
             {(this.state.name ? this.state.name : name) + ' ' + '(' + country + ')'}
           </div>
-          <span style={{ fontSize: '10pt', color: 'gray' }}>{address + ' - ' + city}</span>
-          <div>Kode Pos: {zipCode} </div>
+          <span style={{ fontSize: '10pt', color: 'gray' }}>{address + (!city ? '' : ' - ' + city)}</span>
+          <div>Kode Pos: {zipCode ? zipCode : ' - '} </div>
         </div>
         <Separator className={styles.separator} >Produk Yang Dijual</Separator>
         {this.renderCards()}
