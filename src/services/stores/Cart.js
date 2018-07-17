@@ -2,6 +2,7 @@
 import { observable, action, computed } from 'mobx'
 import badges from './Badges'
 import ImagePlaceholder from '../../assets/img/image-placeholder.jpeg'
+import ReactGA from 'react-ga'
 
 import { CART_STORAGE_URI } from '../../config'
 
@@ -27,12 +28,12 @@ class Cart {
     address: '',
     city: '',
     zip_code: '',
-    country: 'TWN',
+    country: 'TWN'
   }
   @observable addressFoto = ImagePlaceholder
   @observable addressFotoFile = ''
   @observable addressFotoInformation = ''
-  @observable shippingCost = 0;
+  @observable shippingCost = 0
 
   @action
   add(arg) {
@@ -40,8 +41,7 @@ class Cart {
 
     // check if already exists
     const index = state.findIndex(
-      item =>
-        item.product.id === arg.product.id && item.variant === arg.variant,
+      item => item.product.id === arg.product.id && item.variant === arg.variant
     )
     if (index !== -1) {
       // update amount
@@ -51,7 +51,11 @@ class Cart {
     } else {
       state.push(arg)
     }
-
+    ReactGA.plugin.execute('ec', 'addToCart', {
+      ...arg
+    })
+    ReactGA.plugin.execute('ec', 'send')
+    ReactGA.plugin.execute('ec', 'clear')
     this.data.replace(state)
     badges.set(badges.CART, this.data.length)
 
@@ -83,7 +87,7 @@ class Cart {
       .slice()
       .reduce(
         (total, item) => total + item.product.price.value * item.amount,
-        0,
+        0
       )
   }
 }

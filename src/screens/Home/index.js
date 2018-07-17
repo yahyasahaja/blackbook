@@ -42,7 +42,6 @@ const MAX_FETCH_LENGTH = 5
 //COMPONENT
 @observer
 class Home extends Component {
-  
   //PROPERTIES
   @observable isFetchingSellers = false
   @observable allSellers = []
@@ -57,36 +56,32 @@ class Home extends Component {
     this.checkAllAdvertisementsChanges(nextProps)
   }
 
-  checkAllAdvertisementsChanges(nextProps){
-    let { 
-      activeAdvertisementsQuery:{
-        loading: newLoading, 
-        error: newError 
-      }
+  checkAllAdvertisementsChanges(nextProps) {
+    let {
+      activeAdvertisementsQuery: { loading: newLoading, error: newError }
     } = nextProps
 
     let {
-      activeAdvertisementsQuery:{
-        loading: curLoading
-      }
+      activeAdvertisementsQuery: { loading: curLoading }
     } = this.props
 
-    if(newLoading !== curLoading && !newLoading && !newError){
-      let activeAdvertisements = nextProps.activeAdvertisementsQuery.activeAdvertisements
-      let advertisements = activeAdvertisements.advertisements.map((advertisement) =>{
-        return {...advertisement, imageUrl: advertisement.imageUrl}
-      })
+    if (newLoading !== curLoading && !newLoading && !newError) {
+      let activeAdvertisements =
+        nextProps.activeAdvertisementsQuery.activeAdvertisements
+      let advertisements = activeAdvertisements.advertisements.map(
+        advertisement => {
+          return { ...advertisement, imageUrl: advertisement.imageUrl }
+        }
+      )
 
       this.setState({
         advertisements: [...this.state.advertisements, ...advertisements],
         isFetchDisabled:
           this.state.advertisements.length === activeAdvertisements.totalCount
       })
-    } else if(newError){
+    } else if (newError) {
       return console.log('Error: ' + newError)
     }
-    
-
   }
 
   checkSelectedChanges(nextProps) {
@@ -151,7 +146,10 @@ class Home extends Component {
   componentDidMount() {
     //ANALYTICS
     window.document.body.onscroll = () => {
-      if (this.firstCard && this.firstCard.getBoundingClientRect().top >= 0) {
+      if (
+        this.firstCard !== null &&
+        this.firstCard.getBoundingClientRect().top >= 0
+      ) {
         ReactGA.event({
           category: 'Seeking featured Product',
           action: 'Seeking featured Product'
@@ -363,7 +361,7 @@ class Home extends Component {
   }
 
   renderAdsPanel = () => {
-    if(this.state.advertisements){
+    if (this.state.advertisements) {
       return this.state.advertisements.map((data, i) => {
         return (
           <a key={i} target="_blank" href={data.targetUrl}>
@@ -372,8 +370,7 @@ class Home extends Component {
             {/* </Link> */}
           </a>
         )
-      }  
-      )
+      })
     }
   }
 
@@ -509,9 +506,9 @@ const activePromotedsQuery = gql`
 `
 
 const activeAdvertisementsQuery = gql`
-  query activeAdvertisements($limit: Int){
-    activeAdvertisements(limit: $limit){
-      advertisements{
+  query activeAdvertisements($limit: Int) {
+    activeAdvertisements(limit: $limit) {
+      advertisements {
         id
         imageUrl
         targetUrl
@@ -553,7 +550,7 @@ export default compose(
   graphql(activeAdvertisementsQuery, {
     name: 'activeAdvertisementsQuery',
     options: () => {
-      return{
+      return {
         variables: { limit: 10 }
       }
     }

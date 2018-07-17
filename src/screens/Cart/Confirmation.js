@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import axios from 'axios'
 import { graphql } from 'react-apollo'
 import { withTracker } from '../../google-analytics'
+import ReactGA from 'react-ga'
 
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
@@ -33,7 +34,7 @@ class Process extends Component {
   }
 
   state = {
-    loading: false,
+    loading: false
   }
 
   componentWillMount() {
@@ -69,7 +70,11 @@ class Process extends Component {
         )}
         {type === 'foto' && (
           <Fragment>
-            <img data-testid="address-image" className={styles.foto} src={address.img} />
+            <img
+              data-testid="address-image"
+              className={styles.foto}
+              src={address.img}
+            />
             <p data-testid="address-information">{address.information}</p>
           </Fragment>
         )}
@@ -83,35 +88,39 @@ class Process extends Component {
     const logo = {
       HILIFETW: 'https://paygw.azureedge.net/images/hilifelogo.png',
       FAMILYTW: 'https://paygw.azureedge.net/images/familogo.png',
-      AS2IN1WAL: 'http://as2in1mobile.com/images/As2in1-Mobile-logo.png',
+      AS2IN1WAL: 'http://as2in1mobile.com/images/As2in1-Mobile-logo.png'
     }
-
 
     let { getUser, loading } = this.props.user
 
     let as2in1Wallet = ''
     if (getUser) as2in1Wallet = getUser.as2in1Wallet
 
-    if (channel === 'AS2IN1WAL') return (
-      <div className={styles['e-wallet-channel']}>
-        <img 
-          className={cart.channel === 'AS2IN1WAL' ? styles.as2in1 : ''}
-          data-testid="channel-logo" 
-          data-channel={channel} 
-          src={logo[channel]}
-        />
+    if (channel === 'AS2IN1WAL')
+      return (
+        <div className={styles['e-wallet-channel']}>
+          <img
+            className={cart.channel === 'AS2IN1WAL' ? styles.as2in1 : ''}
+            data-testid="channel-logo"
+            data-channel={channel}
+            src={logo[channel]}
+          />
 
-        <span className={styles.balance} >
-          {loading ? 'Loading...' : as2in1Wallet ? convertToMoneyFormat(as2in1Wallet, 'HKD') : 0}
-        </span>
-      </div>
-    )
+          <span className={styles.balance}>
+            {loading
+              ? 'Loading...'
+              : as2in1Wallet
+                ? convertToMoneyFormat(as2in1Wallet, 'HKD')
+                : 0}
+          </span>
+        </div>
+      )
 
     return (
-      <div className >
-        <img 
-          data-testid="channel-logo" 
-          data-channel={channel} 
+      <div className>
+        <img
+          data-testid="channel-logo"
+          data-channel={channel}
           src={logo[channel]}
         />
       </div>
@@ -151,7 +160,9 @@ class Process extends Component {
 
   // total section
   renderTotal() {
-    let currency = user.data ? convertCountryCurrency(user.data.country) : config.COUNTRY_CODE
+    let currency = user.data
+      ? convertCountryCurrency(user.data.country)
+      : config.COUNTRY_CODE
 
     console.log(user.data)
     return (
@@ -165,35 +176,41 @@ class Process extends Component {
           <span>
             {convertToMoneyFormat(
               this.props.location.state.shippingCost,
-              currency,
+              currency
             )}
           </span>
         </div>
-        {this.props.location.state.discount > 0 && <div className={styles.price}>
-          <span>Potongan</span>
-          <span>
-            {'- ' + convertToMoneyFormat(
-              this.props.location.state.discount,
-              currency,
-            )}
-          </span>
-        </div>}
+        {this.props.location.state.discount > 0 && (
+          <div className={styles.price}>
+            <span>Potongan</span>
+            <span>
+              {'- ' +
+                convertToMoneyFormat(
+                  this.props.location.state.discount,
+                  currency
+                )}
+            </span>
+          </div>
+        )}
         <div className={`${styles.price} ${styles.total}`}>
           <span>Total</span>
           <span data-testid="confirmation-total">
             {convertToMoneyFormat(
-              cart.totalPrice + this.props.location.state.shippingCost - this.props.location.state.discount,
-              currency,
+              cart.totalPrice +
+                this.props.location.state.shippingCost -
+                this.props.location.state.discount,
+              currency
             )}
           </span>
         </div>
 
-        {cart.totalPrice > 20000 && (user.data && user.data.country) !== 'HKG' && (
-          <p>
-            Anda akan mendapatkan lebih dari satu barkode pembayaran (nominal
-            diatas NTD 20.000)
-          </p>
-        )}
+        {cart.totalPrice > 20000 &&
+          (user.data && user.data.country) !== 'HKG' && (
+            <p>
+              Anda akan mendapatkan lebih dari satu barkode pembayaran (nominal
+              diatas NTD 20.000)
+            </p>
+          )}
       </div>
     )
   }
@@ -202,6 +219,12 @@ class Process extends Component {
     const { type, saveNewAddress } = this.props.location.state
 
     this.setState({ loading: true })
+
+    ReactGA.plugin.execute('ec', 'confirmToBuy', {
+      ...this.props.location.state
+    })
+    ReactGA.plugin.execute('ec', 'send')
+    ReactGA.plugin.execute('ec', 'clear')
 
     // create cart + order
     const orderData = await this.createOrder()
@@ -238,14 +261,14 @@ class Process extends Component {
         await axios.put(targetUrl, ev.target.result, {
           headers: {
             'content-type': address.foto.type,
-            'x-ms-blob-type': 'BlockBlob',
+            'x-ms-blob-type': 'BlockBlob'
           },
           transformRequest: [
             (data, headers) => {
               delete headers.Authorization
               return data
-            },
-          ],
+            }
+          ]
         })
       }
       await reader.readAsArrayBuffer(address.foto)
@@ -262,22 +285,24 @@ class Process extends Component {
       const items = cart.data.slice().map(item => ({
         productId: item.product.id,
         variant: item.variant,
-        quantity: item.amount,
+        quantity: item.amount
       }))
 
-      const { data: { createCart: cartData } } = await orderingClient.mutate({
+      const {
+        data: { createCart: cartData }
+      } = await orderingClient.mutate({
         mutation: CreateCart,
         variables: {
           input: {
             promotionCode: voucherCode,
-            items,
-          },
-        },
+            items
+          }
+        }
       })
 
       // create order
       const {
-        data: { createOrderFromCart: orderData },
+        data: { createOrderFromCart: orderData }
       } = await orderingClient.mutate({
         mutation: CreateOrderFromCart,
         variables: {
@@ -289,9 +314,9 @@ class Process extends Component {
                 ? null
                 : `${address.address}, ${address.city}, ${address.country}`,
             shippingZipCode: type === 'foto' ? null : address.zip_code,
-            shippingInfo: type === 'foto' ? address.information : null,
-          },
-        },
+            shippingInfo: type === 'foto' ? address.information : null
+          }
+        }
       })
 
       return orderData
@@ -301,7 +326,7 @@ class Process extends Component {
         'Gagal memproses pesanan anda, mohon ulangi kembali.',
         'Tutup',
         null,
-        4000,
+        4000
       )
       return null
     }
@@ -312,15 +337,15 @@ class Process extends Component {
 
     try {
       const {
-        data: { addOrderPayment: paymentDetail },
+        data: { addOrderPayment: paymentDetail }
       } = await orderingClient.mutate({
         mutation: AddOrderPayment,
         variables: {
           orderId: orderId,
           input: {
-            channel,
-          },
-        },
+            channel
+          }
+        }
       })
 
       // create payment sukses
@@ -328,11 +353,11 @@ class Process extends Component {
         snackbar.show(
           `Order berhasil, silahkan melakukan pembayaran sejumlah ${convertToMoneyFormat(
             paymentDetail.total,
-            convertCountryCurrency(paymentDetail.country),
+            convertCountryCurrency(paymentDetail.country)
           )} melalui ${channelName}`,
           null,
           null,
-          7000,
+          7000
         )
       }
     } catch (err) {
@@ -351,9 +376,9 @@ class Process extends Component {
         variables: {
           addressDetail: {
             user_id: 0,
-            ...address,
-          },
-        },
+            ...address
+          }
+        }
       })
     } catch (err) {
       console.log(err)
@@ -379,7 +404,7 @@ class Process extends Component {
           paddingBottom: 88,
           paddingTop: 56,
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'column'
         }}
       >
         {this.renderAddress()}
@@ -472,9 +497,11 @@ const getUserDataQuery = gql`
   }
 `
 
-export default withTracker(graphql(getUserDataQuery, {
-  name: 'user',
-  options: {
-    client: userClient,
-  },
-})(Process))
+export default withTracker(
+  graphql(getUserDataQuery, {
+    name: 'user',
+    options: {
+      client: userClient
+    }
+  })(Process)
+)
