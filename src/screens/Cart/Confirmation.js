@@ -124,7 +124,9 @@ class Process extends Component {
       <div className={styles.section}>
         <p className={styles.title}>CHANNEL PEMBAYARAN</p>
         {this.renderChannelDetail()}
-        <p>Tunjukan barcode pembayaran yang akan anda terima kepada kasir</p>
+        {user.data && user.data.country !== 'HKG' && (
+          <p>Tunjukan barcode pembayaran yang akan anda terima kepada kasir</p>
+        )}
       </div>
     )
   }
