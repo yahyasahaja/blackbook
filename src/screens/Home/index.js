@@ -46,6 +46,7 @@ class Home extends Component {
   //PROPERTIES
   @observable isFetchingSellers = false
   @observable allSellers = []
+  
 
   componentWillReceiveProps(nextProps) {
     this.checkSelectedChanges(nextProps)
@@ -113,7 +114,7 @@ class Home extends Component {
     let { 
       activeAdvertisementsQuery:{
         loading: newLoading, 
-        error: newError 
+        error: newError,
       }
     } = nextProps
 
@@ -137,8 +138,6 @@ class Home extends Component {
     } else if(newError){
       return console.log('Error: ' + newError)
     }
-    
-
   }
 
   componentDidMount() {
@@ -147,6 +146,11 @@ class Home extends Component {
     this.addScrollListener(this.props.isSelected)
     this.checkScroll()
     this.fetchSellers()
+    
+  }
+
+  componentWillUnmount(){
+    this.canRefresh = false
   }
 
   async fetchSellers() {
