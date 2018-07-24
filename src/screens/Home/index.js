@@ -32,7 +32,7 @@ import TShirt from '../../assets/img/t-shirt-white.svg'
 import {
   categories as categoriesStore,
   appStack,
-  favorites,
+  favorites
 } from '../../services/stores'
 import client from '../../services/graphql/productClient'
 
@@ -42,17 +42,47 @@ const MAX_FETCH_LENGTH = 5
 //COMPONENT
 @observer
 class Home extends Component {
-  
   //PROPERTIES
   @observable isFetchingSellers = false
   @observable allSellers = []
   
+
+  //FOR ANALYTICS PURPOSES
+  firstCard = null
 
   componentWillReceiveProps(nextProps) {
     this.checkSelectedChanges(nextProps)
     this.checkAllCategoriesChanges(nextProps)
     this.checkAllProductsChanges(nextProps)
     this.checkAllAdvertisementsChanges(nextProps)
+  }
+
+  checkAllAdvertisementsChanges(nextProps) {
+    let {
+      activeAdvertisementsQuery: { loading: newLoading, error: newError }
+    } = nextProps
+
+    let {
+      activeAdvertisementsQuery: { loading: curLoading }
+    } = this.props
+
+    if (newLoading !== curLoading && !newLoading && !newError) {
+      let activeAdvertisements =
+        nextProps.activeAdvertisementsQuery.activeAdvertisements
+      let advertisements = activeAdvertisements.advertisements.map(
+        advertisement => {
+          return { ...advertisement, imageUrl: advertisement.imageUrl }
+        }
+      )
+
+      this.setState({
+        advertisements: [...this.state.advertisements, ...advertisements],
+        isFetchDisabled:
+          this.state.advertisements.length === activeAdvertisements.totalCount
+      })
+    } else if (newError) {
+      return console.log('Error: ' + newError)
+    }
   }
 
   checkSelectedChanges(nextProps) {
@@ -110,37 +140,21 @@ class Home extends Component {
     }
   }
 
-  checkAllAdvertisementsChanges(nextProps){
-    let { 
-      activeAdvertisementsQuery:{
-        loading: newLoading, 
-        error: newError,
-      }
-    } = nextProps
-
-    let {
-      activeAdvertisementsQuery:{
-        loading: curLoading
-      }
-    } = this.props
-
-    if(newLoading !== curLoading && !newLoading && !newError){
-      let activeAdvertisements = nextProps.activeAdvertisementsQuery.activeAdvertisements
-      let advertisements = activeAdvertisements.advertisements.map((advertisement) =>{
-        return {...advertisement, imageUrl: advertisement.imageUrl}
-      })
-
-      this.setState({
-        advertisements: [...this.state.advertisements, ...advertisements],
-        isFetchDisabled:
-          this.state.advertisements.length === activeAdvertisements.totalCount
-      })
-    } else if(newError){
-      return console.log('Error: ' + newError)
-    }
-  }
-
   componentDidMount() {
+    //ANALYTICS
+    window.document.body.onscroll = () => {
+      if (
+        this.firstCard !== null &&
+        this.firstCard.getBoundingClientRect().top >= 0
+      ) {
+        ReactGA.event({
+          category: 'Seeking featured Product',
+          action: 'Seeking featured Product'
+        })
+        window.document.body.onscroll = null
+      }
+    }
+
     this.before = this.current = document.documentElement.scrollTop
     window.scrollTo(0, 0)
     this.addScrollListener(this.props.isSelected)
@@ -151,6 +165,7 @@ class Home extends Component {
 
   componentWillUnmount(){
     this.canRefresh = false
+    window.document.body.onscroll = null
   }
 
   async fetchSellers() {
@@ -158,13 +173,13 @@ class Home extends Component {
       this.isFetchingSellers = true
 
       const {
-        data: { allSellers },
+        data: { allSellers }
       } = await client.query({
         query: allSellersQuery,
         variables: {
           offset: 0,
           limit: 3
-        },
+        }
         // fetchPolicy: 'network-only'
       })
 
@@ -234,46 +249,54 @@ class Home extends Component {
     if (products.length < 15) {
       finalProducts.push({ allSellersSection: true })
     }
-    
+
     return finalProducts.map((data, i) => {
       if (data.allSellersSection) {
         return (
-          <div className={styles.sellers} key={i} >
-            <div className={styles.title} >Sellers</div>
+          <div className={styles.sellers} key={i}>
+            <div className={styles.title}>Sellers</div>
 
-            <div className={styles.wrapper} >
-              {this.renderSellerList()}
-            </div>
+            <div className={styles.wrapper}>{this.renderSellerList()}</div>
           </div>
         )
       }
-      
-      return <Card favorites={favorites} {...data} key={i} data={data} />
+
+      return (
+        <div
+          ref={el => {
+            if (i === 0) this.firstCard = el
+          }}
+          key={i}
+        >
+          <Card favorites={favorites} {...data} data={data} />
+        </div>
+      )
     })
   }
 
   renderSellerList() {
-    if (this.isFetchingSellers) return (
-      <ProgressBar
-        className={styles.loading}
-        type="circular"
-        theme={ProgressBarTheme}
-        mode="indeterminate"
-      />
-    )
+    if (this.isFetchingSellers)
+      return (
+        <ProgressBar
+          className={styles.loading}
+          type="circular"
+          theme={ProgressBarTheme}
+          mode="indeterminate"
+        />
+      )
 
     let finalSellers = this.allSellers.slice()
 
-    finalSellers.push({allSellersButton: true})
+    finalSellers.push({ allSellersButton: true })
 
     return finalSellers.map((data, i) => {
       if (data.allSellersButton) return <SellerListCard key={i} {...data} />
 
       return (
-        <SellerListCard 
-          imageUrl={data.profilePicture} 
-          url={`/seller/${data.id}`} 
-          key={i} 
+        <SellerListCard
+          imageUrl={data.profilePicture}
+          url={`/seller/${data.id}`}
+          key={i}
           name={data.name}
         />
       )
@@ -341,7 +364,7 @@ class Home extends Component {
   }
 
   renderAdsPanel = () => {
-    if(this.state.advertisements){
+    if (this.state.advertisements) {
       return this.state.advertisements.map((data, i) => {
         return (
           <a key={i} target="_blank" href={data.targetUrl}>
@@ -350,8 +373,7 @@ class Home extends Component {
             {/* </Link> */}
           </a>
         )
-      }  
-      )
+      })
     }
   }
 
@@ -399,8 +421,7 @@ class Home extends Component {
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: false,
-
+      arrows: false
     }
     let {
       activePromotedsQuery: { loading }
@@ -428,9 +449,7 @@ class Home extends Component {
         style={{ background: 'rgb(239, 239, 239)' }}
         wrapperStyle={{ padding: 0 }}
       >
-        <Slider {...settings}>
-          {this.renderAdsPanel()}
-        </Slider>
+        <Slider {...settings}>{this.renderAdsPanel()}</Slider>
         <div style={style}>
           <div className={styles.categories}>{this.renderCategories()}</div>
 
@@ -490,9 +509,9 @@ const activePromotedsQuery = gql`
 `
 
 const activeAdvertisementsQuery = gql`
-  query activeAdvertisements($limit: Int){
-    activeAdvertisements(limit: $limit){
-      advertisements{
+  query activeAdvertisements($limit: Int) {
+    activeAdvertisements(limit: $limit) {
+      advertisements {
         id
         imageUrl
         targetUrl
@@ -534,7 +553,7 @@ export default compose(
   graphql(activeAdvertisementsQuery, {
     name: 'activeAdvertisementsQuery',
     options: () => {
-      return{
+      return {
         variables: { limit: 10 }
       }
     }

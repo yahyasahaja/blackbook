@@ -13,6 +13,7 @@ import dialog from './Dialog'
 import serviceWorkerUpdate from './ServiceWorkerUpdate'
 import overlayLoading from './OverlayLoading'
 import countdownTimer from './CountdownTimer'
+import info from './Info'
 
 export { 
   categories,
@@ -30,6 +31,7 @@ export {
   serviceWorkerUpdate,
   overlayLoading,
   countdownTimer,
+  info,
 }
 
 export default { 
@@ -47,5 +49,6 @@ export default {
   chat,
   serviceWorkerUpdate,
   overlayLoading,
-  countdownTimer
+  countdownTimer,
+  info,
 }

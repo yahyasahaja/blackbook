@@ -37,18 +37,18 @@ export default function register() {
       window.onbeforeinstallprompt === null &&
       window.navigator.userAgent.toLowerCase().includes('chrome')
     ) {
-      // console.log('listening beforeinstallprompt event', window.navigator.userAgent)
-      // window.addEventListener('beforeinstallprompt', e => {
-      //   e.preventDefault()
-      //   if (!localStorage.getItem('blanja-hash-appinstalled')) {
-      //     swu.setPrompt(e)
-      //     e.userChoice.then(choice => {
-      //       if (choice.outcome === 'acepted')
-      //         localStorage.setItem('blanja-hash-appinstalled', true)
-      //       else localStorage.setItem('blanja-hash-appinstalled', false)
-      //     })
-      //   }
-      // })
+      console.log('listening beforeinstallprompt event', window.navigator.userAgent)
+      window.addEventListener('beforeinstallprompt', e => {
+        e.preventDefault()
+        if (!localStorage.getItem('blanja-hash-appinstalled')) {
+          swu.setPrompt(e)
+          e.userChoice.then(choice => {
+            if (choice.outcome === 'acepted')
+              localStorage.setItem('blanja-hash-appinstalled', true)
+            else localStorage.setItem('blanja-hash-appinstalled', false)
+          })
+        }
+      })
     }
 
     //check for first time visit

@@ -209,3 +209,23 @@ self.addEventListener('push', function (event) {
 
   event.waitUntil(self.registration.showNotification(title, options))
 })
+
+self.addEventListener('notificationclick', function(event) {
+  console.log(clients.url)
+  console.log(event.notification)
+  let notification = event.notification
+  notification.close()
+  event.waitUntil(clients.matchAll({
+    type: 'window'
+  }).then(function(clientList) {
+    for (var i = 0; i < clientList.length; i++) {
+      var client = clientList[i]
+      console.log(client.url)
+      if (client.url == '/' && 'focus' in client)
+        return client.focus()
+    }
+    if (clients.openWindow){
+      return clients.openWindow('/chat')
+    }
+  }))
+})

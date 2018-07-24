@@ -14,6 +14,8 @@ import { appStack, user, cart } from '../../services/stores'
 
 import { convertCountryCodeToText } from '../../utils'
 
+import { COUNTRY_CODE } from '../../config'
+
 import PopupBar from '../../components/PopupBar'
 import PrimaryButton from '../../components/PrimaryButton'
 
@@ -42,6 +44,11 @@ class Process extends Component {
   }
 
   componentWillMount() {
+    if (user.isLoggedIn && (COUNTRY_CODE === 'HKG' || user.data.country === 'HKG')) {
+      cart.channel = 'AS2IN1WAL'
+      cart.channelIndex = 1
+    }
+
     if (
       !user.isLoggedIn ||
       !this.props.location.state ||
@@ -101,6 +108,7 @@ class Process extends Component {
     return (
       <div className={styles.section}>
         <Dropdown
+          auto
           className="address-dropdown"
           label="ALAMAT"
           onChange={value => {
@@ -241,7 +249,7 @@ class Process extends Component {
       FAMILYTW: 'https://paygw.azureedge.net/images/familogo.png',
       AS2IN1WAL: 'http://as2in1mobile.com/images/As2in1-Mobile-logo.png'
     }
-
+    
     return (
       <div className={styles.section}>
         <Dropdown
@@ -255,6 +263,7 @@ class Process extends Component {
           source={channels}
           value={cart.channelIndex}
           theme={dropdownTheme}
+          disabled={user.data.country === 'HKG'}
         />
         {cart.channel !== 'none' && (
           <img 
@@ -264,7 +273,7 @@ class Process extends Component {
             src={logo[cart.channel]} 
           />
         )}
-        {cart.channel !== 'none' && (
+        {cart.channel !== 'none' && user.data.country !== 'HKG' && (
           <p>Tunjukan barcode pembayaran yang akan anda terima kepada kasir</p>
         )}
       </div>
