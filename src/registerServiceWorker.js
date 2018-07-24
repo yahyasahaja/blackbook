@@ -75,9 +75,9 @@ export default function register() {
       }
     }
 
-    // window.addEventListener('appinstalled', () => {
-    //   localStorage.setItem('blanja-hash-appinstalled', true)
-    // })
+    window.addEventListener('appinstalled', () => {
+      localStorage.setItem('blanja-hash-appinstalled', true)
+    })
 
     window.addEventListener('load', () => {
       const swUrl =
