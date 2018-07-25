@@ -140,5 +140,6 @@ export default graphql(getThreadsQuery, {
   skip: () => !user.isLoggedIn,
   options: {
     client,
+    fetchPolicy: 'cache-and-network',
   },
 })(Threads)

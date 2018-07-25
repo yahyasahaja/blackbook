@@ -73,7 +73,7 @@ class BottomTabBar extends Component {
         }}
         className={styles.container}
       >
-        <data.Component {...this.props} isSelected={currentPage == i} />
+        <data.Component key={user.data ? user.data.id : -1} {...this.props} isSelected={currentPage == i} />
       </div>
     ))
   }
