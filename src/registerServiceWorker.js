@@ -37,7 +37,10 @@ export default function register() {
       window.onbeforeinstallprompt === null &&
       window.navigator.userAgent.toLowerCase().includes('chrome')
     ) {
-      console.log('listening beforeinstallprompt event', window.navigator.userAgent)
+      console.log(
+        'listening beforeinstallprompt event',
+        window.navigator.userAgent
+      )
       window.addEventListener('beforeinstallprompt', e => {
         e.preventDefault()
         if (!localStorage.getItem('blanja-hash-appinstalled')) {
@@ -64,6 +67,8 @@ export default function register() {
             .unix()
         )
       } else {
+        if (window.location.href.includes('open=pwa'))
+          localStorage.setItem('blanja-hash-appinstalled', true)
         const now = moment().unix()
         const first = localStorage.getItem('blanja-hash-firstvisit')
         const show = first <= now
@@ -75,9 +80,9 @@ export default function register() {
       }
     }
 
-    // window.addEventListener('appinstalled', () => {
-    //   localStorage.setItem('blanja-hash-appinstalled', true)
-    // })
+    window.addEventListener('appinstalled', () => {
+      localStorage.setItem('blanja-hash-appinstalled', true)
+    })
 
     window.addEventListener('load', () => {
       const swUrl =
@@ -199,7 +204,7 @@ function checkValidServiceWorker(swUrl) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
           registration.unregister().then(() => {
-            window.location.reload()
+            // window.location.reload()
           })
         })
       } else {

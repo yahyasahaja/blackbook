@@ -53,7 +53,7 @@ axios.interceptors.response.use(
     return Promise.reject(err)
   }
 )
-// if (tokens.token) axios.defaults.headers['Authorization'] = tokens.token
+// if (tokens.bearerToken) axios.defaults.headers['Authorization'] = tokens.bearerToken
 
 @observer
 class App extends Component {

@@ -59,7 +59,7 @@ class Promo extends Component {
         isFetchDisabled: this.state.activePromotions.length === activePromotions.totalCount
       })
     } else if (newError) {
-      tokens.refetchAPIToken().then(() => window.location.reload())
+      // tokens.refetchAPIToken().then(() => window.location.reload())
     }
   }
 

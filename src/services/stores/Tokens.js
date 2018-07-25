@@ -8,6 +8,8 @@ import {
   AUTHORIZATION_TOKEN_STORAGE_URI,
 } from '../../config'
 
+import { setAxiosAuthorization } from '../../utils'
+
 //STORE
 class Tokens {
   constructor() {
@@ -15,24 +17,24 @@ class Tokens {
     let apiToken, authToken
 
     if ((apiToken = localStorage.getItem(API_TOKEN_STORAGE_URI)))
-      this.apiToken = observable(apiToken)
+      this.rawApiToken = observable(apiToken)
     else
       this.refetchAPIToken()
 
     if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI))) {
-      this.authToken = observable(authToken)
+      this.rawAuthToken = observable(authToken)
       this.setAuthToken(authToken)
     } else this.setAuthToken()
   }
 
   //THIS MUST BE RAW TOKEN, NO BEARER!
-  @observable apiToken = null
-  @observable authToken = null
+  @observable rawApiToken = null
+  @observable rawAuthToken = null
   @observable forgotPasswordToken = null
 
   //USE THIS FOR AUTHORIZATION
   @computed
-  get token() {
+  get bearerToken() {
     let raw = this.rawToken
     return raw ? `Bearer ${raw}` : null
   }
@@ -40,12 +42,12 @@ class Tokens {
   @computed
   get rawToken() {
     if (
-      this.authToken === null ||
-      this.authToken == 'undefined' || 
-      this.authToken == 'null'
-    ) return this.apiToken
+      this.rawAuthToken === null ||
+      this.rawAuthToken == 'undefined' || 
+      this.rawAuthToken == 'null'
+    ) return this.rawApiToken
     
-    return this.authToken
+    return this.rawAuthToken
   }
 
   @action
@@ -56,21 +58,22 @@ class Tokens {
     if (data) {
       let token = data.toString()
       localStorage.setItem(API_TOKEN_STORAGE_URI, token)
-      this.apiToken = observable(token)
-      axios.defaults.headers['Authorization'] = `Bearer ${this.token}`
+      this.rawApiToken = observable(token)
+      // console.log('ke sini kah?', token)
+      setAxiosAuthorization(token)
       return data
     }
 
-    return this.refetchAPIToken()
+    return await this.refetchAPIToken()
   }
 
   @action
   setAuthToken(token) {
-    this.authToken = token || this.rawToken
-    
-    localStorage.setItem(AUTHORIZATION_TOKEN_STORAGE_URI, this.authToken)
-    axios.defaults.headers['Authorization'] = `Bearer ${this.authToken}`
-    return this.authToken
+    this.rawAuthToken = token
+
+    localStorage.setItem(AUTHORIZATION_TOKEN_STORAGE_URI, token)
+    setAxiosAuthorization(token)
+    return token
   }
 
   @action
@@ -80,15 +83,16 @@ class Tokens {
   }
 
   @action
-  removeForgotPasswordToken(token){
+  removeForgotPasswordToken() {
     this.forgotPasswordToken = null
   }
   
 
   @action
   removeAuthToken() {
-    this.authToken = null
-    if (this.token) axios.defaults.headers['Authorization'] = this.token
+    this.rawAuthToken = null
+    console.log('REMOVING AUTH TOKEN', this.rawApiToken)
+    if (this.rawApiToken) setAxiosAuthorization(this.rawApiToken)
     else delete axios.defaults.headers['Authorization']
     
     localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
@@ -96,7 +100,7 @@ class Tokens {
 
   @action
   removeAPIToken() {
-    this.apiToken = null
+    this.rawApiToken = null
     delete axios.defaults.headers['Authorization']
     
     localStorage.removeItem(API_TOKEN_STORAGE_URI)
@@ -104,4 +108,5 @@ class Tokens {
 }
 
 // autorun(() => console.log('DARI AUTORUN', window.badges.data))
+window.axios = axios
 export default window.tokens = new Tokens()
