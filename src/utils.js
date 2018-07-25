@@ -96,11 +96,13 @@ export const limitString = (str, limit) => {
 }
 
 export const setAxiosAuthorization = rawToken => {
+  if (!rawToken) return
+
   if (typeof rawToken !== 'string') rawToken = rawToken.value
   let tokenWord = rawToken.split(' ')
   rawToken = tokenWord[tokenWord.length - 1]
   axios.defaults.headers['Authorization'] = `Bearer ${rawToken}`
-  console.log(axios.defaults.headers)
+  // console.log(axios.defaults.headers)
 }
 
 export default {

@@ -59,7 +59,7 @@ class Tokens {
       let token = data.toString()
       localStorage.setItem(API_TOKEN_STORAGE_URI, token)
       this.rawApiToken = observable(token)
-      console.log('ke sini kah?', token)
+      // console.log('ke sini kah?', token)
       setAxiosAuthorization(token)
       return data
     }
