@@ -3,6 +3,13 @@ $size: 50px;
 .avatar {
   height: $size !important;
   width: $size !important;
+  min-width: $size !important;
+}
+
+.image {
+  height: $size !important;
+  width: $size !important;
+  min-width: $size !important;
 }
 
 .letter {
