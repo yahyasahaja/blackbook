@@ -105,14 +105,14 @@ class User {
 
   async processUploadProfilePicFile(data, fileType) {
     try {
-      console.log(fileType, `Bearer ${tokens.token}`)
+      console.log(fileType, `Bearer ${tokens.bearerToken}`)
       this.isLoadingUploadProfilePic = true
       let { data: { is_ok, uri } } = await axios.post(
         getIAMEndpoint(`/iam/profpic/${fileType}`),
         {},
         {
           headers: {
-            Authorization: tokens.token
+            Authorization: tokens.bearerToken
           }
         }
       )
@@ -126,7 +126,7 @@ class User {
         }
       })
       
-      setAxiosAuthorization(token)
+      setAxiosAuthorization(tokens.bearerToken)
       this.getProfilePictureURL()
     } catch (e) {
       console.log(e)
@@ -138,7 +138,7 @@ class User {
 
   @action
   getProfilePictureURL() {
-    if (this.isLoggedIn && tokens.authToken)
+    if (this.isLoggedIn && tokens.rawAuthToken)
       return axios.get(getIAMEndpoint('/profpic'))
         .then(({ data: { is_ok, uri } }) => {
           if (is_ok) {
@@ -317,7 +317,7 @@ class User {
       // console.log('REGISTERING THIS SUBSCRIPTION:', pushSubscription, this.isLoggedIn)
       if (!pushSubscription || !this.isLoggedIn) return false
 
-      let authToken = tokens.token
+      let authToken = tokens.bearerToken
 
       pushSubscription = pushSubscription.toJSON()
       pushSubscription = {
@@ -368,7 +368,7 @@ class User {
           return res
         }
 
-        localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)
+        this.logout()
         this.isLoading = false
         return false
       }).catch(res => {
