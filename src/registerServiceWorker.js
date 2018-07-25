@@ -102,7 +102,9 @@ export default function register() {
             'This web app is being served cache-first by a service ' +
               'worker. To learn more, visit https://goo.gl/SC7cgQ'
           )
+          
         })
+        
       } else {
         // Is not local host. Just register service worker
         registerValidSW(swUrl)
@@ -117,6 +119,18 @@ function registerValidSW(swUrl) {
     .register(swUrl)
     .then(registration => {
       console.log('successful registration')
+      Notification.requestPermission().then(function(result) {
+        if (result === 'denied') {
+          console.log('Notif permission denied')
+          return
+        }
+        if (result === 'default') {
+          console.log('Notif permission dismissed')
+          return
+        }
+        // Do something with the granted permission.
+        console.log('Notif allowed')
+      })
       registration.onupdatefound = () => {
         console.log('update found')
         const installingWorker = registration.installing
@@ -148,7 +162,7 @@ function registerValidSW(swUrl) {
   navigator.serviceWorker.ready.then(registration => {
     let activatingWorker = registration.active
     console.log(registration.active)
-
+    
     if (activatingWorker.state === 'activated') {
       subscribeRegistration(registration)
     } else

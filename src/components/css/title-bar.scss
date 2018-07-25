@@ -29,4 +29,21 @@
       opacity: .3;
     }
   }
+
+  .a2hsIcon, .a2hsIcon:visited {
+    position: absolute;
+    width: 60px;
+    font-size: 20pt;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $secondary-color;
+
+    &:active {
+      opacity: .3;
+    }
+  }
 }

@@ -45,6 +45,7 @@ class Home extends Component {
   //PROPERTIES
   @observable isFetchingSellers = false
   @observable allSellers = []
+  
 
   //FOR ANALYTICS PURPOSES
   firstCard = null
@@ -139,10 +140,6 @@ class Home extends Component {
     }
   }
 
-  componentWillUnmount() {
-    window.document.body.onscroll = null
-  }
-
   componentDidMount() {
     //ANALYTICS
     window.document.body.onscroll = () => {
@@ -163,6 +160,12 @@ class Home extends Component {
     this.addScrollListener(this.props.isSelected)
     this.checkScroll()
     this.fetchSellers()
+    
+  }
+
+  componentWillUnmount(){
+    this.canRefresh = false
+    window.document.body.onscroll = null
   }
 
   async fetchSellers() {
