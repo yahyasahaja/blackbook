@@ -19,6 +19,7 @@ import cart from './Cart'
 import {
   getSubscription,
   getQueryString,
+  setAxiosAuthorization,
 } from '../../utils'
 
 const isNotLocal = () => !(location.href.includes('localhost') || /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href))
@@ -125,7 +126,7 @@ class User {
         }
       })
       
-      axios.defaults.headers['Authorization'] = tokens.token
+      setAxiosAuthorization(token)
       this.getProfilePictureURL()
     } catch (e) {
       console.log(e)

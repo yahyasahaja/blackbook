@@ -8,6 +8,8 @@ import {
   AUTHORIZATION_TOKEN_STORAGE_URI,
 } from '../../config'
 
+import { setAxiosAuthorization } from '../../utils'
+
 //STORE
 class Tokens {
   constructor() {
@@ -57,17 +59,18 @@ class Tokens {
       let token = data.toString()
       localStorage.setItem(API_TOKEN_STORAGE_URI, token)
       this.apiToken = observable(token)
-      axios.defaults.headers['Authorization'] = `Bearer ${this.token}`
+      setAxiosAuthorization(token)
       return data
     }
 
-    return this.refetchAPIToken()
+    return await this.refetchAPIToken()
   }
 
   @action
   setAuthToken(token) {
-    this.authToken = token || this.rawToken
-    
+    if (token) this.authToken = token
+    else this.authToken = `Bearer ${this.rawToken}`
+
     localStorage.setItem(AUTHORIZATION_TOKEN_STORAGE_URI, this.authToken)
     axios.defaults.headers['Authorization'] = `Bearer ${this.authToken}`
     return this.authToken
@@ -80,7 +83,7 @@ class Tokens {
   }
 
   @action
-  removeForgotPasswordToken(token){
+  removeForgotPasswordToken() {
     this.forgotPasswordToken = null
   }
   
@@ -88,7 +91,7 @@ class Tokens {
   @action
   removeAuthToken() {
     this.authToken = null
-    if (this.token) axios.defaults.headers['Authorization'] = this.token
+    if (this.token) setAxiosAuthorization(this.token)
     else delete axios.defaults.headers['Authorization']
     
     localStorage.removeItem(AUTHORIZATION_TOKEN_STORAGE_URI)

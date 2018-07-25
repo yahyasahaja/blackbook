@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const matchLoading = (next, current, context) => {
   return next[context].loading === current[context].loading
 }
@@ -93,6 +95,12 @@ export const limitString = (str, limit) => {
   return str.slice(0, limit) + (str.length < limit ? '' : '...')
 }
 
+export const setAxiosAuthorization = rawToken => {
+  let tokenWord = rawToken.split(' ')
+  rawToken = tokenWord[tokenWord.length - 1]
+  axios.defaults.headers['Authorization'] = `Bearer ${rawToken}`
+}
+
 export default {
   matchLoading,
   matchProps,
@@ -102,4 +110,5 @@ export default {
   convertCountryCurrency,
   getQueryString,
   limitString,
+  setAxiosAuthorization,
 }
