@@ -67,6 +67,9 @@ const Transaction = asyncComponent(() =>
   import(/*webpackChunkName: "Transaction"*/ './screens/Account/Transaction')
 )
 const Seller = asyncComponent(() => import('./screens/Seller'))
+
+const PWASupport = asyncComponent(() => import('./screens/PWA'))
+
 //STYLES
 import styles from './assets/css/app-router.scss'
 import ProgressBarTheme from './assets/css/theme-progress-bar-white.scss'
@@ -221,6 +224,7 @@ class AppRouter extends Component {
               <Route path="/product/:product_id" component={Product} />
               <Route path="/seller/:seller_id" component={Seller}/>
               <Route path="/sellers" component={Sellers} />
+              <Route path="/pwa-support" component={PWASupport}/>
             </Switch>
           </div>
 
