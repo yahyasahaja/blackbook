@@ -66,9 +66,13 @@ const Sellers = asyncComponent(() =>
 const Transaction = asyncComponent(() =>
   import(/*webpackChunkName: "Transaction"*/ './screens/Account/Transaction')
 )
-const Seller = asyncComponent(() => import('./screens/Seller'))
+const Seller = asyncComponent(() => 
+  import(/*webpackChunkName: "Seller"*/ './screens/Seller')
+)
 
-const PWASupport = asyncComponent(() => import('./screens/PWA'))
+const PWASupport = asyncComponent(() => 
+  import(/*webpackChunkName: "PWA"*/ './screens/PWA')
+)
 
 //STYLES
 import styles from './assets/css/app-router.scss'

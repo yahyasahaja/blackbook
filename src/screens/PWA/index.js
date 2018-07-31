@@ -135,7 +135,7 @@ class PWASupport extends Component{
   render(){
     return(
       <PopupBar
-        title="PWA Support" {...this.props}
+        title="CEK DUKUNGAN APLIKASI" {...this.props}
         renderContent={this.renderContent}
         anim={ANIMATE_HORIZONTAL}
         cart
