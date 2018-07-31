@@ -12,7 +12,7 @@
   max-width: 480px;
   min-height: 100vh;
   background: white;
-  opacity: 0;
+  // opacity: 0;
   z-index: 2;
 
   .bar {
@@ -123,7 +123,7 @@
   animation-name: horizontalAnimation;
   animation-timing-function: cubic-bezier(.23,.24,0,1);
   animation-fill-mode: forwards;
-  animation-duration: .3s;
+  animation-duration: .4s;
 }
 
 @keyframes verticalAnimation {
@@ -132,6 +132,6 @@
 }
 
 @keyframes horizontalAnimation {
-  0% {opacity: 0; margin-left: 100%}
-  100% {opacity: 1; margin-left: 0}
+  0% {margin-left: 100%}
+  100% {margin-left: 0}
 }
