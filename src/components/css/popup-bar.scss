@@ -121,14 +121,14 @@
 
 .animate-horizontal {
   animation-name: horizontalAnimation;
-  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  animation-timing-function: cubic-bezier(.23,.24,0,1);
   animation-fill-mode: forwards;
-  animation-duration: .2s;
+  animation-duration: .3s;
 }
 
 @keyframes verticalAnimation {
   0% {opacity: 0; top: 50px}
-  100% {opacity: 1; top: 0}
+  100% {opacity: 1; top: 0} 
 }
 
 @keyframes horizontalAnimation {
