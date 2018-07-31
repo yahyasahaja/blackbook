@@ -55,30 +55,30 @@ export default function register() {
     }
 
     //check for first time visit
-    if (
-      !/blanja\.hk/gi.test(window.location.href) &&
-      window.outerWidth <= 768
-    ) {
-      if (!localStorage.getItem('blanja-hash-firstvisit')) {
-        localStorage.setItem(
-          'blanja-hash-firstvisit',
-          moment()
-            .add(10, 'minutes')
-            .unix()
-        )
-      } else {
-        if (window.location.href.includes('open=pwa'))
-          localStorage.setItem('blanja-hash-appinstalled', true)
-        const now = moment().unix()
-        const first = localStorage.getItem('blanja-hash-firstvisit')
-        const show = first <= now
-        if (!localStorage.getItem('blanja-hash-appinstalled') && show) {
-          setTimeout(() => {
-            swu.setManualGuide(true)
-          }, 10000)
-        }
-      }
-    }
+    // if (
+    //   !/blanja\.hk/gi.test(window.location.href) &&
+    //   window.outerWidth <= 768
+    // ) {
+    //   if (!localStorage.getItem('blanja-hash-firstvisit')) {
+    //     localStorage.setItem(
+    //       'blanja-hash-firstvisit',
+    //       moment()
+    //         .add(10, 'minutes')
+    //         .unix()
+    //     )
+    //   } else {
+    //     if (window.location.href.includes('open=pwa'))
+    //       localStorage.setItem('blanja-hash-appinstalled', true)
+    //     const now = moment().unix()
+    //     const first = localStorage.getItem('blanja-hash-firstvisit')
+    //     const show = first <= now
+    //     if (!localStorage.getItem('blanja-hash-appinstalled') && show) {
+    //       setTimeout(() => {
+    //         swu.setManualGuide(true)
+    //       }, 10000)
+    //     }
+    //   }
+    // }
 
     window.addEventListener('appinstalled', () => {
       localStorage.setItem('blanja-hash-appinstalled', true)
