@@ -9,7 +9,7 @@
 // This link also includes instructions on opting out of this behavior.
 
 import { user, serviceWorkerUpdate as swu } from './services/stores'
-import moment from 'moment'
+// import moment from 'moment'
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
