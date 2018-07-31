@@ -24,7 +24,7 @@ export default class Home extends Component {
           <div className={styles.a2hsIcon} onClick={() => {
             swu.setManualGuide(true, true)
           }}> 
-            <Badge badge={badges.CART} icon="book" />
+            <Badge icon="book" />
           </div>
           : '' 
         }

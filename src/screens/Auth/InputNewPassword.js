@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import Input from 'react-toolbox/lib/input/Input'
 import { observer } from 'mobx-react'
-import { Link } from 'react-router-dom'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 
@@ -20,7 +19,7 @@ import PrimaryButton from '../../components/PrimaryButton'
 import { user, snackbar, appStack, overlayLoading, countdownTimer, tokens } from '../../services/stores'
 
 //CONFIG
-import { observable, computed, action } from 'mobx'
+import { observable } from 'mobx'
 
 @observer
 class NewPassword extends Component {
@@ -63,7 +62,7 @@ class NewPassword extends Component {
       snackbar.show('Password Baru dan Konfirmasi Password yang dimasukkan harus sama')
       this.setState(...this.state, { confirmPassword: '', password: '' })
     } else {
-      console.log("success reach else conditional")
+      console.log('success reach else conditional')
       let data = await this.forgotPassword()
       console.log('has been succeeded from forgotPassword')
       if(data.is_ok) {
@@ -135,26 +134,26 @@ class NewPassword extends Component {
         <div className={styles.timer}>
           {(countdownTimer.min_countdown === undefined 
             ? 
-              '' 
+            '' 
             : 
-              countdownTimer.min_countdown) 
+            countdownTimer.min_countdown) 
           + 
             (countdownTimer.min_countdown === undefined && 
             countdownTimer.sec_countdown === undefined 
-            ? 
+              ? 
               '' 
-            : 
+              : 
               ':')
-          + (countdownTimer.sec_countdown === undefined 
-            ? 
+            + (countdownTimer.sec_countdown === undefined 
+              ? 
               '' 
-            : 
+              : 
               countdownTimer.sec_countdown < 10 ? '0' : '') 
           + (countdownTimer.sec_countdown === undefined
             ?
-              ''
+            ''
             :
-              countdownTimer.sec_countdown)}
+            countdownTimer.sec_countdown)}
         </div>
         <form className={styles.form} onSubmit={this.onSubmit}>
           <div className={styles.password}>
