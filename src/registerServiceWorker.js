@@ -226,3 +226,5 @@ export function unregister() {
     })
   }
 }
+
+console.log('CHECK FOR UPDATE')
