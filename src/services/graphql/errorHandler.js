@@ -18,7 +18,7 @@ export default onError(({ graphQLErrors, networkError }) => {
 
     if (networkError.statusCode === 401) {
       (async () => {
-        await user.logout()
+        await user.logout() 
         location.reload()
       })()
     }
