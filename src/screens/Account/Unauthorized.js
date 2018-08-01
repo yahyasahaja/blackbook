@@ -24,7 +24,7 @@ class Account extends Component {
           <SecondaryButton to="/auth/login" >LOGIN</SecondaryButton>
         </div>
         <div className={styles.pwaButton}>
-          <SecondaryButton to="/pwa-support"> CEK PWA SUPPORT </SecondaryButton>
+          <SecondaryButton to="/app-support"> CEK DUKUNGAN APLIKASI </SecondaryButton>
         </div>
       </div>
     )

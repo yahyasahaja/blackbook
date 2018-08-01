@@ -224,7 +224,7 @@ class AppRouter extends Component {
               <Route path="/product/:product_id" component={Product} />
               <Route path="/seller/:seller_id" component={Seller}/>
               <Route path="/sellers" component={Sellers} />
-              <Route path="/pwa-support" component={PWASupport}/>
+              <Route path="/app-support" component={PWASupport}/>
             </Switch>
           </div>
 
