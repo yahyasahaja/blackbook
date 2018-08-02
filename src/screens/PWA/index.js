@@ -24,6 +24,8 @@ let fileApiSupported = ('File' in window && 'FileReader' in window && 'FileList'
 // let btSupported = 'bluetooth' in navigator
 let mediaDevicesSupported = 'mediaDevices' in navigator
 let geoSupported = 'geolocation' in navigator
+let buildDate = 'BUILD_DATE_FORMATTED'
+
 
 class PWASupport extends Component{
   
@@ -100,6 +102,9 @@ class PWASupport extends Component{
             this.renderSupportedFeature()
           }
         </div>
+        <div className={styles.build}>
+          BUILD DATE: { buildDate } 
+        </div>
       </div>
     )
   }
@@ -118,7 +123,7 @@ class PWASupport extends Component{
             <div className={styles.iconNotSupported}>
               <Badge icon="file-excel-box"/> 
             </div>
-          } 
+          }
         </div>
       )
     })
