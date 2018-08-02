@@ -16,19 +16,21 @@ let serviceWorkerSupported = 'serviceWorker' in navigator
 let cacheSupported = 'caches' in window
 let pushSupported = 'serviceWorker' in navigator && 'PushManager' in window
 let bgSyncSupported = 'serviceWorker' in navigator && 'SyncManager' in window
-let periodicSyncSupported = 'serviceWorker' in navigator && typeof ServiceWorkerRegistration.prototype.periodicSync !== 'undefined'
+// let periodicSyncSupported = 'serviceWorker' in navigator && typeof ServiceWorkerRegistration.prototype.periodicSync !== 'undefined'
 let indexedDbSupported = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
 let storageSupported = 'storage' in navigator && 'StorageManager' in window
 let persistentStorageSupported = navigator.storage && navigator.storage.persist
 let fileApiSupported = ('File' in window && 'FileReader' in window && 'FileList' in window && 'Blob' in window)
-let btSupported = 'bluetooth' in navigator
+// let btSupported = 'bluetooth' in navigator
 let mediaDevicesSupported = 'mediaDevices' in navigator
 let geoSupported = 'geolocation' in navigator
+let buildDate = 'BUILD_DATE_FORMATTED'
 
 class PWASupport extends Component{
   
   isMount = false
-  
+  buildDateFormatted = ''
+
   supportedPWA = [
     {
       'name': 'Service Worker',
@@ -47,10 +49,6 @@ class PWASupport extends Component{
       'key': bgSyncSupported
     },
     {
-      'name': 'Periodic Sync',
-      'key': periodicSyncSupported
-    },
-    {
       'name': 'Index DB',
       'key': indexedDbSupported
     },
@@ -67,10 +65,6 @@ class PWASupport extends Component{
       'key': fileApiSupported
     },
     {
-      'name': 'Bluetooth',
-      'key': btSupported
-    },
-    {
       'name': 'Media Device',
       'key': mediaDevicesSupported
     },
@@ -83,7 +77,27 @@ class PWASupport extends Component{
 
   componentDidMount = () => {
     this.isMount = true
+    this.formattingBuildDate()
+  }
 
+  formattingBuildDate = () => {
+    let date = buildDate
+    let nowDate = new Date()
+
+    let currentMonth = nowDate.getMonth()
+    console.log(currentMonth)
+
+    let currentMonthFormatted = '0' + (currentMonth+1)
+    console.log(currentMonthFormatted)
+    let arrayDate = date.split('')
+
+
+    arrayDate.splice(2, 5, currentMonthFormatted)
+    let arrJoin = arrayDate.join('')
+
+    let separatorSplit = arrJoin.split('-')
+
+    this.buildDateFormatted = separatorSplit.join('')
   }
 
   renderContent = () => {
@@ -108,6 +122,9 @@ class PWASupport extends Component{
             this.renderSupportedFeature()
           }
         </div>
+        <div className={styles.build}>
+          Build: { this.buildDateFormatted } 
+        </div>
       </div>
     )
   }
@@ -126,7 +143,7 @@ class PWASupport extends Component{
             <div className={styles.iconNotSupported}>
               <Badge icon="file-excel-box"/> 
             </div>
-          } 
+          }
         </div>
       )
     })

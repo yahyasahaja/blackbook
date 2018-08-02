@@ -19,11 +19,13 @@ export default class Home extends Component {
     let {cart} = this.props
     return (
       <div className={styles.container} > 
-        <div className={styles.a2hsIcon} onClick={() => {
-          swu.setManualGuide(true, true)
-        }}> 
-          <Badge icon="book" />
-        </div>
+        { !localStorage.getItem('blanja-hash-appinstalled') &&
+          <div className={styles.a2hsIcon} onClick={() => {
+            swu.setManualGuide(true, true)
+          }}> 
+            <Badge icon="bookmark" />
+          </div>
+        }
         <div className={styles.title}><span>Blanja</span></div> 
         {cart && <Link to="/cart" className={styles.icon}><Badge badge={badges.CART} icon="cart" /></Link> }
       </div>
