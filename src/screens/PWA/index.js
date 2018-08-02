@@ -26,11 +26,11 @@ let mediaDevicesSupported = 'mediaDevices' in navigator
 let geoSupported = 'geolocation' in navigator
 let buildDate = 'BUILD_DATE_FORMATTED'
 
-
 class PWASupport extends Component{
   
   isMount = false
-  
+  buildDateFormatted = ''
+
   supportedPWA = [
     {
       'name': 'Service Worker',
@@ -77,7 +77,27 @@ class PWASupport extends Component{
 
   componentDidMount = () => {
     this.isMount = true
+    this.formattingBuildDate()
+  }
 
+  formattingBuildDate = () => {
+    let date = buildDate
+    let nowDate = new Date()
+
+    let currentMonth = nowDate.getMonth()
+    console.log(currentMonth)
+
+    let currentMonthFormatted = '0' + (currentMonth+1)
+    console.log(currentMonthFormatted)
+    let arrayDate = date.split('')
+
+
+    arrayDate.splice(2, 5, currentMonthFormatted)
+    let arrJoin = arrayDate.join('')
+
+    let separatorSplit = arrJoin.split('-')
+
+    this.buildDateFormatted = separatorSplit.join('')
   }
 
   renderContent = () => {
@@ -103,7 +123,7 @@ class PWASupport extends Component{
           }
         </div>
         <div className={styles.build}>
-          BUILD DATE: { buildDate } 
+          Build: { this.buildDateFormatted } 
         </div>
       </div>
     )
