@@ -45,19 +45,28 @@ class Profile extends Component {
 
     let { name } = user.data
     let { profilePictureURL } = user
+    let isProfilePictureURLExist = profilePictureURL && profilePictureURL.length > 0
 
-    if (profilePictureURL) if (profilePictureURL.length > 0) return (
+    return (
       <label htmlFor="pic" className={styles.pic} >
         {
-          !user.isLoadingUploadProfilePic
-            ? <img src={profilePictureURL} alt="Profile Picture" />
-            : (
+          user.isLoadingUploadProfilePic
+            ? (
               <div className={styles['pic-loading']} >
                 <div className={styles.loading}>
                   <ProgressBar theme={loadingTheme} type="circular" mode="indeterminate" />
                 </div>
               </div>
             )
+            : isProfilePictureURLExist
+              ? (
+                <img src={profilePictureURL} alt="Profile Picture" />
+              )
+              : (
+                <div className={styles['picture-default']} >
+                  <span>{name.split(' ').slice(0, 2).map(v => v[0]).join('')}</span>
+                </div>
+              )
         }
 
         <span className={`mdi mdi-pencil ${styles.edit}`} />
@@ -70,12 +79,6 @@ class Profile extends Component {
           disabled={user.isLoadingUploadProfilePic}
         />
       </label>
-    )
-
-    return (
-      <div className={styles['picture-default']} >
-        <span>{name.split(' ').slice(0, 2).map(v => v[0]).join('')}</span>
-      </div>
     )
   }
 

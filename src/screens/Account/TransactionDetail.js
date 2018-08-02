@@ -46,7 +46,7 @@ class TransactionDetail extends Component {
 
   async fetchOrder() {
     try {
-      this.loadingOrders = true
+      this.loadingOrder = true
       const {
         data: { order },
       } = await client.query({
@@ -68,10 +68,13 @@ class TransactionDetail extends Component {
     this.setState({ active: !this.state.active })
   }
 
-  confirmSeller = () => {
+  confirmSeller = async () => {
     let loc = this.state.currentConfirmSeller
 
-    client.mutate({
+    this.setState({ active: false })
+    overlayLoading.show()
+
+    await client.mutate({
       mutation: confirmOrder,
       variables: {
         orderSellerId: loc.id,
@@ -79,9 +82,11 @@ class TransactionDetail extends Component {
           status: 'RECEIVED'
         }
       }
-    }).then(() => this.props.getOrderQuery.refetch())
+    })
 
-    this.setState({ active: false })
+    overlayLoading.hide()
+    
+    await this.fetchOrder()
   }
 
   actions = [
