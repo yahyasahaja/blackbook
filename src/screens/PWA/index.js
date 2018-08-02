@@ -16,12 +16,12 @@ let serviceWorkerSupported = 'serviceWorker' in navigator
 let cacheSupported = 'caches' in window
 let pushSupported = 'serviceWorker' in navigator && 'PushManager' in window
 let bgSyncSupported = 'serviceWorker' in navigator && 'SyncManager' in window
-let periodicSyncSupported = 'serviceWorker' in navigator && typeof ServiceWorkerRegistration.prototype.periodicSync !== 'undefined'
+// let periodicSyncSupported = 'serviceWorker' in navigator && typeof ServiceWorkerRegistration.prototype.periodicSync !== 'undefined'
 let indexedDbSupported = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
 let storageSupported = 'storage' in navigator && 'StorageManager' in window
 let persistentStorageSupported = navigator.storage && navigator.storage.persist
 let fileApiSupported = ('File' in window && 'FileReader' in window && 'FileList' in window && 'Blob' in window)
-let btSupported = 'bluetooth' in navigator
+// let btSupported = 'bluetooth' in navigator
 let mediaDevicesSupported = 'mediaDevices' in navigator
 let geoSupported = 'geolocation' in navigator
 
@@ -47,10 +47,6 @@ class PWASupport extends Component{
       'key': bgSyncSupported
     },
     {
-      'name': 'Periodic Sync',
-      'key': periodicSyncSupported
-    },
-    {
       'name': 'Index DB',
       'key': indexedDbSupported
     },
@@ -65,10 +61,6 @@ class PWASupport extends Component{
     {
       'name': 'File API',
       'key': fileApiSupported
-    },
-    {
-      'name': 'Bluetooth',
-      'key': btSupported
     },
     {
       'name': 'Media Device',
