@@ -14,6 +14,7 @@ export default class PrimaryButton extends Component {
       return (
         <Link
           data-testid="primary-button"
+          data-cyid={children}
           to={to}
           onClick={onClick}
           className={`${styles.container} ${className || ''}`}
@@ -26,6 +27,7 @@ export default class PrimaryButton extends Component {
     return (
       <button
         data-testid="primary-button"
+        data-cyid={children}
         type={type}
         className={`${styles.container} ${disabled ? styles.disabled : ''} ${className || ''}`}
         onClick={disabled ? () => {} : onClick}

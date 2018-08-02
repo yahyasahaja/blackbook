@@ -50,7 +50,7 @@ export default class ScopeBar extends Component {
           
           if (to) return (
             <Link 
-              className={`${styles.tab} ${isSelected ? styles.selected : ''}`} key={i} 
+              className={`${label} ${styles.tab} ${isSelected ? styles.selected : ''}`} key={i} 
               onClick={this.onClick.bind(this, data, i)}
               to={to}
             > 
@@ -60,7 +60,7 @@ export default class ScopeBar extends Component {
 
           return (
             <button 
-              className={`${styles.tab} ${isSelected ? styles.selected : ''}`} key={i} 
+              className={`${label} ${styles.tab} ${isSelected ? styles.selected : ''}`} key={i} 
               onClick={this.onClick.bind(this, data, i)}
             > 
               <span>{label}</span>
