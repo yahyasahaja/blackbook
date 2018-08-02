@@ -19,7 +19,7 @@ export default class Home extends Component {
     let {cart} = this.props
     return (
       <div className={styles.container} > 
-        { !('onappinstalled' in window) &&
+        { !localStorage.getItem('blanja-hash-appinstalled') &&
           <div className={styles.a2hsIcon} onClick={() => {
             swu.setManualGuide(true, true)
           }}> 
