@@ -81,6 +81,7 @@ class TransactionPayment extends Component {
     return order.payments.map((payment, i) => (
       <div
         key={i} className={styles.list}
+        data-cy="pay"
         onClick={this.openPopup.bind(this, payment)}
       >
         <div className={styles.left} >
@@ -111,7 +112,7 @@ class TransactionPayment extends Component {
       {
         popupUrl
           ? <div className={styles.popup} >
-            <div className={styles.close} onClick={() => this.setState({ popupUrl: null })} >&times;</div>
+            <div data-cy="close" className={styles.close} onClick={() => this.setState({ popupUrl: null })} >&times;</div>
             <iframe
               ref={el => this.iframe = el}
               // onLoad={e => {
