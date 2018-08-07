@@ -89,10 +89,11 @@ import {
   dialog,
   serviceWorkerUpdate as swu,
   overlayLoading,
-  snackbar
+  reloadCountdownTimer as rct,
+  // snackbar
 } from './services/stores'
-snackbar.show('lul')
-setTimeout(() => snackbar.show('lul 2'), 3000)
+// snackbar.show('lul')
+// setTimeout(() => snackbar.show('lul 2'), 3000)
 
 //INNER_CONFIG
 let BOTTOM_TAB_BAR_DATA = [
@@ -255,6 +256,20 @@ class AppRouter extends Component {
               title={dialog.title}
             >
               {dialog.content}
+            </Dialog>
+          </section>
+          <section>
+            <Dialog
+              actions={[
+                {
+                  label: `Reload ${rct.countDown}`,
+                  onClick: rct.refreshPage
+                }
+              ]}
+              active={rct.shouldReload}
+              title="Telah terjadi kesalahan!"
+            >
+              Klik reload untuk memuat ulang
             </Dialog>
           </section>
           <section>

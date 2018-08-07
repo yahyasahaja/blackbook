@@ -14,6 +14,7 @@ import serviceWorkerUpdate from './ServiceWorkerUpdate'
 import overlayLoading from './OverlayLoading'
 import countdownTimer from './CountdownTimer'
 import info from './Info'
+import reloadCountdownTimer from './ReloadCountdownTimer'
 
 export { 
   categories,
@@ -32,6 +33,7 @@ export {
   overlayLoading,
   countdownTimer,
   info,
+  reloadCountdownTimer,
 }
 
 export default { 
@@ -51,4 +53,5 @@ export default {
   overlayLoading,
   countdownTimer,
   info,
+  reloadCountdownTimer,
 }

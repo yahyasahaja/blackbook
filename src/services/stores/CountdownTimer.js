@@ -7,8 +7,6 @@ import {
 } from '../../config'
 
 class Countdown{
-  
-  
   @observable min_countdown
   @observable sec_countdown
   @observable countdownIntervalId = null
