@@ -122,13 +122,14 @@ class EditableList extends Component {
 
     return (
       <div
+        data-cy="transaction-item"
         className={`${styles.container} ${disabled ? styles.disabled : ''} ${className}`}
         style={style || {}}
       >
         <div className={`${styles.section} ${styles.section1}`} >
           <div className={styles.left} >
             <div className={styles.id} >{id}</div>
-            <div>{moment(time).format('DD MMM YYYY')}</div>
+            <div data-cy="tanggal" >{moment(time).format('DD MMM YYYY')}</div>
           </div>
 
           <div className={styles.right} >
@@ -142,7 +143,7 @@ class EditableList extends Component {
         <div className={styles.devider} />
         <div className={`${styles.section} ${styles.section3}`} >
           <div className={styles.des} >Status Terakhir: </div>
-          <div className={styles.status} >{
+          <div data-cy="status" className={styles.status} >{
             status === 'COMPLETE'
               ? 'SELESAI'
               : status === 'UNPAID'
