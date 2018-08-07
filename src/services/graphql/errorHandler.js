@@ -1,6 +1,6 @@
 import {onError} from 'apollo-link-error'
 import Raven from 'raven-js'
-import { user } from '../stores'
+import { user, reloadCountdownTimer } from '../stores'
 
 export default onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -19,7 +19,7 @@ export default onError(({ graphQLErrors, networkError }) => {
     if (networkError.statusCode === 401) {
       (async () => {
         await user.logout() 
-        location.reload()
+        reloadCountdownTimer.reload()
       })()
     }
   }
