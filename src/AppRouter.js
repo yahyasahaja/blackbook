@@ -89,7 +89,10 @@ import {
   dialog,
   serviceWorkerUpdate as swu,
   overlayLoading,
+  snackbar
 } from './services/stores'
+snackbar.show('lul')
+setTimeout(() => snackbar.show('lul 2'), 3000)
 
 //INNER_CONFIG
 let BOTTOM_TAB_BAR_DATA = [

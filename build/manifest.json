@@ -31,7 +31,7 @@
       "src": "/static/icon/"
     }
   ],
-  "start_url": "/home?open=pwa",
+  "start_url": "/home",
   "display": "standalone",
   "background_color": "#ea0f00",
   "theme_color": "#ea0f00",

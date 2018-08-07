@@ -1,11 +1,15 @@
 export const AUTHORIZATION_TOKEN_STORAGE_URI = 'hashAuthToken'
 
 describe('Check Transaction Detail', () => {
+  before(() => {
+    cy.visit('/')
+    cy.login()
+  })
+
   it('Visit login page first', () => {
     localStorage.clear()
-    cy.visit('/')
     cy.url().should('include', '/home')
-
+    
     cy.get('a[href="/account"]').click()
     cy.url().should('include', '/account')
     

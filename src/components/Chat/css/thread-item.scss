@@ -8,6 +8,10 @@
   align-items: center;
   margin-bottom: 1px;
 
+  img {
+    object-fit: cover;
+  }
+
   .text {
     color: #333;
     display: flex;
