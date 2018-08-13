@@ -48,7 +48,10 @@ export default function register() {
           e.userChoice.then(choice => {
             if (choice.outcome === 'acepted')
               localStorage.setItem('blanja-hash-appinstalled', true)
-            else localStorage.setItem('blanja-hash-appinstalled', false)
+            else {
+              localStorage.setItem('blanja-hash-appinstalled', false)
+              swu.setManualGuide(true, true)
+            }
           })
         }
       })

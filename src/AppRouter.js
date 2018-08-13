@@ -291,7 +291,10 @@ class AppRouter extends Component {
               actions={[
                 {
                   label: 'Batal',
-                  onClick: () => swu.setCancellable(true)
+                  onClick: () => {
+                    swu.setCancellable(true)
+                    swu.setManualGuide(true, true)
+                  }
                 },
                 {
                   label: 'Tambahkan Ke Layar Utama',
