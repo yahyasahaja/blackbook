@@ -111,7 +111,7 @@ class TransactionPayment extends Component {
 
       {
         popupUrl
-          ? <div className={styles.popup} >
+          ? <div data-cy="popup" className={styles.popup} >
             <div data-cy="close" className={styles.close} onClick={() => this.setState({ popupUrl: null })} >&times;</div>
             <iframe
               ref={el => this.iframe = el}
