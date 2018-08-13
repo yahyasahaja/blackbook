@@ -6,6 +6,12 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 import styles from './css/index-async.scss'
 
+//COMPONENT
+import { snackbar, reloadCountdownTimer } from '../../services/stores'
+
+//CONFIG
+// import { IS_PROD } from '../../config'
+
 //EXPORT ALL
 export class AsyncComponent extends Component {
   state = {
@@ -20,7 +26,9 @@ export class AsyncComponent extends Component {
           let mod = await this.props.load()
           this.setState({ loading: false, Component: mod.default })
         } catch (err) {
-          history.back()
+          reloadCountdownTimer.reload()
+          snackbar.show('There\'s an Error occured')
+          console.log('ERROR WHILE LOADING PAGE ROUTE', err)
         }
       }
     )

@@ -56,6 +56,7 @@ describe('Cart', () => {
   it('Show list of items', () => {
     cy.get('a[href="/cart"]').eq(1).click()
     cy.url().should('include', '/cart')
+    cy.wait(1000)
     cy.get('div[data-testid="cart-list"] > div[data-testid="cart-item"]').should('have.length', 4)
   })
 

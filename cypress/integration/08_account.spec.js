@@ -41,6 +41,7 @@ describe('Account Page', () => {
     cy.get('input').eq(2).type('1234qwer')
     cy.get('button[type="submit"]').click()
     cy.get('[data-react-toolbox="dialog"]').should('be.visible')
+    cy.wait(1000)
     cy.get('button').contains('Ok').click()
     cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
     cy.get('button').contains('Cancel').click()

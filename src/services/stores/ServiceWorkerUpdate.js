@@ -40,7 +40,10 @@ class ServiceWorkerUpdate {
       this.promptInstall.prompt()
       this.promptInstall.userChoice.then(choice => {
         if (choice.outcome === 'accepted') console.log('INSTALLING APP')
-        else console.log('INSTALLING APP REJECTED')
+        else {
+          console.log('INSTALLING APP REJECTED')
+          this.setManualGuide(true, true)
+        }
         this.promptInstall = null
       })
     }

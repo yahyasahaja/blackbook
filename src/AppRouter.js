@@ -66,9 +66,13 @@ const Sellers = asyncComponent(() =>
 const Transaction = asyncComponent(() =>
   import(/*webpackChunkName: "Transaction"*/ './screens/Account/Transaction')
 )
-const Seller = asyncComponent(() => import('./screens/Seller'))
+const Seller = asyncComponent(() => 
+  import(/*webpackChunkName: "Seller"*/ './screens/Seller')
+)
 
-const PWASupport = asyncComponent(() => import('./screens/PWA'))
+const PWASupport = asyncComponent(() => 
+  import(/*webpackChunkName: "PWA"*/ './screens/PWA')
+)
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -85,7 +89,11 @@ import {
   dialog,
   serviceWorkerUpdate as swu,
   overlayLoading,
+  reloadCountdownTimer as rct,
+  // snackbar
 } from './services/stores'
+// snackbar.show('lul')
+// setTimeout(() => snackbar.show('lul 2'), 3000)
 
 //INNER_CONFIG
 let BOTTOM_TAB_BAR_DATA = [
@@ -254,6 +262,20 @@ class AppRouter extends Component {
             <Dialog
               actions={[
                 {
+                  label: `Reload ${rct.countDown}`,
+                  onClick: rct.refreshPage
+                }
+              ]}
+              active={rct.shouldReload}
+              title="Telah terjadi kesalahan!"
+            >
+              Klik reload untuk memuat ulang
+            </Dialog>
+          </section>
+          <section>
+            <Dialog
+              actions={[
+                {
                   label: `Reload ${swu.countDown}`,
                   onClick: swu.refreshPage
                 }
@@ -269,7 +291,10 @@ class AppRouter extends Component {
               actions={[
                 {
                   label: 'Batal',
-                  onClick: () => swu.setCancellable(true)
+                  onClick: () => {
+                    swu.setCancellable(true)
+                    swu.setManualGuide(true, true)
+                  }
                 },
                 {
                   label: 'Tambahkan Ke Layar Utama',

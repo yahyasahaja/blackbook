@@ -160,7 +160,6 @@ class Home extends Component {
     this.addScrollListener(this.props.isSelected)
     this.checkScroll()
     this.fetchSellers()
-    
   }
 
   componentWillUnmount(){
@@ -169,6 +168,7 @@ class Home extends Component {
   }
 
   async fetchSellers() {
+    // console.log('FETCHING SELLERS')
     try {
       this.isFetchingSellers = true
 
@@ -179,10 +179,10 @@ class Home extends Component {
         variables: {
           offset: 0,
           limit: 3
-        }
-        // fetchPolicy: 'network-only'
+        },
+        fetchPolicy: 'network-only'
       })
-
+      // console.log('ALL SELLERS RESULT: ', allSellers)
       this.allSellers = allSellers.sellers
     } catch (e) {
       console.log(e)
@@ -237,7 +237,7 @@ class Home extends Component {
       let product = products[i]
 
       if (products.length > 15) {
-        if (i === 11) {
+        if (i == 11) {
           finalProducts.push({ allSellersSection: true })
           continue
         }
@@ -246,7 +246,7 @@ class Home extends Component {
       finalProducts.push(product)
     }
 
-    if (products.length < 15) {
+    if (products.length <= 15) {
       finalProducts.push({ allSellersSection: true })
     }
 
@@ -413,6 +413,7 @@ class Home extends Component {
   }
 
   render() {
+    this.allSellers
     let settings = {
       autoplay: true,
       dots: true,

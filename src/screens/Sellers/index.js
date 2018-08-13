@@ -47,7 +47,7 @@ class Sellers extends Component {
         data: { allSellers },
       } = await client.query({
         query: allSellersQuery,
-        // fetchPolicy: 'network-only'
+        fetchPolicy: 'network-only'
       })
 
       this.allSellers = allSellers.sellers

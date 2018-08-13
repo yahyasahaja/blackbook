@@ -503,40 +503,19 @@ const productRelationsQuery = gql`
 query productRelationsQuery ($productId: ID!, $limit: Int) {
   productRelations(productId: $productId, limit: $limit) {
     product {
-      id,
-      name,
-      sku,
-      description,
-      images {
-        url,
-        priority
-      },
-      variants {
-        name,
-        quantity 
-      },
-      keywords,
-      category,
-      shipping {
-        length,
-        width,
-        height,
-        weight
-      },
-      seller {
-        name,
-        profilePicture,
-        country,
-      },
+      id
+      name
       price {
-        value,
+        value
         currency
-      },
-      country,
-      liked,
-      created,
-      updated,
-      shareUrl,
+      }
+      variants {
+        name
+      }
+      images {
+        url
+      }
+      shareUrl
     }
     
     count
@@ -560,7 +539,8 @@ export default withTracker(compose(
       name: 'productRelationsQuery',
       options: props => {
         return {
-          variables: { productId: props.match.params.product_id, limit: MAX_FETCH_LENGTH }
+          variables: { productId: props.match.params.product_id, limit: MAX_FETCH_LENGTH },
+          fetchPolicy: 'network-only'
         }
       }
     }
