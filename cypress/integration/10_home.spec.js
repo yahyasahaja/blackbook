@@ -23,15 +23,26 @@ describe('Home', () => {
       }
     })
 
-    cy.wait('@productRequest').then(xhr => {
-      console.log(1, xhr)
+    cy.wait('@productRequest').then(() => {
       cy.get('div[data-testid="product-card"]').should('exist', true)
     })
+  })
 
+  it('Match sellers order', () => {
+    cy.visit('/favorite')
+    cy.url().should('include', '/favorite')
+
+    cy.server()
     cy.route('POST', 'https://product-hub-testing.azurewebsites.net/graphql').as('productRequest')
-    cy.wait('@productRequest').then(xhr => {
-      console.log(1, xhr)
-      cy.get('div[data-testid="product-card"]')
+
+    cy.visit('/home', {
+      onBeforeLoad: (win) => {
+        win.fetch = null
+      }
+    })
+
+    cy.wait('@productRequest').then(() => {
+      cy.get('a[data-testid="seller-card"]').should('exist', true)
     })
   })
 })

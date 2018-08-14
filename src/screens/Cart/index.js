@@ -43,6 +43,8 @@ class Cart extends Component {
   }
 
   componentDidMount() {
+    cart.refetchDataFromLocalStorage()
+
     // this.calculateTotalCost()
     this.disposer = observe(cart.data, () => {
       this.calculateTotalCost()

@@ -30,7 +30,7 @@ export default class SellerListCard extends Component {
 
     return (
       <Link 
-        data-id="seller-card" to={url} 
+        data-testid="seller-card" to={url} 
         className={`${className} ${styles.container} ${large ? styles.large : ''}`} 
       >
         <div className={styles.wrapper} >

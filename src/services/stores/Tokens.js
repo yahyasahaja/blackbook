@@ -24,7 +24,7 @@ class Tokens {
     if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI))) {
       this.rawAuthToken = observable(authToken)
       this.setAuthToken(authToken)
-    } else this.setAuthToken()
+    }
   }
 
   //THIS MUST BE RAW TOKEN, NO BEARER!

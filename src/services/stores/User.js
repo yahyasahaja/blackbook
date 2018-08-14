@@ -25,13 +25,6 @@ import {
 const isNotLocal = () => !(location.href.includes('localhost') || /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href))
 //STORE
 class User {
-  constructor() {
-    //INIT_USER_DATA
-    this.fetchData().then(data => {
-      if (data) this.registerPushSubscription()
-    }).catch(e => console.log('CANT FETCH USER DATA', e))
-  }
-
   @observable data = null
   @observable profilePictureURL
   @observable isLoading
@@ -368,8 +361,9 @@ class User {
           return res
         }
 
-        this.logout()
+        // this.logout()
         this.isLoading = false
+        console.log('LOGOUT')
         return false
       }).catch(res => {
         console.log('ERROR ON FETCHING USER DATA', res)
