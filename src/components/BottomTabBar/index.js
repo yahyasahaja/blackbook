@@ -93,7 +93,6 @@ class BottomTabBar extends Component {
         }}
       >
         <div className={styles.content}>{this.renderData()}</div>
-
         <Route path="*" render={props => <TabBar {...props} icons={data} />} />
       </div>
     )

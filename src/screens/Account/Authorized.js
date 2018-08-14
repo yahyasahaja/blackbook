@@ -117,6 +117,7 @@ class Account extends Component {
               onClick={() => {
                 this.props.history.push('/account/transaction/')
               }}
+              className="daftar-transaksi"
             />
             <ListItem
               caption="Ubah Kata Sandi"
