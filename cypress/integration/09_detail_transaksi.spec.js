@@ -2,13 +2,10 @@ import moment from 'moment'
 import gql from 'graphql-tag'
 
 describe('Check Transaction Detail', () => {
-  before(() => {
-    cy.visit('/')
-    cy.login()
-  })
 
   it('Visit login page first', () => {
     localStorage.clear()
+    cy.visit('/')
     cy.url().should('include', '/home')
     
     cy.get('a[href="/account"]').click()
@@ -83,7 +80,7 @@ describe('Check Transaction Detail', () => {
         } 
         `,
         variables: {
-          offset: 10,
+          offset: 0,
           limit: 10,
           status: 'PROGRESS'
         }
@@ -91,7 +88,14 @@ describe('Check Transaction Detail', () => {
       headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTAzYTViMDQtMzQ1Yi00MDE1LTkxMTQtODc0YmM2ZTNmZTY5IiwibXNpc2RuIjoiODg2MyIsImlhdCI6MTUzMDU4NjI0MSwiZXhwIjoxNTQwOTU0MjQxfQ.or-ZI-yQU_J5h328MvRFns7LSlwIpW72Rv9OkD1oOgI'
       }
-    }).then(response => console.log(response.data))
+    }).then(response => {
+      let data = response.body.data.myOrders.orders
+      console.log(data)
+      console.log('graphql success')
+      cy.get(':nth-child(1) > .vertical-list--value--1IsmsY5p').should($text => {
+        expect($text).to.contain(data[0].id)
+      })
+    })
     cy.get(':nth-child(1) > .vertical-list--value--1IsmsY5p').should($text => {
       expect($text).to.contain('IVAA00000000007')
     })
@@ -124,6 +128,40 @@ describe('Check Transaction Detail', () => {
     })
     cy.get('button[data-cyid="Detail Transaksi"]').eq(0).click()
     cy.wait(2000)
+    cy.server()
+    cy.request({
+      method: 'POST',
+      url: 'https://ordering-service-testing.azurewebsites.net/graphql', 
+      body: { 
+        query: gql`
+        query RetrieveTransactionData($offset: Int, $limit: Int $status: [OrderStatusEnum!]) {
+          myOrders(status: $status, order: DESC, limit: $limit, offset: $offset) {
+            orders {
+              id
+              status
+              time
+            }
+            totalCount
+          }
+        } 
+        `,
+        variables: {
+          offset: 0,
+          limit: 10,
+          status: 'COMPLETE'
+        }
+      },
+      headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTAzYTViMDQtMzQ1Yi00MDE1LTkxMTQtODc0YmM2ZTNmZTY5IiwibXNpc2RuIjoiODg2MyIsImlhdCI6MTUzMDU4NjI0MSwiZXhwIjoxNTQwOTU0MjQxfQ.or-ZI-yQU_J5h328MvRFns7LSlwIpW72Rv9OkD1oOgI'
+      }
+    }).then(response => {
+      let data = response.body.data.myOrders.orders
+      console.log(data)
+      console.log('graphql success')
+      cy.get(':nth-child(1) > .transaction-list--section1--24Jz68Q4 > .transaction-list--left--2_uOtQoo > .transaction-list--id--1RYVQFA8').should($text => {
+        expect($text).to.contain(data[0].id)
+      })
+    })
     cy.get('a[href="/account/transaction"]').click()
   })
 
