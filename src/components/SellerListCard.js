@@ -29,7 +29,10 @@ export default class SellerListCard extends Component {
     }
 
     return (
-      <Link to={url} className={`${className} ${styles.container} ${large ? styles.large : ''}`} >
+      <Link 
+        data-id="seller-card" to={url} 
+        className={`${className} ${styles.container} ${large ? styles.large : ''}`} 
+      >
         <div className={styles.wrapper} >
           <div style={style} className={styles['image-wrapper']} >
             <img className={styles.img} src={imageUrl || StoreIcon} alt="seller image" />

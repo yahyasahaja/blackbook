@@ -233,6 +233,7 @@ class AppRouter extends Component {
               <Route path="/seller/:seller_id" component={Seller}/>
               <Route path="/sellers" component={Sellers} />
               <Route path="/app-support" component={PWASupport}/>
+              <Redirect from="*" to="/home" />
             </Switch>
           </div>
 
