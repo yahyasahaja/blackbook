@@ -206,6 +206,7 @@ class AppRouter extends Component {
           >
             <Switch>
               <Redirect from="/" exact to="/home" />
+              
               <Route
                 path="*"
                 render={props => (
@@ -233,6 +234,7 @@ class AppRouter extends Component {
               <Route path="/seller/:seller_id" component={Seller}/>
               <Route path="/sellers" component={Sellers} />
               <Route path="/app-support" component={PWASupport}/>
+              <Redirect from ="*" exact to="/home"/>                                                                                                                                                                                                        />
             </Switch>
           </div>
 
