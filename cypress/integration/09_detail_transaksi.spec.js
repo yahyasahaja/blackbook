@@ -96,9 +96,6 @@ describe('Check Transaction Detail', () => {
         expect($text).to.contain(data[0].id)
       })
     })
-    cy.get(':nth-child(1) > .vertical-list--value--1IsmsY5p').should($text => {
-      expect($text).to.contain('IVAA00000000007')
-    })
     cy.get('a[href="/account/transaction"]').click()
     cy.url().should('include', '/transaction')
   })
