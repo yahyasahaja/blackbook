@@ -78,8 +78,7 @@ class Tokens {
 
   @action
   setForgotPasswordToken(token){
-    this.forgotPasswordToken = token
-    return this.forgotPasswordToken
+    return this.forgotPasswordToken = token
   }
 
   @action
