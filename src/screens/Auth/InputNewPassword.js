@@ -125,7 +125,7 @@ class NewPassword extends Component {
       <div className={styles['container']}>
         <div className={styles.top}>
           <div className={styles.pageTitle}>
-            Blanja
+            Jualbli
           </div>
           <div className={styles.desc}>
             Masukkan password baru Anda untuk mengganti password

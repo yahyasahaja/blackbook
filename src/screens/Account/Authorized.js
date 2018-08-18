@@ -127,13 +127,13 @@ class Account extends Component {
               }}
             />
             <ListItem
-              caption="Berjualan di Blanja"
+              caption="Berjualan di Jualbli"
               leftIcon="business_center"
               onClick={() =>
                 dialog.show(
-                  'Berjualan di Blanja',
+                  'Berjualan di Jualbli',
                   <div className={styles.berjualan}>
-                    Untuk berjualan di portal Blanja, anda perlu mengunduh
+                    Untuk berjualan di portal Jualbli, anda perlu mengunduh
                     aplikasi untuk penjual dan mengunjungi halaman
                     <a
                       className={styles.link}
@@ -185,7 +185,7 @@ class Account extends Component {
               onClick={() =>
                 dialog.show(
                   'Keluar',
-                  'Apakah Anda yakin ingin keluar dari Blanja?',
+                  'Apakah Anda yakin ingin keluar dari Jualbli?',
                   this.closeActions
                 )
               }
