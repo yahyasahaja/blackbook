@@ -2,7 +2,7 @@
   TOP BAR
   by Yahya Sahaja
   created on February 3, 2018
-  for Hash.Blanja
+  for Hash.Jualbli
 
   USAGE 
   props.relative = {

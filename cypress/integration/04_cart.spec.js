@@ -2,8 +2,11 @@ let temp = ''
 
 describe('Cart', () => {
   beforeEach(() => {
+    cy.visit('/home')
+    cy.url().should('include', '/home')
     localStorage.setItem('cart', temp)
-    cy.visit('/')
+    cy.wait(1000)
+    // console.log('INI CART NYA', localStorage.getItem('cart'), '\nTEMP', temp)
   })
 
   it('Can visit cart page', () => {
@@ -54,14 +57,21 @@ describe('Cart', () => {
   })
 
   it('Show list of items', () => {
+    localStorage.setItem('cart', temp)
+    // console.log('CART NYA', localStorage.getItem('cart'))
     cy.get('a[href="/cart"]').eq(1).click()
     cy.url().should('include', '/cart')
+
     cy.wait(1000)
+    
+    // console.log('CART', localStorage.getItem('cart'), 'TEMP', temp)
     cy.get('div[data-testid="cart-list"] > div[data-testid="cart-item"]').should('have.length', 4)
   })
 
   it('Can remove an item', () => {
+    localStorage.setItem('cart', temp)
     cy.get('a[href="/cart"]').eq(1).click()
+    cy.url().should('include', '/cart')
 
     cy.get('span[data-testid="remove-cart-item"]').eq(3).click()
     cy.get('div[data-testid="cart-list"] > div[data-testid="cart-item"]').should('have.length', 3).then(() => {
@@ -72,13 +82,16 @@ describe('Cart', () => {
   })
 
   it('Has correct total price', () => {
+    localStorage.setItem('cart', temp)
     cy.get('a[href="/cart"]').eq(1).click()
+    cy.url().should('include', '/cart')
 
     cy.server()
     cy.route('POST', 'https://ordering-service-testing.azurewebsites.net/graphql').as('orderingRequest')
 
     cy.visit('/cart', {
       onBeforeLoad: (win) => {
+        localStorage.setItem('cart', temp)
         win.fetch = null
       }
     })
@@ -93,9 +106,10 @@ describe('Cart', () => {
       cy.wait(500)
       cy.get('[data-testid=cart-shipping-cost]').then(shippingCostElement => {
         cy.get('[data-testid="cart-total"]').then(totalElement => {
-          const totalCart = totalElement.text().replace('.', '').split(' ')[1]
+          const totalCart = totalElement.text().replace('.', '').replace(',', '').split(' ')[1]
           const shippingCost = shippingCostElement.text().replace('.', '').split(' ')[1]
           const sum = total + Number(shippingCost)
+          console.log('TOTAL CART', totalCart)
           expect(sum).to.be.equals(Number(totalCart))
         })
       })

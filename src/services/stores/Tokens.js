@@ -24,7 +24,7 @@ class Tokens {
     if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI))) {
       this.rawAuthToken = observable(authToken)
       this.setAuthToken(authToken)
-    } else this.setAuthToken()
+    }
   }
 
   //THIS MUST BE RAW TOKEN, NO BEARER!
@@ -78,8 +78,7 @@ class Tokens {
 
   @action
   setForgotPasswordToken(token){
-    this.forgotPasswordToken = token
-    return this.forgotPasswordToken
+    return this.forgotPasswordToken = token
   }
 
   @action

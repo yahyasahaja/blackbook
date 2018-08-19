@@ -17,7 +17,53 @@ import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import ImageLoader from '../../components/ImageLoader'
 
 //STORE
-import { appStack } from '../../services/stores'
+import { appStack, snackbar } from '../../services/stores'
+
+window.Clipboard = (function (window, document, navigator) {
+  var textArea,
+    copy
+
+  function isOS() {
+    return navigator.userAgent.match(/ipad|iphone/i)
+  }
+
+  function createTextArea(text) {
+    textArea = document.createElement('textArea')
+    textArea.value = text
+    document.body.appendChild(textArea)
+  }
+
+  function selectText() {
+    var range,
+      selection
+
+    if (isOS()) {
+      range = document.createRange()
+      range.selectNodeContents(textArea)
+      selection = window.getSelection()
+      selection.removeAllRanges()
+      selection.addRange(range)
+      textArea.setSelectionRange(0, 999999)
+    } else {
+      textArea.select()
+    }
+  }
+
+  function copyToClipboard() {
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+  }
+
+  copy = function (text) {
+    createTextArea(text)
+    selectText()
+    copyToClipboard()
+  }
+
+  return {
+    copy: copy
+  }
+})(window, document, navigator)
 
 //COMPONENTs
 @observer
@@ -36,8 +82,9 @@ class PromoDetail extends Component {
   }
 
   copy = () => {
-    this.inputCode.select()
+    window.Clipboard.copy(this.inputCode.value)
     document.execCommand('Copy')
+    snackbar.show('Kode berhasil disalin')
   }
 
   renderContent = () => {
@@ -63,7 +110,7 @@ class PromoDetail extends Component {
             {title}
           </div>
           <div className={styles.desc}>
-            <div dangerouslySetInnerHTML={{__html: description || 'Loading deskripsi promo...'}} />
+            <div dangerouslySetInnerHTML={{ __html: description || 'Loading deskripsi promo...' }} />
           </div>
         </div>
 
@@ -111,7 +158,7 @@ class PromoDetail extends Component {
               Syarat dan Ketentuan
             </div>
 
-            <div dangerouslySetInnerHTML={{__html: terms}} />
+            <div dangerouslySetInnerHTML={{ __html: terms }} />
           </div>
         </div>
       </div>

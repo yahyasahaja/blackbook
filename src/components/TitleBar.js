@@ -26,7 +26,7 @@ export default class Home extends Component {
             <Badge icon="bookmark" />
           </div>
         }
-        <div className={styles.title}><span>Blanja</span></div> 
+        <div className={styles.title}><img src="/static/img/logo-500.png" alt=""/></div> 
         {cart && <Link to="/cart" className={styles.icon}><Badge badge={badges.CART} icon="cart" /></Link> }
       </div>
     )

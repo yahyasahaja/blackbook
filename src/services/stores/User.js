@@ -25,13 +25,6 @@ import {
 const isNotLocal = () => !(location.href.includes('localhost') || /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href))
 //STORE
 class User {
-  constructor() {
-    //INIT_USER_DATA
-    this.fetchData().then(data => {
-      if (data) this.registerPushSubscription()
-    }).catch(e => console.log('CANT FETCH USER DATA', e))
-  }
-
   @observable data = null
   @observable profilePictureURL
   @observable isLoading
@@ -235,7 +228,8 @@ class User {
     country,
     zip_code,
     subscription,
-    city
+    city,
+    transactionId,
   }) => {
     let data = {}
     this.isLoadingUpdateProfile = true
@@ -248,8 +242,13 @@ class User {
     if (zip_code) data.zip_code = zip_code
     if (subscription) data.push_id = JSON.stringify(subscription)
     if (city) data.city = city
+    if (transactionId) data.transactionId = transactionId
     
-    return axios.post(getIAMEndpoint('/register'), data)
+    return axios.post(getIAMEndpoint('/register'), data, {
+      headers: {
+        Authorization: tokens.bearerToken
+      }
+    })
       .then(({ data: { is_ok, data: token } }) => {
         this.isLoadingUpdateProfile = false
 
@@ -291,7 +290,7 @@ class User {
   }
 
   @action
-  register = ({ name, msisdn, password, address, country, zip_code, city }) => {
+  register = ({ name, msisdn, password, address, country, zip_code, city, transactionId }) => {
     password = btoa(password)
 
     return getSubscription().then(subscription => {
@@ -303,7 +302,8 @@ class User {
         country,
         zip_code,
         subscription,
-        city
+        city,
+        transactionId,
       })
     })
   }
@@ -368,8 +368,9 @@ class User {
           return res
         }
 
-        this.logout()
+        // this.logout()
         this.isLoading = false
+        console.log('LOGOUT')
         return false
       }).catch(res => {
         console.log('ERROR ON FETCHING USER DATA', res)

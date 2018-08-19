@@ -124,14 +124,14 @@ class Register extends Component {
   }
 
   onConfirmClicked = async () => {
-    let res = await user.confirmOTP(this.msisdn, this.state.otp, this.secret)
+    let { is_ok, validToken } = await user.confirmOTP(this.msisdn, this.state.otp, this.secret)
 
-    if (!res.is_ok) {
+    if (!is_ok) {
       this.setState({otp_error: 'Kode konfirmasi tidak valid'})
       return snackbar.show('Kode konfirmasi tidak valid')
     }
     
-    this.register()
+    this.register(validToken)
   }
 
   @action
@@ -203,7 +203,7 @@ class Register extends Component {
     }, 1000)
   }
 
-  register() {
+  register(transactionId) {
     let {
       countryCode,
       password,
@@ -214,6 +214,7 @@ class Register extends Component {
     let { msisdn } = this
     
     user.register({
+      transactionId,
       name,
       msisdn,
       password,
@@ -242,7 +243,7 @@ class Register extends Component {
     return (
       <div className={styles.container} >
         <div className={styles.top} >
-          <div className={styles.title} ><span>Blanja</span></div>
+          <div className={styles.title} ><span>Jualbli</span></div>
           <div className={styles.desc} ><span>
             Masukkan data diri anda untuk menjadi anggota BLANJA
           </span></div>

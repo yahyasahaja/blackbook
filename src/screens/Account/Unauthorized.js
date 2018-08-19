@@ -16,7 +16,7 @@ class Account extends Component {
         <div className={styles.text} >
           <span className={`mdi mdi-account-circle ${styles.icon}`} />
           <span className={styles.title} >Belum punya akun?</span>
-          <span className={styles.desc} >Daftar sekarang dan dapatkan berbagai diskon member Blanja</span>
+          <span className={styles.desc} >Daftar sekarang dan dapatkan berbagai diskon member Jualbli</span>
         </div>
 
         <div className={styles.button} >

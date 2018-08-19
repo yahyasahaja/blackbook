@@ -9,11 +9,7 @@ import { CART_STORAGE_URI } from '../../config'
 //STORE
 class Cart {
   constructor() {
-    let carts
-    if ((carts = localStorage.getItem(CART_STORAGE_URI))) {
-      this.data = JSON.parse(carts)
-      badges.set(badges.CART, this.data.length)
-    }
+    this.refetchDataFromLocalStorage()
   }
 
   @observable data = []
@@ -34,6 +30,15 @@ class Cart {
   @observable addressFotoFile = ''
   @observable addressFotoInformation = ''
   @observable shippingCost = 0
+
+  @action
+  refetchDataFromLocalStorage() {
+    let carts
+    if ((carts = localStorage.getItem(CART_STORAGE_URI))) {
+      this.data = JSON.parse(carts)
+      badges.set(badges.CART, this.data.length)
+    }
+  }
 
   @action
   add(arg) {

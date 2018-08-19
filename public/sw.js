@@ -200,9 +200,9 @@ self.addEventListener('push', function (event) {
     })
   }
   ///
-  const title = context.title || 'Blanja-Commerce'
+  const title = context.title || 'Jualbli-Commerce'
   const options = {
-    body: context.body || 'Pesan baru dari Blanja',
+    body: context.body || 'Pesan baru dari Jualbli',
     icon: '/static/img/icons/android-chrome-192x192.png',
     vibrate: [100, 50, 100]
   }

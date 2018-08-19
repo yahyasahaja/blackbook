@@ -233,7 +233,7 @@ class ForgotPassword extends Component {
       <div className={styles['container']}>
         <div className={styles.top}>
           <div className={styles.pageTitle}>
-            Blanja
+            Jualbli
           </div>
           <div className={styles.desc}>
             Masukkan nomor telepon Anda untuk menerima kode melalui SMS

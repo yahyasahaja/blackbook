@@ -68,7 +68,7 @@ describe('Account Page', () => {
     cy.get('button').contains('Ok').click()
   })
 
-  it('Berjualan di Blanja', () => {
+  it('Berjualan di Jualbli', () => {
     cy.get('@list-item').eq(3).click()
     cy.get('[data-react-toolbox="dialog"]').should('be.visible')
     cy.get('[data-react-toolbox="dialog"]').find('button').contains('Okay').click()

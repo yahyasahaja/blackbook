@@ -251,7 +251,7 @@ class PromoDetail extends Component {
       id === 'twitter'
         ? `https://twitter.com/share?url=${link}`
         : id === 'facebook'
-          ? `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=Blanja`
+          ? `https://www.facebook.com/sharer/sharer.php?u=${link}&quote=Jualbli`
           : `https://social-plugins.line.me/lineit/share?url=${link}`,
       '',
       'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
