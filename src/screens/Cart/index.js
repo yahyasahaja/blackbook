@@ -152,7 +152,7 @@ class Cart extends Component {
   }
 
   renderDetail() {
-    let currency = user.data ? convertCountryCurrency(user.data.country) : config.COUNTRY_CODE
+    let currency = convertCountryCurrency(user.data ? user.data.country : config.COUNTRY_CODE)
     return (
       <div data-testid="cart-detail" className={styles.detail}>
         <div className={styles.row}>
