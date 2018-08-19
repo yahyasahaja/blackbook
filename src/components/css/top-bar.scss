@@ -12,7 +12,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    background: white;
+    background: #f8f8f8;
     border-bottom: 1px solid #e1e1e1;
     max-width: $max-width;
     margin: auto;
@@ -21,7 +21,7 @@
 
   .content {
     width: 100%;
-    background: white;
+    background: #f8f8f8;
     margin-bottom: 55px;
     min-height: calc(100vh - 55px);
 
@@ -30,7 +30,7 @@
       position: relative;
       top: 0;
       width: 100%;
-      background: white;
+      background: #f8f8f8;
       border-bottom: 1px solid #e1e1e1;
       z-index: 1;
     }
