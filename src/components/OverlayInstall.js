@@ -32,7 +32,7 @@ export default class OverlayInstall extends Component {
 
   handler = () => {
     if (this.state.checked)
-      localStorage.setItem('blanja-hash-appinstalled', false)
+      localStorage.setItem('jualbli-hash-appinstalled', false)
     swu.setManualGuide(false)
   }
   render() {

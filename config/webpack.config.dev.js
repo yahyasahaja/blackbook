@@ -91,7 +91,7 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web'
-      //'blanja-analytics' : path.resolve('src/google-analytics.js')
+      //'jualbli-analytics' : path.resolve('src/google-analytics.js')
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -246,7 +246,7 @@ module.exports = {
       staticFileGlobs: ['build/manifest.json', 'build/static/css/style.css'],
       // Don't precache sourcemaps (they're large) and build asset manifest:
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
-      cacheId: 'blanja-hash-cra',
+      cacheId: 'jualbli-hash-cra',
       importScripts: ['/sw.js']
     }),
     // Moment.js is an extremely popular library that bundles large locale files

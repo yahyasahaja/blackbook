@@ -343,7 +343,7 @@ module.exports = new Promise(function(resolve) {
           ],
           // Don't precache sourcemaps (they're large) and build asset manifest:
           staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
-          cacheId: 'blanja-hash-cra',
+          cacheId: 'jualbli-hash-cra',
           importScripts: [
             '/sw.js',
           ]

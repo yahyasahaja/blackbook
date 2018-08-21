@@ -88,7 +88,7 @@ class Login extends Component {
         <div className={styles.top} >
           <div className={styles.title} ><span>Jualbli</span></div>
           <div className={styles.desc} >
-            <span>Masukkan nomor telepon anda untuk masuk ke blanja.tw</span>
+            <span>Masukkan nomor telepon anda untuk masuk ke jualbli.com</span>
           </div>
         </div>
 

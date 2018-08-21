@@ -245,7 +245,7 @@ class Register extends Component {
         <div className={styles.top} >
           <div className={styles.title} ><span>Jualbli</span></div>
           <div className={styles.desc} ><span>
-            Masukkan data diri anda untuk menjadi anggota BLANJA
+            Masukkan data diri anda untuk menjadi anggota Jualbli
           </span></div>
         </div>
 
