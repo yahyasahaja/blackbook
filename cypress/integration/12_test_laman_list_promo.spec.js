@@ -1,7 +1,7 @@
 import moment from 'moment'
 import gql from 'graphql-tag'
 
-let responsePromo = [], promoBeginTime = [], promoEndTime = [], promoImage = []
+let responsePromo = [], promoBeginTime = [], promoEndTime = []
 
 describe('Promo', () => {
   
