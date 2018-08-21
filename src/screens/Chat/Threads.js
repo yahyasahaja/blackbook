@@ -28,7 +28,7 @@ class Threads extends Component {
         return thread
       })
       
-      console.log('update threads')
+      console.log('update threads', threads)
       chat.threads = observable(threads)
     }
 
@@ -108,7 +108,7 @@ class Threads extends Component {
 }
 
 const getThreadsQuery = gql`
-  {
+  query getThreadsQuery {
     threads(perspective: BUYER) {
       data {
         id
