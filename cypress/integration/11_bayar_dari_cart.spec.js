@@ -149,9 +149,14 @@ describe('Pay product from Cart', () => {
         expect(text.text()).to.be.equal(tempPrice[idx])
       })
     })
+
+    cy.server()
+    cy.route('POST', 'https://ordering-service-testing.azurewebsites.net/graphql').as('orderingRequest')
+
     cy.get('button[data-cyid=KONFIRMASI]').click()
-    cy.wait(2000)
-    cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+    cy.wait('@orderingRequest').then(() => {
+      cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+    })
     cy.wait(3000)
     cy.get('button[data-cyid=Bayar]').eq(0).click({force: true})
     cy.get('div[data-cy=pay]').each(($element) => {
