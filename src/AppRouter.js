@@ -240,7 +240,7 @@ class AppRouter extends Component {
               <Route path="/sellers" component={Sellers} />
               <Route path="/app-support" component={PWASupport}/>
               <Route path="/home" component={null} />
-              <Route path="/cart" component={null} />
+              <Route path="/chat" component={null} />
               <Route path="/favorite" component={null} />
               <Route path="/promo" component={null} />
               <Route path="/account" component={null} />
