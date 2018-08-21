@@ -84,7 +84,7 @@ class TransactionPayment extends Component {
         data-cy="pay"
         onClick={this.openPopup.bind(this, payment)}
       >
-        <div className={styles.left} >
+        <div data-cy="payment-status" className={styles.left} >
           {renewLoading === payment.id ? 'Loading ... ' : convertPaymentStatus(payment.status)}
           {
             Date.now() > new Date(payment.expDate).getTime()

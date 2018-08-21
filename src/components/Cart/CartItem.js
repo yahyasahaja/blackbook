@@ -41,10 +41,10 @@ export default class CartItem extends Component {
           style={{ backgroundImage: `url(${image})` }}
         />
         <div className={styles.info}>
-          <span className={styles.name}>{name}</span>
+          <span data-cyid="name" className={styles.name}>{name}</span>
           <div>
-            <span className={styles.variant}>{variant}</span>
-            <span className={styles.amount}>{`Jumlah: ${amount}`}</span>
+            <span data-cyid="variant" className={styles.variant}>{variant}</span>
+            <span data-cyid="amount" className={styles.amount}>{`Jumlah: ${amount}`}</span>
           </div>
         </div>
         <div className={styles.right}>
@@ -58,7 +58,7 @@ export default class CartItem extends Component {
             }}
             className={`mdi mdi-delete ${styles.delete}`}
           />
-          <span className={styles.price}>
+          <span data-cyid="price" className={styles.price}>
             {convertToMoneyFormat(value * amount, currency)}
           </span>
         </div>
