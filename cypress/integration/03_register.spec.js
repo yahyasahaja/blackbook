@@ -3,6 +3,15 @@ export const AUTHORIZATION_TOKEN_STORAGE_URI = 'hashAuthToken'
 const TEST_PHONE_NUMBER_NOT_EXIST = '46030693630'
 const TEST_PHONE_NUMBER_EXIST = '3963968936'
 const TEST_VALID_TOKEN = 'VALID-TOKENiioehriuenoinvoiewjioejg'
+const TEST_INVALID_OTP_CODE = 'testInvalidOTPCode'
+const TEST_VALID_OTP_CODE = 'testValidOTPCode'
+const TEST_INVALID_OTP_TOKEN = 'testInvalidOTPToken'
+const TEST_VALID_OTP_TOKEN = 'testvalidOTPToken'
+const TEST_REGISTER_TOKEN = 'testRegisterToken'
+const TEST_USER = {
+  name: 'Test Name',
+  msisdn: TEST_PHONE_NUMBER_NOT_EXIST,
+}
 
 describe('Authentication', () => {
   it('Visits the register page', () => {
@@ -112,12 +121,52 @@ describe('Authentication', () => {
       'https://iam-message-testing.azurewebsites.net/otp-sms/*',
       {
         is_ok: false,
-        error: 'INVALID OTP'
+        error: TEST_INVALID_OTP_TOKEN
+      }
+    )
+
+    cy.wait(1000)
+
+    cy.get('input[name="otp"').type(TEST_INVALID_OTP_CODE)
+    cy.get('button').contains('Konfirmasi').click()
+    cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+  })
+
+  it('OTP confirmation is valid and register', () => {
+    cy.server()
+    cy.route(
+      'POST',
+      'https://iam-message-testing.azurewebsites.net/otp-sms/*',
+      {
+        is_ok: true,
+        validToken: TEST_VALID_OTP_TOKEN
       }
     )
     
+    cy.route(
+      'POST',
+      'https://iam-message-testing.azurewebsites.net/register',
+      {
+        is_ok: true,
+        data: TEST_REGISTER_TOKEN
+      }
+    )
+
+    cy.route(
+      'GET',
+      'https://iam-message-testing.azurewebsites.net/user',
+      {
+        is_ok: true,
+        data: TEST_USER
+      }
+    )
+
+    cy.wait(1000)
+
+    cy.get('input[name="otp"').clear()
+    cy.get('input[name="otp"').type(TEST_VALID_OTP_CODE)
     cy.get('button').contains('Konfirmasi').click()
-    // cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+    cy.url().should('include', '/account')
   })
 
   // it('Login, Set local storage token and redirect to /account after login', () => {
