@@ -160,7 +160,7 @@ class NewPassword extends Component {
             <Input
               type="password"
               label="Password Baru"
-              data-testid="password"
+              data-testid="new-password"
               required
               onChange={this.handleChange.bind(this, 'password')}
               value={this.state.password}

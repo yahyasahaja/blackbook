@@ -29,23 +29,6 @@ describe('Forgot password', () => {
     cy.get('a[href="/auth/forgot"]').click()
     cy.url().should('include', '/auth/forgot')
   })
-
-  // it('Register', () => {
-  //   const numbers = '0123456789'
-  //   let phoneNumber = '62'
-  //   for (var i = 0; i < 10; i++)
-  //     phoneNumber += numbers.charAt(Math.floor(Math.random() * numbers.length))
-
-  //   cy.get('input[name=name]').type('Test User')
-  //   cy.get('.country_code').click()
-  //   cy.get('.country_code > ul > li').contains('+62').click()
-  //   cy.get('input[name=phone_number]').type(phoneNumber)
-  //   cy.get('input[name=password]').type('12qwaszx')
-  //   cy.get('textarea[name=address]').type('Test address')
-    
-
-  // })
-
   // TODO: register test
 
   it('Phone number is not exist', () => {
@@ -136,6 +119,32 @@ describe('Forgot password', () => {
     cy.get('input[name="otp"').type(TEST_VALID_OTP_CODE)
     cy.get('button').contains('Konfirmasi').click()
     cy.url().should('include', '/auth/forgot/new')
+  })
+
+  it('New password and retype should be the same', () => {
+    cy.get('input[data-testid="new-password"]').type('not')
+    cy.get('input[data-testid="retype-password"]').type('match')
+    cy.get('[type="submit"]').click()
+    cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+  })
+
+  it('Change password', () => {
+    cy.server()
+    cy.route(
+      'POST',
+      'https://iam-message-testing.azurewebsites.net/forgot/*',
+      {
+        is_ok: true,
+      }
+    )
+
+    cy.wait(1000)
+
+    cy.get('input[data-testid="new-password"]').clear().type('isMatch')
+    cy.get('input[data-testid="retype-password"]').clear().type('isMatch')
+    cy.get('[type="submit"]').click()
+    cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+    cy.url().should('include', '/auth/login')
   })
 
   // it('Login, Set local storage token and redirect to /account after login', () => {
