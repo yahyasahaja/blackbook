@@ -160,12 +160,14 @@ class NewPassword extends Component {
             <Input
               type="password"
               label="Password Baru"
+              data-testid="password"
               required
               onChange={this.handleChange.bind(this, 'password')}
               value={this.state.password}
             />
             <Input
               type="password"
+              data-testid="retype-password"
               label="Konfirmasi Password"
               required
               onChange={this.handleChange.bind(this, 'confirmPassword')}

@@ -253,6 +253,7 @@ class ForgotPassword extends Component {
             <Input
               type="tel"
               label="Nomor Telepon"
+              name="phone_number"
               required
               onChange={this.handleChange.bind(this, 'telp')}
               value={this.state.telp}
