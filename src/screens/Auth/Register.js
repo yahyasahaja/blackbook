@@ -239,7 +239,7 @@ class Register extends Component {
     return (
       <div className={styles.container} >
         <div className={styles.top} >
-          <div className={styles.title} ><span>Jualbli</span></div>
+          <div className={styles.title}><img src="/static/img/logo-500.png" alt=""/></div> 
           <div className={styles.desc} ><span>
             Masukkan data diri anda untuk menjadi anggota Jualbli
           </span></div>

@@ -19,9 +19,15 @@
       text-align: center;
       font-weight: 700;
       font-size: 30pt;
-      width: 100%;
+      width: 200px;
       cursor: default;
       color: $secondary-color;
+      margin: auto;
+      margin-top: 19px;
+
+      img {
+        width: 100%;
+      }
     }
 
     .desc {
