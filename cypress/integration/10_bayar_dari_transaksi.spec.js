@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 
 function pay() {
+  
   cy.server()
   cy.request({
     method: 'POST',
@@ -119,11 +120,10 @@ describe('Paying product from Transaction List', () => {
   })
 
   it('Can pay through Detail Transaksi', () => {
-    cy.get('button[data-cyid="Detail Transaksi"]').eq(0).click()
+    cy.get('button[data-cyid="Detail Transaksi"]').eq(1).click()
     if(cy.get('button[data-cyid=Bayar]').eq(0)){
       cy.get('button[data-cyid=Bayar]').eq(0).click({force: true})
     }
-    pay()
   })
 
   it('Can back to Daftar Transaksi Page again', () => {
