@@ -64,16 +64,12 @@ class Register extends Component {
   @observable otpModalActive = false
   @observable otpConfirmationActions = [
     {
-      label: 'Kirim Ulang', onClick: () => {
-        this.toggleActiveConfirmationModal()
-      },
+      label: 'Kirim Ulang', onClick: this.toggleActiveConfirmationModal,
       disabled: false
     },
     {
-      label: 'Konfirmasi', onClick: () => {
-        this.toggleActiveConfirmationModal()
-      }
-    },
+      label: 'Konfirmasi', onClick: this.toggleActiveConfirmationModal
+    }
   ]
   @observable count = this.DEFAULT_COUNT
   @observable secret = ''

@@ -31,14 +31,14 @@ class ProductCard extends Component {
 
     return (
       <Link className={styles.container} data-testid="promo-card" to={to}>
-        <div className={styles.picture}>
+        <div data-cyid="promo-image" className={styles.picture}>
           <ImageLoader src={image} alt="Product Image" />
         </div>
 
         <div className={styles.wrapper}>
           <div className={styles.left}>
-            <span className={styles.title}>{title}</span>
-            <span className={styles.time}>
+            <span data-cyid="promo-title" className={styles.title}>{title}</span>
+            <span data-cyid="promo-time" className={styles.time}>
               {moment(begin).format('DD MMM YY')}
               {' - '}
               {moment(end).format('DD MMM YY')}

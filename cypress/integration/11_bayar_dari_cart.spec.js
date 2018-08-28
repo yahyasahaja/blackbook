@@ -19,20 +19,33 @@ describe('Pay product from Cart', () => {
     cy.login()
     cy.visit('/')
     cy.url().should('include', '/home')
-    cy.get('div[data-testid="product-card"]').eq(0).find('div[data-testid="product-card-action"] > div').as('productCardAction1')
-    cy.get('@productCardAction1').eq(1).find('button').click() //click Buy button
-    cy.get('@productCardAction1').eq(0).find('button').click() //click Buy after popup appear
-    cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
-    cy.get('a[href="/cart"]').eq(1).find('div[data-testid="badge-count"]').contains('1')
+    cy.server()
+    cy.route('POST', 'https://product-hub-testing.azurewebsites.net/graphql').as('productRequest')
 
-    //1 more item
-    cy.get('div[data-testid="product-card"]').eq(1).find('div[data-testid="product-card-action"] > div').as('productCardAction2')
-    cy.get('@productCardAction2').eq(1).find('button').click() // click the buy button
-    cy.get('@productCardAction2').eq(0).find('select').eq(1).select('3') // change amount
-    cy.get('@productCardAction2').eq(0).find('button').click() // click buy button after detail pop out
+    cy.visit('/home', {
+      onBeforeLoad: (win) => {
+        win.fetch = null
+      }
+    })
 
-    // check badge count
-    cy.get('a[href="/cart"]').eq(1).find('div[data-testid="badge-count"]').contains('2')
+    cy.wait('@productRequest').then(() => {
+      cy.get('div[data-testid="product-card"]').eq(0).find('div[data-testid="product-card-action"] > div').as('productCardAction1')
+      cy.get('@productCardAction1').eq(1).find('button').click() //click Buy button
+      cy.get('@productCardAction1').eq(0).find('button').click() //click Buy after popup appear
+      cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+      cy.get('a[href="/cart"]').eq(1).find('div[data-testid="badge-count"]').contains('1')
+  
+      //1 more item
+      cy.get('div[data-testid="product-card"]').eq(1).find('div[data-testid="product-card-action"] > div').as('productCardAction2')
+      cy.get('@productCardAction2').eq(1).find('button').click() // click the buy button
+      cy.get('@productCardAction2').eq(0).find('select').eq(1).select('3') // change amount
+      cy.get('@productCardAction2').eq(0).find('button').click() // click buy button after detail pop out
+  
+      // check badge count
+      cy.get('a[href="/cart"]').eq(1).find('div[data-testid="badge-count"]').contains('2')
+    })
+
+    
 
     //proceed to cart page
     cy.get('a[href="/cart"]').eq(1).click()
@@ -149,9 +162,14 @@ describe('Pay product from Cart', () => {
         expect(text.text()).to.be.equal(tempPrice[idx])
       })
     })
+
+    cy.server()
+    cy.route('POST', 'https://ordering-service-testing.azurewebsites.net/graphql').as('orderingRequest')
+
     cy.get('button[data-cyid=KONFIRMASI]').click()
-    cy.wait(2000)
-    cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+    cy.wait('@orderingRequest').then(() => {
+      cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+    })
     cy.wait(3000)
     cy.get('button[data-cyid=Bayar]').eq(0).click({force: true})
     cy.get('div[data-cy=pay]').each(($element) => {
