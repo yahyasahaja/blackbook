@@ -69,8 +69,9 @@ class Tokens {
 
   @action
   setAuthToken(token) {
+    if (!token) return
     this.rawAuthToken = token
-
+    
     localStorage.setItem(AUTHORIZATION_TOKEN_STORAGE_URI, token)
     setAxiosAuthorization(token)
     return token

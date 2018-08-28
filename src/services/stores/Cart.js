@@ -9,7 +9,7 @@ import { CART_STORAGE_URI } from '../../config'
 //STORE
 class Cart {
   constructor() {
-    this.refetchDataFromLocalStorage()
+    this.refreshData()
   }
 
   @observable data = []
@@ -32,7 +32,7 @@ class Cart {
   @observable shippingCost = 0
 
   @action
-  refetchDataFromLocalStorage() {
+  refreshData() {
     let carts
     if ((carts = localStorage.getItem(CART_STORAGE_URI))) {
       this.data = JSON.parse(carts)

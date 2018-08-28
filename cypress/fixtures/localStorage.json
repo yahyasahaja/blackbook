@@ -1,0 +1,54 @@
+[
+  {
+    "product": {
+      "id": "7c394623-c042-4a55-a946-f523d36570bd",
+      "name": "Celana Jeans Lea",
+      "price": {
+        "value": 174,
+        "currency": "NTD",
+        "__typename": "Price"
+      },
+      "variants": [
+        {
+          "name": "Garment Blue",
+          "__typename": "Variant"
+        },
+        {
+          "name": "Garment Black",
+          "__typename": "Variant"
+        },
+        {
+          "name": "Hitam polos",
+          "__typename": "Variant"
+        },
+        {
+          "name": "Bio Wash",
+          "__typename": "Variant"
+        },
+        {
+          "name": "Biru Langit",
+          "__typename": "Variant"
+        },
+        {
+          "name": "Abu-Abu",
+          "__typename": "Variant"
+        },
+        {
+          "name": "Coklat",
+          "__typename": "Variant"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://mpf.azureedge.net/products-testing/7c394623-c042-4a55-a946-f523d36570bd/c6b0d04c-f086-4981-be12-d3ecc4c01dde",
+          "__typename": "Image"
+        }
+      ],
+      "shareUrl": "https://product-hub-testing.azurewebsites.net/static/product/7c394623-c042-4a55-a946-f523d36570bd",
+      "__typename": "Product",
+      "image": "https://mpf.azureedge.net/products-testing/7c394623-c042-4a55-a946-f523d36570bd/c6b0d04c-f086-4981-be12-d3ecc4c01dde"
+    },
+    "variant": "Garment Blue",
+    "amount": 1
+  }
+]

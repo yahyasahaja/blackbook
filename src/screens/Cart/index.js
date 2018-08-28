@@ -43,7 +43,7 @@ class Cart extends Component {
   }
 
   componentDidMount() {
-    cart.refetchDataFromLocalStorage()
+    cart.refreshData()
 
     // this.calculateTotalCost()
     this.disposer = observe(cart.data, () => {

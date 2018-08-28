@@ -145,6 +145,7 @@ class PromoDetail extends Component {
                 onClick={this.copy}
                 className={styles.copy}
                 type="submit"
+                data-testid="copy-promo-code"
               >
                 Salin Kode
               </button>

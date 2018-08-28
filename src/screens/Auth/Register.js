@@ -65,13 +65,13 @@ class Register extends Component {
   @observable otpConfirmationActions = [
     {
       label: 'Kirim Ulang', onClick: () => {
-        this.toggleActive()
+        this.toggleActiveConfirmationModal()
       },
       disabled: false
     },
     {
       label: 'Konfirmasi', onClick: () => {
-        this.toggleActive()
+        this.toggleActiveConfirmationModal()
       }
     },
   ]

@@ -1,7 +1,8 @@
 export const AUTHORIZATION_TOKEN_STORAGE_URI = 'hashAuthToken'
 
-const TEST_AVAILABLE_PHONE_NUMBER = '46030693630'
-const TEST_UNAVAILABLE_PHONE_NUMBER = '3963968936'
+const TEST_PHONE_NUMBER_NOT_EXIST = '46030693630'
+const TEST_PHONE_NUMBER_EXIST = '3963968936'
+const TEST_VALID_TOKEN = 'VALID-TOKENiioehriuenoinvoiewjioejg'
 
 describe('Authentication', () => {
   it('Visits the register page', () => {
@@ -50,7 +51,7 @@ describe('Authentication', () => {
       'https://iam-message-testing.azurewebsites.net/quick/*',
       {
         is_ok: true,
-        msisdn: TEST_UNAVAILABLE_PHONE_NUMBER
+        msisdn: TEST_PHONE_NUMBER_EXIST
       }
     )
 
@@ -58,14 +59,14 @@ describe('Authentication', () => {
     cy.url().should('include', '/auth/register')
 
     cy.get('input[name=name]').type('Test User')
-    cy.get('input[name=phone_number]').type(TEST_UNAVAILABLE_PHONE_NUMBER)
+    cy.get('input[name=phone_number]').type(TEST_PHONE_NUMBER_EXIST)
     cy.get('input[name=password]').type('alreadyexist')
     cy.get('textarea[name=address]').type('Test address')
     cy.get('[type=submit]').click()
     cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
   })
 
-  it('Phone number is available', () => {
+  it('Phone number is not exist', () => {
     localStorage.clear()
     cy.visit('/')
 
@@ -80,7 +81,16 @@ describe('Authentication', () => {
       'https://iam-message-testing.azurewebsites.net/quick/*',
       {
         is_ok: false,
-        msisdn: TEST_AVAILABLE_PHONE_NUMBER
+        msisdn: TEST_PHONE_NUMBER_NOT_EXIST
+      }
+    )
+
+    cy.route(
+      'POST',
+      'https://iam-message-testing.azurewebsites.net/otp-sms/*',
+      {
+        is_ok: true,
+        data: TEST_VALID_TOKEN,
       }
     )
 
@@ -88,11 +98,26 @@ describe('Authentication', () => {
     cy.url().should('include', '/auth/register')
 
     cy.get('input[name=name]').type('Test User')
-    cy.get('input[name=phone_number]').type(TEST_AVAILABLE_PHONE_NUMBER)
+    cy.get('input[name=phone_number]').type(TEST_PHONE_NUMBER_NOT_EXIST)
     cy.get('input[name=password]').type('alreadyexist')
     cy.get('textarea[name=address]').type('Test address')
     cy.get('[type=submit]').click()
-    cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+    cy.get('[data-react-toolbox="dialog"]').should('be.visible')
+  })
+
+  it('OTP confirmation is not valid', () => {
+    cy.server()
+    cy.route(
+      'POST',
+      'https://iam-message-testing.azurewebsites.net/otp-sms/*',
+      {
+        is_ok: false,
+        error: 'INVALID OTP'
+      }
+    )
+    
+    cy.get('button').contains('Konfirmasi').click()
+    // cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
   })
 
   // it('Login, Set local storage token and redirect to /account after login', () => {

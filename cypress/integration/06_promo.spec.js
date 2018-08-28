@@ -22,6 +22,11 @@ describe('Promo page', () => {
     })
   })
 
+  it('Copy promo code', () => {
+    cy.get('[data-testid="copy-promo-code"]').click()
+    cy.get('[data-react-toolbox="snackbar"]').should('be.visible')
+  })
+
   it('Order with wrong promo code', () => {
     cy.clearLocalStorage()
 
@@ -60,6 +65,7 @@ describe('Promo page', () => {
         cy.get('[data-testid="discount"]').should('contain', '- NTD '+randDisc.replace(/[\w]*/gi,''))
         cy.get('[data-testid="cart-total"]').should('contain', 'NTD '+total)
         cy.get('[data-testid="primary-button"]').click()
+        cy.get('[data-react-toolbox="dialog"]').should('be.visible')
       })
     })
   })
