@@ -1,9 +1,9 @@
 const prodSetup = {
-  iam : 'https://api.blanja.tw/iam',
-  productql : 'https://api.blanja.tw/productql',
-  orderql : 'https://api.blanja.tw/orderql',
-  chatql : 'https://api.blanja.tw/chatql',
-  userql : 'https://api.blanja.tw/userql'
+  iam : 'https://api.jualbli.com/iam',
+  productql : 'https://api.jualbli.com/productql',
+  orderql : 'https://api.jualbli.com/orderql',
+  chatql : 'https://api.jualbli.com/iam/chatql',
+  userql : 'https://api.jualbli.com/iam/userql'
 }
 
 export const IS_PROD = window.location.host.match(/^(?:www.)?blanja\.(?:tw|hk)/gi)

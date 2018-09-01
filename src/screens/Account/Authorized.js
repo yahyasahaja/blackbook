@@ -137,16 +137,16 @@ class Account extends Component {
                     aplikasi untuk penjual dan mengunjungi halaman
                     <a
                       className={styles.link}
-                      href="https://jual.blanja.tw"
+                      href="https://seller.jualbli.com"
                       target="_blank"
                     >
                       {' '}
-                      jual.blanja.tw{' '}
+                      seller.jualbli.com{' '}
                     </a>
                     melalui komputer.
                     <div className={styles['img-wrapper']}>
                       <a
-                        href="https://api.blanja.tw/sellerapp/android"
+                        href="https://api.jualbli.com/sellerapp/android"
                         target="_blank"
                       >
                         <img
@@ -156,7 +156,7 @@ class Account extends Component {
                         />
                       </a>
                       <a
-                        href="https://api.blanja.tw/sellerapp/ios"
+                        href="https://api.jualbli.com/sellerapp/ios"
                         target="_blank"
                       >
                         <img
