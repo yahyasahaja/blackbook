@@ -1,7 +1,7 @@
 const prodSetup = {
   iam : 'https://api.jualbli.com/iam',
-  productql : 'https://api.jualbli.com/productql',
-  orderql : 'https://api.jualbli.com/orderql',
+  productql : 'https://api.jualbli.com/product/graphql',
+  orderql : 'https://api.jualbli.com/order/graphql',
   chatql : 'https://api.jualbli.com/iam/chatql',
   userql : 'https://api.jualbli.com/iam/userql'
 }
