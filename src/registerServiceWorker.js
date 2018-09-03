@@ -43,13 +43,13 @@ export default function register() {
       )
       window.addEventListener('beforeinstallprompt', e => {
         e.preventDefault()
-        if (!localStorage.getItem('blanja-hash-appinstalled')) {
+        if (!localStorage.getItem('jualbli-hash-appinstalled')) {
           swu.setPrompt(e)
           e.userChoice.then(choice => {
             if (choice.outcome === 'acepted')
-              localStorage.setItem('blanja-hash-appinstalled', true)
+              localStorage.setItem('jualbli-hash-appinstalled', true)
             else {
-              localStorage.setItem('blanja-hash-appinstalled', false)
+              localStorage.setItem('jualbli-hash-appinstalled', false)
               swu.setManualGuide(true, true)
             }
           })
@@ -59,23 +59,23 @@ export default function register() {
 
     //check for first time visit
     // if (
-    //   !/blanja\.hk/gi.test(window.location.href) &&
+    //   !/jualbli\.hk/gi.test(window.location.href) &&
     //   window.outerWidth <= 768
     // ) {
-    //   if (!localStorage.getItem('blanja-hash-firstvisit')) {
+    //   if (!localStorage.getItem('jualbli-hash-firstvisit')) {
     //     localStorage.setItem(
-    //       'blanja-hash-firstvisit',
+    //       'jualbli-hash-firstvisit',
     //       moment()
     //         .add(10, 'minutes')
     //         .unix()
     //     )
     //   } else {
     //     if (window.location.href.includes('open=pwa'))
-    //       localStorage.setItem('blanja-hash-appinstalled', true)
+    //       localStorage.setItem('jualbli-hash-appinstalled', true)
     //     const now = moment().unix()
-    //     const first = localStorage.getItem('blanja-hash-firstvisit')
+    //     const first = localStorage.getItem('jualbli-hash-firstvisit')
     //     const show = first <= now
-    //     if (!localStorage.getItem('blanja-hash-appinstalled') && show) {
+    //     if (!localStorage.getItem('jualbli-hash-appinstalled') && show) {
     //       setTimeout(() => {
     //         swu.setManualGuide(true)
     //       }, 10000)
@@ -84,7 +84,7 @@ export default function register() {
     // }
 
     window.addEventListener('appinstalled', () => {
-      localStorage.setItem('blanja-hash-appinstalled', true)
+      localStorage.setItem('jualbli-hash-appinstalled', true)
     })
 
     window.addEventListener('load', () => {

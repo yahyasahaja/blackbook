@@ -6,7 +6,7 @@ const prodSetup = {
   userql : 'https://api.jualbli.com/iam/userql'
 }
 
-export const IS_PROD = window.location.host.match(/^(?:www.)?blanja\.(?:tw|hk)/gi)
+export const IS_PROD = window.location.host.match(/^(?:www.)?jualbli\.com/gi)
 export const COUNTRY_CODE = IS_PROD ? (window.location.host.substr(-2) === 'tw' ? 'TWN' : 'HKG') : 'TWN'
 
 export const PRODUCTS_ENDPOINT_URL = IS_PROD ? prodSetup.productql : 'https://product-hub-testing.azurewebsites.net/graphql'
