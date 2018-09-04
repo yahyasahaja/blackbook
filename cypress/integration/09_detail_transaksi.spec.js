@@ -82,13 +82,14 @@ describe('Check Transaction Detail', () => {
         variables: {
           offset: 0,
           limit: 10,
-          status: 'PROGRESS'
+          status: 'UNPAID'
         }
       },
       headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZTAzYTViMDQtMzQ1Yi00MDE1LTkxMTQtODc0YmM2ZTNmZTY5IiwibXNpc2RuIjoiODg2MyIsImlhdCI6MTUzMDU4NjI0MSwiZXhwIjoxNTQwOTU0MjQxfQ.or-ZI-yQU_J5h328MvRFns7LSlwIpW72Rv9OkD1oOgI'
       }
     }).then(response => {
+      console.log(response)
       let data = response.body.data.myOrders.orders
       console.log(data)
       console.log('graphql success')
