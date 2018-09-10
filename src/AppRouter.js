@@ -152,7 +152,7 @@ class AppRouter extends Component {
     console.log(`BUILD-${buildDate}`)
 
     user.fetchData().then(data => {
-      if (data) this.registerPushSubscription()
+      if (data) user.registerPushSubscription()
     }).catch(e => console.log('CANT FETCH USER DATA', e))
   }
 

@@ -216,6 +216,7 @@ class ProductCard extends Component {
                   </FlatButton>
                   <Link
                     to={{ pathname: '/chat/new', state: { productId: id } }}
+                    data-testid="chat"
                   >
                     <FlatButton icon="forum">Chat</FlatButton>
                   </Link>
