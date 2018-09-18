@@ -15,7 +15,7 @@ import { setAxiosAuthorization } from '../../utils'
 class Tokens {
   constructor() {
     //INIT_TOKENS
-    let apiToken, authToken
+    let authToken
     
     this.refetchAPIToken()
 

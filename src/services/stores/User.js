@@ -8,12 +8,14 @@ import ReactGA from 'react-ga'
 import {
   getIAMEndpoint,
   AUTHORIZATION_TOKEN_STORAGE_URI,
+  SELECTED_COUNTRY_STORAGE_URI,
 } from '../../config'
 
 //TOKENS
 import tokens from './Tokens'
 import favorites from './Favorites'
 import cart from './Cart'
+import country from './Country'
 
 //UTILS
 import {
@@ -364,6 +366,7 @@ class User {
         if (is_ok) {
           tokens.setAuthToken(raw)
           const res = this.setData(user)
+          country.setCountry(user.country.toLowerCase(), true)
           this.isLoading = false
           return res
         }

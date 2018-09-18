@@ -10,7 +10,7 @@ import styles from './css/title-bar.scss'
 import Badge from '../components/Badge'
 
 //STORE
-import { badges, serviceWorkerUpdate as swu, country } from '../services/stores'
+import { badges, serviceWorkerUpdate as swu, country, user } from '../services/stores'
 
 
 //COMPONENT
@@ -28,9 +28,11 @@ export default class Home extends Component {
             </div>
           }
           
-          <div className={styles.badge} onClick={country.openCountryPage} >
-            <Badge icon="earth" />
-          </div>
+          { !user.isLoggedIn &&
+            <div className={styles.badge} onClick={country.openCountryPage} >
+              <Badge icon="earth" />
+            </div>
+          }
         </div>
 
         <div className={styles.title}><img src="/static/img/logo-500.png" alt=""/></div> 

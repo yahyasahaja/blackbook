@@ -40,10 +40,10 @@ class Country {
   )
 
   @action
-  setCountry(country) {
+  setCountry(country, withoutReload) {
     this.currentCountry = country
     localStorage.setItem(SELECTED_COUNTRY_STORAGE_URI, country)
-    window.location.reload()
+    if (!withoutReload) window.location.reload()
   }
 }
 

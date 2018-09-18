@@ -21,13 +21,14 @@ export default class CountrySelection extends Component {
       <div 
         className={styles.container} 
         style={{display: country.isCountryPageOpened ? 'flex' : 'none'}} 
+        onClick={country.closeCountryPage}
       >
-        <div className={styles.close} onClick={country.closeCountryPage} >
+        <div className={styles.close}>
           <span>&times;</span>
         </div>
         <span className={styles.title} >Select Country</span>
 
-        <div className={styles.selection} >
+        <div className={styles.selection} onClick={e => e.stopPropagation()} >
           <RadioGroup name='comic' value={country.currentCountry} onChange={this.handleChange}>
             <RadioButton label='Taiwan' value='twn'/>
             <RadioButton label='Hongkong' value='hkg'/>
