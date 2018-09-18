@@ -15,6 +15,7 @@ import overlayLoading from './OverlayLoading'
 import countdownTimer from './CountdownTimer'
 import info from './Info'
 import reloadCountdownTimer from './ReloadCountdownTimer'
+import country from './Country'
 
 export { 
   categories,
@@ -34,6 +35,7 @@ export {
   countdownTimer,
   info,
   reloadCountdownTimer,
+  country,
 }
 
 export default { 
@@ -54,4 +56,5 @@ export default {
   countdownTimer,
   info,
   reloadCountdownTimer,
+  country,
 }

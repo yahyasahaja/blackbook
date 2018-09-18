@@ -6,6 +6,7 @@ import {
   getIAMEndpoint,
   API_TOKEN_STORAGE_URI,
   AUTHORIZATION_TOKEN_STORAGE_URI,
+  SELECTED_COUNTRY_STORAGE_URI
 } from '../../config'
 
 import { setAxiosAuthorization } from '../../utils'
@@ -15,11 +16,8 @@ class Tokens {
   constructor() {
     //INIT_TOKENS
     let apiToken, authToken
-
-    if ((apiToken = localStorage.getItem(API_TOKEN_STORAGE_URI)))
-      this.rawApiToken = observable(apiToken)
-    else
-      this.refetchAPIToken()
+    
+    this.refetchAPIToken()
 
     if ((authToken = localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI))) {
       this.rawAuthToken = observable(authToken)
@@ -50,9 +48,27 @@ class Tokens {
     return this.rawAuthToken
   }
 
+  @computed
+  get country() {
+    if (
+      this.rawApiToken !== null ||
+      this.rawApiToken != 'undefined' || 
+      this.rawApiToken != 'null'
+    ) {
+      if (this.rawApiToken.value.indexOf('SESSTWN') != -1) return 'twn'
+      return 'hkg'
+    }
+  }
+
   @action
   async refetchAPIToken() {
-    let hkg = location.host.indexOf('hktest') !== -1 || location.host.indexOf('.hk') !== -1
+    let hkg = (
+      location.host.indexOf('hktest') !== -1 || 
+      location.host.indexOf('.hk') !== -1 ||
+      localStorage.getItem(SELECTED_COUNTRY_STORAGE_URI) === 'hkg'
+    )
+
+    console.log('KE SINI GA SIH', hkg)
     let { data } = await axios.get(getIAMEndpoint(`/token${hkg ? '/hk' : ''}`))
 
     if (data) {

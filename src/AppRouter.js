@@ -91,8 +91,10 @@ import {
   overlayLoading,
   reloadCountdownTimer as rct,
   user,
+  country
   // snackbar
 } from './services/stores'
+import CountrySelection from './components/CountrySelection'
 // snackbar.show('lul')
 // setTimeout(() => snackbar.show('lul 2'), 3000)
 
@@ -247,6 +249,10 @@ class AppRouter extends Component {
               <Redirect from ="*" exact to="/home"/>                                                                                                                                                                                                        />
             </Switch>
           </div>
+
+          <section>
+            {country.currentCountry ? <CountrySelection /> : null}
+          </section>
 
           <section>
             <Snackbar

@@ -20,6 +20,7 @@ export const getIAMEndpoint = params => `${IAM_ENDPOINT_URL}${params || ''}`
 export const API_TOKEN_STORAGE_URI = 'hashAPIToken'
 export const AUTHORIZATION_TOKEN_STORAGE_URI = 'hashAuthToken'
 export const FAVORITES_STORAGE_URI = 'favorites'
+export const SELECTED_COUNTRY_STORAGE_URI = 'hashSelectedCountry'
 
 export const CART_STORAGE_URI = 'cart'
 
@@ -35,6 +36,7 @@ export default {
   API_TOKEN_STORAGE_URI,
   AUTHORIZATION_TOKEN_STORAGE_URI,
   FAVORITES_STORAGE_URI,
+  SELECTED_COUNTRY_STORAGE_URI,
 
   CART_STORAGE_URI,
 

@@ -35,20 +35,23 @@
     }
   }
 
-  .a2hsIcon, .a2hsIcon:visited {
+  .lefticon, .lefticon:visited {
     position: absolute;
     width: 60px;
     font-size: 20pt;
-    top: 0;
+    top: 10px;
     left: 0;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
     color: $secondary-color;
     cursor: pointer;
-    &:active {
-      opacity: .3;
+
+    .badge {
+      margin-left: 10px;
+
+      &:active {
+        opacity: .3;
+      }
     }
   }
 
