@@ -33,6 +33,12 @@ class Country {
     }
   }
 
+  @computed
+  get currentCountry2Words() {
+    if (this.currentCountry === 'hkg') return 'hk'
+    return 'tw'
+  }
+
   @observable currentCountry = (
     !localStorage.getItem(SELECTED_COUNTRY_STORAGE_URI)
       ? this.countryBasedOnToken

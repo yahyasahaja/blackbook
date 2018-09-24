@@ -30,7 +30,7 @@ export default class Home extends Component {
           
           { !user.isLoggedIn &&
             <div className={styles.badge} onClick={country.openCountryPage} >
-              <Badge icon="earth" />
+              <span className={styles.country}>{country.currentCountry2Words.toUpperCase()}</span>
             </div>
           }
         </div>
