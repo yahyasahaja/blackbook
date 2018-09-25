@@ -24,8 +24,8 @@ class Country {
   @computed
   get countryBasedOnToken() {
     if (
-      tokens.rawApiToken !== null ||
-      tokens.rawApiToken != 'undefined' || 
+      tokens.rawApiToken !== null &&
+      tokens.rawApiToken != 'undefined' && 
       tokens.rawApiToken != 'null'
     ) {
       if (tokens.rawApiToken.value.indexOf('SESSTWN') != -1) return 'twn'

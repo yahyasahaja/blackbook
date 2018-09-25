@@ -7,9 +7,10 @@ $size: 37px;
 }
 
 .image {
-  height: $size !important;
-  width: $size !important;
-  min-width: $size !important;
+  height: 100% !important;
+  width: 100% !important;
+  min-width: 37px !important;
+  object-fit: cover;
 }
 
 .letter {
