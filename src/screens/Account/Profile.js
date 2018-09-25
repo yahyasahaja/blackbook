@@ -33,6 +33,7 @@ class Profile extends Component {
 
   componentDidMount() {
     user.getProfilePictureURL()
+    console.log('USR DATA', user.data)
     this.setState({ ...user.data })
   }
 

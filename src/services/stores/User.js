@@ -8,7 +8,6 @@ import ReactGA from 'react-ga'
 import {
   getIAMEndpoint,
   AUTHORIZATION_TOKEN_STORAGE_URI,
-  SELECTED_COUNTRY_STORAGE_URI,
 } from '../../config'
 
 //TOKENS

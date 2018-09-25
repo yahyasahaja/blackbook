@@ -451,7 +451,7 @@ class Process extends Component {
 }
 
 const CreateCart = gql`
-  mutation CreateCart($input: CartInput) {
+  mutation CreateCart($input: CartInput!) {
     createCart(input: $input) {
       id
     }

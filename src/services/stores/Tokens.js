@@ -48,18 +48,6 @@ class Tokens {
     return this.rawAuthToken
   }
 
-  @computed
-  get country() {
-    if (
-      this.rawApiToken !== null ||
-      this.rawApiToken != 'undefined' || 
-      this.rawApiToken != 'null'
-    ) {
-      if (this.rawApiToken.value.indexOf('SESSTWN') != -1) return 'twn'
-      return 'hkg'
-    }
-  }
-
   @action
   async refetchAPIToken() {
     let hkg = (
@@ -68,7 +56,6 @@ class Tokens {
       localStorage.getItem(SELECTED_COUNTRY_STORAGE_URI) === 'hkg'
     )
 
-    console.log('KE SINI GA SIH', hkg)
     let { data } = await axios.get(getIAMEndpoint(`/token${hkg ? '/hk' : ''}`))
 
     if (data) {

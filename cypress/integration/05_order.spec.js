@@ -69,6 +69,7 @@ describe('Order', () => {
 
   it('Continue to order page', () => {
     cy.login()
+    cy.wait(1000)
     cy.get('[data-testid="cart-detail"] > button[data-testid="primary-button"]').click()
     cy.url().should('include', '/cart/process')
   })

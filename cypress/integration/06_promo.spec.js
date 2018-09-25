@@ -1,5 +1,3 @@
-import gql from 'graphql-tag'
-
 describe('Promo page', () => {
   it('Visits home', () => {
     localStorage.clear()
@@ -63,7 +61,7 @@ describe('Promo page', () => {
       method: 'POST',
       url: 'https://product-hub-testing.azurewebsites.net/graphql',
       body: {
-        query: gql`
+        query: `
         query activePromotions($limit: Int, $offset: Int){
           activePromotions(limit: $limit, offset: $offset){
             promotions{

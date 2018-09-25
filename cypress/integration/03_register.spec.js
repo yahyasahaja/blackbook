@@ -11,6 +11,14 @@ const TEST_REGISTER_TOKEN = 'testRegisterToken'
 const TEST_USER = {
   name: 'Test Name',
   msisdn: TEST_PHONE_NUMBER_NOT_EXIST,
+  address: 'Malang, Jawa Timur',
+  city:'Malang',
+  country: 'TWN',
+  enable: 1,
+  id: 17,
+  level: 0,
+  uuid: 'e03a5b04-345b-4015-9114-874bc6e3fe69',
+  zip_code: '65142',
 }
 
 describe('Authentication', () => {
