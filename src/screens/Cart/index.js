@@ -77,7 +77,7 @@ class Cart extends Component {
 
     const input = cart.data.slice().map(item => ({
       productId: item.product.id,
-      quantity: item.amount,
+      quantity: Number(item.amount),
     }))
 
     const country = user.data ? user.data.country : config.COUNTRY_CODE
@@ -89,7 +89,7 @@ class Cart extends Component {
           input: {
             country,
             items: input,
-            promotionCode: useVoucher ? voucherCode : '',
+            promotionCode: useVoucher ? voucherCode : null,
           },
         },
       })

@@ -1,5 +1,4 @@
 import moment from 'moment'
-import gql from 'graphql-tag'
 
 let responsePromo = [], promoBeginTime = [], promoEndTime = []
 
@@ -20,7 +19,7 @@ describe('Promo', () => {
       method: 'POST',
       url: 'https://product-hub-testing.azurewebsites.net/graphql',
       body:{
-        query: gql`
+        query: `
         query activePromotions($limit: Int, $offset: Int){
           activePromotions(limit: $limit, offset: $offset){
             promotions{

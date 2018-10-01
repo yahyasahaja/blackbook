@@ -1,5 +1,4 @@
 import moment from 'moment'
-import gql from 'graphql-tag'
 
 describe('Check Transaction Detail', () => {
 
@@ -67,7 +66,7 @@ describe('Check Transaction Detail', () => {
       method: 'POST',
       url: 'https://ordering-service-testing.azurewebsites.net/graphql', 
       body: { 
-        query: gql`
+        query: `
         query RetrieveTransactionData($offset: Int, $limit: Int $status: [OrderStatusEnum!]) {
           myOrders(status: $status, order: DESC, limit: $limit, offset: $offset) {
             orders {
@@ -82,7 +81,7 @@ describe('Check Transaction Detail', () => {
         variables: {
           offset: 0,
           limit: 10,
-          status: 'UNPAID'
+          status: [ 'UNPAID', 'PAID', 'PROGRESS']
         }
       },
       headers: {
@@ -93,9 +92,7 @@ describe('Check Transaction Detail', () => {
       let data = response.body.data.myOrders.orders
       console.log(data)
       console.log('graphql success')
-      cy.get(':nth-child(1) > .vertical-list--value--1IsmsY5p').should($text => {
-        expect($text).to.contain(data[0].id)
-      })
+      cy.get('[data-testid="id"]').then(el => expect(el.text()).to.be.equals(data[0].id))
     })
     cy.get('a[href="/account/transaction"]').click()
     cy.url().should('include', '/transaction')
@@ -131,7 +128,7 @@ describe('Check Transaction Detail', () => {
       method: 'POST',
       url: 'https://ordering-service-testing.azurewebsites.net/graphql', 
       body: { 
-        query: gql`
+        query: `
         query RetrieveTransactionData($offset: Int, $limit: Int $status: [OrderStatusEnum!]) {
           myOrders(status: $status, order: DESC, limit: $limit, offset: $offset) {
             orders {

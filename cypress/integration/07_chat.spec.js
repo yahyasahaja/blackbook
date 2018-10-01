@@ -12,12 +12,12 @@ describe('Chat page', () => {
 
   it('Chat with seller from chat page', () => {
     cy.get('a[href="/chat"]').click()
-    cy.wait(5000)
+    cy.wait(3000)
     cy.get('[class^="thread-item"]').eq(0).click()
     const dateNow = 'Test chat on '+new Date().toString()
     cy.get('textarea').type(dateNow)
     cy.get('textarea').siblings('button').click()
-    cy.wait(5000)
+    cy.wait(3000)
     cy.get('[class^="conversation--bubble"]').last().should('contain', dateNow)
   })
 
@@ -28,11 +28,11 @@ describe('Chat page', () => {
     cy.get('div[data-testid="product-card"]').eq(0).find('div[data-testid="product-card-action"] > div').as('productCardAction1')
     cy.get('@productCardAction1').eq(0).find('a[data-testid="chat"]').click()
     cy.url().should('contain', '/chat/new')
-    cy.wait(5000)
+    cy.wait(3000)
     const dateNow = 'Test chat on '+new Date().toString()
     cy.get('textarea').type(dateNow)
     cy.get('textarea').siblings('button').click()
-    cy.wait(5000)
+    cy.wait(3000)
     cy.get('[class^="conversation--bubble"]').last().should('contain', dateNow)
   }) 
 
@@ -78,7 +78,7 @@ describe('Chat page', () => {
       )
     })
 
-    cy.wait(5000)
+    cy.wait(3000)
     cy.visit('/chat/44')
     cy.get('[class^="conversation--bubble"]').last().should('contain', message)
   }) 

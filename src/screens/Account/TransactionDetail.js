@@ -182,7 +182,7 @@ class TransactionDetail extends Component {
     let channel = (payments[0] && payments[0].channel) || ''
 
     let list = [
-      { key: 'Nomor Transaksi', value: id },
+      { key: 'Nomor Transaksi', value: id, 'data-testid': 'id' },
       {
         key: 'Status Transaksi', value: status !== 'UNPAID' ? convertStatus(status) : (
           <div className={styles.status} >
@@ -246,7 +246,9 @@ class TransactionDetail extends Component {
       <div className={styles.container} >
         <div className={styles.info} >
           {list.map((data, i) => {
-            return <VerticalList key={i} dataKey={data.key} value={data.value} />
+            return <VerticalList 
+              data-testid={data['data-testid']} key={i} dataKey={data.key} value={data.value} 
+            />
           })}
         </div>
       </div>

@@ -103,7 +103,7 @@ describe('Cart', () => {
     }, 0)
 
     cy.wait('@orderingRequest').then(() => {
-      cy.wait(500)
+      cy.wait(3000)
       cy.get('[data-testid=cart-shipping-cost]').then(shippingCostElement => {
         cy.get('[data-testid="cart-total"]').then(totalElement => {
           const totalCart = totalElement.text().replace('.', '').replace(',', '').split(' ')[1]

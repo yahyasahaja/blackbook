@@ -7,7 +7,7 @@ function pay() {
     method: 'POST',
     url: 'https://ordering-service-testing.azurewebsites.net/graphql',
     body:{
-      query: gql`
+      query: `
       query order($orderId: ID!){
         order(orderId: $orderId){
           id

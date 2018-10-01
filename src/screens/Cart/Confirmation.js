@@ -285,7 +285,7 @@ class Process extends Component {
       const items = cart.data.slice().map(item => ({
         productId: item.product.id,
         variant: item.variant,
-        quantity: item.amount
+        quantity: Number(item.amount)
       }))
 
       const {

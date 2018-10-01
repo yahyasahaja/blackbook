@@ -13,7 +13,7 @@ export default class VerticalList extends Component {
           {this.props.dataKey}
         </div>
 
-        <div className={styles.value} >
+        <div data-testid={this.props['data-testid']} className={styles.value} >
           {this.props.value}
         </div>
       </div>
