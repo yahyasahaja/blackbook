@@ -42,11 +42,10 @@ class Cart {
   @observable shippingCost = 0
 
   @action
-  async fetchData() {
+  async fetchData(useLoading) {
     if (user && user.isLoggedIn) {
       try {
         this.isLoading = true
-        overlayLoading.show()
         const { 
           data: {
             myCarts: { totalCount, carts}
@@ -59,7 +58,6 @@ class Cart {
         })
   
         this.isLoading = false
-        overlayLoading.hide()
   
         if (totalCount > 0) {
 
@@ -78,7 +76,6 @@ class Cart {
 
         //TODO: merge if local exist
         badges.set(badges.CART, this.items.length)
-        console.log(this.items.slice(), this.id)
       } catch (e) {
         console.log('ERROR WHILE FETCHING CART DRAFT', e)
       }
