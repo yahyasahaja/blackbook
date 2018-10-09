@@ -91,7 +91,8 @@ import {
   overlayLoading,
   reloadCountdownTimer as rct,
   user,
-  country
+  country,
+  cart
   // snackbar
 } from './services/stores'
 import CountrySelection from './components/CountrySelection'
@@ -155,6 +156,7 @@ class AppRouter extends Component {
 
     user.fetchData().then(data => {
       if (data) user.registerPushSubscription()
+      cart.fetchData()
     }).catch(e => console.log('CANT FETCH USER DATA', e))
   }
 

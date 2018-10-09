@@ -145,7 +145,7 @@ class Process extends Component {
     return (
       <div className={styles.section}>
         <p className={styles.title}>DAFTAR PRODUK</p>
-        {cart.data
+        {cart.items
           .slice()
           .map((item, index) => (
             <ConfirmationItem
@@ -281,32 +281,13 @@ class Process extends Component {
     const { type, address, voucherCode } = this.props.location.state
 
     try {
-      // create cart
-      const items = cart.data.slice().map(item => ({
-        productId: item.product.id,
-        variant: item.variant,
-        quantity: Number(item.amount)
-      }))
-
-      const {
-        data: { createCart: cartData }
-      } = await orderingClient.mutate({
-        mutation: CreateCart,
-        variables: {
-          input: {
-            promotionCode: voucherCode,
-            items
-          }
-        }
-      })
-
       // create order
       const {
         data: { createOrderFromCart: orderData }
       } = await orderingClient.mutate({
         mutation: CreateOrderFromCart,
         variables: {
-          cartId: cartData.id,
+          cartId: cart.id,
           input: {
             shippingType: type === 'foto' ? 'IMAGE' : 'TEXT',
             shippingAddress:
@@ -453,6 +434,14 @@ class Process extends Component {
 const CreateCart = gql`
   mutation CreateCart($input: CartInput!) {
     createCart(input: $input) {
+      id
+    }
+  }
+`
+
+const UpdateCart = gql`
+  mutation UpdateCart($cartId: ID!, $input: CartInput!) {
+    updateCart(cartId: $cartId, input: $input) {
       id
     }
   }

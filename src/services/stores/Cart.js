@@ -6,19 +6,29 @@ import ReactGA from 'react-ga'
 
 import { CART_STORAGE_URI } from '../../config'
 
+import user from './User'
+import overlayLoading from './OverlayLoading'
+import snackbar from './Snackbar'
+
+import client from '../graphql/orderingClient'
+import gql from 'graphql-tag'
+
 //STORE
 class Cart {
   constructor() {
-    this.refreshData()
+    this.fetchData()
   }
 
-  @observable data = []
+  @observable id = null
+  @observable items = []
+  @observable cartData = {}
   @observable address = 'none'
   @observable channelIndex = 'none'
   @observable channel = 'none'
   @observable channelName = 'none'
   @observable addressList = []
   @observable saveNewAddress = false
+  @observable isLoading = false
   @observable
   newAddress = {
     address: '',
@@ -32,17 +42,65 @@ class Cart {
   @observable shippingCost = 0
 
   @action
-  refreshData() {
+  async fetchData() {
+    if (user && user.isLoggedIn) {
+      try {
+        this.isLoading = true
+        overlayLoading.show()
+        const { 
+          data: {
+            myCarts: { totalCount, carts}
+          } 
+        } = await client.query({
+          query: myCarts,
+          variables: {
+            status: 'DRAFT'
+          }
+        })
+  
+        this.isLoading = false
+        overlayLoading.hide()
+  
+        if (totalCount > 0) {
+
+          this.items = carts[0].items.map(data => {
+            data = { ...data }
+            data.product = { ...data.product }
+            if (data.product.images.length > 0) 
+              data.product.image = data.product.images[0].url
+
+            data.amount = data.quantity
+
+            return data
+          })
+          this.id = carts[0].id
+        }
+
+        //TODO: merge if local exist
+        badges.set(badges.CART, this.items.length)
+        console.log(this.items.slice(), this.id)
+      } catch (e) {
+        console.log('ERROR WHILE FETCHING CART DRAFT', e)
+      }
+      
+      return
+    }
+
     let carts
     if ((carts = localStorage.getItem(CART_STORAGE_URI))) {
-      this.data = JSON.parse(carts)
-      badges.set(badges.CART, this.data.length)
+      this.items = JSON.parse(carts)
+      badges.set(badges.CART, this.items.length)
     }
   }
 
+  @computed
+  get isDraftExist() {
+    return this.id != null && this.id != 'null'
+  }
+
   @action
-  add(arg) {
-    let state = this.data.slice()
+  async add(arg) {
+    let state = this.items.slice()
 
     // check if already exists
     const index = state.findIndex(
@@ -56,45 +114,135 @@ class Cart {
     } else {
       state.push(arg)
     }
+
+    //REACT GA
     ReactGA.plugin.execute('ec', 'addToCart', {
       ...arg
     })
     ReactGA.plugin.execute('ec', 'send')
     ReactGA.plugin.execute('ec', 'clear')
-    this.data.replace(state)
-    badges.set(badges.CART, this.data.length)
 
-    localStorage.setItem(CART_STORAGE_URI, JSON.stringify(state))
+    //FINISHING
+    this.items.replace(state)
+    if (await this.updateCart()) snackbar.show('Barang ditambahkan ke keranjang')
+    badges.set(badges.CART, this.items.length)
+
+    if (!user.isLoggedIn) localStorage.setItem(CART_STORAGE_URI, JSON.stringify(state))
+  }
+
+  async updateCart(voucherCode) {
+    if (!user || !user.isLoggedIn) return
+
+    const items = this.items.slice().map(item => ({
+      productId: item.product.id,
+      variant: item.variant,
+      quantity: Number(item.amount)
+    }))
+
+    this.isLoading = true
+    overlayLoading.show()
+
+    try {
+      const {
+        data: { result }
+      } = await client.mutate({
+        mutation: this.isDraftExist ? updateCart : createCart,
+        variables: {
+          cartId: this.id,
+          input: {
+            promotionCode: voucherCode === '' ? null : voucherCode,
+            items
+          }
+        }
+      })
+      this.isLoading = false
+      overlayLoading.hide()
+
+      if (result && result.id) this.id = result.id
+      return true
+    } catch(e) {
+      this.isLoading = false
+      overlayLoading.hide()
+      return false
+    }
   }
 
   @action
-  remove(index) {
-    let state = this.data.slice()
+  async remove(index) {
+    let state = this.items.slice()
 
     state.splice(index, 1)
 
-    this.data.replace(state)
-    badges.set(badges.CART, this.data.length)
+    this.items.replace(state)
+    badges.set(badges.CART, this.items.length)
+    await this.updateCart()
 
-    localStorage.setItem(CART_STORAGE_URI, JSON.stringify(state))
+    if (!user.isLoggedIn) localStorage.setItem(CART_STORAGE_URI, JSON.stringify(state))
   }
 
   @action
   clear() {
-    this.data.clear()
+    this.items.clear()
     badges.set(badges.CART, 0)
     localStorage.removeItem(CART_STORAGE_URI)
   }
 
   @computed
   get totalPrice() {
-    return this.data
+    return this.items
       .slice()
       .reduce(
-        (total, item) => total + item.product.price.value * item.amount,
+        (total, item) => total + item.product.price.value * (item.amount || item.quantity),
         0
       )
   }
 }
 
-export default new Cart()
+const myCarts = gql`
+  query myCarts($status: CartStatusEnum) {
+    myCarts(status: $status) {
+      carts {
+        id
+        status
+        items {
+          product {
+            id
+            name
+            price {
+              value
+              currency
+            }
+            variants {
+              name
+            }
+            images {
+              url
+            }
+            shareUrl
+          }
+          variant
+          quantity
+        }
+      }
+      totalCount
+    }
+  }
+`
+
+const createCart = gql`
+  mutation createCart($input: CartInput!) {
+    createCart(input: $input) {
+      id
+    }
+  }
+`
+
+const updateCart = gql`
+  mutation updateCart($cartId: ID!, $input: CartInput!) {
+    updateCart(cartId: $cartId, input: $input) {
+      id
+    }
+  }
+`
+
+export default window.cart = new Cart()

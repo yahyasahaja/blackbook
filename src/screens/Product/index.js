@@ -175,8 +175,6 @@ class PromoDetail extends Component {
       variant,
       amount,
     })
-
-    snackbar.show('Barang ditambahkan ke keranjang')
   }
 
   renderAmountOption() {

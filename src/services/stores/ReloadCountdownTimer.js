@@ -3,7 +3,7 @@ import { observable, action } from 'mobx'
 
 //COMPONENT
 class ReloadCoundownTimer {
-  MAX_COUNT_DOWN = 10
+  MAX_COUNT_DOWN = 100
   @observable countDown = this.MAX_COUNT_DOWN
   @observable shouldReload = false
 
@@ -21,4 +21,4 @@ class ReloadCoundownTimer {
   }
 }
 
-export default new ReloadCoundownTimer()
+export default window.reloadCountdownTimer = new ReloadCoundownTimer()

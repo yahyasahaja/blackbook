@@ -43,10 +43,8 @@ class Cart extends Component {
   }
 
   componentDidMount() {
-    cart.refreshData()
-
     // this.calculateTotalCost()
-    this.disposer = observe(cart.data, () => {
+    this.disposer = observe(cart.items, () => {
       this.calculateTotalCost()
     })
 
@@ -72,10 +70,12 @@ class Cart extends Component {
   }
 
   async calculateTotalCost() {
+    if (cart.items.slice().length === 0) return
+    
     this.setState({ shippingCost: null, discount: 0, error: '' })
     const { useVoucher, voucherCode } = this.state
 
-    const input = cart.data.slice().map(item => ({
+    const input = cart.items.slice().map(item => ({
       productId: item.product.id,
       quantity: Number(item.amount),
     }))
@@ -114,6 +114,7 @@ class Cart extends Component {
   }
 
   renderProducts() {
+    console.log('TOTTT', this.totalPrice)
     return (
       <div
         data-testid="cart-list"
@@ -122,7 +123,7 @@ class Cart extends Component {
         ${this.state.error && styles.error}
         ${this.state.useVoucher && this.state.discount > 0 && styles.discount}`}
       >
-        {cart.data
+        {cart.items
           .slice()
           .map((item, index) => (
             <CartItem
@@ -171,7 +172,7 @@ class Cart extends Component {
         </div>}
         <div className={styles.row}>
           <span className={styles.info}>Total Pembayaran</span>
-          <span data-testid="cart-total" data-total={this.totalPrice} className={styles.amount}>
+          <span data-testid="cart-total" data-total={this.totalPrice || 0} className={styles.amount}>
             {convertToMoneyFormat(this.totalPrice, currency)}
           </span>
         </div>
@@ -253,14 +254,14 @@ class Cart extends Component {
           <p>Silahkan login terlebih dahulu untuk melakukan transaksi</p>
         </Dialog>
 
-        {cart.data.length === 0 && (
+        {cart.items.length === 0 && (
           <p data-testid="cart-message" className={styles.empty}>
             Keranjang belanja anda masih kosong
             <span className="mdi mdi-cart-outline" />
           </p>
         )}
         {this.renderProducts()}
-        {cart.data.length > 0 && this.renderDetail()}
+        {cart.items.length > 0 && this.renderDetail()}
       </PopupBar>
     )
   }
