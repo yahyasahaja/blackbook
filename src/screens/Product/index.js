@@ -289,18 +289,17 @@ class PromoDetail extends Component {
 
     let shouldShowProductRelations = !error
     if (productRelations) if (productRelations.length > 0) shouldShowProductRelations = true
-
+    console.log(images)
     return (
       <div className={styles.container}>
         <div className={styles.card} >
           <div className={styles.picture}>
             <Slider
-              items={images.map(image => image.url)}
+              items={images}
               showThumbnails={false}
               showBullets={true}
               showPlayButton={false}
               showFullscreenButton={false}
-
             >
             </Slider>
           </div>
@@ -464,7 +463,8 @@ query productQuery ($id: ID!) {
     description,
     images {
       url,
-      priority
+      priority,
+      info
     },
     variants {
       name,

@@ -93,6 +93,13 @@ class ProductCard extends Component {
       category: 'Share',
       action: `Share to ${id}`
     })
+
+    if (id === 'copy') {
+      window.Clipboard.copy(link)
+      snackbar.show('URL berhasil disalin')
+      return
+    }
+
     window.open(
       id === 'twitter'
         ? `https://twitter.com/share?url=${link}`
@@ -235,6 +242,12 @@ class ProductCard extends Component {
                         styles.facebook
                       }`}
                     />
+                    <img
+                      src="/static/icon/line.png"
+                      onClick={this.share.bind(this, 'line')}
+                      href="javascript:void(0)"
+                      className={`mdi mdi-pinterest ${styles.icon}`}
+                    />
                     <a
                       onClick={this.share.bind(this, 'twitter')}
                       href="javascript:void(0)"
@@ -242,11 +255,12 @@ class ProductCard extends Component {
                         styles.twitter
                       }`}
                     />
-                    <img
-                      src="/static/icon/line.png"
-                      onClick={this.share.bind(this, 'line')}
+                    <a
+                      onClick={this.share.bind(this, 'copy')}
                       href="javascript:void(0)"
-                      className={`mdi mdi-pinterest ${styles.icon}`}
+                      className={`mdi mdi-content-copy ${styles.icon} ${
+                        styles.copy
+                      }`}
                     />
                   </div>
                 </div>

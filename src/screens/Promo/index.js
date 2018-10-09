@@ -15,7 +15,7 @@ import TopBar, { HIDE } from '../../components/TopBar'
 import PromoCard from '../../components/PromoCard'
 
 //STORE
-import { categories as categoriesStore, appStack, tokens } from '../../services/stores'
+import { categories as categoriesStore, appStack } from '../../services/stores'
 
 //INNER_CONFIG
 const MAX_FETCH_LENGTH = 5

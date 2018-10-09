@@ -38,7 +38,7 @@ export default class Slider extends Component {
   renderItems() {
     let { items } = this.props
 
-    return items.map((url, i) => {
+    return items.map(({url, info}, i) => {
       let width = `${100 / items.length}%`
       let { zooms } = this.state
       let zoom = zooms.length > i && this.state.isFullScreen ? zooms[i] : 1
@@ -52,6 +52,9 @@ export default class Slider extends Component {
             src={url} alt="Item URL" className={styles.img} 
             style={{transform: `scaleX(${zoom})`}}
           />
+          <div className={styles.info}>
+            <span >{info}</span>
+          </div>
         </div>
       )
     })
@@ -200,7 +203,7 @@ export default class Slider extends Component {
         className={styles.container} 
         ref={el => this.container = el} 
         style={{
-          height: this.props.height || 350
+          height: this.props.height || 400
         }}
       >
         <div 
