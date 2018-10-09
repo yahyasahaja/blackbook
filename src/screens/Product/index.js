@@ -245,6 +245,12 @@ class PromoDetail extends Component {
     let { shareUrl } = this.props.productQuery.product
     let link = shareUrl
 
+    if (id === 'copy') {
+      window.Clipboard.copy(link)
+      snackbar.show('URL berhasil disalin')
+      return
+    }
+
     window.open(
       id === 'twitter'
         ? `https://twitter.com/share?url=${link}`
@@ -289,7 +295,7 @@ class PromoDetail extends Component {
 
     let shouldShowProductRelations = !error
     if (productRelations) if (productRelations.length > 0) shouldShowProductRelations = true
-    console.log(images)
+    
     return (
       <div className={styles.container}>
         <div className={styles.card} >
@@ -377,15 +383,22 @@ class PromoDetail extends Component {
                             href="javascript:void(0)"
                             className={`mdi mdi-facebook ${styles.icon} ${styles.facebook}`}
                           />
+                          <img
+                            src="/static/icon/line.png"
+                            onClick={this.share.bind(this, 'line')}
+                            className={`mdi mdi-pinterest ${styles.icon}`}
+                          />
                           <a
                             onClick={this.share.bind(this, 'twitter')}
                             href="javascript:void(0)"
                             className={`mdi mdi-twitter ${styles.icon} ${styles.twitter}`}
                           />
-                          <img
-                            src="/static/icon/line.png"
-                            onClick={this.share.bind(this, 'line')}
-                            className={`mdi mdi-pinterest ${styles.icon}`}
+                          <a
+                            onClick={this.share.bind(this, 'copy')}
+                            href="javascript:void(0)"
+                            className={`mdi mdi-content-copy ${styles.icon} ${
+                              styles.copy
+                            }`}
                           />
                         </div>
                       </div>
