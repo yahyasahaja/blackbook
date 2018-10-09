@@ -281,6 +281,8 @@ class Process extends Component {
     const { type, address, voucherCode } = this.props.location.state
 
     try {
+      await cart.updateCart(voucherCode)
+
       // create order
       const {
         data: { createOrderFromCart: orderData }
@@ -430,22 +432,6 @@ class Process extends Component {
     )
   }
 }
-
-const CreateCart = gql`
-  mutation CreateCart($input: CartInput!) {
-    createCart(input: $input) {
-      id
-    }
-  }
-`
-
-const UpdateCart = gql`
-  mutation UpdateCart($cartId: ID!, $input: CartInput!) {
-    updateCart(cartId: $cartId, input: $input) {
-      id
-    }
-  }
-`
 
 export const CreateOrderFromCart = gql`
   mutation CreateOrderFromCart($cartId: ID!, $input: OrderFromCartInput!) {

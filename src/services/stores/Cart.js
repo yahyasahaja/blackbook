@@ -42,7 +42,7 @@ class Cart {
   @observable shippingCost = 0
 
   @action
-  async fetchData(useLoading) {
+  async fetchData() {
     if (user && user.isLoggedIn) {
       try {
         this.isLoading = true
