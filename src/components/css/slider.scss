@@ -18,6 +18,10 @@
       z-index: 100;
       background: black;
       transition: .3s;
+
+      .wrapper .item .info {
+        color: white;
+      }
     }
 
     .zoomin, .zoomout {
