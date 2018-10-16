@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { graphql, compose } from 'react-apollo'
-import gql from 'graphql-tag'
+import gql from 'graphql-tag' 
 import { observer } from 'mobx-react'
 import { observable } from 'mobx'
 import { Link } from 'react-router-dom'
@@ -502,6 +502,9 @@ const activePromotedsQuery = gql`
             url
           }
           shareUrl
+          liked
+          favorited
+          sold
         }
       }
       totalCount

@@ -21,7 +21,7 @@ import Card from '../../components/ProductCard'
 import Separator from '../../components/Separator'
 
 //STORE
-import { appStack, favorites, cart, snackbar } from '../../services/stores'
+import { appStack, favorites, cart, snackbar, user } from '../../services/stores'
 
 import { convertToMoneyFormat } from '../../utils'
 
@@ -126,8 +126,10 @@ class PromoDetail extends Component {
     let { productQuery: { loading: cur } } = this.props
 
     if (cur !== next && product && !next) {
-      setTimeout(() =>
-        this.setState({ variant: product.variants[0].name }), 100)
+      setTimeout(() => {
+        this.setState({ variant: product.variants[0].name })
+        this.totalLikeRaw = product.liked - (product.favorited ? 1 : 0)
+      }, 100)
     }
   }
 
@@ -150,11 +152,13 @@ class PromoDetail extends Component {
 
   onLike = async () => {
     let { product } = this.props.productQuery
-    if (!this.liked) await favorites.add(product)
+    if (!user.isLoggedIn) return this.props.history.push('/auth/login')
+    if (!this.isLiked) await favorites.add(product)
     else await favorites.remove(product.id)
   }
 
   liked = false
+  totalLikeRaw = 0
 
   openVariant() {
     this.setState({ isVariantOpen: true })
@@ -282,12 +286,16 @@ class PromoDetail extends Component {
         </div>
       )
 
-    let { name, images, id, price, variants, description, seller } = this.props.productQuery.product
-    this.liked = false
+    let { 
+      name, images, 
+      id, price, variants, description, seller 
+    } = this.props.productQuery.product
+    this.isLiked = false
+    
     let fav = favorites.data.slice()
     for (let i in fav)
       if (fav[i].id === id) {
-        this.liked = true
+        this.isLiked = true
         break
       }
 
@@ -363,16 +371,17 @@ class PromoDetail extends Component {
                     <Fragment>
                       <div className={styles.left}>
                         <FlatButton
-                          active={this.liked}
-                          icon={this.liked ? 'heart' : 'heart-outline'}
+                          active={this.isLiked}
+                          icon={this.isLiked ? 'heart' : 'heart-outline'}
                           onClick={this.onLike}
+                          data-testid="like-button"
                         >
-                          Suka
+                          {this.totalLikeRaw + (this.isLiked ? 1 : 0)}
                         </FlatButton>
                         <Link to={{ pathname: '/chat/new', state: { productId: id } }}>
-                          <FlatButton icon="forum">Chat</FlatButton>
+                          <FlatButton icon="forum" />
                         </Link>
-                        <FlatButton onMouseOver={this.toggleShare} icon="share">Bagikan</FlatButton>
+                        <FlatButton onMouseOver={this.toggleShare} icon="share" />
                         <div
                           className={
                             `${this.state.isShareActive ? styles.active : ''} ${styles.share}`
@@ -420,7 +429,7 @@ class PromoDetail extends Component {
             <div className={styles.seller} >
               {
                 seller.profilePicture
-                  ? <img src={seller.profilePicture} />
+                  ? <div className={styles.img} ><img src={seller.profilePicture} /></div>
                   : <div className={styles.pic}>{
                     seller.name.split(' ').slice(0, 2).map(d => d[0]).join('')
                   }</div>
@@ -506,6 +515,8 @@ query productQuery ($id: ID!) {
     created,
     updated
     shareUrl
+    favorited
+    sold
   }
 }
 `
@@ -527,6 +538,9 @@ query productRelationsQuery ($productId: ID!, $limit: Int) {
         url
       }
       shareUrl
+      liked
+      favorited
+      sold
     }
     
     count

@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import { Link, withRouter } from 'react-router-dom'
 import ReactGA from 'react-ga'
+import gql from 'graphql-tag' 
 
 //STYLES
 import styles from './css/product-card.scss'
@@ -14,6 +15,7 @@ import ImageLoader from './ImageLoader'
 
 //STORE
 import { favorites, cart, snackbar, user } from '../services/stores'
+import client from '../services/graphql/productClient'
 
 import { convertToMoneyFormat } from '../utils'
 
@@ -35,9 +37,13 @@ class ProductCard extends Component {
     }
   }
 
+  componentDidMount() {
+    this.totalLikeRaw = this.props.favorited ? this.props.liked - 1 : this.props.liked
+  }
+
   onLike = async () => {
     let { data, id } = this.props
-    if (!this.liked) {
+    if (!this.isLiked) {
       if (!user.isLoggedIn) return this.props.history.push('/auth/login')
       await favorites.add(data)
       ReactGA.event({
@@ -53,7 +59,8 @@ class ProductCard extends Component {
     }
   }
 
-  liked = false
+  isLiked = false
+  totalLikeRaw = 0
 
   openVariant() {
     this.setState({ isVariantOpen: true })
@@ -122,11 +129,12 @@ class ProductCard extends Component {
 
   render() {
     let { images, image, name, price, variants, /*link,*/ id } = this.props
-    this.liked = false
+    
+    this.isLiked = false
     let fav = favorites.data.slice()
     for (let i in fav)
       if (fav[i].id === id) {
-        this.liked = true
+        this.isLiked = true
         break
       }
 
@@ -216,21 +224,20 @@ class ProductCard extends Component {
               <Fragment>
                 <div className={styles.left}>
                   <FlatButton
-                    active={this.liked}
-                    icon={this.liked ? 'heart' : 'heart-outline'}
+                    active={this.isLiked}
+                    icon={this.isLiked ? 'heart' : 'heart-outline'}
                     onClick={this.onLike}
+                    data-testid="like-button"
                   >
-                    Suka
+                    {this.totalLikeRaw + (this.isLiked ? 1 : 0)}
                   </FlatButton>
                   <Link
                     to={{ pathname: '/chat/new', state: { productId: id } }}
                     data-testid="chat"
                   >
-                    <FlatButton icon="forum">Chat</FlatButton>
+                    <FlatButton icon="forum" />
                   </Link>
-                  <FlatButton onMouseOver={this.toggleShare} icon="share">
-                    Bagikan
-                  </FlatButton>
+                  <FlatButton onMouseOver={this.toggleShare} icon="share" />
                   <div
                     className={`${
                       this.state.isShareActive ? styles.active : ''

@@ -15,16 +15,18 @@
   margin: 0 3px;
 
   .icon {
-    font-size: 12pt;
+    font-size: 16pt;
     display: block;
     margin-right: 5px;
   }
 
 
   @media only screen and(max-width: 445px) {
-    padding: 10px 4px;
     font-size: 10pt;
     margin: 0;
+    border-radius: 100px;
+    padding: 10px;
+    margin-right: 10px;
   }
 
   &:active {

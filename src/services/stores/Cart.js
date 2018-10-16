@@ -57,7 +57,7 @@ class Cart {
           },
           fetchPolicy: 'network-only'
         })
-        console.log('REFETCHING CART DATA')
+        
         this.isLoading = false
   
         if (totalCount > 0) {

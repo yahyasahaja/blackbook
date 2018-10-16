@@ -374,6 +374,9 @@ const allProductsQuery = gql`
           url
         }
         shareUrl
+        liked
+        favorited
+        sold
       }
       totalCount
     }

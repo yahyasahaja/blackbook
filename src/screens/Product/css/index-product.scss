@@ -27,11 +27,15 @@
         margin-right: 10px;
       }
 
-      img {
-        width: 70px;
-        height: 70px;
-        border-radius: 100px;
-        margin-right: 10px;
+      .img {
+
+        img {
+          width: 70px;
+          height: 70px;
+          border-radius: 100px;
+          margin-right: 10px;
+          object-fit: cover;
+        }
       }
 
       span {

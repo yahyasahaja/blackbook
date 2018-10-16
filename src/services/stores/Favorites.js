@@ -8,7 +8,7 @@ import client from '../graphql/productClient'
 import { FAVORITES_STORAGE_URI } from '../../config'
 
 import user from './User'
-import overlayLoading from './OverlayLoading'
+// import overlayLoading from './OverlayLoading'
 
 //STORE
 class Favorites {
@@ -49,10 +49,7 @@ class Favorites {
 
     try {
       this.isLoading = true 
-      overlayLoading.show()
-      const {
-        data: result
-      } = await client.mutate({
+      await client.mutate({
         mutation: favoriteProduct,
         variables: {
           input: {
@@ -61,9 +58,7 @@ class Favorites {
         },
       })
       this.isLoading = false
-      overlayLoading.hide()
-
-      console.log(result)
+      
       this.data.replace(state)
       badges.set(badges.LIKED, this.data.length)
       // window.localStorage.setItem('favorites', JSON.stringify(state))
@@ -83,7 +78,6 @@ class Favorites {
 
     try {
       this.isLoading = true
-      overlayLoading.show()
       const {
         data: result
       } = await client.mutate({
@@ -95,7 +89,6 @@ class Favorites {
         },
       })
       this.isLoading = false
-      overlayLoading.hide()
 
       console.log(result)
       this.data.replace(state)
@@ -145,6 +138,9 @@ const myFavoriteProducts = gql`
           url
         }
         shareUrl
+        liked
+        favorited
+        sold
       }
     }
   }

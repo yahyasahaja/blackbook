@@ -308,6 +308,9 @@ query allProducts(
         url
       }
       shareUrl
+      liked
+      favorited
+      sold
     }
     totalCount
   }

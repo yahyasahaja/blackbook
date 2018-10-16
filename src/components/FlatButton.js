@@ -26,6 +26,7 @@ export default class FlatButton extends Component {
         className={`${styles.container} ${active ? styles.active : ''} ${className || ''}`}
         onClick={onClick} 
         onMouseDown={onMouseOver}
+        data-testid={this.props['data-testid']}
       >
         {icon? <span className={`mdi mdi-${icon} ${styles.icon}`} /> : '' }
         {children}
