@@ -26,7 +26,7 @@ export default class CartItem extends Component {
       amount,
       history,
     } = this.props
-    console.log(this.props,this.props.product.price.value)
+    
     return (
       <div
         data-testid="cart-item"

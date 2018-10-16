@@ -54,9 +54,10 @@ class Cart {
           query: myCarts,
           variables: {
             status: 'DRAFT'
-          }
+          },
+          fetchPolicy: 'network-only'
         })
-  
+        console.log('REFETCHING CART DATA')
         this.isLoading = false
   
         if (totalCount > 0) {

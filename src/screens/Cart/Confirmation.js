@@ -164,7 +164,6 @@ class Process extends Component {
       ? convertCountryCurrency(user.data.country)
       : config.COUNTRY_CODE
 
-    console.log(user.data)
     return (
       <div className={styles.section}>
         <div className={styles.price}>

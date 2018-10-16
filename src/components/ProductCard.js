@@ -71,7 +71,7 @@ class ProductCard extends Component {
       amount
     })
 
-    snackbar.show('Barang ditambahkan ke keranjang')
+    // snackbar.show('Barang ditambahkan ke keranjang')
   }
 
   renderAmountOption() {

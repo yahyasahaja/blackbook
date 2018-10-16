@@ -42,9 +42,11 @@ class Cart extends Component {
     error: '',
   }
 
-  componentDidMount() {
-    // this.calculateTotalCost()
-    this.disposer = observe(cart.items, () => {
+  async componentDidMount() {
+    await cart.fetchData()
+
+    this.calculateTotalCost()
+    this.disposer = observe(cart, () => {
       this.calculateTotalCost()
     })
 
@@ -55,6 +57,8 @@ class Cart extends Component {
         this.calculateTotalCost()
       }
     }, true)
+
+    // cart.fetchData()
   }
 
   componentWillUnmount() {
@@ -114,7 +118,6 @@ class Cart extends Component {
   }
 
   renderProducts() {
-    console.log('TOTTT', this.totalPrice)
     return (
       <div
         data-testid="cart-list"
