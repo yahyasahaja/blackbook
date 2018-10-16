@@ -173,6 +173,7 @@ class User {
         await this.fetchData(token)
         await this.registerPushSubscription()
         cart.fetchData()
+        favorites.fetchData()
         return token
       }
 

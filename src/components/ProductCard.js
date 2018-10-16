@@ -13,7 +13,7 @@ import PrimaryButton from './PrimaryButton'
 import ImageLoader from './ImageLoader'
 
 //STORE
-import { favorites, cart, snackbar } from '../services/stores'
+import { favorites, cart, snackbar, user } from '../services/stores'
 
 import { convertToMoneyFormat } from '../utils'
 
@@ -35,16 +35,17 @@ class ProductCard extends Component {
     }
   }
 
-  onLike = () => {
+  onLike = async () => {
     let { data, id } = this.props
     if (!this.liked) {
-      favorites.add(data)
+      if (!user.isLoggedIn) return this.props.history.push('/auth/login')
+      await favorites.add(data)
       ReactGA.event({
         category: 'Product',
         action: 'Likes Product'
       })
     } else {
-      favorites.remove(id)
+      await favorites.remove(id)
       ReactGA.event({
         category: 'Product',
         action: 'Dislikes Product'

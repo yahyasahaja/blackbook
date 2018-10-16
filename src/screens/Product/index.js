@@ -148,10 +148,10 @@ class PromoDetail extends Component {
     document.execCommand('Copy')
   }
 
-  onLike = () => {
+  onLike = async () => {
     let { product } = this.props.productQuery
-    if (!this.liked) favorites.add(product)
-    else favorites.remove(product.id)
+    if (!this.liked) await favorites.add(product)
+    else await favorites.remove(product.id)
   }
 
   liked = false

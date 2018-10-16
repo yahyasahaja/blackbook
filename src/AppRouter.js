@@ -92,7 +92,8 @@ import {
   reloadCountdownTimer as rct,
   user,
   country,
-  cart
+  cart,
+  favorites,
   // snackbar
 } from './services/stores'
 import CountrySelection from './components/CountrySelection'
@@ -157,6 +158,7 @@ class AppRouter extends Component {
     user.fetchData().then(data => {
       if (data) user.registerPushSubscription()
       cart.fetchData()
+      favorites.fetchData()
     }).catch(e => console.log('CANT FETCH USER DATA', e))
   }
 

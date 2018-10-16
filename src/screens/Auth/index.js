@@ -16,7 +16,7 @@ import Login from './Login'
 import Register from './Register'
 import ForgotPassword from './ForgotPassword'
 import InputNewPassword from './InputNewPassword'
-import PWASupport from '../PWA'
+// import PWASupport from '../PWA'
 
 //STORE
 import { appStack, user } from '../../services/stores'
