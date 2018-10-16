@@ -235,7 +235,10 @@ class PromoDetail extends Component {
     if(updated){
       return (
         <div style={{ marginTop: '20px', color: 'gray' }}>
-          Terakhir diupdate: {date + ' ' + arrayMonth[month] + ' ' + year }
+          Terakhir diupdate: {date + ' ' + arrayMonth[month] + ' ' + year } <br />
+          <span className={styles.sold} >
+            Jumlah Produk Terjual: {this.props.productQuery.product.sold}
+          </span>
         </div>        
       )
     }
