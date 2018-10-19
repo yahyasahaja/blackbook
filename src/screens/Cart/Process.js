@@ -14,7 +14,7 @@ import { appStack, user, cart } from '../../services/stores'
 
 import { convertCountryCodeToText } from '../../utils'
 
-import { COUNTRY_CODE } from '../../config'
+// import { COUNTRY_CODE } from '../../config'
 
 import PopupBar from '../../components/PopupBar'
 import PrimaryButton from '../../components/PrimaryButton'
@@ -44,7 +44,7 @@ class Process extends Component {
   }
 
   componentWillMount() {
-    if (user.isLoggedIn && (COUNTRY_CODE === 'HKG' || user.data.country === 'HKG')) {
+    if (user.isLoggedIn && (user.data.country === 'HKG')) {
       cart.channel = 'AS2IN1WAL'
       cart.channelIndex = 1
     }
