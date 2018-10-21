@@ -43,7 +43,7 @@ class Cart extends Component {
   }
 
   async componentDidMount() {
-    await cart.fetchData()
+    cart.fetchData()
 
     this.calculateTotalCost()
     this.disposer = observe(cart, () => {
