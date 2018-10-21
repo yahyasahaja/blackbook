@@ -505,6 +505,9 @@ const activePromotedsQuery = gql`
           liked
           favorited
           sold
+          seller {
+            id
+          }
         }
       }
       totalCount

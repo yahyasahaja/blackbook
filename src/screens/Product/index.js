@@ -277,6 +277,10 @@ class PromoDetail extends Component {
     return products.map((data, i) => <Card favorites={favorites} {...data} key={i} data={data} />)
   }
 
+  get isMyOwnProduct() {
+    return this.props.productQuery.product.seller.id === (user.isLoggedIn && user.data.uuid)
+  }
+
   renderContent = () => {
     if (this.props.productQuery.loading)
       return (
@@ -365,7 +369,11 @@ class PromoDetail extends Component {
                         </div>
                       </div>
                     </div>
-                    <PrimaryButton onClick={() => this.addToCart()} icon="cart" className={styles.buy}>
+                    <PrimaryButton 
+                      onClick={() => !this.isMyOwnProduct && this.clickBuy()}
+                      icon="cart"
+                      className={`${this.isMyOwnProduct && styles.disabled} ${styles.buy}`}
+                    >
                       BELI
                     </PrimaryButton>
                   </div>
@@ -381,7 +389,12 @@ class PromoDetail extends Component {
                         >
                           {this.totalLikeRaw + (this.isLiked ? 1 : 0)}
                         </FlatButton>
-                        <Link to={{ pathname: '/chat/new', state: { productId: id } }}>
+                        <Link 
+                          to={{ pathname: '/chat/new', state: { productId: id } }}
+                          data-testid="chat"
+                          className={(this.isMyOwnProduct && styles.disabled) || ''}
+                          onClick={e => this.isMyOwnProduct && e.preventDefault()}
+                        >
                           <FlatButton icon="forum" />
                         </Link>
                         <FlatButton onMouseOver={this.toggleShare} icon="share" />
@@ -415,8 +428,8 @@ class PromoDetail extends Component {
                         </div>
                       </div>
 
-                      <div className={styles.right}>
-                        <PrimaryButton onClick={() => this.openVariant()}>
+                      <div className={`${this.isMyOwnProduct && styles.disabled} ${styles.right}`}>
+                        <PrimaryButton onClick={() => !this.isMyOwnProduct && this.openVariant()}>
                           BELI
                         </PrimaryButton>
                       </div>
@@ -544,6 +557,9 @@ query productRelationsQuery ($productId: ID!, $limit: Int) {
       liked
       favorited
       sold
+      seller {
+        id
+      }
     }
     
     count

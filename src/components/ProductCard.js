@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react'
 import { observer } from 'mobx-react'
 import { Link, withRouter } from 'react-router-dom'
 import ReactGA from 'react-ga'
-import gql from 'graphql-tag' 
+// import gql from 'graphql-tag' 
 
 //STYLES
 import styles from './css/product-card.scss'
@@ -15,7 +15,7 @@ import ImageLoader from './ImageLoader'
 
 //STORE
 import { favorites, cart, snackbar, user } from '../services/stores'
-import client from '../services/graphql/productClient'
+// import client from '../services/graphql/productClient'
 
 import { convertToMoneyFormat } from '../utils'
 
@@ -127,8 +127,12 @@ class ProductCard extends Component {
     })
   }
 
+  get isMyOwnProduct() {
+    return this.props.seller.id === (user.isLoggedIn && user.data.uuid)
+  }
+
   render() {
-    let { images, image, name, price, variants, /*link,*/ id } = this.props
+    let { images, image, name, price, variants, /*link,*/ id} = this.props
     
     this.isLiked = false
     let fav = favorites.data.slice()
@@ -213,9 +217,9 @@ class ProductCard extends Component {
                   </div>
                 </div>
                 <PrimaryButton
-                  onClick={() => this.clickBuy()}
+                  onClick={() => !this.isMyOwnProduct && this.clickBuy()}
                   icon="cart"
-                  className={styles.buy}
+                  className={`${this.isMyOwnProduct && styles.disabled} ${styles.buy}`}
                 >
                   BELI
                 </PrimaryButton>
@@ -234,6 +238,8 @@ class ProductCard extends Component {
                   <Link
                     to={{ pathname: '/chat/new', state: { productId: id } }}
                     data-testid="chat"
+                    className={(this.isMyOwnProduct && styles.disabled) || ''}
+                    onClick={e => this.isMyOwnProduct && e.preventDefault()}
                   >
                     <FlatButton icon="forum" />
                   </Link>
@@ -273,8 +279,8 @@ class ProductCard extends Component {
                   </div>
                 </div>
 
-                <div className={styles.right}>
-                  <PrimaryButton onClick={() => this.openVariant()}>
+                <div className={`${this.isMyOwnProduct && styles.disabled} ${styles.right}`}>
+                  <PrimaryButton onClick={() => !this.isMyOwnProduct && this.openVariant()}>
                     BELI
                   </PrimaryButton>
                 </div>

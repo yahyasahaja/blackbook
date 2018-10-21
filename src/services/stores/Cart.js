@@ -99,6 +99,7 @@ class Cart {
   @action
   async add(arg) {
     let state = this.items.slice()
+    let backup = this.items.slice()
 
     // check if already exists
     const index = state.findIndex(
@@ -123,6 +124,10 @@ class Cart {
     //FINISHING
     this.items.replace(state)
     if (await this.updateCart()) snackbar.show('Barang ditambahkan ke keranjang')
+    else {
+      this.items.replace(backup)
+      snackbar.show('Gagal menambahkan ke keranjang')
+    }
     badges.set(badges.CART, this.items.length)
 
     if (!user.isLoggedIn) localStorage.setItem(CART_STORAGE_URI, JSON.stringify(state))
@@ -141,17 +146,20 @@ class Cart {
     overlayLoading.show()
 
     try {
+      const variables = {
+        input: {
+          promotionCode: voucherCode === '' ? null : voucherCode,
+          items
+        }
+      }
+
+      if (this.isDraftExist) variables.cartId = this.id
+
       const {
         data: { result }
       } = await client.mutate({
         mutation: this.isDraftExist ? updateCart : createCart,
-        variables: {
-          cartId: this.id,
-          input: {
-            promotionCode: voucherCode === '' ? null : voucherCode,
-            items
-          }
-        }
+        variables
       })
       this.isLoading = false
       overlayLoading.hide()

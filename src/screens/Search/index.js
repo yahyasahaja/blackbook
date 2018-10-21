@@ -311,6 +311,9 @@ query allProducts(
       liked
       favorited
       sold
+      seller {
+        id
+      }
     }
     totalCount
   }

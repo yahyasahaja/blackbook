@@ -60,6 +60,10 @@
         .buy {
           font-size: 11pt;
           margin: 10px 0 5px 0;
+
+          &.disabled {
+            filter: grayscale(100%);
+          }
         }
       }
       .variant {
@@ -139,11 +143,33 @@
         justify-content: space-between;
         flex-wrap: wrap;
         position: relative;
+        
+        .disabled, .disabled * {
+          filter: grayscale(100%);
+          cursor: default;
+          opacity: .7;
+          display: none;
+        }
       }
+
+      .right.disabled, .right.disabled * {
+        filter: grayscale(100%);
+        cursor: default;
+        opacity: .7;
+        display: none;
+      }
+
       @media only screen and(max-width: 350px) {
         .right {
           width: 100%;
           margin-bottom: 10px;
+
+          &.disabled, &.disabled * {
+            filter: grayscale(100%);
+            cursor: default;
+            opacity: .7;
+            display: none;
+          }
         }
         .left {
           width: 100%;
