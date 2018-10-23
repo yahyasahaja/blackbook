@@ -13,6 +13,8 @@ import snackbar from './Snackbar'
 import client from '../graphql/orderingClient'
 import gql from 'graphql-tag'
 
+import _ from 'lodash'
+
 //STORE
 class Cart {
   constructor() {
@@ -60,8 +62,10 @@ class Cart {
         
         this.isLoading = false
   
-        if (totalCount > 0) {
+        let localItems = this.items.slice()
 
+        //draft exist
+        if (totalCount > 0) {
           this.items = carts[0].items.map(data => {
             data = { ...data }
             data.product = { ...data.product }
@@ -76,7 +80,23 @@ class Cart {
         }
 
         //TODO: merge if local exist
-        badges.set(badges.CART, this.items.length)
+        let newItems = []
+        for (let item of localItems) {
+          // console.log(user.data.uuid !== item.product.seller.id, item)
+          if (user.data.uuid !== item.product.seller.id) 
+            newItems.push(item)
+        }
+
+        let fetchedItem = this.items.slice()
+        this.items = _.map(newItems, function(p){
+          return _.merge(
+            p, 
+            _.find(fetchedItem, {id: p.id})
+          )
+        })
+        
+        this.saveToLocalStorage()
+        await this.updateCart()
       } catch (e) {
         console.log('ERROR WHILE FETCHING CART DRAFT', e)
       }
@@ -89,6 +109,12 @@ class Cart {
       this.items = JSON.parse(carts)
       badges.set(badges.CART, this.items.length)
     }
+  }
+
+  @action
+  saveToLocalStorage() {
+    localStorage.setItem(CART_STORAGE_URI, JSON.stringify(this.items.slice()))
+    badges.set(badges.CART, this.items.length)
   }
 
   @computed
@@ -123,11 +149,15 @@ class Cart {
 
     //FINISHING
     this.items.replace(state)
-    if (await this.updateCart()) snackbar.show('Barang ditambahkan ke keranjang')
-    else {
-      this.items.replace(backup)
-      snackbar.show('Gagal menambahkan ke keranjang')
-    }
+
+    if (user.isLoggedIn) {
+      if (await this.updateCart()) snackbar.show('Barang ditambahkan ke keranjang')
+      else {
+        this.items.replace(backup)
+        snackbar.show('Gagal menambahkan ke keranjang')
+      }
+    } else snackbar.show('Barang ditambahkan ke keranjang')
+    
     badges.set(badges.CART, this.items.length)
 
     if (!user.isLoggedIn) localStorage.setItem(CART_STORAGE_URI, JSON.stringify(state))
@@ -225,6 +255,9 @@ const myCarts = gql`
               url
             }
             shareUrl
+            seller {
+              id
+            }
           }
           variant
           quantity

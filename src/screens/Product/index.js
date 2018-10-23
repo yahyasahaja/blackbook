@@ -370,7 +370,7 @@ class PromoDetail extends Component {
                       </div>
                     </div>
                     <PrimaryButton 
-                      onClick={() => !this.isMyOwnProduct && this.clickBuy()}
+                      onClick={() => !this.isMyOwnProduct && this.addToCart()}
                       icon="cart"
                       className={`${this.isMyOwnProduct && styles.disabled} ${styles.buy}`}
                     >
