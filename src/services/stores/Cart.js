@@ -62,11 +62,11 @@ class Cart {
         
         this.isLoading = false
   
-        let localItems = this.items.slice()
+        let fetchedItems,localItems = this.items.slice()
 
         //draft exist
         if (totalCount > 0) {
-          this.items = carts[0].items.map(data => {
+          fetchedItems = carts[0].items.map(data => {
             data = { ...data }
             data.product = { ...data.product }
             if (data.product.images.length > 0) 
@@ -86,17 +86,23 @@ class Cart {
           if (user.data.uuid !== item.product.seller.id) 
             newItems.push(item)
         }
-
-        let fetchedItem = this.items.slice()
-        this.items = _.map(newItems, function(p){
-          return _.merge(
-            p, 
-            _.find(fetchedItem, {id: p.id})
-          )
-        })
         
+        let newestItems = newItems.slice()
+        for (let item of fetchedItems) {
+          let same = false
+          for (let prevItem of newItems) if (prevItem.product.id === item.product.id) {
+            same = true
+            continue
+          }
+          
+          if (same) continue
+          newestItems.push(item)
+        }
+        
+        this.items = newestItems
         this.saveToLocalStorage()
         await this.updateCart()
+
       } catch (e) {
         console.log('ERROR WHILE FETCHING CART DRAFT', e)
       }
