@@ -137,6 +137,9 @@ const myFavoriteProducts = gql`
         images {
           url
         }
+        seller {
+          id
+        }
         shareUrl
         liked
         favorited
