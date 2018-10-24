@@ -44,7 +44,7 @@ class Cart {
   @observable shippingCost = 0
 
   @action
-  async fetchData() {
+  async fetchData(sync) {
     if (user && user.isLoggedIn) {
       try {
         this.isLoading = true
@@ -61,9 +61,8 @@ class Cart {
         })
         
         this.isLoading = false
-  
-        let fetchedItems, localItems = this.items.slice()
 
+        let fetchedItems
         //draft exist
         if (totalCount > 0) {
           fetchedItems = carts[0].items.map(data => {
@@ -78,31 +77,37 @@ class Cart {
           })
           this.id = carts[0].id
         }
+  
+        if (sync) {
+          let localItems = this.items.slice()
 
-        //TODO: merge if local exist
-        let newItems = []
-        for (let item of localItems) {
-          // console.log(user.data.uuid !== item.product.seller.id, item)
-          if (user.data.uuid !== item.product.seller.id) 
-            newItems.push(item)
-        }
-        
-        let newestItems = newItems.slice()
-        
-        if (fetchedItems) for (let item of fetchedItems) {
-          let same = false
-          for (let prevItem of newItems) if (prevItem.product.id === item.product.id) {
-            same = true
-            continue
+          //TODO: merge if local exist
+          let newItems = []
+          for (let item of localItems) {
+            // console.log(user.data.uuid !== item.product.seller.id, item)
+            if (user.data.uuid !== item.product.seller.id) 
+              newItems.push(item)
           }
           
-          if (same) continue
-          newestItems.push(item)
+          let newestItems = newItems.slice()
+          
+          if (fetchedItems) for (let item of fetchedItems) {
+            let same = false
+            for (let prevItem of newItems) if (prevItem.product.id === item.product.id) {
+              same = true
+              continue
+            }
+            
+            if (same) continue
+            newestItems.push(item)
+          }
+          
+          this.items = newestItems
+          await this.updateCart()
+        } else {
+          this.items = fetchedItems
+          badges.set(badges.CART, this.items.length)
         }
-        
-        this.items = newestItems
-        await this.updateCart()
-
       } catch (e) {
         console.log('ERROR WHILE FETCHING CART DRAFT', e)
       }

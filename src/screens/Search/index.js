@@ -181,9 +181,10 @@ class Search extends Component {
           id="filters"
           value={filter}
           autoCapitalize="true" onChange={this.handleChange.bind(this, 'filter')}
+          data-testid="filter"
         >
           {filters.map((data, i) => {
-            return <option key={i} value={data.value}>{data.label}</option>
+            return <option data-testid={data.value} key={i} value={data.value}>{data.label}</option>
           })}
         </select>
         <span className={`mdi mdi-chevron-down ${styles.icon}`} />
@@ -195,6 +196,7 @@ class Search extends Component {
           id="categories"
           value={category}
           autoCapitalize="true" onChange={this.handleChange.bind(this, 'category')}
+          data-testid="categories"
         >
           {_.map(categories, (data, i) => {
             return <option key={i} value={data.value}>{data.label}</option>

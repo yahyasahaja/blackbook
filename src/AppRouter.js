@@ -157,7 +157,7 @@ class AppRouter extends Component {
 
     user.fetchData().then(data => {
       if (data) user.registerPushSubscription()
-      cart.fetchData()
+      cart.fetchData(true)
       favorites.fetchData()
     }).catch(e => console.log('CANT FETCH USER DATA', e))
   }

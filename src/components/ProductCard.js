@@ -162,7 +162,7 @@ class ProductCard extends Component {
 
         <div className={styles.wrapper}>
           <div className={styles.content}>
-            <span className={styles.name}>{name}</span>
+            <span data-testid="product-card-name" className={styles.name}>{name}</span>
             <span className={styles.price}>
               {convertToMoneyFormat(price.value, price.currency)}
             </span>
