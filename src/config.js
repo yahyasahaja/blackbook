@@ -15,6 +15,12 @@ export const IAM_ENDPOINT_URL = IS_PROD ? prodSetup.iam : 'https://iam-message-t
 export const CHAT_ENDPOINT_URL = IS_PROD ? prodSetup.chatql : 'https://iam-message-testing.azurewebsites.net/chatql'
 export const USER_ENDPOINT_URL = IS_PROD ? prodSetup.userql :' https://iam-message-testing.azurewebsites.net/userql'
 
+// localhost/product/graphql'
+// export const ORDERING_ENDPOINT_URL = IS_PROD ? prodSetup.orderql : 'https://localhost/order/graphql'
+// export const IAM_ENDPOINT_URL = IS_PROD ? prodSetup.iam : 'https://localhost/iam'
+// export const CHAT_ENDPOINT_URL = IS_PROD ? prodSetup.chatql : 'https://localhost/iam/chatql'
+// export const USER_ENDPOINT_URL = IS_PROD ? prodSetup.userql : 'https://localhost/iam/
+
 export const getIAMEndpoint = params => `${IAM_ENDPOINT_URL}${params || ''}`
 
 export const API_TOKEN_STORAGE_URI = 'hashAPIToken'

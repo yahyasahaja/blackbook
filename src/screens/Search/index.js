@@ -128,7 +128,7 @@ class Search extends Component {
 
   fetchProducts = () => {
     let { offset, filter, category, search } = this.state
-    let sort = filter === 'termurah' || filter === 'termahal' ? 'price' : 'created'
+    let sort = filter === 'termurah' || filter === 'termahal' ? 'value' : 'created'
     let order = filter === 'termurah' || filter === 'terlama' ? 'ASC' : 'DESC'
     this.props.allProductsQuery.refetch({
       limit: MAX_FETCH_LENGTH,

@@ -13,7 +13,7 @@ import snackbar from './Snackbar'
 import client from '../graphql/orderingClient'
 import gql from 'graphql-tag'
 
-import _ from 'lodash'
+// import _ from 'lodash'
 
 //STORE
 class Cart {
