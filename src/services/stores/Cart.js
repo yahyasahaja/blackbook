@@ -62,7 +62,7 @@ class Cart {
         
         this.isLoading = false
   
-        let fetchedItems,localItems = this.items.slice()
+        let fetchedItems, localItems = this.items.slice()
 
         //draft exist
         if (totalCount > 0) {
@@ -88,7 +88,8 @@ class Cart {
         }
         
         let newestItems = newItems.slice()
-        for (let item of fetchedItems) {
+        
+        if (fetchedItems) for (let item of fetchedItems) {
           let same = false
           for (let prevItem of newItems) if (prevItem.product.id === item.product.id) {
             same = true
@@ -100,7 +101,6 @@ class Cart {
         }
         
         this.items = newestItems
-        this.saveToLocalStorage()
         await this.updateCart()
 
       } catch (e) {
@@ -110,6 +110,7 @@ class Cart {
       return
     }
 
+    console.log('fetching carts from local storage')
     let carts
     if ((carts = localStorage.getItem(CART_STORAGE_URI))) {
       this.items = JSON.parse(carts)
@@ -201,6 +202,7 @@ class Cart {
       overlayLoading.hide()
 
       if (result && result.id) this.id = result.id
+      this.saveToLocalStorage()
       return true
     } catch(e) {
       this.isLoading = false
