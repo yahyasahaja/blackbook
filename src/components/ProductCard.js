@@ -233,7 +233,7 @@ class ProductCard extends Component {
                     onClick={this.onLike}
                     data-testid="like-button"
                   >
-                    {this.totalLikeRaw + (this.isLiked ? 1 : 0)}
+                    <span data-testid="like-count" >{this.totalLikeRaw + (this.isLiked ? 1 : 0)}</span>
                   </FlatButton>
                   <Link
                     to={{ pathname: '/chat/new', state: { productId: id } }}
