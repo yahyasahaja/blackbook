@@ -45,6 +45,7 @@ class Cart {
 
   @action
   async fetchData(sync) {
+    let fetchedItems = []
     if (user && user.isLoggedIn) {
       try {
         this.isLoading = true
@@ -61,8 +62,6 @@ class Cart {
         })
         
         this.isLoading = false
-
-        let fetchedItems
         //draft exist
         if (totalCount > 0) {
           fetchedItems = carts[0].items.map(data => {
@@ -103,6 +102,7 @@ class Cart {
           }
           
           this.items = newestItems
+          console.log('ERROR DETECTION', this.items)
           await this.updateCart()
         } else {
           this.items = fetchedItems
@@ -198,7 +198,7 @@ class Cart {
       if (this.isDraftExist) variables.cartId = this.id
 
       const {
-        data: { result }
+        data
       } = await client.mutate({
         mutation: this.isDraftExist ? updateCart : createCart,
         variables
@@ -206,7 +206,7 @@ class Cart {
       this.isLoading = false
       overlayLoading.hide()
 
-      if (result && result.id) this.id = result.id
+      this.id = (data['createCart'] || data['updateCart']).id
       this.saveToLocalStorage()
       return true
     } catch(e) {
@@ -231,6 +231,7 @@ class Cart {
 
   @action
   clear() {
+    this.id = null
     this.items.clear()
     badges.set(badges.CART, 0)
     localStorage.removeItem(CART_STORAGE_URI)

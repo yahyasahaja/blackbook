@@ -46,24 +46,25 @@ class Cart extends Component {
     cart.fetchData()
 
     this.calculateTotalCost()
-    this.disposer = observe(cart, () => {
-      this.calculateTotalCost()
-    })
+    // this.disposer = observe(cart, () => {
+    //   console.log('summoned')
+    //   // this.calculateTotalCost()
+    // })
 
     // wait until user data loaded
-    this.userDisposer = observe(user, 'isLoading', () => {
-      console.log('creating listener')
-      if (!user.isLoading) {
-        this.calculateTotalCost()
-      }
-    }, true)
+    // this.userDisposer = observe(user, 'isLoading', () => {
+    //   console.log('creating listener')
+    //   if (!user.isLoading) {
+    //     // this.calculateTotalCost()
+    //   }
+    // }, true)
 
     // cart.fetchData()
   }
 
   componentWillUnmount() {
     this.isUnmounted = true
-    this.disposer()
+    // this.disposer()
     appStack.pop()
   }
 
@@ -74,7 +75,7 @@ class Cart extends Component {
   }
 
   async calculateTotalCost() {
-    if (cart.items.slice().length === 0) return
+    if (cart.items && cart.items.slice().length === 0) return
     
     this.setState({ shippingCost: null, discount: 0, error: '' })
     const { useVoucher, voucherCode } = this.state
@@ -114,7 +115,7 @@ class Cart extends Component {
       console.log(err)
     }
 
-    this.userDisposer()
+    // this.userDisposer()
   }
 
   renderProducts() {
@@ -126,7 +127,7 @@ class Cart extends Component {
         ${this.state.error && styles.error}
         ${this.state.useVoucher && this.state.discount > 0 && styles.discount}`}
       >
-        {cart.items
+        {cart.items && cart.items
           .slice()
           .map((item, index) => (
             <CartItem
@@ -257,14 +258,14 @@ class Cart extends Component {
           <p>Silahkan login terlebih dahulu untuk melakukan transaksi</p>
         </Dialog>
 
-        {cart.items.length === 0 && (
+        {cart.items && cart.items.length === 0 && (
           <p data-testid="cart-message" className={styles.empty}>
             Keranjang belanja anda masih kosong
             <span className="mdi mdi-cart-outline" />
           </p>
         )}
         {this.renderProducts()}
-        {cart.items.length > 0 && this.renderDetail()}
+        {cart.items && cart.items.length > 0 && this.renderDetail()}
       </PopupBar>
     )
   }
