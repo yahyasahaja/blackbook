@@ -43,7 +43,7 @@ class Cart extends Component {
   }
 
   async componentDidMount() {
-    cart.fetchData()
+    await cart.fetchData()
 
     this.calculateTotalCost()
     // this.disposer = observe(cart, () => {
@@ -52,19 +52,18 @@ class Cart extends Component {
     // })
 
     // wait until user data loaded
-    // this.userDisposer = observe(user, 'isLoading', () => {
-    //   console.log('creating listener')
-    //   if (!user.isLoading) {
-    //     // this.calculateTotalCost()
-    //   }
-    // }, true)
+    this.userDisposer = observe(user, 'isLoading', () => {
+      if (!user.isLoading) {
+        this.calculateTotalCost()
+      }
+    }, true)
 
     // cart.fetchData()
   }
 
   componentWillUnmount() {
     this.isUnmounted = true
-    // this.disposer()
+    this.userDisposer()
     appStack.pop()
   }
 

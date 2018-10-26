@@ -6,4 +6,4 @@ class Chat {
   @observable threads = observable.array()
 }
 
-export default new Chat()
+export default window.chat = new Chat()

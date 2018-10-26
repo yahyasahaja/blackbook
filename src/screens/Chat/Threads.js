@@ -14,8 +14,33 @@ import { observable } from 'mobx'
 @observer 
 class Threads extends Component {
   componentWillReceiveProps(nextProps) {
-    if(nextProps.data.threads && nextProps.location.pathname === '/chat') {
-      const threads = nextProps.data.threads.data.map((x, index) => {
+    if(nextProps.isSelected && nextProps.location.pathname === '/chat') {
+      // refetch when there is a new notification
+      navigator.serviceWorker.onmessage = (e) => {
+        if(e.type === 'message') {
+          this.fetchThreads()
+          badges.inc(badges.CHAT)
+        }
+      }
+    }
+
+    if(this.props.isSelected && onlineStatus.isOnline && this.props.location.pathname !== '/chat') {
+      this.fetchThreads()
+    }
+
+    if(this.props.isSelected && !user.isLoggedIn) {
+      return this.props.history.replace('/account')
+    }
+  }
+
+  async fetchThreads() {
+    try {
+      let { data: { threads } } = await client.query({
+        query: getThreadsQuery,
+        fetchPolicy: 'network-only'
+      })
+      
+      chat.threads = threads.data.map((x, index) => {
         const thread = Object.assign({}, x)
         const currentThread = chat.threads.length > 0 ? chat.threads[index] : null
 
@@ -27,27 +52,8 @@ class Threads extends Component {
 
         return thread
       })
-      
-      console.log('update threads', threads)
-      chat.threads = observable(threads)
-    }
-
-    if(nextProps.isSelected && nextProps.location.pathname === '/chat') {
-      // refetch when there is a new notification
-      navigator.serviceWorker.onmessage = (e) => {
-        if(e.type === 'message') {
-          this.props.data.refetch()
-          badges.inc(badges.CHAT)
-        }
-      }
-    }
-
-    if(this.props.isSelected && onlineStatus.isOnline && this.props.location.pathname !== '/chat') {
-      if (this.props.data.refetch) this.props.data.refetch()
-    }
-
-    if(this.props.isSelected && !user.isLoggedIn) {
-      return this.props.history.replace('/account')
+    } catch (e) {
+      console.log('ERROR FETCHING THREADS', e)
     }
   }
 
@@ -55,6 +61,8 @@ class Threads extends Component {
     if(this.props.isSelected && !user.isLoggedIn) {
       return this.props.history.replace('/account')
     }
+
+    this.fetchThreads()
   }
 
   componentWillUnmount() {

@@ -52,15 +52,6 @@ class Conversation extends Component {
     error: '',
   }
 
-  async componentWillMount() {
-    this.getThreadId()
-    this.disposer = observe(user, 'isLoading', () => {
-      if (!user.isLoading) {
-        this.getThreadId()
-      }
-    })
-  }
-
   async componentDidMount() {
     if (this.props.location.state && this.props.location.state.index) {
       if (chat.threads[this.props.location.state.index]) {
@@ -80,6 +71,13 @@ class Conversation extends Component {
     }
 
     badges.set(badges.CHAT, 0)
+    
+    await this.getThreadId()
+    this.disposer = observe(user, 'isLoading', () => {
+      if (!user.isLoading) {
+        this.getThreadId()
+      }
+    })
   }
 
   componentDidUpdate(props) {
@@ -172,18 +170,20 @@ class Conversation extends Component {
         variables: {
           id: productId,
         },
+        fetchPolicy: 'network-only'
       })
-
+      
       this.setState({
         loadingProduct: false,
         product,
         title: product.seller.name,
-      })
+      }, () => { console.log('FETCHED', this.state)})
     } catch (err) {
+      console.log('ADA ERROR CUK', err)
       this.setState({
         loadingProduct: false,
         error: 'Tidak dapat mengambil informasi produk',
-      })
+      }) 
     }
   }
 
@@ -228,7 +228,7 @@ class Conversation extends Component {
       }
 
       // after get message, get product detail
-      if (!before && !this.state.product) this.getProduct(thread.productId)
+      this.getProduct(thread.productId)
       return true
     } catch (err) {
       console.log(err)
@@ -468,6 +468,7 @@ const getProductQuery = gql`
         url
       }
       seller {
+        id
         name
       }
     }
