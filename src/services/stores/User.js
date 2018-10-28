@@ -13,8 +13,8 @@ import {
 //TOKENS
 import tokens from './Tokens'
 import favorites from './Favorites'
-import cart from './Cart'
-import country from './Country'
+import cart from './Favorites'
+import country from './Favorites'
 
 //UTILS
 import {

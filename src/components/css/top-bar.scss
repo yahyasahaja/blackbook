@@ -7,13 +7,13 @@
   flex-direction: column;
   word-wrap: break-word;
   min-height: 100vh;
+  box-shadow: 0px 0px 12px #3c3c3c;
 
   .fly {
     position: fixed;
     top: 0;
     width: 100%;
-    background: #f8f8f8;
-    border-bottom: 1px solid #e1e1e1;
+    background: $bg-sec-color;
     max-width: $max-width;
     margin: auto;
     z-index: 1;
@@ -21,17 +21,16 @@
 
   .content {
     width: 100%;
-    background: #f8f8f8;
-    margin-bottom: 55px;
-    min-height: calc(100vh - 55px);
+    background: $bg-sec-color;
+    margin-bottom: 45px;
+    min-height: calc(100vh - 45px);
 
     .relative {
       display: block;
       position: relative;
       top: 0;
       width: 100%;
-      background: #f8f8f8;
-      border-bottom: 1px solid #e1e1e1;
+      background: $bg-sec-color;
       z-index: 1;
     }
 
@@ -50,6 +49,6 @@
 
 .hide {
   opacity: 0 !important;
-  top: -55px !important;
+  top: -45px !important;
   transition: .5s;
 }

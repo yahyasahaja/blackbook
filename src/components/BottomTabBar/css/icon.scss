@@ -10,12 +10,12 @@
   background: none;
   
   span {
-    color: #9c9c9c;
+    color: #bdbdbd;
     font-weight: 600;
 
     &.active {
       font-weight: bold;
-      color: $primary-color;
+      color: white;
     }
   }
 
@@ -35,7 +35,7 @@
 
   &:active {
     span {
-      color: $primary-color;
+      color: white;
       transition: .01s;
     }
   }

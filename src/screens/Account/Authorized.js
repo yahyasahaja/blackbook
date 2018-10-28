@@ -7,7 +7,7 @@ import gql from 'graphql-tag'
 
 //STYLES
 import styles from './css/authorized.scss'
-import userClient from '../../services/graphql/userClient'
+import userClient from '../../services/graphql/productClient'
 
 //STORE
 import { user, dialog, serviceWorkerUpdate as swu } from '../../services/stores'

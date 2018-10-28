@@ -2,7 +2,7 @@
 
 .container {
   position: relative;
-  padding: 8px 5px;
+  padding: 5px 5px;
   color: $secondary-color;
   display: flex;
   justify-content: space-between;
@@ -24,6 +24,7 @@
     color: #9c9c9c;
     margin: 0 10px;
     cursor: text;
+    height: 34px;
 
     .icon {
       font-size: 18pt;

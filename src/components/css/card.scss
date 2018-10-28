@@ -1,0 +1,17 @@
+@import '../../assets/css/config.scss';
+
+.container {
+  border-radius: 20px;
+  margin: 10px;
+  background: $bg-sec-color;
+  width: 40%;
+  height: 200px;
+  overflow: hidden;
+  box-shadow: 0 0 32px #1d1d1d;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}

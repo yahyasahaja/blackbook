@@ -11,67 +11,11 @@ import asyncComponent from './components/AsyncComponent'
 const Home = asyncComponent(() =>
   import(/*webpackChunkName: "Home"*/ './screens/Home')
 )
-const Favorite = asyncComponent(() =>
-  import(/*webpackChunkName: "Favorite"*/ './screens/Favorite')
-)
-const Promo = asyncComponent(() =>
-  import(/*webpackChunkName: "Promo"*/ './screens/Promo')
-)
-const Chat = asyncComponent(() =>
-  import(/*webpackChunkName: "Chat"*/ './screens/Chat')
-)
-const Conversation = asyncComponent(() =>
-  import(/*webpackChunkName: "Conversation"*/ './screens/Chat/Conversation')
-)
+// const Favorite = asyncComponent(() =>
+//   import(/*webpackChunkName: "Favorite"*/ './screens/Favorite')
+// )
 const Account = asyncComponent(() =>
   import(/*webpackChunkName: "Account"*/ './screens/Account')
-)
-// const PageNotFound = asyncComponent(() => import(/*webpackChunkName: "PageNotFound"*/'./screens/PageNotFound'))
-const Search = asyncComponent(() =>
-  import(/*webpackChunkName: "Search"*/ './screens/Search')
-)
-const Category = asyncComponent(() =>
-  import(/*webpackChunkName: "Category"*/ './screens/Category')
-)
-const Auth = asyncComponent(() =>
-  import(/*webpackChunkName: "Auth"*/ './screens/Auth')
-)
-const Password = asyncComponent(() =>
-  import(/*webpackChunkName: "Password"*/ './screens/Account/Password')
-)
-const Profile = asyncComponent(() =>
-  import(/*webpackChunkName: "Profile"*/ './screens/Account/Profile')
-)
-const Cart = asyncComponent(() =>
-  import(/*webpackChunkName: "Cart"*/ './screens/Cart')
-)
-const CartProcess = asyncComponent(() =>
-  import(/*webpackChunkName: "CartProcess"*/ './screens/Cart/Process')
-)
-const CartConfirm = asyncComponent(() =>
-  import(/*webpackChunkName: "CartConfirm"*/ './screens/Cart/Confirmation')
-)
-const PromoDetail = asyncComponent(() =>
-  import(/*webpackChunkName: "PromoDetail"*/ './screens/Promo/PromoDetail')
-)
-const Product = asyncComponent(() =>
-  import(/*webpackChunkName: "Product"*/ './screens/Product')
-)
-const Overlay = asyncComponent(() =>
-  import(/*webpackChunkName: "Overlay"*/ './components/OverlayInstall')
-)
-const Sellers = asyncComponent(() =>
-  import(/*webpackChunkName: "Product"*/ './screens/Sellers')
-)
-const Transaction = asyncComponent(() =>
-  import(/*webpackChunkName: "Transaction"*/ './screens/Account/Transaction')
-)
-const Seller = asyncComponent(() => 
-  import(/*webpackChunkName: "Seller"*/ './screens/Seller')
-)
-
-const PWASupport = asyncComponent(() => 
-  import(/*webpackChunkName: "PWA"*/ './screens/PWA')
 )
 
 //STYLES
@@ -91,33 +35,21 @@ import {
   overlayLoading,
   reloadCountdownTimer as rct,
   user,
-  country,
-  cart,
-  favorites,
   // snackbar
 } from './services/stores'
-import CountrySelection from './components/CountrySelection'
 // snackbar.show('lul')
 // setTimeout(() => snackbar.show('lul 2'), 3000)
 
 //INNER_CONFIG
 let BOTTOM_TAB_BAR_DATA = [
   { label: 'Home', icon: 'home', url: '/home', Component: Home },
-  {
-    label: 'Disukai',
-    icon: 'heart',
-    url: '/favorite',
-    Component: Favorite,
-    badge: badges.LIKED
-  },
-  { label: 'Promo', icon: 'tag', url: '/promo', Component: Promo },
-  {
-    label: 'Chat',
-    icon: 'forum',
-    url: '/chat',
-    Component: Chat,
-    badge: badges.CHAT
-  },
+  // {
+  //   label: 'Disukai',
+  //   icon: 'heart',
+  //   url: '/favorite',
+  //   Component: Favorite,
+  //   badge: badges.LIKED
+  // },
   { label: 'Akun', icon: 'account', url: '/account', Component: Account }
 ]
 
@@ -157,8 +89,7 @@ class AppRouter extends Component {
 
     user.fetchData().then(data => {
       if (data) user.registerPushSubscription()
-      cart.fetchData(true)
-      favorites.fetchData()
+      // favorites.fetchData()
     }).catch(e => console.log('CANT FETCH USER DATA', e))
   }
 
@@ -230,21 +161,6 @@ class AppRouter extends Component {
               />
             </Switch>
             <Switch>
-              <Route path="/search" component={Search} />
-              <Route path="/auth" component={Auth} />
-              <Route path="/category/:category_name" component={Category} />
-              <Route path="/chat/:id" component={Conversation} />
-              <Route path="/cart/process" component={CartProcess} />
-              <Route path="/cart/confirm" component={CartConfirm} />
-              <Route path="/cart" component={Cart} />
-              <Route path="/account/profile" component={Profile} />
-              <Route path="/account/password" component={Password} />
-              <Route path="/account/transaction" component={Transaction} />
-              <Route path="/promo/:promotion_id" component={PromoDetail} />
-              <Route path="/product/:product_id" component={Product} />
-              <Route path="/seller/:seller_id" component={Seller}/>
-              <Route path="/sellers" component={Sellers} />
-              <Route path="/app-support" component={PWASupport}/>
               <Route path="/home" component={null} />
               <Route path="/chat" component={null} />
               <Route path="/favorite" component={null} />
@@ -253,10 +169,6 @@ class AppRouter extends Component {
               <Redirect from ="*" exact to="/home"/>                                                                                                                                                                                                        />
             </Switch>
           </div>
-
-          <section>
-            {country.currentCountry ? <CountrySelection /> : null}
-          </section>
 
           <section>
             <Snackbar
