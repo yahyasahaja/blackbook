@@ -18,7 +18,7 @@ export default class HideShow extends Component {
   renderSub() {
     if (this.activator.slice().length === 0) return
     return this.props.data.map((dt, i) => {
-      console.log(this.activator[i])
+      // console.log(this.activator[i])
       return (
         <div key={i} className={styles.sub}>
           <div className={styles.title} onClick={() => this.activator[i] = !this.activator[i]} >
