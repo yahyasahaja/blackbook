@@ -23,14 +23,14 @@
     width: 100%;
     max-width: 480px;
     color: $secondary-color;
-    font-size: 20pt;
+    font-size: 16pt;
     background: $bg-sec-color;
     color: $text-color;
     z-index: 2;
 
     .bar-wrapper {
       width: 100%;
-      padding: 3px 5px;
+      padding: 5px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -62,7 +62,7 @@
           width: 50px;
           white-space: nowrap;
           text-overflow: ellipsis;
-          font-size: 15pt;
+          font-size: 13pt;
         }
       }
   
@@ -74,7 +74,7 @@
         .cart, .cart:visited {
           position: absolute;
           width: 60px;
-          font-size: 20pt;
+          font-size: 16pt;
           top: 0;
           right: 0;
           height: 100%;
