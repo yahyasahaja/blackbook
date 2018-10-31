@@ -1,0 +1,8 @@
+@import '../../../assets/css/config.scss';
+
+.container {
+  display: block;
+  padding-top: 70px;
+  background: $bg-color;
+  min-height: 100vh;
+}

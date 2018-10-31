@@ -20,39 +20,39 @@ class Home extends Component {
     let dummy = [
       {
         img: '/static/img/sample.png',
-        url: '/'
+        url: '/hero/1'
       },
       {
         img: '/static/img/sample.png',
-        url: '/'
+        url: '/hero/1'
       },
       {
         img: '/static/img/sample.png',
-        url: '/'
+        url: '/hero/1'
       },
       {
         img: '/static/img/sample.png',
-        url: '/'
+        url: '/hero/1'
       },
       {
         img: '/static/img/sample.png',
-        url: '/'
+        url: '/hero/1'
       },
       {
         img: '/static/img/sample.png',
-        url: '/'
+        url: '/hero/1'
       },
       {
         img: '/static/img/sample.png',
-        url: '/'
+        url: '/hero/1'
       },
       {
         img: '/static/img/sample.png',
-        url: '/'
+        url: '/hero/1'
       },
       {
         img: '/static/img/sample.png',
-        url: '/'
+        url: '/hero/1'
       },
     ]
     return dummy.map((dt, i) => <Card key={i} {...dt} />)

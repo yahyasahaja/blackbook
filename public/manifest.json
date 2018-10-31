@@ -1,6 +1,6 @@
 {
-  "name": "Jualbli M-Commerce",
-  "short_name": "Jualbli",
+  "name": "Dota 2 Blackbook",
+  "short_name": "Dota 2 Blackbook",
   "icons": [
     {
       "src": "/static/icon/icon-72x72.png",
@@ -45,8 +45,8 @@
   ],
   "start_url": "/home",
   "display": "standalone",
-  "background_color": "#ea0f00",
-  "theme_color": "#ea0f00",
+  "background_color": "#6b6b6b",
+  "theme_color": "#b81b00",
   "gcm_sender_id_comment": "OneSignal WPN, Do Not Change ID",
   "gcm_sender_id": "519393577988"
 }

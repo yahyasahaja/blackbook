@@ -14,6 +14,7 @@
   background: white;
   // opacity: 0;
   z-index: 2;
+  box-shadow: 0px 0px 12px #3c3c3c;
 
   .bar {
     position: fixed;
@@ -23,14 +24,13 @@
     max-width: 480px;
     color: $secondary-color;
     font-size: 20pt;
-    background: #f8f8f8;
-    border-bottom: 1px solid #e1e1e1;
-    color: #9c9c9c;
+    background: $bg-sec-color;
+    color: $text-color;
     z-index: 2;
 
     .bar-wrapper {
       width: 100%;
-      padding: 8px 5px;
+      padding: 3px 5px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -39,11 +39,11 @@
         display: block;
         cursor: pointer;
         padding: 0 10px;
-        color: #5a5a5a;
+        color: white;
       }
   
       .title {
-        color: #5a5a5a;
+        color: white;
         font-size: 15pt;
         font-weight: 500;
         margin-left: 10px;
