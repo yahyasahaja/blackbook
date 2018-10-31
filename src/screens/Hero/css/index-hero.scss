@@ -13,7 +13,6 @@
 
     .left {
       display: block;
-      width: 50%;
 
       .image {
         display: block;
@@ -34,7 +33,7 @@
 
       .slider {
         border-radius: 30px;
-        background: #d4d4d4;
+        background: #232323;
         margin: 0 5px;
         margin-top: 10px;
       }
@@ -49,7 +48,7 @@
           display: flex;
           align-items: center;
           margin: 5px;
-          width: 40%;
+          width: 30%;
 
           img {
             width: 20px;
