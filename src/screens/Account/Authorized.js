@@ -2,17 +2,17 @@
 import React, { Component } from 'react'
 import { List, ListItem, ListSubHeader } from 'react-toolbox/lib/list'
 import { observer } from 'mobx-react'
-import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
+// import { graphql } from 'react-apollo'
+// import gql from 'graphql-tag'
 
 //STYLES
 import styles from './css/authorized.scss'
-import userClient from '../../services/graphql/productClient'
+// import userClient from '../../services/graphql/productClient'
 
 //STORE
-import { user, dialog, serviceWorkerUpdate as swu } from '../../services/stores'
-import HorizontalList from '../../components/HorizontalList'
-import { convertToMoneyFormat } from '../../utils'
+import { user, dialog } from '../../services/stores'
+// import HorizontalList from '../../components/HorizontalList'
+// import { convertToMoneyFormat } from '../../utils'
 
 //COMPONENT
 @observer
@@ -64,118 +64,28 @@ class Account extends Component {
   ]
 
   render() {
-    let { name, msisdn, country } = user.data
+    let { name } = user.data
 
-    let { getUser, loading } = this.props.user
+    // let { getUser, loading } = this.props.user
 
-    let as2in1Wallet = ''
-    if (getUser) as2in1Wallet = getUser.as2in1Wallet
+    // let as2in1Wallet = ''
+    // if (getUser) as2in1Wallet = getUser.as2in1Wallet
 
     return (
       <div className={styles.container}>
         <div className={styles.profile}>
           {this.renderProfilePicture()}
           <span className={styles.name}>{name}</span>
-          <span className={styles.msisdn}>+{msisdn}</span>
         </div>
 
         <div className={styles.card}>
           <List selectable ripple>
-            {country === 'HKG' ? (
-              <React.Fragment>
-                <ListSubHeader
-                  className={styles['e-wallet']}
-                  caption="eWallet"
-                />
-                <HorizontalList
-                  dataKey="As 2in1 Wallet"
-                  value={
-                    loading
-                      ? 'Loading...'
-                      : as2in1Wallet
-                        ? convertToMoneyFormat(as2in1Wallet)
-                        : 0
-                  }
-                  valueClassName={styles['e-wallet-value']}
-                  keyClassName={styles['e-wallet-key']}
-                />
-              </React.Fragment>
-            ) : (
-              <div />
-            )}
             <ListSubHeader caption="Akun" />
             <ListItem
               caption="Profil Saya"
               leftIcon="account_circle"
               onClick={() => {
                 this.props.history.push('/account/profile')
-              }}
-            />
-            <ListItem
-              caption="Daftar Transaksi"
-              leftIcon="playlist_add_check"
-              onClick={() => {
-                this.props.history.push('/account/transaction/')
-              }}
-              className="daftar-transaksi"
-            />
-            <ListItem
-              caption="Ubah Kata Sandi"
-              leftIcon="lock"
-              onClick={() => {
-                this.props.history.push('/account/password')
-              }}
-            />
-            <ListItem
-              caption="Berjualan di Jualbli"
-              leftIcon="business_center"
-              onClick={() =>
-                dialog.show(
-                  'Berjualan di Jualbli',
-                  <div className={styles.berjualan}>
-                    Untuk berjualan di portal Jualbli, anda perlu mengunduh
-                    aplikasi untuk penjual dan mengunjungi halaman
-                    <a
-                      className={styles.link}
-                      href="https://seller.jualbli.com"
-                      target="_blank"
-                    >
-                      {' '}
-                      seller.jualbli.com{' '}
-                    </a>
-                    melalui komputer.
-                    <div className={styles['img-wrapper']}>
-                      <a
-                        href="https://api.jualbli.com/sellerapp/android"
-                        target="_blank"
-                      >
-                        <img
-                          className={styles.google}
-                          src="/static/img/google_play_badge.png"
-                          alt="Google Play Badge"
-                        />
-                      </a>
-                      <a
-                        href="https://api.jualbli.com/sellerapp/ios"
-                        target="_blank"
-                      >
-                        <img
-                          className={styles.apple}
-                          src="/static/img/app_store_badge.svg"
-                          alt="Google Play Badge"
-                        />
-                      </a>
-                    </div>
-                  </div>,
-                  this.berjualanActions
-                )
-              }
-            />
-            <ListItem
-              caption="Menambahkan Aplikasi ke Layar Utama"
-              leftIcon="smartphone"
-              onClick={() => {
-                swu.setManualGuide(true, true)
               }}
             />
             <ListItem
@@ -197,17 +107,4 @@ class Account extends Component {
   }
 }
 
-const getUserDataQuery = gql`
-  query UserData {
-    getUser {
-      as2in1Wallet
-    }
-  }
-`
-
-export default graphql(getUserDataQuery, {
-  name: 'user',
-  options: {
-    client: userClient
-  }
-})(Account)
+export default Account

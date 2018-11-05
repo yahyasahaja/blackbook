@@ -26,7 +26,11 @@ import {
 const isNotLocal = () => !(location.href.includes('localhost') || /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href))
 //STORE
 class User {
-  @observable data = null
+  @observable data = {
+    name: 'Paijo',
+    email: 'paijo@gmail.com',
+
+  }
   @observable profilePictureURL
   @observable isLoading
   @observable isLoadingUpdateProfile
@@ -350,36 +354,36 @@ class User {
   }
 
   @action
-  fetchData = token => {
-    let raw = token || localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)
+  fetchData = async token => {
+    // let raw = token || localStorage.getItem(AUTHORIZATION_TOKEN_STORAGE_URI)
 
-    if (!raw) return new Promise((resolve) => resolve(false))
+    // if (!raw) return new Promise((resolve) => resolve(false))
 
-    let authToken = `Bearer ${raw}`
+    // let authToken = `Bearer ${raw}`
 
-    this.isLoading = true
-    return axios.get(getIAMEndpoint('/user'), {
-      headers: {
-        Authorization: authToken
-      }
-    })
-      .then(({ data: { is_ok, data: user } }) => {
-        if (is_ok) {
-          tokens.setAuthToken(raw)
-          const res = this.setData(user)
-          country.setCountry(user.country.toLowerCase(), true)
-          this.isLoading = false
-          return res
-        }
+    // this.isLoading = true
+    // return axios.get(getIAMEndpoint('/user'), {
+    //   headers: {
+    //     Authorization: authToken
+    //   }
+    // })
+    //   .then(({ data: { is_ok, data: user } }) => {
+    //     if (is_ok) {
+    //       tokens.setAuthToken(raw)
+    //       const res = this.setData(user)
+    //       country.setCountry(user.country.toLowerCase(), true)
+    //       this.isLoading = false
+    //       return res
+    //     }
 
-        // this.logout()
-        this.isLoading = false
-        console.log('LOGOUT')
-        return false
-      }).catch(res => {
-        console.log('ERROR ON FETCHING USER DATA', res)
-        return false
-      })
+    //     // this.logout()
+    //     this.isLoading = false
+    //     console.log('LOGOUT')
+    //     return false
+    //   }).catch(res => {
+    //     console.log('ERROR ON FETCHING USER DATA', res)
+    //     return false
+    //   })
   }
 
   @computed

@@ -23,9 +23,6 @@ class Account extends Component {
           <PrimaryButton to="/auth/register" >DAFTAR</PrimaryButton>
           <SecondaryButton to="/auth/login" >LOGIN</SecondaryButton>
         </div>
-        <div className={styles.pwaButton}>
-          <SecondaryButton to="/app-support"> CEK DUKUNGAN APLIKASI </SecondaryButton>
-        </div>
       </div>
     )
   }

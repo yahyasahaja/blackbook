@@ -5,19 +5,21 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { observer } from 'mobx-react'
 import Dialog from 'react-toolbox/lib/dialog'
 import { withTracker } from '../../google-analytics'
+import Input from 'react-toolbox/lib/input/Input'
 
 //STYLES
-import styles from './css/profile.scss'
+import styles from './css/index-edit-hero.scss'
 import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
+import theme from '../../assets/css/theme.scss'
 
 //COMPONENTS
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
-import EditableList from '../../components/EditableList'
 import PrimaryButton from '../../components/PrimaryButton'
 // import loadingTheme from '../Chat/css/loading-submit.scss'
 
 //STORE
-import { user, snackbar, appStack } from '../../services/stores'
+import { user, snackbar, appStack, info } from '../../services/stores'
+import { observable } from 'mobx';
 
 //COMPONENT
 @observer
@@ -83,59 +85,30 @@ class Profile extends Component {
     )
   }
 
-  state = {
-    profilePictureURL: null,
-    name: '',
-    msisdn: '',
-    address: '',
-    city: '',
-    zip_code: '',
-    country: '',
-    profilePhotoInput: '',
-    active: false,
-    active2: false,
-  }
+  @observable name = ''
+  @observable stat = []
+  @observable bio = ''
+  @observable ability = []
+  @observable tipsDesc = ''
+  @observable tipsVideo = ''
+  @observable active = false
 
   handleChange(name, value) {
-    this.setState({ [name]: value })
+    this[name] = value
   }
 
-  updateProfile = () => {
+  post = async () => {
     if (user.isLoadingUpdateProfile) return
 
-    this.setState({ active: false }, () => {
-      user.updateProfile({
-        ...this.state
-      }).then(token => {
-        if (token) snackbar.show('Profile has been updated')
-      })
+    this.active = false
+    let token = await user.updateProfile({
+      ...this.state
     })
+    
+    if (token) snackbar.show('Profile has been updated')
   }
-
-  handleToggle = state => {
-    this.setState({ [state]: !this.state[state] })
-    console.log(this.state)
-  }
-
-  actions = [
-    { label: 'Cancel', onClick: () => this.handleToggle('active') },
-    { label: 'Ok', onClick: this.updateProfile }
-  ]
-
-  actions2 = [
-    { label: 'Cancel', onClick: () => this.handleToggle('active2') },
-    { label: 'Ok', onClick: this.updateProfile }
-  ]
-
+  
   renderContent = () => {
-    let {
-      name,
-      email,
-      currentPassword,
-      retypePassword,
-      newPassword,
-    } = this.state
-
     return (
       <div className={styles.container} >
         <div className={styles.profile} >
@@ -143,53 +116,40 @@ class Profile extends Component {
         </div>
 
         <div className={styles.card} >
-          <EditableList
-            label="Nama" placeholder="Your Name"
-            value={name}
+          <Input
+            type="text"
+            label="Name"
             onChange={this.handleChange.bind(this, 'name')}
-            border
+            value={this.name}
+            theme={theme}
+            required
           />
 
-
-          <EditableList
-            label="Email" placeholder="Your Email"
-            value={email} disabled
-            onChange={this.handleChange.bind(this, 'email')}
-            border
+          <Input
+            type="text"
+            label="Bio"
+            onChange={this.handleChange.bind(this, 'bio')}
+            value={this.bio}
+            theme={theme}
+            required
           />
 
-          {this.renderButton()}
-          <Dialog
-            actions={this.actions}
-            active={this.state.active}
-            onEscKeyDown={() => this.handleToggle('active')}
-            onOverlayClick={() => this.handleToggle('active')}
-            title='Update Profile'
-          >
-            <p>Anda akan memperbarui informasi. Lanjutkan?</p>
-          </Dialog>
-        </div>
-
-        <div className={styles.card} >
-          <EditableList
-            label="Nama" placeholder="Your Current Password"
-            value={currentPassword}
-            onChange={this.handleChange.bind(this, 'currentPassword')}
-            border
+          <Input
+            type="text"
+            label="Tips Description"
+            onChange={this.handleChange.bind(this, 'tipsDesc')}
+            value={this.bio}
+            theme={theme}
+            required
           />
 
-          <EditableList
-            label="Email" placeholder="Your New Password"
-            value={newPassword} disabled
-            onChange={this.handleChange.bind(this, 'newPassword')}
-            border
-          />
-
-          <EditableList
-            label="Email" placeholder="Retype Password"
-            value={retypePassword} disabled
-            onChange={this.handleChange.bind(this, 'retypePassword')}
-            border
+          <Input
+            type="text"
+            label="Tips Video Link"
+            onChange={this.handleChange.bind(this, 'tipsVideo')}
+            value={this.bio}
+            theme={theme}
+            required
           />
 
           {this.renderPasswordButton()}
@@ -224,29 +184,7 @@ class Profile extends Component {
         type="submit"
         onClick={() => this.setState({ active: true })}
       >
-        Simpan Profile
-      </PrimaryButton>
-    )
-  }
-
-  renderPasswordButton() {
-    if (user.isLoadingUpdateProfile) return (
-      <div className={styles['loading-wrapper']} >
-        <ProgressBar
-          className={styles.loading}
-          type='circular'
-          mode='indeterminate' theme={ProgressBarTheme}
-        />
-      </div>
-    )
-
-    return (
-      <PrimaryButton
-        className={styles.button}
-        type="submit"
-        onClick={() => this.setState({ active2: true })}
-      >
-        Update Password
+        Save New Hero
       </PrimaryButton>
     )
   }

@@ -23,6 +23,12 @@ const Auth = asyncComponent(() =>
 const Hero = asyncComponent(() => 
   import(/*webpackChunkName: "Auth"*/ './screens/Hero')
 )
+const Profile = asyncComponent(() => 
+  import(/*webpackChunkName: "Profile"*/ './screens/Account/Profile')
+)
+const EditHero = asyncComponent(() => 
+  import(/*webpackChunkName: "Profile"*/ './screens/EditHero')
+)
 
 //STYLES
 import styles from './assets/css/app-router.scss'
@@ -168,7 +174,9 @@ class AppRouter extends Component {
             </Switch>
             <Switch>
               <Route path="/auth" component={Auth} />
+              <Route path="/hero/new" component={EditHero} />
               <Route path="/hero/:id" component={Hero} />
+              <Route path="/account/profile" component={Profile} />
 
               <Route path="/home" component={null} />
               <Route path="/chat" component={null} />

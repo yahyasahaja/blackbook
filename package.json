@@ -88,6 +88,7 @@
     "react-ga": "^2.5.3",
     "react-image-gallery": "^0.8.7",
     "react-lazyload": "^2.3.0",
+    "react-parallax": "^2.0.1",
     "react-responsive-carousel": "^3.1.39",
     "react-router-dom": "^4.2.2",
     "react-slick": "^0.23.1",

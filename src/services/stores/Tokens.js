@@ -50,6 +50,7 @@ class Tokens {
 
   @action
   async refetchAPIToken() {
+    return
     let hkg = (
       location.host.indexOf('hktest') !== -1 || 
       location.host.indexOf('.hk') !== -1 ||

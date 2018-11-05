@@ -1,34 +1,23 @@
 //MODULES
 import React, { Component } from 'react'
 import Input from 'react-toolbox/lib/input/Input'
-import Dropdown from 'react-toolbox/lib/dropdown'
+// import Dropdown from 'react-toolbox/lib/dropdown'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import { observable, computed, action } from 'mobx'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import Dialog from 'react-toolbox/lib/dialog'
-import axios from 'axios'
 
 //STYLES 
-import styles from './css/register.scss'
-import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
+import styles from './css/login.scss'
 
 //THEME
 import theme from '../../assets/css/theme.scss'
+import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import PrimaryButton from '../../components/PrimaryButton'
 
-//INNER_CONFIG
-let countryCodes = [
-  { value: '886', label: '+886' },
-  { value: '852', label: '+852' },
-  { value: '62', label: '+62' },
-]
-
 //STORE
-import { user, appStack, snackbar, overlayLoading } from '../../services/stores'
-import { getIAMEndpoint } from '../../config'
+import { user, snackbar, appStack } from '../../services/stores'
 
 //COMPONENT
 @observer
@@ -40,189 +29,40 @@ class Register extends Component {
 
   componentWillUnmount() {
     appStack.pop()
-    this.isUnmounted = true
   }
 
   componentDidMount() {
-    this.props.setTitle('Daftar')
+    this.props.setTitle('Register')
   }
 
-  isUnmounted = false
-  DEFAULT_COUNT = 120
+  onSubmit = e => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    let { password, countryCode, telp } = this.state
+
+    if (countryCode === null) return
+    user.Register(`${countryCode}${telp}`, password).then(token => {
+      if (!token) snackbar.show('Nomor telepon atau password anda salah!')
+    })
+  }
 
   state = {
     countryCode: '886',
     telp: '',
     password: '',
-    address: '',
-    name: '',
-    gender: '',
-    otp: '',
-    otp_error: ''
-  }
-
-  @observable otpModalActive = false
-  @observable otpConfirmationActions = [
-    {
-      label: 'Kirim Ulang', onClick: this.toggleActiveConfirmationModal,
-      disabled: false
-    },
-    {
-      label: 'Konfirmasi', onClick: this.toggleActiveConfirmationModal
-    }
-  ]
-  @observable count = this.DEFAULT_COUNT
-  @observable secret = ''
-  
-  @computed
-  get msisdn() {
-    let { countryCode, telp } = this.state
-    return `${countryCode}${telp}`
-  }
-
-  @computed
-  get canResend() {
-    return this.count <= 0
-  }
-
-  @action
-  decreaseCount() {
-    if (this.canResend) {
-      this.otpConfirmationActions = observable([
-        {
-          label: 'Kirim Ulang', onClick: this.onResendClicked,
-          disabled: false
-        },
-        {
-          label: 'Konfirmasi', onClick: this.onConfirmClicked
-        },
-      ])
-
-      if (this.intervalId !== null) clearInterval(this.intervalId)
-      this.intervalId = null
-
-      return
-    }
-
-    this.otpConfirmationActions = observable([
-      {
-        label: `Kirim Ulang (${--this.count})`, onClick: this.onResendClicked,
-        disabled: true
-      },
-      {
-        label: 'Konfirmasi', onClick: this.onConfirmClicked
-      },
-    ])
-  }
-
-  onResendClicked = () => {
-    this.sendOtp()
-  }
-
-  onConfirmClicked = async () => {
-    let { is_ok, validToken } = await user.confirmOTP(this.msisdn, this.state.otp, this.secret)
-
-    if (!is_ok) {
-      this.setState({otp_error: 'Kode konfirmasi tidak valid'})
-      return snackbar.show('Kode konfirmasi tidak valid')
-    }
-    
-    this.register(validToken)
-  }
-
-  @action
-  resetCount() {
-    this.count = this.DEFAULT_COUNT
-  }
-
-  @action
-  showConfirmationModal() {
-    this.otpModalActive = true
-  }
-
-  toggleActiveConfirmationModal = () => {
-    this.otpModalActive = !this.otpModalActive
   }
 
   handleChange(name, value) {
     if (name === 'telp')
-      if (value[0] === '0')
+      if (value[0] === '0') 
         value = value.split('').slice(1).join('')
 
-    this.setState({ [name]: value, [`${name}_error`]: '' })
-  }
-
-  isUserExist = async () => {
-    overlayLoading.show()
-    try {
-      let { data: { is_ok } } = await axios.post(getIAMEndpoint(`/quick/${this.msisdn}`))
-      overlayLoading.hide()
-      if (is_ok)
-        snackbar.show('Nomor telah terdaftar. Silahkan gunakan fitur lupa password')
-      return is_ok
-    } catch(e) {
-      overlayLoading.hide()
-      snackbar.show('Telah terjadi kesalahan koneksi, coba lagi nanti')
-      throw e
-    }
-  }
-
-  onSubmit = async e => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    let isUserExist = await this.isUserExist()
-    if (isUserExist) return
-    console.log('sending otp')
-    await this.sendOtp()
-    this.showConfirmationModal()
-  }
-
-  intervalId = null
-
-  @action
-  async sendOtp() {
-    this.resetCount()
-    let { data } = await user.sendOTP(this.msisdn)
-
-    if (!data) return
-    let { is_ok, data: secret } = data
-
-    if (!is_ok) return snackbar.show('Gagal mengirimkan kode OTP')
-
-    this.secret = secret
-
-    this.intervalId = setInterval(() => {
-      if (!this.isUnmounted) {
-        this.decreaseCount()
-      }
-    }, 1000)
-  }
-
-  register(transactionId) {
-    let {
-      countryCode,
-      password,
-      address,
-      name,
-    } = this.state
-
-    let { msisdn } = this
-    
-    user.register({
-      transactionId,
-      name,
-      msisdn,
-      password,
-      address,
-      country: countryCode === '886' ? 'TWN' : countryCode === '852' ? 'HKG' : 'IDN'
-    }).then(token => {
-      if (!token) snackbar.show('Registrasi gagal!')
-    })
+    this.setState({ [name]: value })
   }
 
   renderButton() {
-    if (user.isLoadingUpdateProfile || user.isLoadingSendingOTP) return (
+    if (user.isLoadingRegister) return (
       <div className={styles['loading-wrapper']} >
         <ProgressBar
           className={styles.loading}
@@ -232,7 +72,7 @@ class Register extends Component {
       </div>
     )
 
-    return <PrimaryButton type="submit" >Daftar</PrimaryButton>
+    return <PrimaryButton type="submit" >Register</PrimaryButton>
   }
 
   render() {
@@ -240,45 +80,18 @@ class Register extends Component {
       <div className={styles.container} >
         <div className={styles.top} >
           <div className={styles.title}><img src="/static/img/logo-color.png" alt=""/></div> 
-          <div className={styles.desc} ><span>
-            Masukkan data diri anda untuk menjadi anggota Jualbli
-          </span></div>
         </div>
 
         <form className={styles.form} onSubmit={this.onSubmit} >
           <Input
-            name="name"
-            type="text"
-            label="Nama"
-            onChange={this.handleChange.bind(this, 'name')}
-            value={this.state.name}
+            name="email"
+            type="email"
+            label="Email"
+            onChange={this.handleChange.bind(this, 'email')}
+            value={this.state.password}
             theme={theme}
             required
           />
-
-          <div className={styles.handphone} >
-            <Dropdown
-              auto
-              className="country_code"
-              onChange={this.handleChange.bind(this, 'countryCode')}
-              source={countryCodes}
-              value={this.state.countryCode}
-              label="Kode Negara"
-              required
-            />
-
-            <div className={styles.telp} >
-              <Input
-                name="phone_number"
-                type="tel"
-                label="Nomor Telepon"
-                onChange={this.handleChange.bind(this, 'telp')}
-                value={this.state.telp}
-                theme={theme}
-                required
-              />
-            </div>
-          </div>
 
           <Input
             name="password"
@@ -290,58 +103,14 @@ class Register extends Component {
             required
           />
 
-          <Input
-            name="address"
-            type="text"
-            label="Alamat"
-            onChange={this.handleChange.bind(this, 'address')}
-            value={this.state.address}
-            theme={theme}
-            multiline
-            rows={2}
-          />
-
           {this.renderButton()}
 
           <span className={styles.ref} >
             Sudah memiliki akun? <Link to="/auth/login" >Login disini</Link>
           </span>
-
-          <Dialog
-            actions={
-              !user.isLoadingSendingOTP
-                ? this.otpConfirmationActions.slice()
-                : []
-            }
-            active={this.otpModalActive}
-            title="Konfirmasi OTP"
-          >
-            {
-              user.isLoadingSendingOTP
-                ? (
-                  <div className={styles['loading-wrapper']} >
-                    <ProgressBar
-                      className={styles.loading}
-                      type='circular'
-                      mode='indeterminate' theme={ProgressBarTheme}
-                    />
-                  </div>
-                )
-                : (
-                  <div className={styles.modal} >
-                    <Input
-                      name="otp"
-                      type="text"
-                      label="Nomor OTP"
-                      onChange={this.handleChange.bind(this, 'otp')}
-                      value={this.state.otp}
-                      theme={theme}
-                      error={this.state.otp_error}
-                    />
-                  </div>
-                )
-            }
-          </Dialog>
+          {/* <div className={styles.ref}>
+            <Link to="/auth/forgot">Lupa password?</Link> 
+          </div> */}
         </form>
       </div>
     )

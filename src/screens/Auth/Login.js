@@ -1,7 +1,7 @@
 //MODULES
 import React, { Component } from 'react'
 import Input from 'react-toolbox/lib/input/Input'
-import Dropdown from 'react-toolbox/lib/dropdown'
+// import Dropdown from 'react-toolbox/lib/dropdown'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
@@ -15,13 +15,6 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
 import PrimaryButton from '../../components/PrimaryButton'
-
-//INNER_CONFIG
-let countryCodes = [
-  { value: '886', label: '+886' },
-  { value: '852', label: '+852'},
-  { value: '62', label: '+62' },
-]
 
 //STORE
 import { user, snackbar, appStack } from '../../services/stores'
@@ -87,34 +80,18 @@ class Login extends Component {
       <div className={styles.container} >
         <div className={styles.top} >
           <div className={styles.title}><img src="/static/img/logo-color.png" alt=""/></div> 
-          <div className={styles.desc} >
-            <span>Masukkan nomor telepon anda untuk masuk ke jualbli.com</span>
-          </div>
         </div>
 
         <form className={styles.form} onSubmit={this.onSubmit} >
-          <div className={styles.handphone} >
-            <Dropdown
-              className="country_code"
-              onChange={this.handleChange.bind(this, 'countryCode')}
-              source={countryCodes}
-              value={this.state.countryCode}
-              label="Kode Negara"
-              required
-            />
-
-            <div className={styles.telp} >
-              <Input
-                name="phone_number"
-                type="tel"
-                label="Nomor Telepon"
-                onChange={this.handleChange.bind(this, 'telp')}
-                value={this.state.telp}
-                theme={theme}
-                required
-              />
-            </div>
-          </div>
+          <Input
+            name="email"
+            type="email"
+            label="Email"
+            onChange={this.handleChange.bind(this, 'email')}
+            value={this.state.password}
+            theme={theme}
+            required
+          />
 
           <Input
             name="password"
@@ -131,9 +108,9 @@ class Login extends Component {
           <span className={styles.ref} >
             Belum punya akun? <Link to="/auth/register" >Daftar disini</Link>
           </span>
-          <div className={styles.ref}>
+          {/* <div className={styles.ref}>
             <Link to="/auth/forgot">Lupa password?</Link> 
-          </div>
+          </div> */}
         </form>
       </div>
     )

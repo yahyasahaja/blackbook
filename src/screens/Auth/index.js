@@ -14,9 +14,6 @@ import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import Login from './Login'
 import Register from './Register'
-import ForgotPassword from './ForgotPassword'
-import InputNewPassword from './InputNewPassword'
-// import PWASupport from '../PWA'
 
 //STORE
 import { appStack, user } from '../../services/stores'
@@ -58,12 +55,6 @@ class Auth extends Component {
         <Route path="/auth/register" render={props => {
           return <Register {...props} setTitle={this.setTitle} />
         }} />
-        <Route path="/auth/forgot/new" exact render={props => {
-          return <InputNewPassword {...props} setTitle={this.setTitle}/>
-        }}/>
-        <Route path="/auth/forgot" exact render={props => {
-          return <ForgotPassword {...props} setTitle={this.setTitle}/>
-        }}/>
         <Redirect from="*" to="/auth/login" />
       </Switch>
     )
