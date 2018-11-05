@@ -119,7 +119,8 @@
     "test": "cypress run",
     "toolbox": "react-toolbox-themr",
     "git": "git add . && git commit -m",
-    "postgit": "git push"
+    "postgit": "git push",
+    "deploy": "yarn build && git push blackbook master"
   },
   "jest": {
     "collectCoverageFrom": [
