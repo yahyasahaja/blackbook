@@ -18,8 +18,8 @@ import PrimaryButton from '../../components/PrimaryButton'
 // import loadingTheme from '../Chat/css/loading-submit.scss'
 
 //STORE
-import { user, snackbar, appStack, info } from '../../services/stores'
-import { observable } from 'mobx';
+import { user, snackbar, appStack, } from '../../services/stores'
+import { observable } from 'mobx'
 
 //COMPONENT
 @observer
