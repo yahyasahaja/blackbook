@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
+// import gql from 'graphql-tag' 
 
 //STYLES
 import styles from './css/index.scss'
@@ -13,49 +14,18 @@ import TopBar, { APPEAR } from '../../components/TopBar'
 import Card from '../../components/Card'
 // import client from '../../services/graphql/productClient'
 
+//STORE
+import { hero } from '../../services/stores'
+
 //COMPONENT
 @observer
 class Home extends Component {
+  componentDidMount() {
+    hero.fetchAllHeroes()
+  }
+
   renderCards() {
-    let dummy = [
-      {
-        img: '/static/img/sample.png',
-        url: '/hero/1'
-      },
-      {
-        img: '/static/img/sample.png',
-        url: '/hero/1'
-      },
-      {
-        img: '/static/img/sample.png',
-        url: '/hero/1'
-      },
-      {
-        img: '/static/img/sample.png',
-        url: '/hero/1'
-      },
-      {
-        img: '/static/img/sample.png',
-        url: '/hero/1'
-      },
-      {
-        img: '/static/img/sample.png',
-        url: '/hero/1'
-      },
-      {
-        img: '/static/img/sample.png',
-        url: '/hero/1'
-      },
-      {
-        img: '/static/img/sample.png',
-        url: '/hero/1'
-      },
-      {
-        img: '/static/img/sample.png',
-        url: '/hero/1'
-      },
-    ]
-    return dummy.map((dt, i) => <Card key={i} {...dt} />)
+    return hero.allHeroes.map((dt, i) => <Card key={i} {...dt } />)
   }
 
   render() {

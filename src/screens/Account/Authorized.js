@@ -18,7 +18,7 @@ import { user, dialog } from '../../services/stores'
 @observer
 class Account extends Component {
   componentDidMount() {
-    user.getProfilePictureURL()
+    
   }
 
   renderProfilePicture() {

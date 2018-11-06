@@ -8,7 +8,7 @@
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
 
-import { user, serviceWorkerUpdate as swu } from './services/stores'
+import { serviceWorkerUpdate as swu } from './services/stores'
 // import moment from 'moment'
 
 const isLocalhost = Boolean(
@@ -178,21 +178,21 @@ function registerValidSW(swUrl) {
   })
 }
 
-function subscribeRegistration(registration) {
-  if (!registration.pushManager) return
-  registration.pushManager.getSubscription().then(async subscription => {
-    try {
-      if (!subscription)
-        subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true
-        })
+function subscribeRegistration(/*registration*/) {
+  // if (!registration.pushManager) return
+  // registration.pushManager.getSubscription().then(async subscription => {
+  //   try {
+  //     if (!subscription)
+  //       subscription = await registration.pushManager.subscribe({
+  //         userVisibleOnly: true
+  //       })
 
-      console.log('FROM SERVICE WORKER REGISTRATION', subscription)
-      await user.registerPushSubscription(subscription)
-    } catch (e) {
-      console.log('ERROR ON REGISTRERING SERVICE WORKER AT THE FIRST TIME', e)
-    }
-  })
+  //     console.log('FROM SERVICE WORKER REGISTRATION', subscription)
+  //     await user.registerPushSubscription(subscription)
+  //   } catch (e) {
+  //     console.log('ERROR ON REGISTRERING SERVICE WORKER AT THE FIRST TIME', e)
+  //   }
+  // })
 }
 
 function checkValidServiceWorker(swUrl) {

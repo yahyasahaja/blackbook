@@ -1,45 +1,45 @@
 import overlayLoading from './OverlayLoading'
 import snackbar from './Snackbar'
 import appStack from './AppStack'
-import favorites from './Favorites'
 import onlineStatus from './OnlineStatus'
 import selected from './Selected'
 import badges from './Badges'
-import tokens from './Tokens'
+import token from './Token'
 import user from './User'
 import dialog from './Dialog'
 import serviceWorkerUpdate from './ServiceWorkerUpdate'
 import info from './Info'
 import reloadCountdownTimer from './ReloadCountdownTimer'
+import hero from './Hero'
 
 export { 
   appStack,
-  favorites,
   onlineStatus,
   selected,
   snackbar,
   badges,
-  tokens,
+  token,
   user,
   dialog,
   serviceWorkerUpdate,
   overlayLoading,
   info,
   reloadCountdownTimer,
+  hero
 }
 
 export default { 
   appStack,
-  favorites,
   onlineStatus,
   selected,
   snackbar,
   badges,
-  tokens,
+  token,
   user,
   dialog,
   serviceWorkerUpdate,
   overlayLoading,
   info,
   reloadCountdownTimer,
+  hero
 }

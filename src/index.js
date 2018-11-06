@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { ThemeProvider } from 'react-css-themr'
-import { ApolloProvider } from 'react-apollo'
 // import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { observer } from 'mobx-react'
 import axios from 'axios'
@@ -14,7 +13,6 @@ import theme from './assets/theme/theme.js'
 import AppRouter from './AppRouter'
 
 //SERVICES
-import client from './services/graphql/productClient'
 import { onlineStatus, snackbar } from './services/stores'
 
 //SERVICE_WORKER
@@ -108,11 +106,9 @@ class App extends Component {
 
   render() {
     return (
-      <ApolloProvider client={client}>
-        <ThemeProvider theme={contextTheme}>
-          <AppRouter onlineStatus={onlineStatus} snackbar={snackbar} />
-        </ThemeProvider>
-      </ApolloProvider>
+      <ThemeProvider theme={contextTheme}>
+        <AppRouter onlineStatus={onlineStatus} snackbar={snackbar} />
+      </ThemeProvider>
     )
   }
 }

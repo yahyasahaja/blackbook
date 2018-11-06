@@ -5,6 +5,7 @@ import Input from 'react-toolbox/lib/input/Input'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
+import { observable } from 'mobx'
 
 //STYLES 
 import styles from './css/login.scss'
@@ -35,34 +36,27 @@ class Login extends Component {
     this.props.setTitle('Login')
   }
 
+  @observable email = ''
+  @observable password = ''
+
   onSubmit = e => {
     e.preventDefault()
     e.stopPropagation()
 
-    let { password, countryCode, telp } = this.state
-
-    if (countryCode === null) return
-    user.login(`${countryCode}${telp}`, password).then(token => {
+    let { password, email } = this
+    
+    user.login(email, password).then(token => {
+      console.log(token)
       if (!token) snackbar.show('Nomor telepon atau password anda salah!')
     })
   }
 
-  state = {
-    countryCode: '886',
-    telp: '',
-    password: '',
-  }
-
   handleChange(name, value) {
-    if (name === 'telp')
-      if (value[0] === '0') 
-        value = value.split('').slice(1).join('')
-
-    this.setState({ [name]: value })
+    this[name] = value
   }
 
   renderButton() {
-    if (user.isLoadingLogin) return (
+    if (user.isLoadingLoggedIn) return (
       <div className={styles['loading-wrapper']} >
         <ProgressBar
           className={styles.loading}
@@ -88,7 +82,7 @@ class Login extends Component {
             type="email"
             label="Email"
             onChange={this.handleChange.bind(this, 'email')}
-            value={this.state.password}
+            value={this.email}
             theme={theme}
             required
           />
@@ -98,7 +92,7 @@ class Login extends Component {
             type="password"
             label="Password"
             onChange={this.handleChange.bind(this, 'password')}
-            value={this.state.password}
+            value={this.password}
             theme={theme}
             required
           />

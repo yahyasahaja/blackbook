@@ -27,11 +27,7 @@ class BottomTabBar extends Component {
     let { match } = nextProps
     let { routers /*raw*/ } = this.state
     let { data } = this.props
-
-    if (!user.isLoggedIn) {
-      user.checkSecretKeyLogin()
-    }
-
+    
     let currentPath = match.url
 
     for (let i in routers) {

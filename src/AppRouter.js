@@ -40,13 +40,14 @@ import Info from './components/Info'
 
 //STORE
 import {
+  user,
   appStack,
   badges,
   dialog,
   serviceWorkerUpdate as swu,
   overlayLoading,
   reloadCountdownTimer as rct,
-  user,
+  // user,
   // snackbar
 } from './services/stores'
 // snackbar.show('lul')
@@ -98,11 +99,7 @@ class AppRouter extends Component {
 
     let buildDate = 'BUILD_DATE_FORMATTED'
     console.log(`BUILD-${buildDate}`)
-
-    user.fetchData().then(data => {
-      if (data) user.registerPushSubscription()
-      // favorites.fetchData()
-    }).catch(e => console.log('CANT FETCH USER DATA', e))
+    user.fetchData()
   }
 
   closeSnackbar = () => {

@@ -7,25 +7,25 @@ import onError from './errorHandler'
 
 //CONFIG
 import {
-  PRODUCTS_ENDPOINT_URL,
+  ENDPOINT_URL,
 } from '../../config'
 
 //STORE
-import { tokens } from '../stores'
+import { token } from '../stores'
 
 let httpLink = new HttpLink({ 
-  uri: PRODUCTS_ENDPOINT_URL
+  uri: ENDPOINT_URL,
 })
 
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = tokens.bearerToken
   // return the headers to the context so httpLink can read them
+  if (token.rawAuthToken) {
+    if (headers) headers.Authorization = token.bearerToken
+    else headers = { Authorization: token.bearerToken }
+  }
+  console.log('HEADERS', headers)
   return {
-    headers: {
-      ...headers,
-      Authorization: token
-    }
+    headers
   }
 })
 
