@@ -17,7 +17,7 @@
     "javascript": "src/assets/theme",
     "styles": "public/static/css"
   },
-  "name": "buyer-pwa",
+  "name": "blackbook",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -26,6 +26,7 @@
     "apollo-link-context": "^1.0.7",
     "apollo-link-error": "^1.1.0",
     "apollo-link-http": "^1.5.2",
+    "apollo-upload-client": "^9.1.0",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",

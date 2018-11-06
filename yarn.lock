@@ -335,6 +335,12 @@ apollo-link-http-common@^0.2.3:
   dependencies:
     apollo-link "^1.2.1"
 
+apollo-link-http-common@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/apollo-link-http-common/-/apollo-link-http-common-0.2.5.tgz#d094beb7971523203359bf830bfbfa7b4e7c30ed"
+  dependencies:
+    apollo-link "^1.2.3"
+
 apollo-link-http@^1.5.2:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-1.5.3.tgz#3aa0d3ecfe5666ef0c360f359c425ff6ea1d285b"
@@ -357,6 +363,21 @@ apollo-link@^1.2.2:
     "@types/graphql" "0.12.6"
     apollo-utilities "^1.0.0"
     zen-observable-ts "^0.8.9"
+
+apollo-link@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.3.tgz#9bd8d5fe1d88d31dc91dae9ecc22474d451fb70d"
+  dependencies:
+    apollo-utilities "^1.0.0"
+    zen-observable-ts "^0.8.10"
+
+apollo-upload-client@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-9.1.0.tgz#13191714ae07388088f2c773ebbfd53ba2f64c53"
+  dependencies:
+    apollo-link "^1.2.3"
+    apollo-link-http-common "^0.2.5"
+    extract-files "^4.0.0"
 
 apollo-utilities@^1.0.0, apollo-utilities@^1.0.8:
   version "1.0.8"
@@ -3398,6 +3419,10 @@ extglob@^2.0.4:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+extract-files@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/extract-files/-/extract-files-4.1.0.tgz#2d5b64af688dfd030274ca542c43fabba325019a"
 
 extract-text-webpack-plugin@3.0.2:
   version "3.0.2"
@@ -9506,6 +9531,12 @@ yauzl@2.8.0:
   dependencies:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.0.1"
+
+zen-observable-ts@^0.8.10:
+  version "0.8.10"
+  resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.8.10.tgz#18e2ce1c89fe026e9621fd83cc05168228fce829"
+  dependencies:
+    zen-observable "^0.8.0"
 
 zen-observable-ts@^0.8.6:
   version "0.8.8"

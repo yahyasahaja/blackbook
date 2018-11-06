@@ -11,6 +11,7 @@ import serviceWorkerUpdate from './ServiceWorkerUpdate'
 import info from './Info'
 import reloadCountdownTimer from './ReloadCountdownTimer'
 import hero from './Hero'
+import uploads from './Uploads'
 
 export { 
   appStack,
@@ -25,7 +26,8 @@ export {
   overlayLoading,
   info,
   reloadCountdownTimer,
-  hero
+  hero,
+  uploads,
 }
 
 export default { 
@@ -41,5 +43,6 @@ export default {
   overlayLoading,
   info,
   reloadCountdownTimer,
-  hero
+  hero,
+  uploads,
 }

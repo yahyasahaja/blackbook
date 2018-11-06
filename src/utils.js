@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { DOMAIN_URL } from './config'
 
 export const matchLoading = (next, current, context) => {
   return next[context].loading === current[context].loading
@@ -105,6 +106,8 @@ export const setAxiosAuthorization = rawToken => {
   // console.log(axios.defaults.headers)
 }
 
+export const makeImageURL = path => `${DOMAIN_URL}${path}`
+
 export default {
   matchLoading,
   matchProps,
@@ -115,4 +118,5 @@ export default {
   getQueryString,
   limitString,
   setAxiosAuthorization,
+  makeImageURL,
 }

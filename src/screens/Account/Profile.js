@@ -17,7 +17,8 @@ import PrimaryButton from '../../components/PrimaryButton'
 // import loadingTheme from '../Chat/css/loading-submit.scss'
 
 //STORE
-import { user, snackbar, appStack } from '../../services/stores'
+import { user, snackbar, appStack, uploads } from '../../services/stores'
+import { makeImageURL } from '../../utils'
 
 //COMPONENT
 @observer
@@ -43,14 +44,13 @@ class Profile extends Component {
   renderProfilePicture() {
     if (!user.data) return
 
-    let { name } = user.data
-    let { profilePictureURL } = user
-    let isProfilePictureURLExist = profilePictureURL && profilePictureURL.length > 0
+    let { name, profpic_url } = user.data
+    let isProfilePictureURLExist = !!profpic_url
 
     return (
       <label htmlFor="pic" className={styles.pic} >
         {
-          user.isLoadingUploadProfilePic
+          uploads.isUploading
             ? (
               <div className={styles['pic-loading']} >
                 <div className={styles.loading}>
@@ -60,7 +60,7 @@ class Profile extends Component {
             )
             : isProfilePictureURLExist
               ? (
-                <img src={profilePictureURL} alt="Profile Picture" />
+                <img src={makeImageURL(profpic_url)} alt="Profile Picture" />
               )
               : (
                 <div className={styles['picture-default']} >
@@ -72,11 +72,13 @@ class Profile extends Component {
         <span className={`mdi mdi-pencil ${styles.edit}`} />
         <input
           id="pic" name="pic" type="file" style={{ display: 'none' }}
-          onChange={e => {
-            user.uploadProfilePicture(e.target.files || e.dataTransfer.files)
+          onChange={async e => {
+            let path = await uploads.singleUpload(e.target.files[0] || e.dataTransfer.files[0])
+            user.updateUser({profpic_url: path})
+            user.data.profpic_url = path
           }}
           accept=".jpg, .jpeg, .png"
-          disabled={user.isLoadingUploadProfilePic}
+          disabled={uploads.isUploading}
         />
       </label>
     )

@@ -13,7 +13,8 @@ class User {
   @observable isFetchingUser = false
   @observable data = null
   @observable isLoadingLoggedIn = false
-
+  @observable isLoadingUploadProfilePic = false
+  
   @computed
   get isLoggedIn() {
     return !!this.data

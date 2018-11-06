@@ -1,9 +1,10 @@
 
 import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
+// import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { setContext } from 'apollo-link-context'
 import onError from './errorHandler'
+import { createUploadLink } from 'apollo-upload-client'
 
 //CONFIG
 import {
@@ -13,9 +14,9 @@ import {
 //STORE
 import { token } from '../stores'
 
-let httpLink = new HttpLink({ 
-  uri: ENDPOINT_URL,
-})
+// const httpLink = new HttpLink({ 
+//   uri: ENDPOINT_URL,
+// })
 
 const authLink = setContext((_, { headers }) => {
   // return the headers to the context so httpLink can read them
@@ -29,7 +30,11 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
+const uploadLink = createUploadLink({
+  uri: ENDPOINT_URL,
+})
+
 export default new ApolloClient({
-  link: authLink.concat(onError).concat(httpLink),
+  link: authLink.concat(onError).concat(uploadLink),
   cache: new InMemoryCache()
 })
