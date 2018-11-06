@@ -42,6 +42,7 @@ class User {
       return user
     } catch (err) {
       console.log('ERROR WHILE LOGIN', err)
+      this.isLoadingLoggedIn = false
       return false
     }
   }
@@ -70,6 +71,7 @@ class User {
       return user
     } catch (err) {
       console.log('ERROR WHILE LOGIN', err)
+      this.isLoadingLoggedIn = false
     }
   }
 
@@ -97,6 +99,23 @@ class User {
     this.data = null
     token.removeAuthToken()
   }
+
+  @observable isLoadingUpdateUser = false
+  @action
+  async updateUser(data) {
+    try {
+      this.isLoadingUpdateUser = true
+      await client.mutate({
+        mutation: updateUserQuery,
+        variables: data
+      })
+      this.isLoadingUpdateUser = false
+      return true
+    } catch (err) {
+      console.log('ERROR WHILE LOGIN', err)
+      this.isLoadingUpdateUser = false
+    }
+  }
 }
 
 const registerQuery = gql`
@@ -117,8 +136,28 @@ const userQuery = gql`
       id
       name
       email
-      role
+      role 
       profpic_url
+    }
+  }
+`
+
+const updateUserQuery = gql`
+  mutation updateUser(
+    $email: String
+    $name: String
+    $newPassword: String
+    $currentPassword: String
+    $profpic_url: String
+  ) {
+    updateUser(
+      email: $email
+      name: $name
+      newPassword: $newPassword
+      currentPassword: $currentPassword
+      profpic_url: $profpic_url
+    ) {
+      id
     }
   }
 `

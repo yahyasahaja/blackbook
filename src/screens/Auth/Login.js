@@ -47,7 +47,7 @@ class Login extends Component {
     
     user.login(email, password).then(token => {
       console.log(token)
-      if (!token) snackbar.show('Nomor telepon atau password anda salah!')
+      if (!token) snackbar.show('Email atau password anda salah!')
     })
   }
 

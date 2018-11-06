@@ -100,12 +100,17 @@ class Profile extends Component {
   }
 
   updateProfile = () => {
-    if (user.isLoadingUpdateProfile) return
+    if (user.isLoadingUpdateUser) return
 
-    this.setState({ active: false }, () => {
-      user.updateProfile({
-        ...this.state
-      }).then(token => {
+    let { name, currentPassword, newPassword } = this.state
+
+    this.setState({ active: false, active2: false }, () => {
+      let dt = {}
+      if (name) dt.name = name
+      if (currentPassword) dt.currentPassword = currentPassword
+      if (newPassword) dt.newPassword = newPassword
+
+      user.updateUser(dt).then(token => {
         if (token) snackbar.show('Profile has been updated')
       })
     })
@@ -171,13 +176,15 @@ class Profile extends Component {
 
         <div className={styles.card} >
           <EditableList
-            label="Nama" placeholder="Your Current Password"
+            type="password"
+            label="Current Password" placeholder="Your Current Password"
             value={currentPassword}
             onChange={this.handleChange.bind(this, 'currentPassword')}
             border
           />
 
           <EditableList
+            type="password"
             label="New Password" placeholder="Your New Password"
             value={newPassword} 
             onChange={this.handleChange.bind(this, 'newPassword')}
@@ -185,6 +192,7 @@ class Profile extends Component {
           />
 
           <EditableList
+            type="password"
             label="Retype Password" placeholder="Retype Password"
             value={retypePassword} 
             onChange={this.handleChange.bind(this, 'retypePassword')}
@@ -207,7 +215,7 @@ class Profile extends Component {
   }
 
   renderButton() {
-    if (user.isLoadingUpdateProfile) return (
+    if (user.isLoadingUpdateUser) return (
       <div className={styles['loading-wrapper']} >
         <ProgressBar
           className={styles.loading}
@@ -229,7 +237,7 @@ class Profile extends Component {
   }
 
   renderPasswordButton() {
-    if (user.isLoadingUpdateProfile) return (
+    if (user.isLoadingUpdateUser) return (
       <div className={styles['loading-wrapper']} >
         <ProgressBar
           className={styles.loading}
