@@ -32,7 +32,6 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    user.getProfilePictureURL()
     console.log('USR DATA', user.data)
     this.setState({ ...user.data })
   }
@@ -179,15 +178,15 @@ class Profile extends Component {
           />
 
           <EditableList
-            label="Email" placeholder="Your New Password"
-            value={newPassword} disabled
+            label="New Password" placeholder="Your New Password"
+            value={newPassword} 
             onChange={this.handleChange.bind(this, 'newPassword')}
             border
           />
 
           <EditableList
-            label="Email" placeholder="Retype Password"
-            value={retypePassword} disabled
+            label="Retype Password" placeholder="Retype Password"
+            value={retypePassword} 
             onChange={this.handleChange.bind(this, 'retypePassword')}
             border
           />

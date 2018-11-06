@@ -5,9 +5,10 @@ import Input from 'react-toolbox/lib/input/Input'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
+import { observable } from 'mobx'
 
 //STYLES 
-import styles from './css/login.scss'
+import styles from './css/register.scss'
 
 //THEME
 import theme from '../../assets/css/theme.scss'
@@ -35,34 +36,28 @@ class Register extends Component {
     this.props.setTitle('Register')
   }
 
+  @observable email = ''
+  @observable password = ''
+  @observable name = ''
+
   onSubmit = e => {
     e.preventDefault()
     e.stopPropagation()
 
-    let { password, countryCode, telp } = this.state
-
-    if (countryCode === null) return
-    user.Register(`${countryCode}${telp}`, password).then(token => {
+    let { name, password, email } = this
+    
+    user.register(name, email, password).then(token => {
+      console.log(token)
       if (!token) snackbar.show('Nomor telepon atau password anda salah!')
     })
   }
 
-  state = {
-    countryCode: '886',
-    telp: '',
-    password: '',
-  }
-
   handleChange(name, value) {
-    if (name === 'telp')
-      if (value[0] === '0') 
-        value = value.split('').slice(1).join('')
-
-    this.setState({ [name]: value })
+    this[name] = value
   }
 
   renderButton() {
-    if (user.isLoadingRegister) return (
+    if (user.isLoadingLoggedIn) return (
       <div className={styles['loading-wrapper']} >
         <ProgressBar
           className={styles.loading}
@@ -84,11 +79,21 @@ class Register extends Component {
 
         <form className={styles.form} onSubmit={this.onSubmit} >
           <Input
+            name="name"
+            type="text"
+            label="Name"
+            onChange={this.handleChange.bind(this, 'name')}
+            value={this.name}
+            theme={theme}
+            required
+          />
+
+          <Input
             name="email"
             type="email"
             label="Email"
             onChange={this.handleChange.bind(this, 'email')}
-            value={this.state.password}
+            value={this.email}
             theme={theme}
             required
           />
@@ -98,7 +103,7 @@ class Register extends Component {
             type="password"
             label="Password"
             onChange={this.handleChange.bind(this, 'password')}
-            value={this.state.password}
+            value={this.password}
             theme={theme}
             required
           />
@@ -106,7 +111,7 @@ class Register extends Component {
           {this.renderButton()}
 
           <span className={styles.ref} >
-            Sudah memiliki akun? <Link to="/auth/login" >Login disini</Link>
+            Sudah punya akun? <Link to="/auth/login" >Login disini</Link>
           </span>
           {/* <div className={styles.ref}>
             <Link to="/auth/forgot">Lupa password?</Link> 

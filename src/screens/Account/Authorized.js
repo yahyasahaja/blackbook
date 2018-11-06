@@ -22,14 +22,13 @@ class Account extends Component {
   }
 
   renderProfilePicture() {
-    let { name } = user.data
-    let { profilePictureURL } = user
-
-    if (profilePictureURL)
-      if (profilePictureURL.length > 0)
+    let { name, profpic_url } = user.data
+    
+    if (profpic_url)
+      if (profpic_url.length > 0)
         return (
           <div className={styles.pic}>
-            <img src={profilePictureURL} alt="Profile Picture" />
+            <img src={profpic_url} alt="Profile Picture" />
           </div>
         )
 

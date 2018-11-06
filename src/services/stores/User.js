@@ -36,10 +36,10 @@ class User {
       })
         
       token.setAuthToken(authToken)
-      await this.fetchData()
+      let user = await this.fetchData()
       this.isLoadingLoggedIn = false
 
-      return authToken
+      return user
     } catch (err) {
       console.log('ERROR WHILE LOGIN', err)
       return false
@@ -47,21 +47,27 @@ class User {
   }
 
   @action
-  async register (email, password) {
+  async register (name, email, password) {
     try {
+      this.isLoadingLoggedIn = true
       let {
         data: {
-          login: authToken
+          register: authToken
         } 
       } = await client.mutate({
         mutation: registerQuery,
         variables: {
+          name,
           email,
           password 
         }
       })
         
       token.setAuthToken(authToken)
+      let user = await this.fetchData()
+      this.isLoadingLoggedIn = false
+
+      return user
     } catch (err) {
       console.log('ERROR WHILE LOGIN', err)
     }
@@ -79,16 +85,23 @@ class User {
         query: userQuery,
       })
 
-      this.data = user
+      return this.data = user
     } catch (err) {
       console.log('ERROR WHILE FETCHING USER DATA', err)
+      return false
     }
+  }
+
+  @action
+  logout = async () => {
+    this.data = null
+    token.removeAuthToken()
   }
 }
 
 const registerQuery = gql`
-  mutation register($email: String!, $password: String!) {
-    register(email: $email, password: $password)
+  mutation register($name: String!, $email: String!, $password: String!) {
+    register(name: $name, email: $email, password: $password, role: ADMIN)
   }
 `
 

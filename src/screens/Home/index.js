@@ -10,7 +10,7 @@ import styles from './css/index.scss'
 import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 
 //COMPONENTS
-import TopBar, { APPEAR } from '../../components/TopBar'
+import TopBar, { ABSOLUTE } from '../../components/TopBar'
 import Card from '../../components/Card'
 // import client from '../../services/graphql/productClient'
 
@@ -33,13 +33,9 @@ class Home extends Component {
 
     return (
       <TopBar
-        relative={{
-          title: { cart: true },
-          search: { cart: false }
-        }}
         fly={{
-          search: { cart: true },
-          mode: APPEAR
+          title: { cart: true },
+          mode: ABSOLUTE
         }}
         isSelected={this.props.isSelected}
         style={{ background: 'rgb(76, 76, 76)' }}
