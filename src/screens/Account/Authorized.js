@@ -12,7 +12,7 @@ import styles from './css/authorized.scss'
 //STORE
 import { user, dialog } from '../../services/stores'
 // import HorizontalList from '../../components/HorizontalList'
-// import { convertToMoneyFormat } from '../../utils'
+import { makeImageURL } from '../../utils'
 
 //COMPONENT
 @observer
@@ -28,7 +28,7 @@ class Account extends Component {
       if (profpic_url.length > 0)
         return (
           <div className={styles.pic}>
-            <img src={profpic_url} alt="Profile Picture" />
+            <img src={makeImageURL(profpic_url)} alt="Profile Picture" />
           </div>
         )
 
