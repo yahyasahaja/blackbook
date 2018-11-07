@@ -16,7 +16,7 @@ import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import HideShow from '../../components/HideShow'
 
 //STORE
-import { appStack, user, hero } from '../../services/stores'
+import { appStack, user, hero, comment, dialog } from '../../services/stores'
 
 //UTILS
 import { makeImageURL, embedYoutubeURL } from '../../utils'
@@ -31,6 +31,7 @@ class Hero extends Component {
   @observable attachedFile = null
   @observable isLoadingComments = false
   @observable isWriteCommentActive = true
+  @observable idToBeDeleted = 0
 
   constructor(props) {
     super(props)
@@ -45,6 +46,15 @@ class Hero extends Component {
     hero.fetchHero(this.props.match.params.id)
   }
 
+  actionDelete = [
+    { label: 'Cancel', onClick: () => dialog.toggleActive() },
+    { label: 'Delete', onClick: async () => {
+      dialog.toggleActive()
+      await comment.deleteComment(this.idToBeDeleted)
+      hero.fetchHero(this.props.match.params.id, false)
+    }},
+  ]
+
   renderStatus = () => {
     if (!hero.singleHero) return
 
@@ -55,7 +65,7 @@ class Hero extends Component {
       'agility',
       'speed',
       'intelligence',
-      'armor'
+      'armor',
     ]
 
     return(
@@ -93,10 +103,35 @@ class Hero extends Component {
 
   renderWriteComment() {
     return (
-      <div className={styles.wrapper} >
-        <div className={styles.attach} >
-          <span className="mdi mdi-plus" />
-        </div>
+      <form className={styles.wrapper} onSubmit={async e => {
+        e.preventDefault()
+        let res = await comment.addComment(
+          {
+            comment: this.comment,
+            heroId: hero.singleHero.id
+          }, 
+          this.attachedFile
+        )
+
+        if (res) {
+          this.comment = ''
+          this.commentInput.value = ''
+          this.attachedFile = null
+          hero.fetchHero(this.props.match.params.id, false)
+        }
+      }} >
+        <label htmlFor="pic" className={styles.pic} >
+          <div className={styles.attach} >
+            <span className="mdi mdi-plus" />
+          </div>
+          <input
+            id="pic" name="pic" type="file" style={{ display: 'none' }}
+            ref={el => this.commentInput = el}
+            onChange={e => this.attachedFile = e.target.files[0]}
+            accept=".jpg, .jpeg, .png"
+            disabled={comment.isLoading}
+          />
+        </label>
 
         <div className={styles.box} >
           <textarea 
@@ -109,8 +144,24 @@ class Hero extends Component {
           />
         </div>
 
-        <div className={styles.send} ><span className="mdi mdi-send" /></div>
-      </div>
+        {
+          comment.isLoading
+            ? (
+              <div className={styles['loading-wrapper']} >
+                <ProgressBar
+                  className={styles.loading}
+                  type='circular'
+                  mode='indeterminate' theme={ProgressBarTheme}
+                />
+              </div>
+            )
+            : (
+              <button type="submit" className={styles.send} >
+                <span className="mdi mdi-send" />
+              </button>
+            )
+        }
+      </form>
     )
   }
 
@@ -129,16 +180,34 @@ class Hero extends Component {
           return (
             <div className={styles.comment} key={i} >
               <div className={styles.left} >
-                <img src={d.user.profpic} alt=""/>
+                <img src={makeImageURL(d.user.profpic_url)} alt=""/>
               </div>
 
 
               <div className={styles.right} >
-                <div className={styles.name} >{d.user.name}</div>
-                {d.video && (
-                  <video width="400" controls>
-                    <source src="mov_bbb.mp4" type="video/mp4" />
-                    <source src="mov_bbb.ogg" type="video/ogg" />
+                <div className={styles.upper} >
+                  <div className={styles.name} >{d.user.name}</div>
+
+                  <div className={styles.menu} >
+                    <div className={`${styles.icon} mdi mdi-pencil`} />
+                    <div 
+                      className={`${styles.icon} mdi mdi-delete`} 
+                      onClick={() => {
+                        console.log('kepanggil?')
+                        this.idToBeDeleted = d.id
+                        dialog.show('Delete this comment?', '', this.actionDelete)
+                      }}
+                    />
+                  </div>
+                </div>
+                
+                {d.image_url && (
+                  <img className={styles.img} src={makeImageURL(d.image_url)} alt=""/>
+                )}
+                {d.video_url && (
+                  <video width="100%" controls>
+                    <source src={makeImageURL(d.video_url)} type="video/mp4" />
+                    <source src={makeImageURL(d.video_url)} type="video/ogg" />
                     Your browser does not support HTML5 video.
                   </video>
                 )}

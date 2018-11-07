@@ -31,9 +31,9 @@ class Hero {
   }
 
   @action
-  async fetchHero(id) {
+  async fetchHero(id, withLoading = true) {
     try {
-      this.isFetchingHero = true
+      if (withLoading) this.isFetchingHero = true
       let {
         data: {
           hero
@@ -42,7 +42,8 @@ class Hero {
         query: heroQuery,
         variables: {
           id
-        }
+        },
+        fetchPolicy: 'network-only'
       })
       
       let loc = hero.statuses.sort((a, b) => a.level - b.level).slice()

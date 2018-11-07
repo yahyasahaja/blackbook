@@ -12,6 +12,7 @@ import info from './Info'
 import reloadCountdownTimer from './ReloadCountdownTimer'
 import hero from './Hero'
 import uploads from './Uploads'
+import comment from './Comment'
 
 export { 
   appStack,
@@ -28,6 +29,7 @@ export {
   reloadCountdownTimer,
   hero,
   uploads,
+  comment
 }
 
 export default { 
@@ -45,4 +47,5 @@ export default {
   reloadCountdownTimer,
   hero,
   uploads,
+  comment
 }

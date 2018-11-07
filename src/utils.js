@@ -107,7 +107,12 @@ export const setAxiosAuthorization = rawToken => {
 }
 
 export const makeImageURL = path => `${DOMAIN_URL}${path}`
-export const embedYoutubeURL = url => `https://www.youtube.com/embed/${url.split('/')[3]}`
+export const embedYoutubeURL = url => {
+  let part = url.split('/')
+  let part2 = url.split('=')
+  if (part2.length > 1) part = part2 
+  return `https://www.youtube.com/embed/${part[part.length - 1]}`
+}
 
 export default {
   matchLoading,
