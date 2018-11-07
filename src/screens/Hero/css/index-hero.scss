@@ -5,6 +5,50 @@
   padding-top: 50px;
   background: $bg-color;
   min-height: 100vh;
+  
+  iframe {
+    border: none;
+  }
+
+  .abilities {
+    display: block;
+
+    .ability {
+      display: block;
+      margin-bottom: 50px;
+      padding: 15px;
+      border: 1px dashed #929292;
+      border-radius: 11px;
+
+      .up {
+        display: flex;
+        
+        .left {
+          display: block;
+        }
+
+        .right {
+          display: block;
+          margin-left: 20px;
+
+          .name {
+            font-size: 15pt;
+          }
+        }
+      }
+
+      .down {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 20px;
+
+      }
+
+      iframe {
+        border: none;
+      }
+    }
+  }
 
   .overview {
     display: block;

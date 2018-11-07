@@ -108,6 +108,7 @@ const heroQuery = gql`
         description
         mana
         cooldown
+        video_url
       }
       statuses {
         id

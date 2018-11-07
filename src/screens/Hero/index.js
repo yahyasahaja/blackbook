@@ -19,13 +19,13 @@ import HideShow from '../../components/HideShow'
 import { appStack, user, hero } from '../../services/stores'
 
 //UTILS
-import { makeImageURL } from '../../utils'
+import { makeImageURL, embedYoutubeURL } from '../../utils'
 
 //COMPONENT
 @observer
 class Hero extends Component {
   @observable data = null
-  @observable currentLevel = 0
+  @observable currentLevel = 1
   @observable isSendingComment = false
   @observable comment = ''
   @observable attachedFile = null
@@ -48,7 +48,7 @@ class Hero extends Component {
   renderStatus = () => {
     if (!hero.singleHero) return
 
-    let stat = hero.singleHero.statuses[this.currentLevel]
+    let stat = hero.singleHero.statuses[this.currentLevel - 1]
     let dt = [
       'strength',
       'attack',
@@ -152,6 +152,36 @@ class Hero extends Component {
     )
   }
 
+  renderAbilities = () => {
+    return (
+      <div className={styles.abilities} >
+        {hero.singleHero.abilities.map((d, i) => {
+          return (
+            <div className={styles.ability} key={i}  >
+              <div className={styles.up} >
+                <div className={styles.left} >
+                  <img src={makeImageURL(d.image_url)} alt=""/>
+                </div>
+
+                <div className={styles.right} >
+                  <div className={styles.name} >{d.name}</div>
+                  <div className={styles.mana} >{d.mana}</div>
+                  <div className={styles.cooldown} >{d.cooldown}</div>
+                </div>
+              </div>
+
+              <div className={styles.down} >
+                <span dangerouslySetInnerHTML={{__html: d.description}} />
+              </div>
+
+              <iframe width="100%" height="200" src={embedYoutubeURL(d.video_url)} />
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
   renderContent = () => {
     if (hero.isFetchingHero) return <div className={styles.loading} >
       <div>
@@ -176,17 +206,14 @@ class Hero extends Component {
       },
       {
         title: 'Abilities',
-        content: (
-          <div>
-            {hero.singleHero.bio}
-          </div>
-        )
+        content: this.renderAbilities()
       },
       {
         title: 'Tips and Trick',
         content: (
           <div>
-            {hero.singleHero.bio}
+            <span>{hero.singleHero.tips_desc}</span>
+            <iframe width="100%" height="200" src={embedYoutubeURL(hero.singleHero.tips_video_url)} />
           </div>
         )
       },
@@ -205,11 +232,11 @@ class Hero extends Component {
             <div className={styles.image} >
               <img src={makeImageURL(hero.singleHero.image_url)} alt=""/>
             </div>
-            <span className={styles.level} >Stat Level: {this.currentLevel + 1}</span>
+            <span className={styles.level} >Stat Level: {this.currentLevel}</span>
             {this.renderStatus()}
             <div className={styles.slider} >
               <Slider 
-                pinned min={0} max={hero.singleHero.statuses.length - 1} step={1} 
+                pinned min={1} max={hero.singleHero.statuses.length} step={1} 
                 value={this.currentLevel} 
                 onChange={v => this.currentLevel = v} 
                 theme={theme}
