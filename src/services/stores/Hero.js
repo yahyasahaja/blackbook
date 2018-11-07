@@ -10,6 +10,7 @@ class Hero {
   @observable isFetchingAllheroes = false
   @observable allHeroes = []
   @observable isFetchingHero = false
+  @observable singleHero = null
   
   @action
   async fetchAllHeroes() {
@@ -32,6 +33,7 @@ class Hero {
   @action
   async fetchHero(id) {
     try {
+      this.isFetchingHero = true
       let {
         data: {
           hero
@@ -42,11 +44,41 @@ class Hero {
           id
         }
       })
+      
+      let loc = hero.statuses.sort((a, b) => a.level - b.level).slice()
+      let res = []
+      let i = 0
+      for (i = 0; i < loc.length - 1; i++) {
+        res.push(loc[i])
+        let minLevel = loc[i].level
+        let maxLevel = loc[i + 1].level
+        let bandingLevel = maxLevel - minLevel
+        
+        for (let j = minLevel + 1; j < maxLevel; j++) { //yg ditanya
+          let obj = {}
+          for (let stat in loc[i]) {
+            let minStat = loc[i][stat]
+            let maxStat = loc[i + 1][stat]
+            let bandingStat = maxStat - minStat
 
-      return hero
+            let convertedLevel = j - minLevel
+            let kali = bandingStat / bandingLevel
+            obj[stat] = Number((kali * convertedLevel) + minStat).toFixed(2)
+          }
+
+          res.push(obj)
+        }
+      }
+      res.push(loc[i])
+      
+      let finalHero = { ...hero, statuses: res}
+      this.singleHero = finalHero
+
+      this.isFetchingHero = false
+      return this.singleHero
     } catch (err) {
       console.log('ERROR WHILE FETCHING USER DATA', err)
-      return false
+      return this.isFetchingHero = false
     }
   }
 }
@@ -92,7 +124,11 @@ const heroQuery = gql`
         comment
         video_url
         image_url
-        user
+        user {
+          id
+          name
+          profpic_url
+        }
       }
     }
   }

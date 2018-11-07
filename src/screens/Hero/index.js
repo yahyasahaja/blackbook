@@ -16,139 +16,15 @@ import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import HideShow from '../../components/HideShow'
 
 //STORE
-import { appStack, user } from '../../services/stores'
+import { appStack, user, hero } from '../../services/stores'
 
-// [
-//   {
-//     title: 'Bio',
-//     content: (
-//       <div>
-//         coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>
-//       </div>
-//     )
-//   },
-//   {
-//     title: 'Abilities',
-//     content: (
-//       <div>
-//         coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>
-//       </div>
-//     )
-//   },
-//   {
-//     title: 'Tips and Tricks',
-//     content: (
-//       <div>
-//         coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>coba<br/>
-//       </div>
-//     )
-//   },
-// ]
-
-const DATA = {
-  name: 'Legion Commander',
-  bio: 'lorem impsum dolor sit amet',
-  images: [
-    '/static/img/sample.png',
-    '/static/img/sample.png',
-  ],
-  status: [
-    {
-      strength: '20+2.20',
-      agility: '18+1.70',
-      intelligence: '26+2.90',
-      attack: '35 - 39',
-      speed: '315',
-      armor: '1.52',
-    },
-    {
-      strength: '22+2.20',
-      agility: '20+1.70',
-      intelligence: '28+2.90',
-      attack: '37 - 40',
-      speed: '400',
-      armor: '1.59',
-    },
-    {
-      strength: '20+2.20',
-      agility: '18+1.70',
-      intelligence: '26+2.90',
-      attack: '35 - 39',
-      speed: '315',
-      armor: '1.52',
-    },
-    {
-      strength: '22+2.20',
-      agility: '20+1.70',
-      intelligence: '28+2.90',
-      attack: '37 - 40',
-      speed: '400',
-      armor: '1.59',
-    },
-  ],
-  tips: {
-    description: '',
-    video: '/static/video/sample.mp4',
-  },
-  abilities: [
-    {
-      name: 'Overwhelming Odds',
-      image: '/static/img/sample.png',
-      description: 'Lorem impsum dolor sit amet',
-      mana_cost: '100/110/120/130',
-      cooldown: 15,
-      video: '/static/video/sample.mp4',
-    },
-    {
-      name: 'Overwhelming Odds',
-      image: '/static/img/sample.png',
-      description: 'Lorem impsum dolor sit amet',
-      mana_cost: '100/110/120/130',
-      cooldown: 15,
-      video: '/static/video/sample.mp4',
-    },
-    {
-      name: 'Overwhelming Odds',
-      image: '/static/img/sample.png',
-      description: 'Lorem impsum dolor sit amet',
-      mana_cost: '100/110/120/130',
-      cooldown: 15,
-      video: '/static/video/sample.mp4',
-    },
-    {
-      name: 'Overwhelming Odds',
-      image: '/static/img/sample.png',
-      description: 'Lorem impsum dolor sit amet',
-      mana_cost: '100/110/120/130',
-      cooldown: 15,
-      video: '/static/video/sample.mp4',
-    },
-  ],
-  comments: [
-    {
-      user: {
-        name: 'Bejo',
-        profpic: '/static/img/sample.png',
-      },
-      comment: 'Sip Gan!',
-      image: '/static/img/sample.png'
-    },
-    {
-      user: {
-        name: 'Layla',
-        profpic: '/static/img/sample.png',
-      },
-      comment: 'Wik wik wik wik!',
-      image: '/static/img/sample.png'
-    },
-  ]
-}
+//UTILS
+import { makeImageURL } from '../../utils'
 
 //COMPONENT
 @observer
 class Hero extends Component {
   @observable data = null
-  @observable isLoading = false
   @observable currentLevel = 0
   @observable isSendingComment = false
   @observable comment = ''
@@ -165,8 +41,14 @@ class Hero extends Component {
     appStack.pop()
   }
 
+  componentDidMount() {
+    hero.fetchHero(this.props.match.params.id)
+  }
+
   renderStatus = () => {
-    let stat = DATA.status[this.currentLevel]
+    if (!hero.singleHero) return
+
+    let stat = hero.singleHero.statuses[this.currentLevel]
     let dt = [
       'strength',
       'attack',
@@ -243,7 +125,7 @@ class Hero extends Component {
       <div className={styles['comment-section']} >
         <div className={styles.title} >Comments</div>
         {this.renderCommentButton()}
-        {DATA.comments.map((d, i) => {
+        {hero.singleHero.comments.map((d, i) => {
           return (
             <div className={styles.comment} key={i} >
               <div className={styles.left} >
@@ -271,8 +153,7 @@ class Hero extends Component {
   }
 
   renderContent = () => {
-    
-    if (this.isLoading) return <div className={styles.loading} >
+    if (hero.isFetchingHero) return <div className={styles.loading} >
       <div>
         <ProgressBar
           className={styles.loading}
@@ -282,12 +163,14 @@ class Hero extends Component {
       </div>
     </div>
 
+    if (!hero.singleHero) return
+
     let data = [
       {
         title: 'Bio',
         content: (
           <div>
-            {DATA.bio}
+            {hero.singleHero.bio}
           </div>
         )
       },
@@ -295,7 +178,7 @@ class Hero extends Component {
         title: 'Abilities',
         content: (
           <div>
-            {DATA.bio}
+            {hero.singleHero.bio}
           </div>
         )
       },
@@ -303,7 +186,7 @@ class Hero extends Component {
         title: 'Tips and Trick',
         content: (
           <div>
-            {DATA.bio}
+            {hero.singleHero.bio}
           </div>
         )
       },
@@ -314,19 +197,19 @@ class Hero extends Component {
         <div className={styles.overview} >
           <div className={styles.left} >
             {/* <Parallax 
-              bgImage={DATA.images[0]}
+              bgImage={hero.singleHero.images[0]}
               strength={100}
             >
               <div style={{height: 200}} />
             </Parallax> */}
             <div className={styles.image} >
-              <img src={DATA.images[0]} alt=""/>
+              <img src={makeImageURL(hero.singleHero.image_url)} alt=""/>
             </div>
             <span className={styles.level} >Stat Level: {this.currentLevel + 1}</span>
             {this.renderStatus()}
             <div className={styles.slider} >
               <Slider 
-                pinned min={0} max={DATA.status.length - 1} step={1} 
+                pinned min={0} max={hero.singleHero.statuses.length - 1} step={1} 
                 value={this.currentLevel} 
                 onChange={v => this.currentLevel = v} 
                 theme={theme}
@@ -349,7 +232,7 @@ class Hero extends Component {
   render() {
     return (
       <PopupBar
-        title={DATA.name} {...this.props}
+        title={hero.singleHero && hero.singleHero.name} {...this.props}
         renderContent={this.renderContent}
         anim={ANIMATE_HORIZONTAL}
       />
