@@ -11,14 +11,17 @@ import uploads from './Uploads'
 //STORE
 class Comment {
   @observable isLoading = false
+  @observable isUpdatingComment = false
 
   @action
   async addComment(variables, file) {
     try {
+      if (variables.comment === '') return
       this.isLoading = true
       let videos = ['m4v', 'avi','mpg','mp4', 'webm'] 
       // let images = ['jpg', 'gif', 'bmp', 'png']
       let isVideo = false
+
 
       if (file) {
         let path = null
@@ -49,7 +52,7 @@ class Comment {
   @action
   async updateComment(variables) {
     try {
-      this.isLoading = true
+      this.isUpdatingComment = true
 
       let {
         data: {
@@ -60,11 +63,11 @@ class Comment {
         variables
       })
 
-      this.isLoading = false
+      this.isUpdatingComment = false
       return res
     } catch (err) {
       console.log('ERROR WHILE UPDATING COMMENT', err)
-      this.isLoading = false
+      this.isUpdatingComment = false
     }
   }
 

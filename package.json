@@ -6,13 +6,13 @@
     ],
     "customProperties": {
       "animation-duration": "0.3s",
-      "color-accent": "#ea0f00",
+      "color-accent": "#2fc0e2",
       "color-accent-dark": "#e74c3c",
       "color-primary-contrast": "var(--color-dark-contrast)",
       "color-accent-contrast": "var(--color-dark-contrast)",
       "input-text-highlight-color": "#ea0f00",
-      "progress-main-color": "#ea0f00",
-      "color-primary": "#e74c3c"
+      "progress-main-color": "#2fc0e2",
+      "color-primary": "#2fc0e2"
     },
     "javascript": "src/assets/theme",
     "styles": "public/static/css"

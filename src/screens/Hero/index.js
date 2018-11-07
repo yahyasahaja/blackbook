@@ -118,6 +118,9 @@ class Hero extends Component {
           this.commentInput.value = ''
           this.attachedFile = null
           hero.fetchHero(this.props.match.params.id, false)
+          this.messageInput.style.height = ''
+          this.messageInput.style.height =
+            Math.min(this.messageInput.scrollHeight, 300) + 'px'
         }
       }} >
         <label htmlFor="pic" className={styles.pic} >
@@ -171,6 +174,8 @@ class Hero extends Component {
     // auto focus
   }
 
+  @observable editCommentText = ''
+  @observable commentIndexToBeEditted = -1
   renderComments = () => {
     return (
       <div className={styles['comment-section']} >
@@ -180,16 +185,38 @@ class Hero extends Component {
           return (
             <div className={styles.comment} key={i} >
               <div className={styles.left} >
-                <img src={makeImageURL(d.user.profpic_url)} alt=""/>
+                {
+                  d.user.profpic_url
+                    ? (
+                      <img src={makeImageURL(d.user.profpic_url)} alt=""/>
+                    )
+                    : (
+                      <div className={styles['picture-default']}>
+                        <span>
+                          {d.user.name
+                            .split(' ')
+                            .slice(0, 2)
+                            .map(v => v[0])
+                            .join('')}
+                        </span>
+                      </div>
+                    )
+                }
               </div>
-
 
               <div className={styles.right} >
                 <div className={styles.upper} >
                   <div className={styles.name} >{d.user.name}</div>
 
                   <div className={styles.menu} >
-                    <div className={`${styles.icon} mdi mdi-pencil`} />
+                    <div 
+                      className={`${styles.icon} mdi mdi-pencil`} 
+                      onClick={() => {
+                        this.commentIndexToBeEditted = i
+                        this.editCommentText = d.comment
+                        if (this.editCommentInput) this.editCommentInput.focus()
+                      }}  
+                    />
                     <div 
                       className={`${styles.icon} mdi mdi-delete`} 
                       onClick={() => {
@@ -212,7 +239,46 @@ class Hero extends Component {
                   </video>
                 )}
                 {d.image && <img src={d.image} />}
-                <div className={styles.content} >{d.comment}</div>
+                {
+                  comment.isUpdatingComment 
+                    ? (
+                      <div className={styles['loading-wrapper']} >
+                        <ProgressBar
+                          className={styles.loading}
+                          type='circular'
+                          mode='indeterminate' theme={ProgressBarTheme}
+                        />
+                      </div>
+                    )
+                    : this.commentIndexToBeEditted != -1 && i === this.commentIndexToBeEditted
+                      ? (
+                        <div className={styles['edit-comment']}>
+                          <textarea 
+                            value={this.editCommentText}
+                            onChange={e => this.editCommentText = e.target.value}
+                            ref={el => this.editCommentInput = el}
+                          />
+                          <div className={styles.actions} >
+                            <button 
+                              onClick={() => this.commentIndexToBeEditted = -1} 
+                            >
+                              Cancel
+                            </button>
+                            <button onClick={async () => {
+                              await comment.updateComment({
+                                id: d.id,
+                                comment: this.editCommentText
+                              })
+                              this.commentIndexToBeEditted = -1
+                              hero.fetchHero(this.props.match.params.id, false)
+                            }} >Edit</button>
+                          </div>
+                        </div>
+                      )
+                      : (
+                        <div className={styles.content} >{d.comment}</div>
+                      )
+                }
               </div>
             </div>
           )
