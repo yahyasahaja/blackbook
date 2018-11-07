@@ -1,9 +1,9 @@
 {
-  "Account.js": "static/js/Account.f0d02750.chunk.js",
-  "Auth.js": "static/js/Auth.7644d487.chunk.js",
-  "Home.js": "static/js/Home.6f130b3f.chunk.js",
-  "Profile.js": "static/js/Profile.ba61087e.chunk.js",
+  "Account.js": "static/js/Account.d51e3b42.chunk.js",
+  "Auth.js": "static/js/Auth.206b45eb.chunk.js",
+  "Home.js": "static/js/Home.f500ff79.chunk.js",
+  "Profile.js": "static/js/Profile.c342feb8.chunk.js",
   "main.css": "static/css/main.86805ae3.css",
-  "main.js": "static/js/main.6c30b93a.js",
-  "vendor.js": "static/js/vendor.96949929.js"
+  "main.js": "static/js/main.81596bac.js",
+  "vendor.js": "static/js/vendor.bac7a3ed.js"
 }
