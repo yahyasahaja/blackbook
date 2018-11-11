@@ -1,9 +1,10 @@
 {
-  "Account.js": "static/js/Account.d51e3b42.chunk.js",
-  "Auth.js": "static/js/Auth.a519a04a.chunk.js",
-  "Home.js": "static/js/Home.f500ff79.chunk.js",
-  "Profile.js": "static/js/Profile.b299326e.chunk.js",
+  "Account.js": "static/js/Account.84cb6306.chunk.js",
+  "Auth.js": "static/js/Auth.908a0da6.chunk.js",
+  "EditHero.js": "static/js/EditHero.db429fe4.chunk.js",
+  "Home.js": "static/js/Home.88805afe.chunk.js",
+  "Profile.js": "static/js/Profile.4232ece6.chunk.js",
   "main.css": "static/css/main.8411cb48.css",
-  "main.js": "static/js/main.db740ce2.js",
-  "vendor.js": "static/js/vendor.bac7a3ed.js"
+  "main.js": "static/js/main.03f6cb8d.js",
+  "vendor.js": "static/js/vendor.828dec1d.js"
 }
