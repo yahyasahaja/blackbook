@@ -24,7 +24,7 @@ const authLink = setContext((_, { headers }) => {
     if (headers) headers.Authorization = token.bearerToken
     else headers = { Authorization: token.bearerToken }
   }
-  console.log('HEADERS', headers)
+  // console.log('HEADERS', headers)
   return {
     headers
   }

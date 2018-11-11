@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 
 //CLIENT
 import client from '../graphql/client'
+import { uploads } from '.'
 
 //STORE
 class Hero {
@@ -11,6 +12,110 @@ class Hero {
   @observable allHeroes = []
   @observable isFetchingHero = false
   @observable singleHero = null
+  @observable isAddingHero = false
+  @observable isUpdateingHero = false
+  @observable isDeletingHero = false
+
+  @action
+  async addHero(variables) {
+    try {
+      this.isUpdateingHero = true
+      variables.abilities = variables.abilities.map(d => {
+        return { ...d, description: d.description.replace(/(?:\r\n|\r|\n)/g, '<br>') }
+      })
+
+      if (variables.image) variables.image_url = await uploads.singleUpload(variables.image)
+      let abilities = variables.abilities
+      
+      for (let ability of abilities) {
+        if (ability.image && ability.image.value)  {
+          ability.image_url = await uploads.singleUpload(ability.image.value)
+        }
+        delete ability.image
+      }
+
+      let statuses = variables.statuses
+      let res = []
+      for (let status of statuses) {
+        if (status.attack) res.push(status)
+      }
+      variables.statuses = res
+
+      let {
+        data: {
+          addHero: {
+            id
+          }
+        }
+      } = await client.mutate({
+        mutation: addHeroQuery,
+        variables
+      })
+      this.isAddingHero = false
+      return id
+    } catch (err) {
+      console.log('ERROR WHILE ADDING HERO', err)
+      this.isAddingHero = false
+    }
+  }
+
+  @action
+  async updateHero(variables) {
+    try {
+      this.isUpdateingHero = true
+      variables.abilities = variables.abilities.map(d => {
+        return { ...d, description: d.description.replace(/(?:\r\n|\r|\n)/g, '<br>') }
+      })
+
+      if (variables.image) variables.image_url = await uploads.singleUpload(variables.image)
+      let abilities = variables.abilities
+      
+      for (let ability of abilities) {
+        if (ability.image && ability.image.value)  {
+          ability.image_url = await uploads.singleUpload(ability.image.value)
+        }
+        delete ability.image
+      }
+
+      let {
+        data: {
+          updateHero: {
+            id
+          }
+        }
+      } = await client.mutate({
+        mutation: updateHeroQuery,
+        variables
+      })
+      this.isUpdateingHero = false
+      return id
+    } catch (err) {
+      console.log('ERROR WHILE ADDING HERO', err)
+      this.isUpdateingHero = false
+    }
+  }
+
+  @action
+  async deleteHero(id) {
+    try {
+      this.isDeletingHero = true
+      let {
+        data: {
+          deleteHero: res
+        }
+      } = await client.mutate({
+        mutation: deleteHeroQuery,
+        variables: {
+          id
+        }
+      })
+      this.isDeletingHero = false
+      return res
+    } catch (err) {
+      console.log('ERROR WHILE ADDING HERO', err)
+      this.isDeletingHero = false
+    }
+  }
   
   @action
   async fetchAllHeroes() {
@@ -83,6 +188,62 @@ class Hero {
     }
   }
 }
+
+const deleteHeroQuery = gql`
+  mutation deleteHero($id: ID!) {
+    deleteHero(id: $id) 
+  }
+`
+
+const updateHeroQuery = gql`
+  mutation updateHero(
+    $id: ID!
+    $name: String
+    $image_url: String
+    $bio: String
+    $tips_desc: String
+    $tips_video_url: String
+    $abilities: [AbilitiesInput]
+    $statuses: [StatusesInput]
+  ) {
+      updateHero (
+        id: $id
+        name: $name
+        image_url: $image_url
+        bio: $bio
+        tips_desc: $tips_desc
+        tips_video_url: $tips_video_url
+        abilities: $abilities
+        statuses: $statuses
+      ) {
+        id
+      }
+  }
+`
+
+const addHeroQuery = gql`
+  mutation addHero(
+    $name: String!
+    $image_url: String!
+    $bio: String!
+    $tips_desc: String!
+    $tips_video_url: String!
+    $abilities: [AbilitiesInput!]!
+    $statuses: [StatusesInput!]!
+  ) {
+      addHero (
+        name: $name
+        image_url: $image_url
+        bio: $bio
+        tips_desc: $tips_desc
+        tips_video_url: $tips_video_url
+        abilities: $abilities
+        statuses: $statuses
+      ) {
+        id
+      }
+  }
+`
 
 const allHeroesQuery = gql`
   query allHeroes {

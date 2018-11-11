@@ -31,6 +31,7 @@ class Comment {
         if (path) variables[isVideo ? 'video_url' : 'image_url'] = path
       }
       
+      variables.comment = variables.comment.replace(/(?:\r\n|\r|\n)/g, '<br>')
 
       let {
         data: {

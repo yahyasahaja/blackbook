@@ -4,7 +4,6 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { Redirect, Route, Switch } from 'react-router-dom'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
-import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/index-auth.scss'
@@ -80,4 +79,4 @@ class Auth extends Component {
   }
 }
 
-export default withTracker(Auth)
+export default Auth

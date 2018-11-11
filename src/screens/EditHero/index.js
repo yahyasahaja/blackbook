@@ -3,14 +3,14 @@ import React, { Component } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
-import Dialog from 'react-toolbox/lib/dialog'
-import { withTracker } from '../../google-analytics'
 import Input from 'react-toolbox/lib/input/Input'
+import Slider from 'react-toolbox/lib/slider'
 
 //STYLES
 import styles from './css/index-edit-hero.scss'
 import ProgressBarTheme from '../../assets/css/theme-progress-bar.scss'
 import theme from '../../assets/css/theme.scss'
+import sliderTheme from '../Hero/css/theme.scss'
 
 //COMPONENTS
 import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
@@ -18,12 +18,49 @@ import PrimaryButton from '../../components/PrimaryButton'
 // import loadingTheme from '../Chat/css/loading-submit.scss'
 
 //STORE
-import { user, snackbar, appStack, } from '../../services/stores'
+import { user, snackbar, appStack, hero } from '../../services/stores'
 import { observable } from 'mobx'
+import UploadImage from '../../components/UploadImage'
 
 //COMPONENT
 @observer
-class Profile extends Component {
+class EditHero extends Component {
+  @observable isEdit = false
+  @observable image = null
+  @observable image_url = ''
+  @observable name = ''
+  @observable bio = ''
+  @observable tips_desc = ''
+  @observable tips_video_url = ''
+  @observable abilities = [
+    {
+      image: null,
+      name: '',
+      description: '',
+      mana: '',
+      cooldown: '',
+      video_url: ''
+    },
+    {
+      image: null,
+      name: '',
+      description: '',
+      mana: '',
+      cooldown: '',
+      video_url: ''
+    },
+    {
+      image: null,
+      name: '',
+      description: '',
+      mana: '',
+      cooldown: '',
+      video_url: ''
+    }
+  ]
+  @observable statuses = []
+  @observable currentLevel = 1
+
   constructor(props) {
     super(props)
     this.id = appStack.push()
@@ -33,142 +70,213 @@ class Profile extends Component {
     appStack.pop()
   }
 
-  componentDidMount() {
-    user.getProfilePictureURL()
-    console.log('USR DATA', user.data)
-    this.setState({ ...user.data })
-  }
-
-  componentWillReact() {
-    this.setState({ ...user.data })
-  }
-
-  renderProfilePicture() {
-    if (!user.data) return
-
-    let { name } = user.data
-    let { profilePictureURL } = user
-    let isProfilePictureURLExist = profilePictureURL && profilePictureURL.length > 0
-
-    return (
-      <label htmlFor="pic" className={styles.pic} >
-        {
-          user.isLoadingUploadProfilePic
-            ? (
-              <div className={styles['pic-loading']} >
-                <div className={styles.loading}>
-                  <ProgressBar type="circular" mode="indeterminate" />
-                </div>
-              </div>
-            )
-            : isProfilePictureURLExist
-              ? (
-                <img src={profilePictureURL} alt="Profile Picture" />
-              )
-              : (
-                <div className={styles['picture-default']} >
-                  <span>{name.split(' ').slice(0, 2).map(v => v[0]).join('')}</span>
-                </div>
-              )
-        }
-
-        <span className={`mdi mdi-pencil ${styles.edit}`} />
-        <input
-          id="pic" name="pic" type="file" style={{ display: 'none' }}
-          onChange={e => {
-            user.uploadProfilePicture(e.target.files || e.dataTransfer.files)
-          }}
-          accept=".jpg, .jpeg, .png"
-          disabled={user.isLoadingUploadProfilePic}
-        />
-      </label>
-    )
-  }
-
-  @observable name = ''
-  @observable stat = []
-  @observable bio = ''
-  @observable ability = []
-  @observable tipsDesc = ''
-  @observable tipsVideo = ''
-  @observable active = false
-
-  handleChange(name, value) {
-    this[name] = value
-  }
-
-  post = async () => {
-    if (user.isLoadingUpdateProfile) return
-
-    this.active = false
-    let token = await user.updateProfile({
-      ...this.state
-    })
+  async componentDidMount() {
+    if (location.pathname.indexOf('edit') !== -1) this.isEdit = true
     
-    if (token) snackbar.show('Profile has been updated')
+    if (!this.isEdit) {
+      for (let i = 0; i < 25; i++) {
+        this.statuses.push({
+          level: i + 1,
+          'strength': '',
+          'attack': '',
+          'agility': '',
+          'speed': '',
+          'intelligence': '',
+          'armor': '',
+        })
+      }
+    } else {
+      let id = this.props.match.params.id
+      let res = await hero.fetchHero(id)
+
+      if (res) {
+        res = { ...res }
+        for (let attr in res) this[attr] = res[attr]
+
+        for (let ability of res.abilities) {
+          ability.description = ability.description.replace(/<br\s*[/]?>/gi, '\n') 
+          ability.image = observable(null)
+        }
+          
+        window.abilities = this.abilities
+      } else {
+        snackbar.show(`Hero with id ${id} is not exist`)
+        this.props.history.push('/home')
+      }
+    }
+  }
+
+  renderStatuses() {
+    let stat = this.statuses[this.currentLevel - 1]
+
+    if (!stat) return
+
+    let dt = [
+      'strength',
+      'attack',
+      'agility',
+      'speed',
+      'intelligence',
+      'armor',
+    ]
+
+    return(
+      <div className={styles['statuses-wrapper']} >
+        <div className={styles.text} >Status Level {this.currentLevel}</div>
+        <div className={styles.statuses}>
+          {dt.map((d, i) => (
+            <div key={i} className={styles.statwrap} >
+              <img src={`/static/img/status/${d}.png`} alt=""/>
+              <div className={styles.inputwrap}>
+                <Input
+                  name="name"
+                  type="text"
+                  label="Name"
+                  onChange={v => stat[d] = v}
+                  value={stat[d]}
+                  theme={theme}
+                  required
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className={styles.slider} >
+          <Slider 
+            pinned min={1} max={25} step={1} 
+            value={this.currentLevel} 
+            onChange={v => this.currentLevel = v} 
+            theme={sliderTheme}
+          />
+        </div>
+      </div>
+    )
   }
   
   renderContent = () => {
     return (
       <div className={styles.container} >
-        <div className={styles.profile} >
-          {this.renderProfilePicture()}
+        <UploadImage
+          onChange={file => this.image = file}
+          className={styles['hero-image']}
+          title="Select Hero Image"
+          defaultImage={this.image_url}
+        />
+
+        <Input
+          name="name"
+          type="text"
+          label="Name"
+          onChange={e => this.name = e}
+          value={this.name}
+          theme={theme}
+          required
+        />
+        
+        <Input
+          name="bio"
+          type="text"
+          label="Bio"
+          onChange={e => this.bio = e}
+          value={this.bio}
+          theme={theme}
+          multiline
+          required
+        />
+
+        <Input
+          name="tips"
+          type="text"
+          label="Tips Description"
+          onChange={e => this.tips_desc = e}
+          value={this.tips_desc}
+          theme={theme}
+          required
+        />
+
+        <Input
+          name="tips_video"
+          type="text"
+          label="Tips Video URL"
+          onChange={e => this.tips_video_url = e}
+          value={this.tips_video_url}
+          theme={theme}
+          required
+        />
+
+        {this.renderStatuses()}
+
+        <div className={styles.abilities} >
+          <span className={styles.text} >Abilities</span>
+          {
+            this.abilities.slice().map((ability, i) => {
+              return (
+                <div key={i} className={styles.ability} >
+                  <UploadImage
+                    onChange={file => this.abilities[i].image = observable(file)}
+                    className={styles['ability-image']}
+                    title="Select Ability Image"
+                    defaultImage={ability.image_url}
+                  />
+                  <Input
+                    name="name"
+                    type="text"
+                    label="Name"
+                    onChange={e => ability.name = e}
+                    value={ability.name}
+                    theme={theme}
+                    required
+                  />
+                  <Input
+                    name="desc"
+                    type="text"
+                    label="Description"
+                    onChange={e => ability.description = e}
+                    value={ability.description}
+                    theme={theme}
+                    required
+                    multiline
+                  />
+                  <Input
+                    name="mana"
+                    type="text"
+                    label="Mana Point"
+                    onChange={e => ability.mana = e}
+                    value={ability.mana}
+                    theme={theme}
+                    required
+                  />
+                  <Input
+                    name="cooldown"
+                    type="text"
+                    label="Cooldown"
+                    onChange={e => ability.cooldown = e}
+                    value={ability.cooldown}
+                    theme={theme}
+                    required
+                  />
+                  <Input
+                    name="video"
+                    type="text"
+                    label="Video URL"
+                    onChange={e => ability.video_url = e}
+                    value={ability.video_url}
+                    theme={theme}
+                    required
+                  />
+                </div>
+              )
+            })
+          }
         </div>
 
-        <div className={styles.card} >
-          <Input
-            type="text"
-            label="Name"
-            onChange={this.handleChange.bind(this, 'name')}
-            value={this.name}
-            theme={theme}
-            required
-          />
-
-          <Input
-            type="text"
-            label="Bio"
-            onChange={this.handleChange.bind(this, 'bio')}
-            value={this.bio}
-            theme={theme}
-            required
-          />
-
-          <Input
-            type="text"
-            label="Tips Description"
-            onChange={this.handleChange.bind(this, 'tipsDesc')}
-            value={this.bio}
-            theme={theme}
-            required
-          />
-
-          <Input
-            type="text"
-            label="Tips Video Link"
-            onChange={this.handleChange.bind(this, 'tipsVideo')}
-            value={this.bio}
-            theme={theme}
-            required
-          />
-
-          {this.renderPasswordButton()}
-          <Dialog
-            actions={this.actions2}
-            active={this.state.active2}
-            onEscKeyDown={() => this.handleToggle('active2')}
-            onOverlayClick={() => this.handleToggle('active2')}
-            title='Update Password'
-          >
-            <p>Anda akan memperbarui password. Lanjutkan?</p>
-          </Dialog>
-        </div>
+        {this.renderButton()}
       </div>
     )
   }
 
   renderButton() {
-    if (user.isLoadingUpdateProfile) return (
+    if (user.isLoadingUpdateEditHero) return (
       <div className={styles['loading-wrapper']} >
         <ProgressBar
           className={styles.loading}
@@ -179,29 +287,108 @@ class Profile extends Component {
     )
 
     return (
-      <PrimaryButton
-        className={styles.button}
-        type="submit"
-        onClick={() => this.setState({ active: true })}
-      >
-        Save New Hero
-      </PrimaryButton>
+      <div className={styles.button} >
+        <PrimaryButton
+          className={styles.button}
+          type="submit"
+          onClick={async () => {
+            let {
+              image,
+              name,
+              bio,
+              tips_desc,
+              tips_video_url,
+              abilities,
+              statuses,
+              image_url
+            } = this
+            
+            abilities = abilities.slice().map(({
+              name,
+              image_url,
+              description,
+              mana,
+              cooldown,
+              video_url,
+              image,
+            }) => {
+              return {
+                name,
+                image_url,
+                description,
+                mana,
+                cooldown,
+                video_url,
+                image
+              }
+            })
+            
+            statuses = statuses.slice().map(({
+              level,
+              strength,
+              attack,
+              agility,
+              speed,
+              intelligence,
+              armor,
+            }) => {
+              return {
+                level,
+                strength,
+                attack,
+                agility,
+                speed,
+                intelligence,
+                armor,
+              }
+            })
+            
+            if (this.isEdit) {
+              console.log(abilities)
+              let res = await hero.updateHero({
+                id: this.props.match.params.id,
+                image,
+                image_url,
+                name,
+                bio,
+                tips_desc,
+                tips_video_url,
+                abilities,
+                statuses,
+              })
+
+              snackbar.show(res ? 'Hero updated' : 'Failed to update hero')
+            } else {
+              let res = await hero.addHero({
+                image,
+                image_url,
+                name,
+                bio,
+                tips_desc,
+                tips_video_url,
+                abilities,
+                statuses,
+              })
+
+              snackbar.show(res ? 'Hero is successfuly added' : 'Failed to add hero')
+            }
+          }}
+        >
+          {this.isEdit ? 'Update' : 'Save New'} Hero
+        </PrimaryButton>
+      </div>
     )
   }
 
   render() {
-    user.data
-    user.profilePictureURL
-    user.isLoadingUploadProfilePic
     return (
       <PopupBar
         title="Profil" {...this.props}
         renderContent={this.renderContent}
-        backLink="/account"
         anim={ANIMATE_HORIZONTAL}
       />
     )
   }
 }
 
-export default withTracker(Profile)
+export default EditHero

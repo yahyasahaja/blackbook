@@ -66,7 +66,6 @@ export default class EditProfile extends Component {
       <PopupBar
         title={this.state.title} {...this.props}
         renderContent={this.renderContent}
-        backLink="/account"
         anim={ANIMATE_HORIZONTAL}
       />
     ) 

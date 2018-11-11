@@ -4,6 +4,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import Slider from 'react-toolbox/lib/slider'
 import { observer } from 'mobx-react'
 import { observable, action } from 'mobx'
+import { Link } from 'react-router-dom'
 // import { Parallax } from 'react-parallax'
 
 //STYLES
@@ -16,7 +17,7 @@ import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import HideShow from '../../components/HideShow'
 
 //STORE
-import { appStack, user, hero, comment, dialog } from '../../services/stores'
+import { appStack, user, hero, comment, dialog, overlayLoading } from '../../services/stores'
 
 //UTILS
 import { makeImageURL, embedYoutubeURL } from '../../utils'
@@ -81,15 +82,9 @@ class Hero extends Component {
   }
 
   renderCommentButton() {
-    if (user.isLoggedIn) return (
+    if (!user.isLoggedIn) return (
       <div className={styles['not-logged-in']} >
-
-      </div>
-    )
-
-    return (
-      <div className={styles.write} >
-        <button></button>
+        <Link to="/auth/login" >Login to Comment</Link>
       </div>
     )
   }
@@ -131,7 +126,7 @@ class Hero extends Component {
             id="pic" name="pic" type="file" style={{ display: 'none' }}
             ref={el => this.commentInput = el}
             onChange={e => this.attachedFile = e.target.files[0]}
-            accept=".jpg, .jpeg, .png"
+            accept=".jpg, .jpeg, .png, .mkv, .mp4, .ogg, .m4v, .avi, .mpg, .webm"
             disabled={comment.isLoading}
           />
         </label>
@@ -276,7 +271,10 @@ class Hero extends Component {
                         </div>
                       )
                       : (
-                        <div className={styles.content} >{d.comment}</div>
+                        <div 
+                          className={styles.content} 
+                          dangerouslySetInnerHTML={{__html: d.comment}} 
+                        />
                       )
                 }
               </div>
@@ -385,16 +383,48 @@ class Hero extends Component {
         <div style={{
           display: this.isWriteCommentActive ? 'block' : 'none'
         }} className={styles['write-comment']} >
-          {this.renderWriteComment()}
+          {user.isLoggedIn && user.data && user.data.role === 'ADMIN' && this.renderWriteComment()}
         </div>
       </div>
     )
   }
 
+  actions = [
+    { label: 'Cancel', onClick: () => dialog.toggleActive() },
+    { label: 'Ok', onClick: async () => {
+      if (hero.singleHero && hero.singleHero.id) {
+        overlayLoading.show()
+        await hero.deleteHero(hero.singleHero.id)
+        overlayLoading.hide()
+        dialog.toggleActive() 
+        this.props.history.push('/home')
+      }
+    }}
+  ]
+
   render() {
+    let icons = []
+
+    if (user.isLoggedIn && user.data && user.data.role === 'ADMIN') {
+      icons = [
+        {
+          icon: 'delete',
+          to: '',
+          onClick: e => {
+            e.preventDefault()
+            dialog.show('Delete This Hero?', 'Are you sure?', this.actions)
+          }
+        },
+        {
+          icon: 'pencil',
+          to: `/hero/${hero.singleHero && hero.singleHero.id}/edit`
+        }
+      ]
+    }
     return (
       <PopupBar
         title={hero.singleHero && hero.singleHero.name} {...this.props}
+        icons={icons}
         renderContent={this.renderContent}
         anim={ANIMATE_HORIZONTAL}
       />

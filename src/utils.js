@@ -114,6 +114,13 @@ export const embedYoutubeURL = url => {
   return `https://www.youtube.com/embed/${part[part.length - 1]}`
 }
 
+export const readURL = file => new Promise((resolve, reject) => {
+  var reader = new FileReader()
+  reader.onload = e => resolve(e.target.result)
+  reader.onerror = e => reject(e)
+  reader.readAsDataURL(file)
+})
+
 export default {
   matchLoading,
   matchProps,
@@ -125,4 +132,5 @@ export default {
   limitString,
   setAxiosAuthorization,
   makeImageURL,
+  readURL,
 }

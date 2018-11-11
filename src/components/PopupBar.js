@@ -90,13 +90,13 @@ import { badges } from '../services/stores'
         if (rightComponent) return <rightComponent />
         if (cart || icons) return <div className={styles.right} >
           {(() => {
-            if (cart) return <Link to="/cart" className={styles.cart}><Badge badge={badges.CART} icon="cart" /></Link>
-            if (icons) return icons.map((data, i) => {
+            if (icons) return icons.map((data, i) => 
               <Link
                 to={data.to} className={`mdi mdi-${data.icon} ${styles.cart}`}
                 onClick={data.onClick} key={i}
               />
-            })
+            )
+            if (cart) return <Link to="/cart" className={styles.cart}><Badge badge={badges.CART} icon="cart" /></Link>
           })()}
         </div>
       })()}

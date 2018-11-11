@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
-import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/index-account.scss'
@@ -61,4 +60,4 @@ class Account extends Component {
   }
 }
 
-export default withTracker(Account)
+export default Account

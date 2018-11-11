@@ -246,7 +246,7 @@ module.exports = {
       staticFileGlobs: ['build/manifest.json', 'build/static/css/style.css'],
       // Don't precache sourcemaps (they're large) and build asset manifest:
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
-      cacheId: 'jualbli-hash-cra',
+      cacheId: 'blackbook-cra',
       importScripts: ['/sw.js']
     }),
     // Moment.js is an extremely popular library that bundles large locale files

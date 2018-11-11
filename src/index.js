@@ -18,12 +18,6 @@ import { onlineStatus, snackbar } from './services/stores'
 //SERVICE_WORKER
 import registerServiceWorker from './registerServiceWorker'
 
-//SENTRY INTEGRATION
-import Raven from 'raven-js'
-
-//GOOGLE ANALYTICS
-import ga from './google-analytics'
-
 window.Clipboard = (function (window, document, navigator) {
   var textArea,
     copy
@@ -72,41 +66,14 @@ window.Clipboard = (function (window, document, navigator) {
 
 //sw
 registerServiceWorker()
-
-//google-analytics
-ga()
-
-const contextTheme = theme
-
-if (
-  !(
-    location.href.includes('localhost') ||
-    /127\.[\d]+\.[\d]+\.[\d]+/gi.test(location.href)
-  )
-)
-  Raven.config(
-    'https://c63c8415e02b4f8f8052e6e8b7f2bada@sentry.io/1212575'
-  ).install()
-
 axios.defaults.headers['Content-Type'] = 'application/json'
-axios.interceptors.response.use(
-  res => res,
-  err => {
-    Raven.captureException(err)
-    return Promise.reject(err)
-  }
-)
 // if (tokens.bearerToken) axios.defaults.headers['Authorization'] = tokens.bearerToken
 
 @observer
 class App extends Component {
-  componentDidCatch(err) {
-    Raven.captureException(err)
-  }
-
   render() {
     return (
-      <ThemeProvider theme={contextTheme}>
+      <ThemeProvider theme={theme}>
         <AppRouter onlineStatus={onlineStatus} snackbar={snackbar} />
       </ThemeProvider>
     )

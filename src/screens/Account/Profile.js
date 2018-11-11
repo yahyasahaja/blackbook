@@ -4,7 +4,6 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 // import _ from 'lodash'
 import { observer } from 'mobx-react'
 import Dialog from 'react-toolbox/lib/dialog'
-import { withTracker } from '../../google-analytics'
 
 //STYLES
 import styles from './css/profile.scss'
@@ -275,4 +274,4 @@ class Profile extends Component {
   }
 }
 
-export default withTracker(Profile)
+export default Profile

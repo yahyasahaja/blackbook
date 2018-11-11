@@ -19,15 +19,15 @@
 
   .icon, .icon:visited {
     position: absolute;
-    width: 60px;
-    font-size: 20pt;
+    width: 40px;
+    font-size: 16pt;
     top: 0;
     right: 0;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: $secondary-color;
+    color: white;
 
     &:active {
       opacity: .3;

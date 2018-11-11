@@ -27,7 +27,7 @@ const Profile = asyncComponent(() =>
   import(/*webpackChunkName: "Profile"*/ './screens/Account/Profile')
 )
 const EditHero = asyncComponent(() => 
-  import(/*webpackChunkName: "Profile"*/ './screens/EditHero')
+  import(/*webpackChunkName: "EditHero"*/ './screens/EditHero')
 )
 
 //STYLES
@@ -172,6 +172,7 @@ class AppRouter extends Component {
             <Switch>
               <Route path="/auth" component={Auth} />
               <Route path="/hero/new" component={EditHero} />
+              <Route path="/hero/:id/edit" component={EditHero} />
               <Route path="/hero/:id" component={Hero} />
               <Route path="/account/profile" component={Profile} />
 
@@ -270,7 +271,7 @@ class AppRouter extends Component {
                 {
                   label: 'Ya',
                   onClick: () => {
-                    localStorage.setItem('jualbli-hash-appinstalled', false)
+                    localStorage.setItem('blackbook-appinstalled', false)
                     swu.setCancellable(false)
                     swu.setShowPrompt(false)
                   }

@@ -15,7 +15,7 @@ import Card from '../../components/Card'
 // import client from '../../services/graphql/productClient'
 
 //STORE
-import { hero } from '../../services/stores'
+import { hero, user } from '../../services/stores'
 
 //COMPONENT
 @observer
@@ -30,11 +30,25 @@ class Home extends Component {
 
   render() {
     let loading = false
+    let icons = []
+
+    if (user.isLoggedIn && user.data && user.data.role === 'ADMIN') {
+      icons = [
+        {
+          icon: 'plus',
+          onClick: e => {
+            e.preventDefault()
+            this.props.history.push('/hero/new')
+          },
+          to: ''
+        }
+      ]
+    }
 
     return (
       <TopBar
         fly={{
-          title: { cart: true },
+          title: { icons },
           mode: ABSOLUTE
         }}
         isSelected={this.props.isSelected}

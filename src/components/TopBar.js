@@ -131,7 +131,7 @@ export class TopBar extends Component {
           (() => {
             if (component) return component
             else return [
-              title && <TitleBar key={0} cart={title.cart} />,
+              title && <TitleBar key={0} cart={title.cart} icons={title.icons} />,
               search && <SearchBar key={1} cart={search.cart} />
             ]
           })()
@@ -170,7 +170,7 @@ export class TopBar extends Component {
           (() => {
             if (component) return component
             else return [
-              title && <TitleBar key={0} cart={title.cart} />,
+              title && <TitleBar key={0} cart={title.cart} icons={title.icons} />,
               search && <SearchBar key={1} cart={search.cart} />
             ]
           })()
