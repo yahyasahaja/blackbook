@@ -20,19 +20,19 @@ class Hero {
   async addHero(variables) {
     try {
       this.isUpdateingHero = true
-      variables.abilities = variables.abilities.map(d => {
-        return { ...d, description: d.description.replace(/(?:\r\n|\r|\n)/g, '<br>') }
-      })
-
-      if (variables.image) variables.image_url = await uploads.singleUpload(variables.image)
-      let abilities = variables.abilities
-      
-      for (let ability of abilities) {
+      variables.abilities = variables.abilities.map(async ability => {
+        let newAbility = {
+          ...ability,
+          description: ability.description.replace(/(?:\r\n|\r|\n)/g, '<br>')
+        }
         if (ability.image && ability.image.value)  {
           ability.image_url = await uploads.singleUpload(ability.image.value)
         }
         delete ability.image
-      }
+        return newAbility
+      })
+
+      if (variables.image) variables.image_url = await uploads.singleUpload(variables.image)
 
       let statuses = variables.statuses
       let res = []
@@ -63,19 +63,19 @@ class Hero {
   async updateHero(variables) {
     try {
       this.isUpdateingHero = true
-      variables.abilities = variables.abilities.map(d => {
-        return { ...d, description: d.description.replace(/(?:\r\n|\r|\n)/g, '<br>') }
-      })
-
-      if (variables.image) variables.image_url = await uploads.singleUpload(variables.image)
-      let abilities = variables.abilities
-      
-      for (let ability of abilities) {
+      variables.abilities = variables.abilities.map(async ability => {
+        let newAbility = {
+          ...ability,
+          description: ability.description.replace(/(?:\r\n|\r|\n)/g, '<br>')
+        }
         if (ability.image && ability.image.value)  {
           ability.image_url = await uploads.singleUpload(ability.image.value)
         }
         delete ability.image
-      }
+        return newAbility
+      })
+
+      if (variables.image) variables.image_url = await uploads.singleUpload(variables.image)
 
       let {
         data: {
