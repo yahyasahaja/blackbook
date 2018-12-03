@@ -73,8 +73,9 @@ class Profile extends Component {
           id="pic" name="pic" type="file" style={{ display: 'none' }}
           onChange={async e => {
             let path = await uploads.singleUpload(e.target.files[0] || e.dataTransfer.files[0])
-            user.updateUser({profpic_url: path})
+            let res = user.updateUser({profpic_url: path})
             user.data.profpic_url = path
+            if (!res) snackbar.show('There\'s an error occured')
           }}
           accept=".jpg, .jpeg, .png"
           disabled={uploads.isUploading}
@@ -103,7 +104,7 @@ class Profile extends Component {
   updateProfile = () => {
     if (user.isLoadingUpdateUser) return
 
-    let { name, currentPassword, newPassword } = this.state
+    let { name, currentPassword, newPassword, retypePassword } = this.state
 
     this.setState({ active: false, active2: false }, () => {
       let dt = {}
@@ -111,8 +112,13 @@ class Profile extends Component {
       if (currentPassword) dt.currentPassword = currentPassword
       if (newPassword) dt.newPassword = newPassword
 
+      if (currentPassword || newPassword) {
+        if (newPassword !== retypePassword) return snackbar.show('Password not match')
+      }
+
       user.updateUser(dt).then(token => {
         if (token) snackbar.show('Profile has been updated')
+        else snackbar.show('There\'s an error occured')
       })
     })
   }

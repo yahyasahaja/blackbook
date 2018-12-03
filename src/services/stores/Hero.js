@@ -16,6 +16,14 @@ class Hero {
   @observable isUpdateingHero = false
   @observable isDeletingHero = false
 
+  validateStatuses(statuses) {
+    let res = []
+    for (let status of statuses) {
+      if (status.attack) res.push(status)
+    }
+    return res
+  }
+
   @action
   async addHero(variables) {
     try {
@@ -35,11 +43,7 @@ class Hero {
       if (variables.image) variables.image_url = await uploads.singleUpload(variables.image)
 
       let statuses = variables.statuses
-      let res = []
-      for (let status of statuses) {
-        if (status.attack) res.push(status)
-      }
-      variables.statuses = res
+      variables.statuses = this.validateStatuses(statuses)
 
       let {
         data: {

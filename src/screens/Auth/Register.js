@@ -48,7 +48,7 @@ class Register extends Component {
     
     user.register(name, email, password).then(token => {
       console.log(token)
-      if (!token) snackbar.show('Email atau password anda salah!')
+      if (!token) snackbar.show('Terjadi kesalahan atau email tersebut sudah ada!')
     })
   }
 

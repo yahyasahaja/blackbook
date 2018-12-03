@@ -17,7 +17,7 @@ import PopupBar, { ANIMATE_HORIZONTAL } from '../../components/PopupBar'
 import HideShow from '../../components/HideShow'
 
 //STORE
-import { appStack, user, hero, comment, dialog, overlayLoading } from '../../services/stores'
+import { appStack, user, hero, comment, dialog, overlayLoading, snackbar } from '../../services/stores'
 
 //UTILS
 import { makeImageURL, embedYoutubeURL } from '../../utils'
@@ -51,8 +51,9 @@ class Hero extends Component {
     { label: 'Cancel', onClick: () => dialog.toggleActive() },
     { label: 'Delete', onClick: async () => {
       dialog.toggleActive()
-      await comment.deleteComment(this.idToBeDeleted)
+      let res = await comment.deleteComment(this.idToBeDeleted)
       hero.fetchHero(this.props.match.params.id, false)
+      if (!res) snackbar.show('There\'s an error occured')
     }},
   ]
 
@@ -116,7 +117,7 @@ class Hero extends Component {
           this.messageInput.style.height = ''
           this.messageInput.style.height =
             Math.min(this.messageInput.scrollHeight, 300) + 'px'
-        }
+        } else snackbar.show('There\'s an error occured')
       }} >
         <label htmlFor="pic" className={styles.pic} >
           <div className={styles.attach} >
@@ -260,12 +261,13 @@ class Hero extends Component {
                               Cancel
                             </button>
                             <button onClick={async () => {
-                              await comment.updateComment({
+                              let res = await comment.updateComment({
                                 id: d.id,
                                 comment: this.editCommentText
                               })
                               this.commentIndexToBeEditted = -1
                               hero.fetchHero(this.props.match.params.id, false)
+                              if (!res) snackbar.show('There\'s an error occured')
                             }} >Edit</button>
                           </div>
                         </div>
